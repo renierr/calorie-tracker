@@ -51,6 +51,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calorieTrend => 'Kalorientrend (7 Tage)';
 
   @override
+  String trendGoal(Object goal) {
+    return 'Ziel: $goal kcal';
+  }
+
+  @override
   String get dayLogSummary => 'Tagesübersicht';
 
   @override

@@ -170,6 +170,12 @@ abstract class AppLocalizations {
   /// **'Calorie Trend (7 Days)'**
   String get calorieTrend;
 
+  /// No description provided for @trendGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal: {goal} kcal'**
+  String trendGoal(Object goal);
+
   /// No description provided for @dayLogSummary.
   ///
   /// In en, this message translates to:

@@ -15,6 +15,7 @@
   "carbs": "Carbohydrates",
   "fat": "Lipid Fats",
   "calorieTrend": "Calorie Trend (7 Days)",
+  "trendGoal": "Goal: {goal} kcal",
   "dayLogSummary": "Day Log Summary",
   "logs": "{count} logs",
   "noMealsLogged": "No meals logged for this day.",

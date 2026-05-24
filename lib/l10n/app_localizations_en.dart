@@ -51,6 +51,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calorieTrend => 'Calorie Trend (7 Days)';
 
   @override
+  String trendGoal(Object goal) {
+    return 'Goal: $goal kcal';
+  }
+
+  @override
   String get dayLogSummary => 'Day Log Summary';
 
   @override

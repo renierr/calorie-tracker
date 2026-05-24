@@ -15,6 +15,7 @@
   "carbs": "Kohlenhydrate",
   "fat": "Fette",
   "calorieTrend": "Kalorientrend (7 Tage)",
+  "trendGoal": "Ziel: {goal} kcal",
   "dayLogSummary": "Tagesübersicht",
   "logs": "{count} Einträge",
   "noMealsLogged": "Keine Mahlzeiten für diesen Tag.",
