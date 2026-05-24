@@ -1,5 +1,5 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../theme/theme.dart';
@@ -172,6 +172,8 @@ class _ScanPageState extends State<ScanPage> {
     );
 
     await appState.addMeal(newMeal);
+
+    appState.selectTab(0);
     
     // Clear and reset state on success
     _clearImage();
@@ -522,6 +524,7 @@ class _ScanPageState extends State<ScanPage> {
                     TextField(
                       controller: _caloriesController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ],
                 ),
@@ -536,6 +539,7 @@ class _ScanPageState extends State<ScanPage> {
                     TextField(
                       controller: _proteinController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ],
                 ),
@@ -555,6 +559,7 @@ class _ScanPageState extends State<ScanPage> {
                     TextField(
                       controller: _carbsController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ],
                 ),
@@ -569,6 +574,7 @@ class _ScanPageState extends State<ScanPage> {
                     TextField(
                       controller: _fatController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ],
                 ),

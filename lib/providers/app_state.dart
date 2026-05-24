@@ -29,6 +29,9 @@ class AppState extends ChangeNotifier {
   // Selected date for Dashboard tracking (defaults to today)
   DateTime _selectedDate = DateTime.now();
 
+  // Tab index for navigation (0=Dashboard, 1=Scan, 2=History, 3=Settings)
+  int _selectedTabIndex = 0;
+
   // Getters
   String get geminiApiKey => _geminiApiKey;
   int get calorieGoal => _calorieGoal;
@@ -39,6 +42,7 @@ class AppState extends ChangeNotifier {
   List<Meal> get meals => _meals;
   bool get isLoading => _isLoading;
   DateTime get selectedDate => _selectedDate;
+  int get selectedTabIndex => _selectedTabIndex;
 
   // Filtered meals based on selected day (at midnight local time)
   List<Meal> get mealsForSelectedDate {
@@ -155,6 +159,12 @@ class AppState extends ChangeNotifier {
 
   void previousDay() {
     _selectedDate = _selectedDate.subtract(const Duration(days: 1));
+    notifyListeners();
+  }
+
+  // Tab Navigation
+  void selectTab(int index) {
+    _selectedTabIndex = index;
     notifyListeners();
   }
 }

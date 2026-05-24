@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../theme/theme.dart';
@@ -105,7 +106,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         children: [
                           const Text('Calories (kcal)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
-                          TextField(controller: caloriesController, keyboardType: TextInputType.number),
+                          TextField(controller: caloriesController, keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
                         ],
                       ),
                     ),
@@ -116,7 +117,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         children: [
                           const Text('Protein (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
-                          TextField(controller: proteinController, keyboardType: TextInputType.number),
+                          TextField(controller: proteinController, keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
                         ],
                       ),
                     ),
@@ -131,7 +132,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         children: [
                           const Text('Carbohydrates (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
-                          TextField(controller: carbsController, keyboardType: TextInputType.number),
+                          TextField(controller: carbsController, keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
                         ],
                       ),
                     ),
@@ -142,7 +143,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         children: [
                           const Text('Lipid Fat (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
-                          TextField(controller: fatController, keyboardType: TextInputType.number),
+                          TextField(controller: fatController, keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
                         ],
                       ),
                     ),
@@ -513,20 +514,25 @@ class _HistoryPageState extends State<HistoryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Photo Thumbnail
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppTheme.surfaceLight,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white12, width: 0.5),
+              GestureDetector(
+                onTap: meal.imageBytes != null
+                    ? () => _showImagePreview(context, meal.imageBytes!)
+                    : null,
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceLight,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white12, width: 0.5),
+                  ),
+                  child: meal.imageBytes != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.memory(meal.imageBytes!, fit: BoxFit.cover),
+                        )
+                      : const Icon(Icons.restaurant, color: AppTheme.accentEmerald, size: 24),
                 ),
-                child: meal.imageBytes != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.memory(meal.imageBytes!, fit: BoxFit.cover),
-                      )
-                    : const Icon(Icons.restaurant, color: AppTheme.accentEmerald, size: 24),
               ),
               const SizedBox(width: 14),
 
@@ -537,7 +543,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     Text(
                       meal.foodName,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 15),
                     ),
@@ -655,6 +661,36 @@ class _HistoryPageState extends State<HistoryPage> {
             style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showImagePreview(BuildContext context, Uint8List imageBytes) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(16),
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: InteractiveViewer(
+                child: Image.memory(imageBytes, fit: BoxFit.contain),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: FloatingActionButton.small(
+                heroTag: 'close_preview',
+                backgroundColor: Colors.black54,
+                onPressed: () => Navigator.pop(context),
+                child: const Icon(Icons.close, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
