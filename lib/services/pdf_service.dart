@@ -5,6 +5,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../models/meal_model.dart';
 
+final PdfColor pdfEmerald = PdfColor.fromHex('#10B981');
+
 class PdfService {
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd HH:mm');
   static final DateFormat _dateOnlyFormat = DateFormat('EEEE, MMMM d, yyyy');
@@ -24,7 +26,7 @@ class PdfService {
               children: [
                 // Header
                 pw.Row(
-                  main pw.MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text(
                       'Nutritional Meal Report',
@@ -36,7 +38,7 @@ class PdfService {
                     ),
                   ],
                 ),
-                pw.Divider(thickness: 1.5, color: PdfColors.emerald),
+                pw.Divider(thickness: 1.5, color: pdfEmerald),
                 pw.SizedBox(height: 20),
 
                 // Meal Details
@@ -81,7 +83,8 @@ class PdfService {
                             borderRadius: const pw.BorderRadius.all(pw.Radius.circular(6)),
                           ),
                           child: pw.ClipRRect(
-                            borderRadius: const pw.BorderRadius.all(pw.Radius.circular(6)),
+                            horizontalRadius: 6,
+                            verticalRadius: 6,
                             child: pw.Image(
                               pw.MemoryImage(meal.imageBytes!),
                               fit: pw.BoxFit.cover,
@@ -153,7 +156,7 @@ class PdfService {
           return pw.Column(
             children: [
               pw.Row(
-                main pw.MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
                   pw.Text(
                     title,
@@ -165,7 +168,7 @@ class PdfService {
                   ),
                 ],
               ),
-              pw.Divider(thickness: 1, color: PdfColors.emerald),
+              pw.Divider(thickness: 1, color: pdfEmerald),
               pw.SizedBox(height: 10),
             ],
           );
@@ -188,7 +191,7 @@ class PdfService {
             pw.Row(
               children: [
                 _buildSummaryStatCard('Calories', '$totalCalories / $calorieGoal kcal',
-                    totalCalories <= calorieGoal ? PdfColors.emerald : PdfColors.amber),
+                    totalCalories <= calorieGoal ? pdfEmerald : PdfColors.amber),
                 pw.SizedBox(width: 10),
                 _buildSummaryStatCard('Protein', '${totalProtein}g / ${proteinGoal}g', PdfColors.blue),
                 pw.SizedBox(width: 10),
@@ -211,7 +214,7 @@ class PdfService {
                 padding: const pw.EdgeInsets.all(10),
                 decoration: pw.BoxDecoration(
                   color: PdfColors.grey100,
-                  border: pw.Border(left: pw.BorderSide(color: PdfColors.emerald, width: 3)),
+                  border: pw.Border(left: pw.BorderSide(color: pdfEmerald, width: 3)),
                 ),
                 child: pw.Text(
                   userNotes,
@@ -298,7 +301,7 @@ class PdfService {
     return pw.Padding(
       padding: const pw.EdgeInsets.symmetric(vertical: 4),
       child: pw.Row(
-        main pw.MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
           pw.Text(
             label,
@@ -312,7 +315,7 @@ class PdfService {
             style: pw.TextStyle(
               fontSize: 11,
               fontWeight: isHeader ? pw.FontWeight.bold : pw.FontWeight.normal,
-              color: isHeader ? PdfColors.emerald : PdfColors.black,
+              color: isHeader ? pdfEmerald : PdfColors.black,
             ),
           ),
         ],
@@ -329,7 +332,7 @@ class PdfService {
           borderRadius: const pw.BorderRadius.all(pw.Radius.circular(6)),
         ),
         child: pw.Column(
-          cross: pw.CrossAxisAlignment.start,
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Text(
               label,

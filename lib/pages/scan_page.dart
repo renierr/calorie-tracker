@@ -194,7 +194,7 @@ class _ScanPageState extends State<ScanPage> {
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
-                cross: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Phase A: Image Intake
                   _buildIntakeSection(),
@@ -325,7 +325,7 @@ class _ScanPageState extends State<ScanPage> {
       padding: const EdgeInsets.all(16),
       decoration: AppTheme.premiumCardDecoration(),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
@@ -390,7 +390,7 @@ class _ScanPageState extends State<ScanPage> {
       width: double.infinity,
       height: 52,
       child: ElevatedButton.icon(
-        icon: const Icon(Icons.sparkles),
+        icon: const Icon(Icons.auto_awesome),
         label: const Text('Scan & Estimate with Gemini'),
         onPressed: () => _scanMeal(apiKey),
       ),
@@ -403,7 +403,7 @@ class _ScanPageState extends State<ScanPage> {
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(showGlow: true),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -439,7 +439,7 @@ class _ScanPageState extends State<ScanPage> {
             children: [
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Calories (kcal)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),
@@ -453,7 +453,7 @@ class _ScanPageState extends State<ScanPage> {
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Protein (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),
@@ -472,7 +472,7 @@ class _ScanPageState extends State<ScanPage> {
             children: [
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Carbohydrates (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),
@@ -486,7 +486,7 @@ class _ScanPageState extends State<ScanPage> {
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Fat (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),

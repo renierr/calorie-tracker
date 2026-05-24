@@ -30,7 +30,7 @@ class DashboardPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
-            cross: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Date Navigation Strip
               _buildDateNavigationStrip(context, appState),
@@ -39,7 +39,7 @@ class DashboardPage extends StatelessWidget {
               // Layout Grid - Responsive for Mobile vs Desktop
               isWide
                   ? Row(
-                      cross: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Left Column: Progress Circle and Macros
                         Expanded(
@@ -244,7 +244,7 @@ class DashboardPage extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Macronutrient Distribution',
@@ -292,7 +292,7 @@ class DashboardPage extends StatelessWidget {
     final int percent = (fraction * 100).toInt();
 
     return Column(
-      cross: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -359,7 +359,7 @@ class DashboardPage extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Calorie Trend (7 Days)',
@@ -448,7 +448,7 @@ class DashboardPage extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -505,7 +505,7 @@ class DashboardPage extends StatelessWidget {
                         child: meal.imageBytes != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.memory(meal.imageBytes!, fit: pw.BoxFit.cover),
+                                child: Image.memory(meal.imageBytes!, fit: BoxFit.cover),
                               )
                             : const Icon(Icons.fastfood, color: AppTheme.accentEmerald, size: 20),
                       ),
@@ -514,7 +514,7 @@ class DashboardPage extends StatelessWidget {
                       // Text Info
                       Expanded(
                         child: Column(
-                          cross: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               meal.foodName,

@@ -77,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
-            cross: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Panel 1: API Configuration
               _buildApiConfigCard(),
@@ -115,7 +115,7 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
@@ -160,7 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
@@ -189,7 +189,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Protein (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 8),
@@ -204,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Carbohydrates (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 8),
@@ -225,7 +225,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Lipid Fats (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 8),
@@ -251,7 +251,7 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(glowColor: AppTheme.accentRed),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [

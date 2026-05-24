@@ -63,7 +63,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
                         ),
                         const SizedBox(width: 12),
                         const Column(
-                          cross: 0 ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'NutriScan',
@@ -107,7 +107,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
                         ),
                         const SizedBox(width: 12),
                         const Column(
-                          cross: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('My Profile', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600, fontSize: 13)),
                             Text('Offline User', style: TextStyle(color: AppTheme.textMuted, fontSize: 10)),

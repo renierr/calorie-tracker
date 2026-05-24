@@ -80,7 +80,7 @@ class _HistoryPageState extends State<HistoryPage> {
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              cross: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('Meal Description', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                 const SizedBox(height: 6),
@@ -90,7 +90,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     Expanded(
                       child: Column(
-                        cross: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Calories (kcal)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
@@ -101,7 +101,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
-                        cross: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Protein (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
@@ -116,7 +116,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     Expanded(
                       child: Column(
-                        cross: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Carbohydrates (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
@@ -127,7 +127,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
-                        cross: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Lipid Fat (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                           const SizedBox(height: 6),
@@ -195,7 +195,7 @@ class _HistoryPageState extends State<HistoryPage> {
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'This compiles a PDF summarizing the ${filteredMeals.length} meals displayed in the active list.',
@@ -333,7 +333,7 @@ class _HistoryPageState extends State<HistoryPage> {
               DropdownButton<String>(
                 value: _filterType,
                 dropdownColor: AppTheme.surface,
-                iconColor: AppTheme.textPrimary,
+                iconEnabledColor: AppTheme.textPrimary,
                 underline: const SizedBox(),
                 items: const [
                   DropdownMenuItem(value: 'all', child: Text('All Time')),
@@ -428,7 +428,7 @@ class _HistoryPageState extends State<HistoryPage> {
         children: [
           Expanded(
             child: Column(
-              cross: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '${filteredMeals.length} logs in active filter',
@@ -464,7 +464,7 @@ class _HistoryPageState extends State<HistoryPage> {
       padding: const EdgeInsets.all(16),
       decoration: AppTheme.premiumCardDecoration(),
       child: Column(
-        cross: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header info
           Row(
@@ -496,7 +496,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
           // Core visual row
           Row(
-            cross: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Photo Thumbnail
               Container(
@@ -519,7 +519,7 @@ class _HistoryPageState extends State<HistoryPage> {
               // Title and Macros Details
               Expanded(
                 child: Column(
-                  cross: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       meal.foodName,
