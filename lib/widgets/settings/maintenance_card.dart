@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
@@ -21,22 +22,10 @@ class MaintenanceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Icon(Icons.dangerous, color: AppTheme.accentRed, size: 20),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(context)!.dangerZone,
-                  maxLines: 2,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
+          AdaptiveCardHeader(
+            icon: Icons.dangerous,
+            iconColor: AppTheme.accentRed,
+            title: AppLocalizations.of(context)!.dangerZone,
           ),
           const SizedBox(height: 10),
           Text(

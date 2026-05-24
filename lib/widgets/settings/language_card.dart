@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
@@ -20,26 +21,10 @@ class LanguageCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.language,
-                color: AppTheme.accentEmerald,
-                size: 20,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(context)!.language,
-                  maxLines: 2,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
+          AdaptiveCardHeader(
+            icon: Icons.language,
+            iconColor: AppTheme.accentEmerald,
+            title: AppLocalizations.of(context)!.language,
           ),
           const SizedBox(height: 16),
           Container(

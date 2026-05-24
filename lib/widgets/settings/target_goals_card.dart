@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -28,26 +29,10 @@ class TargetGoalsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.track_changes,
-                color: AppTheme.accentEmerald,
-                size: 20,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(context)!.dailyTargets,
-                  maxLines: 2,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
+          AdaptiveCardHeader(
+            icon: Icons.track_changes,
+            iconColor: AppTheme.accentEmerald,
+            title: AppLocalizations.of(context)!.dailyTargets,
           ),
           const SizedBox(height: 20),
 

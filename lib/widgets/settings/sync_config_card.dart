@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../layout/adaptive_breakpoints.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
@@ -161,7 +162,9 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
           const SizedBox(height: 20),
           LayoutBuilder(
             builder: (context, constraints) {
-              final bool isNarrow = constraints.maxWidth < 420;
+              final bool isNarrow = AppBreakpoints.isNarrowContentWidth(
+                constraints.maxWidth,
+              );
               final syncButton = ElevatedButton.icon(
                 onPressed: (syncing || !enabled) ? null : _triggerManualSync,
                 icon: syncing

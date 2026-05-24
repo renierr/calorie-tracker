@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../layout/adaptive_breakpoints.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/dashboard/date_navigation_strip.dart';
@@ -15,7 +16,7 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final double width = MediaQuery.of(context).size.width;
-    final bool isWide = width >= 800;
+    final bool isWide = AppBreakpoints.isDesktopWidth(width);
 
     return Scaffold(
       appBar: AppBar(

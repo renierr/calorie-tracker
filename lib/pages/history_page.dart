@@ -2,10 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_selector/file_selector.dart';
+import '../layout/adaptive_breakpoints.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/adaptive/adaptive_action_group.dart';
 import '../widgets/report_config_dialog.dart';
 import '../widgets/history_filter_panel.dart';
 import '../widgets/meal_history_card.dart';
@@ -167,7 +169,9 @@ class _HistoryPageState extends State<HistoryPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final bool useFullPageScroll = constraints.maxWidth < 700;
+            final bool useFullPageScroll = AppBreakpoints.isPhoneWidth(
+              constraints.maxWidth,
+            );
 
             if (useFullPageScroll) {
               return SingleChildScrollView(
@@ -348,11 +352,10 @@ class _HistoryPageState extends State<HistoryPage> {
         context: context,
         color: colors.surface,
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final bool isNarrow = constraints.maxWidth < 380;
-
-          final importButton = OutlinedButton.icon(
+      child: AdaptiveActionGroup(
+        spacing: 10,
+        actions: [
+          OutlinedButton.icon(
             icon: const Icon(
               Icons.upload,
               size: 18,
@@ -376,9 +379,8 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
             ),
             onPressed: () => _handleImport(context, appState),
-          );
-
-          final exportButton = ElevatedButton.icon(
+          ),
+          ElevatedButton.icon(
             icon: const Icon(Icons.download, size: 18),
             label: Text(
               AppLocalizations.of(context)!.exportLabel,
@@ -396,26 +398,8 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
             ),
             onPressed: () => _handleExport(context, appState, filteredMeals),
-          );
-
-          if (isNarrow) {
-            return Column(
-              children: [
-                SizedBox(width: double.infinity, child: importButton),
-                const SizedBox(height: 10),
-                SizedBox(width: double.infinity, child: exportButton),
-              ],
-            );
-          }
-
-          return Row(
-            children: [
-              Expanded(child: importButton),
-              const SizedBox(width: 12),
-              Expanded(child: exportButton),
-            ],
-          );
-        },
+          ),
+        ],
       ),
     );
   }
@@ -533,7 +517,9 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final bool isNarrow = constraints.maxWidth < 420;
+          final bool isNarrow = AppBreakpoints.isNarrowContentWidth(
+            constraints.maxWidth,
+          );
 
           final reportButton = ElevatedButton.icon(
             icon: const Icon(Icons.summarize, size: 18),

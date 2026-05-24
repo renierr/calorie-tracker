@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
@@ -20,22 +21,10 @@ class ThemeCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Icon(Icons.palette, color: AppTheme.accentAmber, size: 20),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(context)!.appearance,
-                  maxLines: 2,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
+          AdaptiveCardHeader(
+            icon: Icons.palette,
+            iconColor: AppTheme.accentAmber,
+            title: AppLocalizations.of(context)!.appearance,
           ),
           const SizedBox(height: 16),
           Container(

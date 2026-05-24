@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../layout/adaptive_breakpoints.dart';
 import '../theme/theme.dart';
 import '../l10n/app_localizations.dart';
 
@@ -33,7 +34,9 @@ class HistoryFilterPanel extends StatelessWidget {
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              final bool isNarrow = constraints.maxWidth < 430;
+              final bool isNarrow = AppBreakpoints.isNarrowContentWidth(
+                constraints.maxWidth,
+              );
               final dropdown = DropdownButton<String>(
                 isExpanded: isNarrow,
                 value: filterType,

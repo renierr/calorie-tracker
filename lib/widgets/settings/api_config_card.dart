@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -26,22 +27,10 @@ class _ApiConfigCardState extends State<ApiConfigCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Icon(Icons.key, color: AppTheme.accentEmerald, size: 20),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(context)!.apiCredentials,
-                  maxLines: 2,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
+          AdaptiveCardHeader(
+            icon: Icons.key,
+            iconColor: AppTheme.accentEmerald,
+            title: AppLocalizations.of(context)!.apiCredentials,
           ),
           const SizedBox(height: 10),
           Text(

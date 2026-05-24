@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import '../../layout/adaptive_breakpoints.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
 import '../../services/gemini_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../adaptive/adaptive_action_group.dart';
 
 class ScanVerificationForm extends StatefulWidget {
   final AppState appState;
@@ -200,7 +202,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              final bool isNarrow = constraints.maxWidth < 380;
+              final bool isNarrow = AppBreakpoints.isCompactContentWidth(
+                constraints.maxWidth,
+              );
               return Wrap(
                 spacing: 10,
                 runSpacing: 8,
@@ -403,7 +407,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
               ),
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final bool isNarrow = constraints.maxWidth < 360;
+                  final bool isNarrow = AppBreakpoints.isCompactWidth(
+                    constraints.maxWidth,
+                  );
                   final Widget staleDateIcon =
                       (_mealDate ==
                               DateTime.now().subtract(
@@ -498,11 +504,10 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             ),
           ),
           const SizedBox(height: 25),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final bool isNarrow = constraints.maxWidth < 430;
-
-              final discardButton = OutlinedButton(
+          AdaptiveActionGroup(
+            spacing: 10,
+            actions: [
+              OutlinedButton(
                 onPressed: _isReEvaluating ? null : widget.onDiscard,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: colors.textPrimary,
@@ -522,47 +527,46 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   maxLines: 2,
                   textAlign: TextAlign.center,
                 ),
-              );
-
-              final reEvaluateButton = ElevatedButton(
-                onPressed: _isReEvaluating ? null : _reEvaluateMeal,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.accentBlue,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size.fromHeight(48),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              ),
+              if (widget.imageBytes != null)
+                ElevatedButton(
+                  onPressed: _isReEvaluating ? null : _reEvaluateMeal,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.accentBlue,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size.fromHeight(48),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                ),
-                child: _isReEvaluating
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
-                          ),
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.auto_awesome, size: 16),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              AppLocalizations.of(context)!.reEvaluate,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
+                  child: _isReEvaluating
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
                             ),
                           ),
-                        ],
-                      ),
-              );
-
-              final saveButton = ElevatedButton(
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.auto_awesome, size: 16),
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                AppLocalizations.of(context)!.reEvaluate,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ElevatedButton(
                 onPressed: _isReEvaluating ? null : _saveMeal,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
@@ -572,34 +576,8 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   maxLines: 2,
                   textAlign: TextAlign.center,
                 ),
-              );
-
-              if (isNarrow) {
-                return Column(
-                  children: [
-                    SizedBox(width: double.infinity, child: discardButton),
-                    const SizedBox(height: 10),
-                    if (widget.imageBytes != null) ...[
-                      SizedBox(width: double.infinity, child: reEvaluateButton),
-                      const SizedBox(height: 10),
-                    ],
-                    SizedBox(width: double.infinity, child: saveButton),
-                  ],
-                );
-              }
-
-              return Row(
-                children: [
-                  Expanded(child: discardButton),
-                  if (widget.imageBytes != null) ...[
-                    const SizedBox(width: 12),
-                    Expanded(child: reEvaluateButton),
-                  ],
-                  const SizedBox(width: 12),
-                  Expanded(child: saveButton),
-                ],
-              );
-            },
+              ),
+            ],
           ),
         ],
       ),
