@@ -451,4 +451,39 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get pdfActiveFilter => 'Aktiver Filterzeitraum';
+
+  @override
+  String get importLabel => 'Importieren';
+
+  @override
+  String get exportLabel => 'Exportieren';
+
+  @override
+  String importMealsSuccess(int count) {
+    return '$count Mahlzeiten erfolgreich importiert.';
+  }
+
+  @override
+  String importMealsError(String error) {
+    return 'Fehler beim Importieren: $error';
+  }
+
+  @override
+  String get exportMealsSuccess => 'Mahlzeiten erfolgreich exportiert.';
+
+  @override
+  String exportMealsError(String error) {
+    return 'Fehler beim Exportieren: $error';
+  }
+
+  @override
+  String get selectMeals => 'Auswählen';
+
+  @override
+  String get deselectAll => 'Auswahl aufheben';
+
+  @override
+  String selectedCount(int count) {
+    return '$count ausgewählt';
+  }
 }

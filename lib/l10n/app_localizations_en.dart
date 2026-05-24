@@ -450,4 +450,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfActiveFilter => 'Active Filter Range';
+
+  @override
+  String get importLabel => 'Import';
+
+  @override
+  String get exportLabel => 'Export';
+
+  @override
+  String importMealsSuccess(int count) {
+    return 'Successfully imported $count meals.';
+  }
+
+  @override
+  String importMealsError(String error) {
+    return 'Failed to import meals: $error';
+  }
+
+  @override
+  String get exportMealsSuccess => 'Meals exported successfully.';
+
+  @override
+  String exportMealsError(String error) {
+    return 'Failed to export: $error';
+  }
+
+  @override
+  String get selectMeals => 'Select';
+
+  @override
+  String get deselectAll => 'Deselect All';
+
+  @override
+  String selectedCount(int count) {
+    return '$count selected';
+  }
 }

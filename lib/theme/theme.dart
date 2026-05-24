@@ -101,7 +101,10 @@ class AppTheme {
         ),
         bodyLarge: TextStyle(color: _darkColors.textPrimary, fontSize: 16),
         bodyMedium: TextStyle(color: _darkColors.textSecondary, fontSize: 14),
-        labelLarge: TextStyle(color: _darkColors.textPrimary, fontWeight: FontWeight.w500),
+        labelLarge: TextStyle(
+          color: _darkColors.textPrimary,
+          fontWeight: FontWeight.w500,
+        ),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
@@ -202,7 +205,10 @@ class AppTheme {
         ),
         bodyLarge: TextStyle(color: _lightColors.textPrimary, fontSize: 16),
         bodyMedium: TextStyle(color: _lightColors.textSecondary, fontSize: 14),
-        labelLarge: TextStyle(color: _lightColors.textPrimary, fontWeight: FontWeight.w500),
+        labelLarge: TextStyle(
+          color: _lightColors.textPrimary,
+          fontWeight: FontWeight.w500,
+        ),
       ),
 
       inputDecorationTheme: InputDecorationTheme(

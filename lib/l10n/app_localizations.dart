@@ -907,6 +907,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Active Filter Range'**
   String get pdfActiveFilter;
+
+  /// No description provided for @importLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get importLabel;
+
+  /// No description provided for @exportLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportLabel;
+
+  /// No description provided for @importMealsSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully imported {count} meals.'**
+  String importMealsSuccess(int count);
+
+  /// No description provided for @importMealsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import meals: {error}'**
+  String importMealsError(String error);
+
+  /// No description provided for @exportMealsSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals exported successfully.'**
+  String get exportMealsSuccess;
+
+  /// No description provided for @exportMealsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export: {error}'**
+  String exportMealsError(String error);
+
+  /// No description provided for @selectMeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get selectMeals;
+
+  /// No description provided for @deselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect All'**
+  String get deselectAll;
+
+  /// No description provided for @selectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String selectedCount(int count);
 }
 
 class _AppLocalizationsDelegate

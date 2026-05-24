@@ -415,11 +415,11 @@ class _ScanPageState extends State<ScanPage> {
               const SizedBox(width: 8),
               Text(
                 AppLocalizations.of(context)!.contextClue,
-              style: TextStyle(
-                color: colors.textPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
+                style: TextStyle(
+                  color: colors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
             ],
           ),
@@ -458,20 +458,17 @@ class _ScanPageState extends State<ScanPage> {
                 const SizedBox(height: 8),
                 Text(
                   AppLocalizations.of(context)!.apiKeyMissing,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                AppLocalizations.of(context)!.apiKeyMissingDesc,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: colors.textSecondary,
-                  fontSize: 12,
-                ),
+                const SizedBox(height: 6),
+                Text(
+                  AppLocalizations.of(context)!.apiKeyMissingDesc,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: colors.textSecondary, fontSize: 12),
                 ),
                 const SizedBox(height: 12),
                 TextButton(
@@ -578,13 +575,13 @@ class _ScanPageState extends State<ScanPage> {
             children: [
               Text(
                 AppLocalizations.of(context)!.verifyEstimates,
-              style: TextStyle(
-                color: colors.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+                style: TextStyle(
+                  color: colors.textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            if (_scanResult != null)
+              if (_scanResult != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -763,10 +760,7 @@ class _ScanPageState extends State<ScanPage> {
                   const SizedBox(width: 10),
                   Text(
                     AppLocalizations.of(context)!.mealDate,
-                    style: TextStyle(
-                      color: colors.textSecondary,
-                      fontSize: 13,
-                    ),
+                    style: TextStyle(color: colors.textSecondary, fontSize: 13),
                   ),
                   Text(
                     DateFormat.yMd(
