@@ -1,13 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../services/gemini_service.dart';
-import '../models/meal_model.dart';
+import '../widgets/scan/scan_image_selector.dart';
+import '../widgets/scan/scan_verification_form.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -28,25 +28,10 @@ class _ScanPageState extends State<ScanPage> {
   bool _showForm = false;
   bool _isScanning = false;
   AIAnalysisResult? _scanResult;
-  DateTime _mealDate = DateTime.now();
-
-  // Form field controllers
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _caloriesController = TextEditingController();
-  final TextEditingController _proteinController = TextEditingController();
-  final TextEditingController _carbsController = TextEditingController();
-  final TextEditingController _fatController = TextEditingController();
-  final TextEditingController _notesController = TextEditingController();
 
   @override
   void dispose() {
     _hintController.dispose();
-    _nameController.dispose();
-    _caloriesController.dispose();
-    _proteinController.dispose();
-    _carbsController.dispose();
-    _fatController.dispose();
-    _notesController.dispose();
     super.dispose();
   }
 
@@ -64,8 +49,6 @@ class _ScanPageState extends State<ScanPage> {
         setState(() {
           _selectedImage = image;
           _imageBytes = bytes;
-          // Keep form open if it was already open (e.g. manual logging),
-          // otherwise keep it closed so user can scan or log manually
         });
       }
     } catch (e) {
@@ -89,7 +72,6 @@ class _ScanPageState extends State<ScanPage> {
         _showForm = false;
         _scanResult = null;
       }
-      _mealDate = DateTime.now();
     });
   }
 
@@ -115,14 +97,6 @@ class _ScanPageState extends State<ScanPage> {
         _scanResult = result;
         _isScanning = false;
         _showForm = true;
-
-        // Populate text form fields
-        _nameController.text = result.foodName;
-        _caloriesController.text = result.calories.toString();
-        _proteinController.text = result.protein.toString();
-        _carbsController.text = result.carbs.toString();
-        _fatController.text = result.fat.toString();
-        _notesController.text = result.notes;
       });
     } catch (e) {
       setState(() {
@@ -155,54 +129,6 @@ class _ScanPageState extends State<ScanPage> {
     }
   }
 
-  // Save validated meal log helper
-  Future<void> _saveMeal(AppState appState) async {
-    final String name = _nameController.text.trim();
-    final int calories = int.tryParse(_caloriesController.text) ?? 0;
-    final int protein = int.tryParse(_proteinController.text) ?? 0;
-    final int carbs = int.tryParse(_carbsController.text) ?? 0;
-    final int fat = int.tryParse(_fatController.text) ?? 0;
-    final String notes = _notesController.text.trim();
-
-    if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.provideName)),
-      );
-      return;
-    }
-
-    final newMeal = Meal(
-      shortId:
-          'MEAL-${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
-      foodName: name,
-      calories: calories,
-      protein: protein,
-      carbs: carbs,
-      fat: fat,
-      confidence: _scanResult?.confidence ?? 100,
-      imageBytes: _imageBytes,
-      notes: notes,
-      timestamp: _mealDate.millisecondsSinceEpoch,
-      updatedAt: DateTime.now().millisecondsSinceEpoch,
-    );
-
-    await appState.addMeal(newMeal);
-
-    appState.selectTab(0);
-
-    // Clear and reset state on success
-    _clearImage();
-    _hintController.clear();
-
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)!.mealLogged),
-        backgroundColor: AppTheme.accentEmerald,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
@@ -221,7 +147,21 @@ class _ScanPageState extends State<ScanPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Phase A: Image Intake
-                  _buildIntakeSection(),
+                  ScanImageSelector(
+                    imageBytes: _imageBytes,
+                    onPickGallery: () => _pickImage(ImageSource.gallery),
+                    onPickCamera: () => _pickImage(ImageSource.camera),
+                    onClear: _clearImage,
+                    onLogManually: () {
+                      setState(() {
+                        _showForm = true;
+                        _imageBytes = null;
+                        _selectedImage = null;
+                        _scanResult = null;
+                      });
+                    },
+                    showForm: _showForm,
+                  ),
                   const SizedBox(height: 20),
 
                   if (_imageBytes != null && !_showForm && !_isScanning) ...[
@@ -235,7 +175,22 @@ class _ScanPageState extends State<ScanPage> {
                   ],
 
                   // Phase B: Form verification
-                  if (_showForm) _buildVerificationForm(appState),
+                  if (_showForm)
+                    ScanVerificationForm(
+                      appState: appState,
+                      scanResult: _scanResult,
+                      imageBytes: _imageBytes,
+                      onDiscard: () {
+                        setState(() {
+                          _showForm = false;
+                          _scanResult = null;
+                        });
+                      },
+                      onSaveSuccess: () {
+                        _clearImage();
+                        _hintController.clear();
+                      },
+                    ),
                 ],
               ),
             ),
@@ -284,119 +239,7 @@ class _ScanPageState extends State<ScanPage> {
     );
   }
 
-  // Layout 1: Photo selection dashboard
-  Widget _buildIntakeSection() {
-    final colors = AppTheme.of(context);
-    return Container(
-      width: double.infinity,
-      height: 260,
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.08),
-          width: 1,
-        ),
-      ),
-      child: _imageBytes == null
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.add_a_photo_outlined,
-                  color: colors.textSecondary.withValues(alpha: 0.5),
-                  size: 48,
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  AppLocalizations.of(context)!.noPhotoSelected,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  AppLocalizations.of(context)!.scanPrompt,
-                  style: TextStyle(color: colors.textMuted, fontSize: 12),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.photo_library),
-                      label: Text(AppLocalizations.of(context)!.gallery),
-                      onPressed: () => _pickImage(ImageSource.gallery),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.surfaceLight,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.camera_alt),
-                      label: Text(AppLocalizations.of(context)!.camera),
-                      onPressed: () => _pickImage(ImageSource.camera),
-                    ),
-                  ],
-                ),
-                if (!_showForm) ...[
-                  const SizedBox(height: 12),
-                  TextButton.icon(
-                    icon: const Icon(
-                      Icons.edit_note,
-                      color: AppTheme.accentEmerald,
-                    ),
-                    label: Text(
-                      AppLocalizations.of(context)!.logManually,
-                      style: const TextStyle(color: AppTheme.accentEmerald),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _showForm = true;
-                        _imageBytes = null;
-                        _selectedImage = null;
-                        _scanResult = null;
-                        _mealDate = DateTime.now();
-                        _nameController.text = 'New Meal';
-                        _caloriesController.text = '0';
-                        _proteinController.text = '0';
-                        _carbsController.text = '0';
-                        _fatController.text = '0';
-                        _notesController.text = '';
-                      });
-                    },
-                  ),
-                ],
-              ],
-            )
-          : Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.memory(
-                    _imageBytes!,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: FloatingActionButton.small(
-                    backgroundColor: Colors.black.withValues(alpha: 0.6),
-                    onPressed: _clearImage,
-                    child: const Icon(Icons.close, color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-    );
-  }
-
-  // Layout 2: Optional hint field
+  // Layout: Optional hint field
   Widget _buildHintField() {
     final colors = AppTheme.of(context);
     return Container(
@@ -436,7 +279,7 @@ class _ScanPageState extends State<ScanPage> {
     );
   }
 
-  // Layout 3: Scan trigger action
+  // Layout: Scan trigger action
   Widget _buildTriggerButton(bool hasApiKey, String apiKey) {
     final colors = AppTheme.of(context);
     if (!hasApiKey) {
@@ -473,7 +316,6 @@ class _ScanPageState extends State<ScanPage> {
                 const SizedBox(height: 12),
                 TextButton(
                   onPressed: () {
-                    // Navigate to settings tab via layout controller if possible
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -551,277 +393,6 @@ class _ScanPageState extends State<ScanPage> {
     setState(() {
       _showForm = true;
       _scanResult = null;
-      _mealDate = DateTime.now();
-      _nameController.text = 'New Meal';
-      _caloriesController.text = '0';
-      _proteinController.text = '0';
-      _carbsController.text = '0';
-      _fatController.text = '0';
-      _notesController.text = '';
     });
-  }
-
-  // Layout 4: AI verification form
-  Widget _buildVerificationForm(AppState appState) {
-    final colors = AppTheme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(showGlow: true),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.verifyEstimates,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (_scanResult != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.accentEmerald.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.aiMatch(_scanResult!.confidence),
-                    style: const TextStyle(
-                      color: AppTheme.accentEmerald,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Food Name
-          Text(
-            AppLocalizations.of(context)!.mealDescription,
-            style: TextStyle(color: colors.textSecondary, fontSize: 12),
-          ),
-          const SizedBox(height: 6),
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.avocadoHint,
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Numeric stats row
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.caloriesKcal,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _caloriesController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.proteinG,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _proteinController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.carbsG,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _carbsController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.fatG,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _fatController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          // Analysis explanations
-          Text(
-            AppLocalizations.of(context)!.aiNotes,
-            style: TextStyle(color: colors.textSecondary, fontSize: 12),
-          ),
-          const SizedBox(height: 6),
-          TextField(
-            controller: _notesController,
-            maxLines: 3,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.macroHint,
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Date picker for meal date
-          InkWell(
-            onTap: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _mealDate,
-                firstDate: DateTime(2020),
-                lastDate: DateTime.now(),
-              );
-              if (picked != null) {
-                setState(() => _mealDate = picked);
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-              decoration: BoxDecoration(
-                color: colors.surfaceLight.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    color: AppTheme.accentEmerald,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    AppLocalizations.of(context)!.mealDate,
-                    style: TextStyle(color: colors.textSecondary, fontSize: 13),
-                  ),
-                  Text(
-                    DateFormat.yMd(
-                      Localizations.localeOf(context).toLanguageTag(),
-                    ).format(_mealDate),
-                    style: TextStyle(
-                      color: colors.textPrimary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                  if (_mealDate ==
-                          DateTime.now().subtract(const Duration(days: 1)) ||
-                      _mealDate.isBefore(
-                        DateTime.now().subtract(const Duration(days: 1)),
-                      ))
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Icon(
-                        Icons.edit_calendar,
-                        color: AppTheme.accentAmber,
-                        size: 16,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 25),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      _showForm = false;
-                      _scanResult = null;
-                    });
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    side: const BorderSide(color: Colors.white24),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(AppLocalizations.of(context)!.discard),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => _saveMeal(appState),
-                  child: Text(AppLocalizations.of(context)!.logAndSave),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 }

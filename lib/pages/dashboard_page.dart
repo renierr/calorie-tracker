@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../theme/theme.dart';
 import '../providers/app_state.dart';
-import '../models/meal_model.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/dashboard/date_navigation_strip.dart';
+import '../widgets/dashboard/calorie_ring_card.dart';
+import '../widgets/dashboard/macros_progress_card.dart';
+import '../widgets/dashboard/trend_chart_card.dart';
+import '../widgets/dashboard/day_quick_logs_card.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -33,7 +35,7 @@ class DashboardPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Date Navigation Strip
-              _buildDateNavigationStrip(context, appState),
+              DateNavigationStrip(appState: appState),
               const SizedBox(height: 25),
 
               // Layout Grid - Responsive for Mobile vs Desktop
@@ -46,9 +48,9 @@ class DashboardPage extends StatelessWidget {
                           flex: 1,
                           child: Column(
                             children: [
-                              _buildCalorieRingCard(context, appState),
+                              CalorieRingCard(appState: appState),
                               const SizedBox(height: 20),
-                              _buildMacrosProgressCard(context, appState),
+                              MacrosProgressCard(appState: appState),
                             ],
                           ),
                         ),
@@ -58,9 +60,9 @@ class DashboardPage extends StatelessWidget {
                           flex: 1,
                           child: Column(
                             children: [
-                              _buildTrendChartCard(context, appState),
+                              TrendChartCard(appState: appState),
                               const SizedBox(height: 20),
-                              _buildDayQuickLogsCard(context, appState),
+                              DayQuickLogsCard(appState: appState),
                             ],
                           ),
                         ),
@@ -69,586 +71,22 @@ class DashboardPage extends StatelessWidget {
                   : Column(
                       children: [
                         // Calorie Ring Indicator
-                        _buildCalorieRingCard(context, appState),
+                        CalorieRingCard(appState: appState),
                         const SizedBox(height: 20),
                         // Macros Progress Slider
-                        _buildMacrosProgressCard(context, appState),
+                        MacrosProgressCard(appState: appState),
                         const SizedBox(height: 20),
                         // 7 Day Calorie Trend
-                        _buildTrendChartCard(context, appState),
+                        TrendChartCard(appState: appState),
                         const SizedBox(height: 20),
                         // Today's Logs Quick List
-                        _buildDayQuickLogsCard(context, appState),
+                        DayQuickLogsCard(appState: appState),
                       ],
                     ),
               const SizedBox(height: 20),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  // Widget 1: Horizontal Sliding Date Navigation Strip
-  Widget _buildDateNavigationStrip(BuildContext context, AppState appState) {
-    final now = DateTime.now();
-    final DateFormat formatter = DateFormat.yMMMd(
-      Localizations.localeOf(context).toLanguageTag(),
-    );
-    final colors = AppTheme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: AppTheme.premiumCardDecoration(),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Previous Day Button
-          IconButton(
-            icon: Icon(Icons.chevron_left, color: colors.textPrimary),
-            onPressed: () => appState.previousDay(),
-          ),
-
-          // Date Text & Calendar Dialog Selector
-          InkWell(
-            onTap: () async {
-              final DateTime? picked = await showDatePicker(
-                context: context,
-                initialDate: appState.selectedDate,
-                firstDate: DateTime(now.year - 2),
-                lastDate: DateTime(now.year + 1),
-                builder: (context, child) {
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                      colorScheme: ColorScheme.dark(
-                        primary: AppTheme.accentEmerald,
-                        onPrimary: Colors.white,
-                        surface: colors.surface,
-                        onSurface: colors.textPrimary,
-                      ),
-                    ),
-                    child: child!,
-                  );
-                },
-              );
-              if (picked != null) {
-                appState.selectDate(picked);
-              }
-            },
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.calendar_month,
-                  color: AppTheme.accentEmerald,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  formatter.format(appState.selectedDate),
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Next Day Button (Enabled unless selectedDate is today or future)
-          IconButton(
-            icon: Icon(Icons.chevron_right, color: colors.textPrimary),
-            onPressed: () => appState.nextDay(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget 2: Calorie Ring Progress Card
-  Widget _buildCalorieRingCard(BuildContext context, AppState appState) {
-    final int consumed = appState.totalCaloriesConsumed;
-    final int goal = appState.calorieGoal;
-    final double percent = goal > 0 ? (consumed / goal).clamp(0.0, 1.0) : 0.0;
-    final int remaining = goal - consumed;
-    final colors = AppTheme.of(context);
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-      decoration: AppTheme.premiumCardDecoration(showGlow: percent >= 1.0),
-      child: Column(
-        children: [
-          Text(
-            AppLocalizations.of(context)!.calorieConsumption,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Visual custom circular progress indicator
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 170,
-                height: 170,
-                child: CircularProgressIndicator(
-                  value: percent,
-                  strokeWidth: 14,
-                  backgroundColor: Colors.white.withValues(alpha: 0.05),
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    AppTheme.accentEmerald,
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '$consumed',
-                    style: TextStyle(
-                      color: colors.textPrimary,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.ofKcal(goal),
-                    style: TextStyle(color: colors.textMuted, fontSize: 13),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // Sub-Label listing remaining allowance
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                remaining >= 0
-                    ? Icons.check_circle_outline
-                    : Icons.warning_amber_rounded,
-                color: remaining >= 0
-                    ? AppTheme.accentEmerald
-                    : AppTheme.accentRed,
-                size: 18,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                remaining >= 0
-                    ? AppLocalizations.of(context)!.kcalRemaining(remaining)
-                    : AppLocalizations.of(
-                        context,
-                      )!.kcalOverBudget(remaining.abs()),
-                style: TextStyle(
-                  color: remaining >= 0
-                      ? colors.textPrimary
-                      : AppTheme.accentRed,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget 3: Macronutrient Goals Sliders
-  Widget _buildMacrosProgressCard(BuildContext context, AppState appState) {
-    final colors = AppTheme.of(context);
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.macroDistribution,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Protein bar
-          _buildMacroSlider(
-            label: AppLocalizations.of(context)!.protein,
-            consumed: appState.totalProteinConsumed,
-            goal: appState.proteinGoal,
-            color: AppTheme.accentBlue,
-            textColor: colors.textPrimary,
-          ),
-          const SizedBox(height: 15),
-
-          // Carbs bar
-          _buildMacroSlider(
-            label: AppLocalizations.of(context)!.carbs,
-            consumed: appState.totalCarbsConsumed,
-            goal: appState.carbsGoal,
-            color: AppTheme.accentAmber,
-            textColor: colors.textPrimary,
-          ),
-          const SizedBox(height: 15),
-
-          // Fat bar
-          _buildMacroSlider(
-            label: AppLocalizations.of(context)!.fat,
-            consumed: appState.totalFatConsumed,
-            goal: appState.fatGoal,
-            color: AppTheme.accentRed,
-            textColor: colors.textPrimary,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMacroSlider({
-    required String label,
-    required int consumed,
-    required int goal,
-    required Color color,
-    required Color textColor,
-  }) {
-    final double fraction = goal > 0 ? (consumed / goal).clamp(0.0, 1.0) : 0.0;
-    final int percent = (fraction * 100).toInt();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
-              ),
-            ),
-            Text(
-              '$consumed / $goal g ($percent%)',
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: Stack(
-            children: [
-              Container(
-                height: 10,
-                color: Colors.white.withValues(alpha: 0.05),
-              ),
-              FractionallySizedBox(
-                widthFactor: fraction,
-                child: Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Widget 4: Calorie 7-Day Trend Bar Chart
-  Widget _buildTrendChartCard(BuildContext context, AppState appState) {
-    // Generate dates for the last 7 days including today
-    final DateTime today = appState.selectedDate;
-    final List<DateTime> last7Days = List.generate(7, (i) {
-      return today.subtract(Duration(days: 6 - i));
-    });
-
-    // Find totals for each of these days
-    final List<int> dailyTotals = last7Days.map((day) {
-      return appState.meals
-          .where((m) {
-            final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
-            return date.year == day.year &&
-                date.month == day.month &&
-                date.day == day.day;
-          })
-          .fold(0, (sum, m) => sum + m.calories);
-    }).toList();
-
-    final int goal = appState.calorieGoal;
-    final int maxVal = [goal, ...dailyTotals].reduce((a, b) => a > b ? a : b);
-    final colors = AppTheme.of(context);
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.calorieTrend,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 25),
-
-          // Elegant Container-Based Chart Grid
-          SizedBox(
-            height: 160,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(7, (i) {
-                final date = last7Days[i];
-                final calories = dailyTotals[i];
-                final double factor = maxVal > 0
-                    ? (calories / maxVal).clamp(0.0, 1.0)
-                    : 0.0;
-                final bool isSelectedDate =
-                    date.year == today.year &&
-                    date.month == today.month &&
-                    date.day == today.day;
-
-                final String weekday = DateFormat.E(
-                  Localizations.localeOf(context).toLanguageTag(),
-                ).format(date).substring(0, 2);
-
-                return Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      // Hover value or visual top label
-                      Text(
-                        calories > 0 ? '$calories' : '',
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: colors.textMuted,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-
-                      // Elegant Rounded Gradient Bar
-                      Expanded(
-                        child: FractionallySizedBox(
-                          heightFactor: factor > 0 ? factor : 0.05,
-                          widthFactor: 0.45,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: isSelectedDate
-                                    ? [
-                                        AppTheme.accentEmerald,
-                                        AppTheme.accentEmerald.withValues(
-                                          alpha: 0.4,
-                                        ),
-                                      ]
-                                    : [
-                                        AppTheme.accentBlue,
-                                        AppTheme.accentBlue.withValues(
-                                          alpha: 0.4,
-                                        ),
-                                      ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              ),
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(4),
-                              ),
-                              border: Border.all(
-                                color: isSelectedDate
-                                    ? AppTheme.accentEmerald
-                                    : Colors.transparent,
-                                width: 0.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Day Label (Highlighted if selected)
-                      Text(
-                        weekday,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isSelectedDate
-                              ? AppTheme.accentEmerald
-                              : colors.textSecondary,
-                          fontWeight: isSelectedDate
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget 5: Quick Meals Logs for the Selected Day
-  Widget _buildDayQuickLogsCard(BuildContext context, AppState appState) {
-    final meals = appState.mealsForSelectedDate;
-    final colors = AppTheme.of(context);
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.dayLogSummary,
-                style: TextStyle(
-                  color: colors.textSecondary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                AppLocalizations.of(context)!.logs(meals.length),
-                style: TextStyle(color: colors.textMuted, fontSize: 12),
-              ),
-            ],
-          ),
-          const SizedBox(height: 15),
-
-          if (meals.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.restaurant_outlined,
-                      color: colors.textMuted.withValues(alpha: 0.5),
-                      size: 36,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      AppLocalizations.of(context)!.noMealsLogged,
-                      style: TextStyle(color: colors.textMuted, fontSize: 13),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: meals.length > 3
-                  ? 3
-                  : meals.length, // Show up to 3 quick logs
-              separatorBuilder: (context, index) =>
-                  const Divider(color: Colors.white10, height: 1),
-              itemBuilder: (context, index) {
-                final Meal meal = meals[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: [
-                      // Thumbnail Photo or fallback icon
-                      Container(
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: colors.surfaceLight,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.white12, width: 0.5),
-                        ),
-                        child: meal.imageBytes != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.memory(
-                                  meal.imageBytes!,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.fastfood,
-                                color: AppTheme.accentEmerald,
-                                size: 20,
-                              ),
-                      ),
-                      const SizedBox(width: 14),
-
-                      // Text Info
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              meal.foodName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: colors.textPrimary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.perGram(meal.carbs, meal.fat, meal.protein),
-                              style: TextStyle(
-                                color: colors.textMuted,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Calorie Count Indicator
-                      Text(
-                        AppLocalizations.of(context)!.kcalLabel(meal.calories),
-                        style: const TextStyle(
-                          color: AppTheme.accentEmerald,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-        ],
       ),
     );
   }
