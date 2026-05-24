@@ -26,6 +26,7 @@ class _ScanPageState extends State<ScanPage> {
   bool _showForm = false;
   bool _isScanning = false;
   AIAnalysisResult? _scanResult;
+  DateTime _mealDate = DateTime.now();
 
   // Form field controllers
   final TextEditingController _nameController = TextEditingController();
@@ -79,10 +80,10 @@ class _ScanPageState extends State<ScanPage> {
       _selectedImage = null;
       _imageBytes = null;
       if (_scanResult != null) {
-        // Only reset form if it was an AI scan, keep form open if it's a manual log
         _showForm = false;
         _scanResult = null;
       }
+      _mealDate = DateTime.now();
     });
   }
 
@@ -167,7 +168,7 @@ class _ScanPageState extends State<ScanPage> {
       confidence: _scanResult?.confidence ?? 100,
       imageBytes: _imageBytes,
       notes: notes,
-      timestamp: DateTime.now().millisecondsSinceEpoch,
+      timestamp: _mealDate.millisecondsSinceEpoch,
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
 
@@ -311,6 +312,7 @@ class _ScanPageState extends State<ScanPage> {
                         _imageBytes = null;
                         _selectedImage = null;
                         _scanResult = null;
+                        _mealDate = DateTime.now();
                         _nameController.text = 'New Meal';
                         _caloriesController.text = '0';
                         _proteinController.text = '0';
@@ -466,6 +468,7 @@ class _ScanPageState extends State<ScanPage> {
     setState(() {
       _showForm = true;
       _scanResult = null;
+      _mealDate = DateTime.now();
       _nameController.text = 'New Meal';
       _caloriesController.text = '0';
       _proteinController.text = '0';
@@ -591,9 +594,48 @@ class _ScanPageState extends State<ScanPage> {
             maxLines: 3,
             decoration: const InputDecoration(hintText: 'Macro breakdown...'),
           ),
-          const SizedBox(height: 25),
+          const SizedBox(height: 16),
 
-          // Actions Form Toggles
+          // Date picker for meal date
+          InkWell(
+            onTap: () async {
+              final picked = await showDatePicker(
+                context: context,
+                initialDate: _mealDate,
+                firstDate: DateTime(2020),
+                lastDate: DateTime.now(),
+              );
+              if (picked != null) {
+                setState(() => _mealDate = picked);
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceLight.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.calendar_today, color: AppTheme.accentEmerald, size: 18),
+                  const SizedBox(width: 10),
+                  const Text('Meal Date: ', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+                  Text(
+                    '${_mealDate.year}-${_mealDate.month.toString().padLeft(2, '0')}-${_mealDate.day.toString().padLeft(2, '0')}',
+                    style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                  if (_mealDate == DateTime.now().subtract(const Duration(days: 1)) ||
+                      _mealDate.isBefore(DateTime.now().subtract(const Duration(days: 1))))
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Icon(Icons.edit_calendar, color: AppTheme.accentAmber, size: 16),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 25),
           Row(
             children: [
               Expanded(
