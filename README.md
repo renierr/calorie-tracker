@@ -79,7 +79,7 @@ The project is structured logically around clean architecture principles in the 
 
 ## How to Build & Run
 
-Ensure you are in the project workspace directory: `C:\dev\flutter\calorie-tracker`
+Ensure you are in the project workspace directory.
 
 ### 1. Run the App
 Launch the developer workspace with live-reload support:
@@ -139,7 +139,7 @@ flutter build windows --release
 
 #### B. Output Directory & Created Files
 The build files are generated under:
-`C:\dev\flutter\calorie-tracker\build\windows\x64\runner\Release\`
+`calorie-tracker\build\windows\x64\runner\Release\`
 
 The directory contains:
 *   `calorie_tracker.exe`: The primary executable binary file.
@@ -186,13 +186,13 @@ flutter build appbundle --release
 To prevent security warnings on install, sign your Android build:
 1. Generate a upload keystore using Java's `keytool`:
    ```bash
-   keytool -genkey -v -keystore C:\Users\renie\upload-keystore.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+   keytool -genkey -v -keystore upload-keystore.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
    ```
 2. Create an `android/key.properties` file:
    ```properties
    storePassword=your-keystore-password
    keyPassword=your-key-password
    keyAlias=upload
-   storeFile=C:/Users/renie/upload-keystore.jks
+   storeFile=upload-keystore.jks
    ```
 3. The build system in `android/app/build.gradle` will automatically detect these credentials on subsequent release runs to produce a signed production build.
