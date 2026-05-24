@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
+import '../l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -61,8 +62,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Preferences saved successfully!'),
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.prefsSaved),
         backgroundColor: AppTheme.accentEmerald,
       ),
     );
@@ -73,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final appState = Provider.of<AppState>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Goal & API Settings')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settingsTitle)),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -98,7 +99,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: 52,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.save),
-                  label: const Text('Save Preferences'),
+                  label: Text(AppLocalizations.of(context)!.savePreferences),
                   onPressed: () => _saveSettings(appState),
                 ),
               ),
@@ -118,28 +119,28 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.key, color: AppTheme.accentEmerald, size: 20),
-              SizedBox(width: 10),
+              const Icon(Icons.key, color: AppTheme.accentEmerald, size: 20),
+              const SizedBox(width: 10),
               Text(
-                'Gemini AI API Credentials',
-                style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                AppLocalizations.of(context)!.apiCredentials,
+                style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ],
           ),
           const SizedBox(height: 10),
-          const Text(
-            'The AI Meal Scanner runs locally and requires a Google Gemini API Key. Your key is saved locally in private app settings.',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, height: 1.4),
+          Text(
+            AppLocalizations.of(context)!.apiCredentialsDesc,
+            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12, height: 1.4),
           ),
           const SizedBox(height: 20),
           TextField(
             controller: _apiKeyController,
             obscureText: _obscureApiKey,
             decoration: InputDecoration(
-              hintText: 'Enter your Gemini API Key',
-              labelText: 'Gemini API Key',
+              hintText: AppLocalizations.of(context)!.enterApiKey,
+              labelText: AppLocalizations.of(context)!.apiKeyLabel,
               suffixIcon: IconButton(
                 icon: Icon(_obscureApiKey ? Icons.visibility_off : Icons.visibility, color: AppTheme.textSecondary),
                 onPressed: () {
@@ -163,25 +164,25 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.track_changes, color: AppTheme.accentEmerald, size: 20),
-              SizedBox(width: 10),
+              const Icon(Icons.track_changes, color: AppTheme.accentEmerald, size: 20),
+              const SizedBox(width: 10),
               Text(
-                'Daily Nutritional Targets',
-                style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                AppLocalizations.of(context)!.dailyTargets,
+                style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ],
           ),
           const SizedBox(height: 20),
 
           // Calories Input
-          const Text('Daily Calorie Budget (kcal)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+          Text(AppLocalizations.of(context)!.calorieBudget, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
           const SizedBox(height: 8),
           TextField(
             controller: _caloriesController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(hintText: 'e.g. 2000'),
+            decoration: InputDecoration(hintText: AppLocalizations.of(context)!.calorieHint),
           ),
           const SizedBox(height: 16),
 
@@ -197,7 +198,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     TextField(
                       controller: _proteinController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: 'e.g. 130'),
+                      decoration: InputDecoration(hintText: AppLocalizations.of(context)!.proteinHint),
                     ),
                   ],
                 ),
@@ -212,7 +213,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     TextField(
                       controller: _carbsController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: 'e.g. 220'),
+                      decoration: InputDecoration(hintText: AppLocalizations.of(context)!.carbsHint),
                     ),
                   ],
                 ),
@@ -233,7 +234,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     TextField(
                       controller: _fatController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: 'e.g. 70'),
+                      decoration: InputDecoration(hintText: AppLocalizations.of(context)!.fatHint),
                     ),
                   ],
                 ),
@@ -254,27 +255,27 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.dangerous, color: AppTheme.accentRed, size: 20),
-              SizedBox(width: 10),
+              const Icon(Icons.dangerous, color: AppTheme.accentRed, size: 20),
+              const SizedBox(width: 10),
               Text(
-                'Danger Zone & Maintenance',
-                style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                AppLocalizations.of(context)!.dangerZone,
+                style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ],
           ),
           const SizedBox(height: 10),
-          const Text(
-            'Clearing your database will permanently remove all tracked foods, calorie metrics, and meal photos from SQLite. This action is irreversible.',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, height: 1.4),
+          Text(
+            AppLocalizations.of(context)!.dangerDesc,
+            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12, height: 1.4),
           ),
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
               icon: const Icon(Icons.delete_forever, color: AppTheme.accentRed),
-              label: const Text('Clear All Food Logs History', style: TextStyle(color: AppTheme.accentRed)),
+              label: Text(AppLocalizations.of(context)!.clearHistory, style: const TextStyle(color: AppTheme.accentRed)),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppTheme.accentRed, width: 1.2),
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -286,14 +287,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   builder: (context) {
                     return AlertDialog(
                       backgroundColor: AppTheme.surface,
-                      title: const Text('Erase All Data?', style: TextStyle(color: AppTheme.accentRed, fontWeight: FontWeight.bold)),
-                      content: const Text(
-                        'Are you absolutely sure you want to permanently clear the SQLite database? This deletes all your logged meal stats, photos, and historical progress. This action cannot be undone.',
-                      ),
+                      title: Text(AppLocalizations.of(context)!.eraseAll, style: const TextStyle(color: AppTheme.accentRed, fontWeight: FontWeight.bold)),
+                      content: Text(AppLocalizations.of(context)!.eraseAllDesc),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+                          child: Text(AppLocalizations.of(context)!.cancel, style: const TextStyle(color: AppTheme.textSecondary)),
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: AppTheme.accentRed),
@@ -302,10 +301,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             if (!context.mounted) return;
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Database log history cleared.')),
+                              SnackBar(content: Text(AppLocalizations.of(context)!.dbCleared)),
                             );
                           },
-                          child: const Text('Permanently Erase Database'),
+                          child: Text(AppLocalizations.of(context)!.permanentlyErase),
                         ),
                       ],
                     );

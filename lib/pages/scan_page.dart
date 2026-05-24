@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../services/gemini_service.dart';
@@ -69,7 +71,7 @@ class _ScanPageState extends State<ScanPage> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pick image: $e')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.pickImageFailed(e.toString()))),
       );
     }
   }
@@ -126,15 +128,15 @@ class _ScanPageState extends State<ScanPage> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: AppTheme.surface,
-          title: const Text('AI Scanner Error', style: TextStyle(color: AppTheme.accentRed)),
+          title: Text(AppLocalizations.of(context)!.aiError, style: const TextStyle(color: AppTheme.accentRed)),
           content: Text(
-            'Failed to analyze image. Please ensure your Gemini API Key is valid and internet connection is active.\n\nError details: $e',
+            AppLocalizations.of(context)!.aiErrorDesc(e.toString()),
             style: const TextStyle(color: AppTheme.textPrimary),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK', style: TextStyle(color: AppTheme.accentEmerald)),
+              child: Text(AppLocalizations.of(context)!.ok, style: const TextStyle(color: AppTheme.accentEmerald)),
             ),
           ],
         ),
@@ -153,7 +155,7 @@ class _ScanPageState extends State<ScanPage> {
 
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please provide a valid meal name.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.provideName)),
       );
       return;
     }
@@ -182,8 +184,8 @@ class _ScanPageState extends State<ScanPage> {
     
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Meal logged successfully!'),
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.mealLogged),
         backgroundColor: AppTheme.accentEmerald,
       ),
     );
@@ -196,7 +198,7 @@ class _ScanPageState extends State<ScanPage> {
     final bool hasApiKey = apiKey.trim().isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('AI Meal Scanner')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.scanTitle)),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -236,17 +238,17 @@ class _ScanPageState extends State<ScanPage> {
                   children: [
                     const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentEmerald)),
                     const SizedBox(height: 24),
-                    const Text(
-                      'Analyzing Food with Gemini AI...',
-                      style: TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
+                    Text(
+                      AppLocalizations.of(context)!.scanningTitle,
+                      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Text(
-                        'Estimating weights, portions, and total nutritional content. This may take a few seconds.',
+                        AppLocalizations.of(context)!.scanningDesc,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                        style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
                       ),
                     ),
                   ],
@@ -274,14 +276,14 @@ class _ScanPageState extends State<ScanPage> {
               children: [
                 Icon(Icons.add_a_photo_outlined, color: AppTheme.textSecondary.withValues(alpha: 0.5), size: 48),
                 const SizedBox(height: 14),
-                const Text(
-                  'No Meal Photo Selected',
-                  style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 15),
+                Text(
+                  AppLocalizations.of(context)!.noPhotoSelected,
+                  style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'Scan a photo to calculate nutrients instantly',
-                  style: TextStyle(color: AppTheme.textMuted, fontSize: 12),
+                Text(
+                  AppLocalizations.of(context)!.scanPrompt,
+                  style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -289,14 +291,14 @@ class _ScanPageState extends State<ScanPage> {
                   children: [
                     ElevatedButton.icon(
                       icon: const Icon(Icons.photo_library),
-                      label: const Text('Gallery'),
+                      label: Text(AppLocalizations.of(context)!.gallery),
                       onPressed: () => _pickImage(ImageSource.gallery),
                       style: ElevatedButton.styleFrom(backgroundColor: AppTheme.surfaceLight),
                     ),
                     const SizedBox(width: 12),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.camera_alt),
-                      label: const Text('Camera'),
+                      label: Text(AppLocalizations.of(context)!.camera),
                       onPressed: () => _pickImage(ImageSource.camera),
                     ),
                   ],
@@ -305,7 +307,7 @@ class _ScanPageState extends State<ScanPage> {
                   const SizedBox(height: 12),
                   TextButton.icon(
                     icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
-                    label: const Text('Log Meal Manually', style: TextStyle(color: AppTheme.accentEmerald)),
+                    label: Text(AppLocalizations.of(context)!.logManually, style: const TextStyle(color: AppTheme.accentEmerald)),
                     onPressed: () {
                       setState(() {
                         _showForm = true;
@@ -358,13 +360,13 @@ class _ScanPageState extends State<ScanPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.lightbulb_outline, color: AppTheme.accentEmerald, size: 18),
-              SizedBox(width: 8),
+              const Icon(Icons.lightbulb_outline, color: AppTheme.accentEmerald, size: 18),
+              const SizedBox(width: 8),
               Text(
-                'Add Context Clue (Optional)',
-                style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                AppLocalizations.of(context)!.contextClue,
+                style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ],
           ),
@@ -372,8 +374,8 @@ class _ScanPageState extends State<ScanPage> {
           TextField(
             controller: _hintController,
             maxLines: 2,
-            decoration: const InputDecoration(
-              hintText: 'e.g. "Two slices of sourdough bread, a whole avocado, and two medium fried eggs."',
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.contextHint,
             ),
           ),
         ],
@@ -394,25 +396,25 @@ class _ScanPageState extends State<ScanPage> {
               children: [
                 const Icon(Icons.warning_amber_rounded, color: AppTheme.accentRed, size: 32),
                 const SizedBox(height: 8),
-                const Text(
-                  'Gemini API Key Missing',
-                  style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                Text(
+                  AppLocalizations.of(context)!.apiKeyMissing,
+                  style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'A valid API key is required to scan photos. Please go to settings and add your Gemini API Key.',
+                Text(
+                  AppLocalizations.of(context)!.apiKeyMissingDesc,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
                 ),
                 const SizedBox(height: 12),
                 TextButton(
                   onPressed: () {
                     // Navigate to settings tab via layout controller if possible
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please navigate to settings panel.')),
+                      SnackBar(content: Text(AppLocalizations.of(context)!.navigateToSettings)),
                     );
                   },
-                  child: const Text('Configure API Key'),
+                  child: Text(AppLocalizations.of(context)!.configureApiKey),
                 ),
               ],
             ),
@@ -423,7 +425,7 @@ class _ScanPageState extends State<ScanPage> {
             height: 52,
             child: OutlinedButton.icon(
               icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
-              label: const Text('Log Manually with this Photo', style: TextStyle(color: AppTheme.accentEmerald)),
+              label: Text(AppLocalizations.of(context)!.logWithPhoto, style: const TextStyle(color: AppTheme.accentEmerald)),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -442,7 +444,7 @@ class _ScanPageState extends State<ScanPage> {
           height: 52,
           child: ElevatedButton.icon(
             icon: const Icon(Icons.auto_awesome),
-            label: const Text('Scan & Estimate with Gemini'),
+            label: Text(AppLocalizations.of(context)!.scanAndEstimate),
             onPressed: () => _scanMeal(apiKey),
           ),
         ),
@@ -452,7 +454,7 @@ class _ScanPageState extends State<ScanPage> {
           height: 52,
           child: OutlinedButton.icon(
             icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
-            label: const Text('Log Manually with this Photo', style: TextStyle(color: AppTheme.accentEmerald)),
+            label: Text(AppLocalizations.of(context)!.logWithPhoto, style: const TextStyle(color: AppTheme.accentEmerald)),
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -489,9 +491,9 @@ class _ScanPageState extends State<ScanPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Verify Nutritional Estimates',
-                style: TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context)!.verifyEstimates,
+                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
               ),
               if (_scanResult != null)
                 Container(
@@ -501,7 +503,7 @@ class _ScanPageState extends State<ScanPage> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    '${_scanResult!.confidence}% AI Match',
+                    AppLocalizations.of(context)!.aiMatch(_scanResult!.confidence),
                     style: const TextStyle(color: AppTheme.accentEmerald, fontSize: 11, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -510,9 +512,9 @@ class _ScanPageState extends State<ScanPage> {
           const SizedBox(height: 20),
 
           // Food Name
-          const Text('Meal Description', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+          Text(AppLocalizations.of(context)!.mealDescription, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
           const SizedBox(height: 6),
-          TextField(controller: _nameController, decoration: const InputDecoration(hintText: 'e.g. Avocado Toast')),
+          TextField(controller: _nameController, decoration: InputDecoration(hintText: AppLocalizations.of(context)!.avocadoHint)),
           const SizedBox(height: 16),
 
           // Numeric stats row
@@ -522,7 +524,7 @@ class _ScanPageState extends State<ScanPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Calories (kcal)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                    Text(AppLocalizations.of(context)!.caloriesKcal, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),
                     TextField(
                       controller: _caloriesController,
@@ -537,7 +539,7 @@ class _ScanPageState extends State<ScanPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Protein (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                    Text(AppLocalizations.of(context)!.proteinG, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),
                     TextField(
                       controller: _proteinController,
@@ -557,7 +559,7 @@ class _ScanPageState extends State<ScanPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Carbohydrates (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                    Text(AppLocalizations.of(context)!.carbsG, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),
                     TextField(
                       controller: _carbsController,
@@ -572,7 +574,7 @@ class _ScanPageState extends State<ScanPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Fat (g)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                    Text(AppLocalizations.of(context)!.fatG, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     const SizedBox(height: 6),
                     TextField(
                       controller: _fatController,
@@ -587,12 +589,12 @@ class _ScanPageState extends State<ScanPage> {
           const SizedBox(height: 16),
 
           // Analysis explanations
-          const Text('AI Breakdown & Notes', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+          Text(AppLocalizations.of(context)!.aiNotes, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
           const SizedBox(height: 6),
           TextField(
             controller: _notesController,
             maxLines: 3,
-            decoration: const InputDecoration(hintText: 'Macro breakdown...'),
+            decoration: InputDecoration(hintText: AppLocalizations.of(context)!.macroHint),
           ),
           const SizedBox(height: 16),
 
@@ -620,9 +622,9 @@ class _ScanPageState extends State<ScanPage> {
                 children: [
                   const Icon(Icons.calendar_today, color: AppTheme.accentEmerald, size: 18),
                   const SizedBox(width: 10),
-                  const Text('Meal Date: ', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+                  Text(AppLocalizations.of(context)!.mealDate, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
                   Text(
-                    '${_mealDate.year}-${_mealDate.month.toString().padLeft(2, '0')}-${_mealDate.day.toString().padLeft(2, '0')}',
+                    DateFormat.yMd().format(_mealDate),
                     style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   if (_mealDate == DateTime.now().subtract(const Duration(days: 1)) ||
@@ -652,14 +654,14 @@ class _ScanPageState extends State<ScanPage> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Discard'),
+                  child: Text(AppLocalizations.of(context)!.discard),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () => _saveMeal(appState),
-                  child: const Text('Log & Save Meal'),
+                  child: Text(AppLocalizations.of(context)!.logAndSave),
                 ),
               ),
             ],

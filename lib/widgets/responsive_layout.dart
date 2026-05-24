@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
+import '../l10n/app_localizations.dart';
 import '../pages/dashboard_page.dart';
 import '../pages/scan_page.dart';
 import '../pages/history_page.dart';
@@ -81,7 +82,7 @@ class ResponsiveLayout extends StatelessWidget {
                         currentIndex: currentIndex,
                         outlineIcon: Icons.dashboard_outlined,
                         filledIcon: Icons.dashboard,
-                        label: 'Dashboard',
+                        label: AppLocalizations.of(context)!.sidebarDashboard,
                         onTap: appState.selectTab,
                       ),
                       _buildSidebarItem(
@@ -89,7 +90,7 @@ class ResponsiveLayout extends StatelessWidget {
                         currentIndex: currentIndex,
                         outlineIcon: Icons.qr_code_scanner_outlined,
                         filledIcon: Icons.qr_code_scanner,
-                        label: 'AI Food Scan',
+                        label: AppLocalizations.of(context)!.sidebarScan,
                         onTap: appState.selectTab,
                       ),
                       _buildSidebarItem(
@@ -97,7 +98,7 @@ class ResponsiveLayout extends StatelessWidget {
                         currentIndex: currentIndex,
                         outlineIcon: Icons.history_outlined,
                         filledIcon: Icons.history,
-                        label: 'Meal History',
+                        label: AppLocalizations.of(context)!.sidebarHistory,
                         onTap: appState.selectTab,
                       ),
                       _buildSidebarItem(
@@ -105,7 +106,7 @@ class ResponsiveLayout extends StatelessWidget {
                         currentIndex: currentIndex,
                         outlineIcon: Icons.settings_outlined,
                         filledIcon: Icons.settings,
-                        label: 'Goal Settings',
+                        label: AppLocalizations.of(context)!.sidebarSettings,
                         onTap: appState.selectTab,
                       ),
                       const Spacer(),
@@ -118,11 +119,11 @@ class ResponsiveLayout extends StatelessWidget {
                               child: const Text('ME', style: TextStyle(color: AppTheme.accentEmerald, fontWeight: FontWeight.bold)),
                             ),
                             const SizedBox(width: 12),
-                            const Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('My Profile', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600, fontSize: 13)),
-                                Text('Offline User', style: TextStyle(color: AppTheme.textMuted, fontSize: 10)),
+                                Text(AppLocalizations.of(context)!.profileName, style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600, fontSize: 13)),
+                                Text(AppLocalizations.of(context)!.profileStatus, style: const TextStyle(color: AppTheme.textMuted, fontSize: 10)),
                               ],
                             ),
                           ],
@@ -145,26 +146,26 @@ class ResponsiveLayout extends StatelessWidget {
             bottomNavigationBar: NavigationBar(
               selectedIndex: currentIndex,
               onDestinationSelected: (index) => appState.selectTab(index),
-              destinations: const [
+              destinations: [
                 NavigationDestination(
                   icon: Icon(Icons.dashboard_outlined),
                   selectedIcon: Icon(Icons.dashboard),
-                  label: 'Dashboard',
+                  label: AppLocalizations.of(context)!.navDashboard,
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.qr_code_scanner_outlined),
                   selectedIcon: Icon(Icons.qr_code_scanner),
-                  label: 'Scan',
+                  label: AppLocalizations.of(context)!.navScan,
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.history_outlined),
                   selectedIcon: Icon(Icons.history),
-                  label: 'History',
+                  label: AppLocalizations.of(context)!.navHistory,
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.settings_outlined),
                   selectedIcon: Icon(Icons.settings),
-                  label: 'Settings',
+                  label: AppLocalizations.of(context)!.navSettings,
                 ),
               ],
             ),

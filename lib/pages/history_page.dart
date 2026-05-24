@@ -6,6 +6,7 @@ import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
 import '../services/pdf_service.dart';
+import '../l10n/app_localizations.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -30,8 +31,8 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 
-  final DateFormat _timeFormat = DateFormat('jm');
-  final DateFormat _dateFormat = DateFormat('MMMM d, yyyy');
+  final DateFormat _timeFormat = DateFormat.jm();
+  final DateFormat _dateFormat = DateFormat.yMMMd();
 
   // Filter logic matching active dropdown selections
   List<Meal> _getFilteredMeals(List<Meal> allMeals) {
@@ -88,7 +89,7 @@ class _HistoryPageState extends State<HistoryPage> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppTheme.surface,
-          title: const Text('Edit Logged Meal', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
+          title: Text(AppLocalizations.of(context)!.editMeal, style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -159,7 +160,7 @@ class _HistoryPageState extends State<HistoryPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+              child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppTheme.textSecondary)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -176,7 +177,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 if (!context.mounted) return;
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Meal updated successfully!'), backgroundColor: AppTheme.accentEmerald),
+                  SnackBar(content: Text(AppLocalizations.of(context)!.mealUpdated), backgroundColor: AppTheme.accentEmerald),
                 );
               },
               child: const Text('Save Changes'),
@@ -204,7 +205,7 @@ class _HistoryPageState extends State<HistoryPage> {
           builder: (context, setStateBuilder) {
             return AlertDialog(
               backgroundColor: AppTheme.surface,
-              title: const Text('Generate PDF Summary Report', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
+              title: Text(AppLocalizations.of(context)!.generatePdf, style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -215,20 +216,20 @@ class _HistoryPageState extends State<HistoryPage> {
                       style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
                     ),
                     const SizedBox(height: 16),
-                    const Text('Report Header Title', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                    Text(AppLocalizations.of(context)!.reportTitle, style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                     const SizedBox(height: 6),
                     TextField(controller: titleController),
                     const SizedBox(height: 14),
-                    const Text('Report Explanations / Comments', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                    Text(AppLocalizations.of(context)!.reportComments, style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                     const SizedBox(height: 6),
                     TextField(
                       controller: notesController,
                       maxLines: 3,
-                      decoration: const InputDecoration(hintText: 'Add summary comments...'),
+                      decoration: InputDecoration(hintText: AppLocalizations.of(context)!.addComments),
                     ),
                     const SizedBox(height: 14),
                     CheckboxListTile(
-                      title: const Text('Include Photo Album', style: TextStyle(color: AppTheme.textPrimary, fontSize: 13)),
+                      title: Text(AppLocalizations.of(context)!.includePhotos, style: TextStyle(color: AppTheme.textPrimary, fontSize: 13)),
                       value: includeImages,
                       activeColor: AppTheme.accentEmerald,
                       contentPadding: EdgeInsets.zero,
@@ -244,29 +245,29 @@ class _HistoryPageState extends State<HistoryPage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+                  child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppTheme.textSecondary)),
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.picture_as_pdf),
-                  label: const Text('Generate PDF'),
+                    label: Text(AppLocalizations.of(context)!.generatePdfBtn),
                   onPressed: () async {
                     Navigator.pop(context);
                     
-                    String rangeText = 'Active Filter Range';
+                    String rangeText = AppLocalizations.of(context)!.pdfActiveFilter;
                     if (_filterType == 'today') {
-                      rangeText = 'Date: ${DateFormat('MMMM d, yyyy').format(DateTime.now())}';
+                      rangeText = AppLocalizations.of(context)!.pdfDateRange(DateFormat.yMMMd().format(DateTime.now()));
                     } else if (_filterType == 'yesterday') {
-                      rangeText = 'Date: ${DateFormat('MMMM d, yyyy').format(DateTime.now().subtract(const Duration(days: 1)))}';
+                      rangeText = AppLocalizations.of(context)!.pdfDateRange(DateFormat.yMMMd().format(DateTime.now().subtract(const Duration(days: 1))));
                     } else if (_filterType == 'week') {
-                      rangeText = 'Range: Last 7 Days';
+                      rangeText = AppLocalizations.of(context)!.pdfRange7Days;
                     } else if (_filterType == 'custom' && _customStartDate != null && _customEndDate != null) {
-                      rangeText = 'Range: ${DateFormat('MM/dd').format(_customStartDate!)} - ${DateFormat('MM/dd').format(_customEndDate!)}';
+                      rangeText = AppLocalizations.of(context)!.pdfRangeCustom(DateFormat.Md().format(_customStartDate!), DateFormat.Md().format(_customEndDate!));
                     } else {
-                      rangeText = 'All-Time Logs';
+                      rangeText = AppLocalizations.of(context)!.pdfAllTime;
                     }
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Generating PDF Report...'), duration: Duration(seconds: 2)),
+                      SnackBar(content: Text(AppLocalizations.of(context)!.generatingPdf), duration: Duration(seconds: 2)),
                     );
 
                     await PdfService.generateSummaryReport(
@@ -296,7 +297,7 @@ class _HistoryPageState extends State<HistoryPage> {
     final List<Meal> filteredMeals = _getFilteredMeals(appState.meals);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Meal History Logs')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.historyTitle)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -341,19 +342,19 @@ class _HistoryPageState extends State<HistoryPage> {
             children: [
               const Icon(Icons.filter_list, color: AppTheme.accentEmerald, size: 20),
               const SizedBox(width: 10),
-              const Text('Filter Timeframe:', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14)),
+              Text(AppLocalizations.of(context)!.filterTimeframe, style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14)),
               const Spacer(),
               DropdownButton<String>(
                 value: _filterType,
                 dropdownColor: AppTheme.surface,
                 iconEnabledColor: AppTheme.textPrimary,
                 underline: const SizedBox(),
-                items: const [
-                  DropdownMenuItem(value: 'all', child: Text('All Time')),
-                  DropdownMenuItem(value: 'today', child: Text('Today')),
-                  DropdownMenuItem(value: 'yesterday', child: Text('Yesterday')),
-                  DropdownMenuItem(value: 'week', child: Text('Last 7 Days')),
-                  DropdownMenuItem(value: 'custom', child: Text('Custom Range')),
+                items: [
+                  DropdownMenuItem(value: 'all', child: Text(AppLocalizations.of(context)!.allTime)),
+                  DropdownMenuItem(value: 'today', child: Text(AppLocalizations.of(context)!.today)),
+                  DropdownMenuItem(value: 'yesterday', child: Text(AppLocalizations.of(context)!.yesterday)),
+                  DropdownMenuItem(value: 'week', child: Text(AppLocalizations.of(context)!.last7Days)),
+                  DropdownMenuItem(value: 'custom', child: Text(AppLocalizations.of(context)!.customRange)),
                 ],
                 onChanged: (val) {
                   final filterVal = val ?? 'all';
@@ -391,7 +392,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        _customStartDate == null ? 'Start Date' : DateFormat('yyyy-MM-dd').format(_customStartDate!),
+                        _customStartDate == null ? AppLocalizations.of(context)!.startDate : DateFormat.yMd().format(_customStartDate!),
                         style: TextStyle(color: _customStartDate == null ? AppTheme.textMuted : AppTheme.textPrimary, fontSize: 13),
                       ),
                     ),
@@ -420,7 +421,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        _customEndDate == null ? 'End Date' : DateFormat('yyyy-MM-dd').format(_customEndDate!),
+                        _customEndDate == null ? AppLocalizations.of(context)!.endDate : DateFormat.yMd().format(_customEndDate!),
                         style: TextStyle(color: _customEndDate == null ? AppTheme.textMuted : AppTheme.textPrimary, fontSize: 13),
                       ),
                     ),
@@ -446,12 +447,12 @@ class _HistoryPageState extends State<HistoryPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${filteredMeals.length} logs in active filter',
+                  AppLocalizations.of(context)!.logsInFilter(filteredMeals.length),
                   style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                 ),
                 const SizedBox(height: 3),
-                const Text(
-                  'Compile meals into a nutritional PDF report.',
+                Text(
+                  AppLocalizations.of(context)!.compilePdf,
                   style: TextStyle(color: AppTheme.textMuted, fontSize: 11),
                 ),
               ],
@@ -459,7 +460,7 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
           ElevatedButton.icon(
             icon: const Icon(Icons.summarize, size: 18),
-            label: const Text('Report PDF', style: TextStyle(fontSize: 13)),
+            label: Text(AppLocalizations.of(context)!.reportPdf, style: TextStyle(fontSize: 13)),
             onPressed: () => _showReportConfigDialog(context, appState, filteredMeals),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -549,12 +550,12 @@ class _HistoryPageState extends State<HistoryPage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Calories: ${meal.calories} kcal',
+                      AppLocalizations.of(context)!.caloriesLabel(meal.calories),
                       style: const TextStyle(color: AppTheme.accentEmerald, fontWeight: FontWeight.bold, fontSize: 13),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'P: ${meal.protein}g  •  C: ${meal.carbs}g  •  F: ${meal.fat}g',
+                      AppLocalizations.of(context)!.macroPerGram(meal.carbs, meal.fat, meal.protein),
                       style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
                     ),
                   ],
@@ -583,10 +584,10 @@ class _HistoryPageState extends State<HistoryPage> {
               // Single Export PDF
               TextButton.icon(
                 icon: const Icon(Icons.picture_as_pdf, size: 16),
-                label: const Text('PDF', style: TextStyle(fontSize: 12)),
+                label: Text(AppLocalizations.of(context)!.pdf, style: TextStyle(fontSize: 12)),
                 onPressed: () async {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Generating individual meal PDF...')),
+                        SnackBar(content: Text(AppLocalizations.of(context)!.generatingMealPdf)),
                   );
                   await PdfService.generateSingleMealPdf(meal, appState.calorieGoal);
                 },
@@ -596,7 +597,7 @@ class _HistoryPageState extends State<HistoryPage> {
               // Edit
               TextButton.icon(
                 icon: const Icon(Icons.edit, size: 16),
-                label: const Text('Edit', style: TextStyle(fontSize: 12)),
+                label: Text(AppLocalizations.of(context)!.edit, style: TextStyle(fontSize: 12)),
                 onPressed: () => _showEditMealDialog(context, appState, meal),
               ),
               const SizedBox(width: 8),
@@ -604,19 +605,19 @@ class _HistoryPageState extends State<HistoryPage> {
               // Delete
               TextButton.icon(
                 icon: const Icon(Icons.delete_outline, size: 16, color: AppTheme.accentRed),
-                label: const Text('Delete', style: TextStyle(fontSize: 12, color: AppTheme.accentRed)),
+                label: Text(AppLocalizations.of(context)!.delete, style: TextStyle(fontSize: 12, color: AppTheme.accentRed)),
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
                         backgroundColor: AppTheme.surface,
-                        title: const Text('Confirm Deletion', style: TextStyle(color: AppTheme.accentRed)),
-                        content: const Text('Are you sure you want to permanently delete this logged meal? This cannot be undone.'),
+                        title: Text(AppLocalizations.of(context)!.confirmDelete, style: TextStyle(color: AppTheme.accentRed)),
+                        content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+                            child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppTheme.textSecondary)),
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(backgroundColor: AppTheme.accentRed),
@@ -625,10 +626,10 @@ class _HistoryPageState extends State<HistoryPage> {
                               if (!context.mounted) return;
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Meal deleted.')),
+                                SnackBar(content: Text(AppLocalizations.of(context)!.mealDeleted)),
                               );
                             },
-                            child: const Text('Delete'),
+                            child: Text(AppLocalizations.of(context)!.delete),
                           ),
                         ],
                       );
@@ -651,13 +652,13 @@ class _HistoryPageState extends State<HistoryPage> {
         children: [
           Icon(Icons.calendar_today, color: AppTheme.textMuted.withValues(alpha: 0.5), size: 48),
           const SizedBox(height: 16),
-          const Text(
-            'No History Found',
+          Text(
+            AppLocalizations.of(context)!.noHistory,
             style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 6),
-          const Text(
-            'Change filters or scan a meal to start logging!',
+          Text(
+            AppLocalizations.of(context)!.noHistoryDesc,
             style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
           ),
         ],

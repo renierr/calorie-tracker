@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
+import '../l10n/app_localizations.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -16,12 +17,12 @@ class DashboardPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NutriScan Dashboard'),
+        title: Text(AppLocalizations.of(context)!.dashboardTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => appState.loadMeals(),
-            tooltip: 'Reload Database',
+            tooltip: AppLocalizations.of(context)!.reloadDatabase,
           ),
         ],
       ),
@@ -91,7 +92,7 @@ class DashboardPage extends StatelessWidget {
   // Widget 1: Horizontal Sliding Date Navigation Strip
   Widget _buildDateNavigationStrip(BuildContext context, AppState appState) {
     final now = DateTime.now();
-    final DateFormat formatter = DateFormat('MMMM d, yyyy');
+    final DateFormat formatter = DateFormat.yMMMd();
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -170,8 +171,8 @@ class DashboardPage extends StatelessWidget {
       decoration: AppTheme.premiumCardDecoration(showGlow: percent >= 1.0),
       child: Column(
         children: [
-          const Text(
-            'Calorie Consumption',
+          Text(
+            AppLocalizations.of(context)!.calorieConsumption,
             style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 24),
@@ -202,7 +203,7 @@ class DashboardPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'of $goal kcal',
+                    AppLocalizations.of(context)!.ofKcal(goal),
                     style: const TextStyle(color: AppTheme.textMuted, fontSize: 13),
                   ),
                 ],
@@ -222,7 +223,9 @@ class DashboardPage extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                remaining >= 0 ? '$remaining kcal remaining' : '${remaining.abs()} kcal over budget',
+                remaining >= 0
+                    ? AppLocalizations.of(context)!.kcalRemaining(remaining)
+                    : AppLocalizations.of(context)!.kcalOverBudget(remaining.abs()),
                 style: TextStyle(
                   color: remaining >= 0 ? AppTheme.textPrimary : AppTheme.accentRed,
                   fontWeight: FontWeight.bold,
@@ -245,15 +248,15 @@ class DashboardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Macronutrient Distribution',
+          Text(
+            AppLocalizations.of(context)!.macroDistribution,
             style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
 
           // Protein bar
           _buildMacroSlider(
-            label: 'Protein',
+            label: AppLocalizations.of(context)!.protein,
             consumed: appState.totalProteinConsumed,
             goal: appState.proteinGoal,
             color: AppTheme.accentBlue,
@@ -262,7 +265,7 @@ class DashboardPage extends StatelessWidget {
 
           // Carbs bar
           _buildMacroSlider(
-            label: 'Carbohydrates',
+            label: AppLocalizations.of(context)!.carbs,
             consumed: appState.totalCarbsConsumed,
             goal: appState.carbsGoal,
             color: AppTheme.accentAmber,
@@ -271,7 +274,7 @@ class DashboardPage extends StatelessWidget {
 
           // Fat bar
           _buildMacroSlider(
-            label: 'Lipid Fats',
+            label: AppLocalizations.of(context)!.fat,
             consumed: appState.totalFatConsumed,
             goal: appState.fatGoal,
             color: AppTheme.accentRed,
@@ -360,8 +363,8 @@ class DashboardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Calorie Trend (7 Days)',
+          Text(
+            AppLocalizations.of(context)!.calorieTrend,
             style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 25),
@@ -380,7 +383,7 @@ class DashboardPage extends StatelessWidget {
                     date.month == today.month &&
                     date.day == today.day;
 
-                final String weekday = DateFormat('E').format(date).substring(0, 2);
+                final String weekday = DateFormat.E().format(date).substring(0, 2);
 
                 return Expanded(
                   child: Column(
@@ -452,12 +455,12 @@ class DashboardPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Day Log Summary',
+              Text(
+                AppLocalizations.of(context)!.dayLogSummary,
                 style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
               ),
               Text(
-                '${meals.length} logs',
+                AppLocalizations.of(context)!.logs(meals.length),
                 style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
               ),
             ],
@@ -472,8 +475,8 @@ class DashboardPage extends StatelessWidget {
                   children: [
                     Icon(Icons.restaurant_outlined, color: AppTheme.textMuted.withValues(alpha: 0.5), size: 36),
                     const SizedBox(height: 10),
-                    const Text(
-                      'No meals logged for this day.',
+                    Text(
+                      AppLocalizations.of(context)!.noMealsLogged,
                       style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
                     ),
                   ],
@@ -527,7 +530,7 @@ class DashboardPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 3),
                             Text(
-                              'P: ${meal.protein}g  C: ${meal.carbs}g  F: ${meal.fat}g',
+                              AppLocalizations.of(context)!.perGram(meal.carbs, meal.fat, meal.protein),
                               style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
                             ),
                           ],
@@ -536,7 +539,7 @@ class DashboardPage extends StatelessWidget {
 
                       // Calorie Count Indicator
                       Text(
-                        '+${meal.calories} kcal',
+                        AppLocalizations.of(context)!.kcalLabel(meal.calories),
                         style: const TextStyle(
                           color: AppTheme.accentEmerald,
                           fontSize: 14,

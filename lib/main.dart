@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'theme/theme.dart';
 import 'providers/app_state.dart';
 import 'widgets/responsive_layout.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
       title: 'NutriScan Calorie Tracker',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const ResponsiveLayout(),
     );
   }
