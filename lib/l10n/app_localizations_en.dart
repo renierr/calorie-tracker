@@ -496,4 +496,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String selectedCount(int count) {
     return '$count selected';
   }
+
+  @override
+  String get reEvaluate => 'Re-Evaluate';
+
+  @override
+  String get reEvaluating => 'Re-Evaluating...';
+
+  @override
+  String reEvaluationError(String error) {
+    return 'Re-Evaluation failed: $error';
+  }
+
+  @override
+  String get reEvaluationSuccess => 'Meal re-evaluated successfully!';
 }

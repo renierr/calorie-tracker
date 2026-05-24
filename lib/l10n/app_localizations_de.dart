@@ -497,4 +497,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String selectedCount(int count) {
     return '$count ausgewählt';
   }
+
+  @override
+  String get reEvaluate => 'Neu bewerten';
+
+  @override
+  String get reEvaluating => 'Neu bewertung...';
+
+  @override
+  String reEvaluationError(String error) {
+    return 'Neu-Bewertung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get reEvaluationSuccess => 'Mahlzeit erfolgreich neu bewertet!';
 }

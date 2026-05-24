@@ -29,6 +29,7 @@ class ScanVerificationForm extends StatefulWidget {
 
 class _ScanVerificationFormState extends State<ScanVerificationForm> {
   DateTime _mealDate = DateTime.now();
+  bool _isReEvaluating = false;
 
   late final TextEditingController _nameController;
   late final TextEditingController _caloriesController;
@@ -69,6 +70,74 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     _fatController.dispose();
     _notesController.dispose();
     super.dispose();
+  }
+
+  Future<void> _reEvaluateMeal() async {
+    if (widget.imageBytes == null) return;
+
+    final apiKey = widget.appState.geminiApiKey;
+    if (apiKey.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.apiKeyMissing)),
+      );
+      return;
+    }
+
+    setState(() {
+      _isReEvaluating = true;
+    });
+
+    try {
+      String customHint = '';
+      final currentName = _nameController.text.trim();
+      final currentNotes = _notesController.text.trim();
+
+      if (currentName.isNotEmpty) {
+        customHint += 'User thinks food is: "$currentName". ';
+      }
+      if (currentNotes.isNotEmpty) {
+        customHint += 'Additional context/adjustments: "$currentNotes". ';
+      }
+
+      final result = await GeminiService.performAIAnalysis(
+        apiKey: apiKey,
+        imageBytes: widget.imageBytes!,
+        mimeType: 'image/jpeg',
+        userHint: customHint,
+        languageCode: widget.appState.appLocale,
+      );
+
+      setState(() {
+        _nameController.text = result.foodName;
+        _caloriesController.text = result.calories.toString();
+        _proteinController.text = result.protein.toString();
+        _carbsController.text = result.carbs.toString();
+        _fatController.text = result.fat.toString();
+        _notesController.text = result.notes;
+        _isReEvaluating = false;
+      });
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.reEvaluationSuccess),
+          backgroundColor: AppTheme.accentEmerald,
+        ),
+      );
+    } catch (e) {
+      setState(() {
+        _isReEvaluating = false;
+      });
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.reEvaluationError(e.toString()),
+          ),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+    }
   }
 
   Future<void> _saveMeal() async {
@@ -173,6 +242,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
           const SizedBox(height: 6),
           TextField(
             controller: _nameController,
+            enabled: !_isReEvaluating,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.avocadoHint,
             ),
@@ -196,6 +266,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                     const SizedBox(height: 6),
                     TextField(
                       controller: _caloriesController,
+                      enabled: !_isReEvaluating,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
@@ -217,6 +288,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                     const SizedBox(height: 6),
                     TextField(
                       controller: _proteinController,
+                      enabled: !_isReEvaluating,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
@@ -243,6 +315,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                     const SizedBox(height: 6),
                     TextField(
                       controller: _carbsController,
+                      enabled: !_isReEvaluating,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
@@ -264,6 +337,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                     const SizedBox(height: 6),
                     TextField(
                       controller: _fatController,
+                      enabled: !_isReEvaluating,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
@@ -282,6 +356,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
           const SizedBox(height: 6),
           TextField(
             controller: _notesController,
+            enabled: !_isReEvaluating,
             maxLines: 3,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.macroHint,
@@ -291,17 +366,19 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
 
           // Date picker for meal date
           InkWell(
-            onTap: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _mealDate,
-                firstDate: DateTime(2020),
-                lastDate: DateTime.now(),
-              );
-              if (picked != null) {
-                setState(() => _mealDate = picked);
-              }
-            },
+            onTap: _isReEvaluating
+                ? null
+                : () async {
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: _mealDate,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime.now(),
+                    );
+                    if (picked != null) {
+                      setState(() => _mealDate = picked);
+                    }
+                  },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
               decoration: BoxDecoration(
@@ -356,7 +433,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: widget.onDiscard,
+                  onPressed: _isReEvaluating ? null : widget.onDiscard,
                   style: OutlinedButton.styleFrom(
                     foregroundColor: colors.textPrimary,
                     side: BorderSide(
@@ -372,10 +449,45 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   child: Text(AppLocalizations.of(context)!.discard),
                 ),
               ),
+              if (widget.imageBytes != null) ...[
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _isReEvaluating ? null : _reEvaluateMeal,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.accentBlue,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: _isReEvaluating
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.auto_awesome, size: 16),
+                              const SizedBox(width: 6),
+                              Text(AppLocalizations.of(context)!.reEvaluate),
+                            ],
+                          ),
+                  ),
+                ),
+              ],
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: _saveMeal,
+                  onPressed: _isReEvaluating ? null : _saveMeal,
                   child: Text(AppLocalizations.of(context)!.logAndSave),
                 ),
               ),

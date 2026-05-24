@@ -183,5 +183,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "reEvaluate": "Re-Evaluate",
+  "reEvaluating": "Re-Evaluating...",
+  "reEvaluationError": "Re-Evaluation failed: {error}",
+  "@reEvaluationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reEvaluationSuccess": "Meal re-evaluated successfully!"
 }

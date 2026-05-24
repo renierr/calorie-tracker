@@ -979,6 +979,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} selected'**
   String selectedCount(int count);
+
+  /// No description provided for @reEvaluate.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-Evaluate'**
+  String get reEvaluate;
+
+  /// No description provided for @reEvaluating.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-Evaluating...'**
+  String get reEvaluating;
+
+  /// No description provided for @reEvaluationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-Evaluation failed: {error}'**
+  String reEvaluationError(String error);
+
+  /// No description provided for @reEvaluationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal re-evaluated successfully!'**
+  String get reEvaluationSuccess;
 }
 
 class _AppLocalizationsDelegate

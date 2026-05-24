@@ -183,5 +183,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "reEvaluate": "Neu bewerten",
+  "reEvaluating": "Neu bewertung...",
+  "reEvaluationError": "Neu-Bewertung fehlgeschlagen: {error}",
+  "@reEvaluationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "reEvaluationSuccess": "Mahlzeit erfolgreich neu bewertet!"
 }
