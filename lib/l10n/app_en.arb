@@ -49,6 +49,8 @@
   "discard": "Discard",
   "logAndSave": "Log & Save Meal",
   "mealDate": "Meal Date:",
+  "notes": "Notes",
+  "saveChanges": "Save Changes",
   "pickImageFailed": "Failed to pick image: {error}",
   "provideName": "Please provide a valid meal name.",
   "mealLogged": "Meal logged successfully!",
@@ -94,7 +96,7 @@
 
   "settingsTitle": "Goal & API Settings",
   "apiCredentials": "Gemini AI API Credentials",
-  "apiCredentialsDesc": "The AI Meal Scanner runs locally and requires a Google Gemini API Key. Your key is saved locally in private app settings.",
+  "apiCredentialsDesc": "The AI Meal Scanner requires a Google Gemini API Key. Your key is saved locally in private app settings.",
   "enterApiKey": "Enter your Gemini API Key",
   "apiKeyLabel": "Gemini API Key",
   "dailyTargets": "Daily Nutritional Targets",

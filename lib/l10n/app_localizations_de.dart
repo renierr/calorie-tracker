@@ -162,6 +162,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mealDate => 'Datum der Mahlzeit:';
 
   @override
+  String get notes => 'Notizen';
+
+  @override
+  String get saveChanges => 'Änderungen speichern';
+
+  @override
   String pickImageFailed(Object error) {
     return 'Fehler beim Laden des Bildes: $error';
   }
@@ -305,7 +311,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get apiCredentialsDesc =>
-      'Der KI-Scanner läuft lokal und benötigt einen Google Gemini API-Schlüssel. Dein Schlüssel wird lokal in den App-Einstellungen gespeichert.';
+      'Der KI-Scanner benötigt einen Google Gemini API-Schlüssel. Dein Schlüssel wird lokal in den App-Einstellungen gespeichert.';
 
   @override
   String get enterApiKey => 'Gemini API-Schlüssel eingeben';

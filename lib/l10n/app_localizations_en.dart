@@ -162,6 +162,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealDate => 'Meal Date:';
 
   @override
+  String get notes => 'Notes';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
   String pickImageFailed(Object error) {
     return 'Failed to pick image: $error';
   }
@@ -304,7 +310,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get apiCredentialsDesc =>
-      'The AI Meal Scanner runs locally and requires a Google Gemini API Key. Your key is saved locally in private app settings.';
+      'The AI Meal Scanner requires a Google Gemini API Key. Your key is saved locally in private app settings.';
 
   @override
   String get enterApiKey => 'Enter your Gemini API Key';

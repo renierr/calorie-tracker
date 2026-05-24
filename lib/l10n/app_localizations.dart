@@ -368,6 +368,18 @@ abstract class AppLocalizations {
   /// **'Meal Date:'**
   String get mealDate;
 
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
   /// No description provided for @pickImageFailed.
   ///
   /// In en, this message translates to:
@@ -629,7 +641,7 @@ abstract class AppLocalizations {
   /// No description provided for @apiCredentialsDesc.
   ///
   /// In en, this message translates to:
-  /// **'The AI Meal Scanner runs locally and requires a Google Gemini API Key. Your key is saved locally in private app settings.'**
+  /// **'The AI Meal Scanner requires a Google Gemini API Key. Your key is saved locally in private app settings.'**
   String get apiCredentialsDesc;
 
   /// No description provided for @enterApiKey.

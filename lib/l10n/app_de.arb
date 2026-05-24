@@ -49,6 +49,8 @@
   "discard": "Verwerfen",
   "logAndSave": "Speichern & erfassen",
   "mealDate": "Datum der Mahlzeit:",
+  "notes": "Notizen",
+  "saveChanges": "Änderungen speichern",
   "pickImageFailed": "Fehler beim Laden des Bildes: {error}",
   "provideName": "Bitte gib einen gültigen Mahlzeitnamen ein.",
   "mealLogged": "Mahlzeit erfolgreich erfasst!",
@@ -94,7 +96,7 @@
 
   "settingsTitle": "Ziele & API-Einstellungen",
   "apiCredentials": "Gemini KI API-Zugangsdaten",
-  "apiCredentialsDesc": "Der KI-Scanner läuft lokal und benötigt einen Google Gemini API-Schlüssel. Dein Schlüssel wird lokal in den App-Einstellungen gespeichert.",
+  "apiCredentialsDesc": "Der KI-Scanner benötigt einen Google Gemini API-Schlüssel. Dein Schlüssel wird lokal in den App-Einstellungen gespeichert.",
   "enterApiKey": "Gemini API-Schlüssel eingeben",
   "apiKeyLabel": "Gemini API-Schlüssel",
   "dailyTargets": "Tägliche Nährstoffziele",

@@ -69,7 +69,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Meal Description',
+              AppLocalizations.of(context)!.mealDescription,
               style: TextStyle(color: colors.textSecondary, fontSize: 11),
             ),
             const SizedBox(height: 6),
@@ -82,7 +82,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Calories (kcal)',
+                        AppLocalizations.of(context)!.caloriesKcal,
                         style: TextStyle(
                           color: colors.textSecondary,
                           fontSize: 11,
@@ -105,7 +105,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Protein (g)',
+                        AppLocalizations.of(context)!.proteinG,
                         style: TextStyle(
                           color: colors.textSecondary,
                           fontSize: 11,
@@ -132,7 +132,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Carbohydrates (g)',
+                        AppLocalizations.of(context)!.carbsG,
                         style: TextStyle(
                           color: colors.textSecondary,
                           fontSize: 11,
@@ -155,7 +155,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Lipid Fat (g)',
+                        AppLocalizations.of(context)!.fatG,
                         style: TextStyle(
                           color: colors.textSecondary,
                           fontSize: 11,
@@ -176,7 +176,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
             ),
             const SizedBox(height: 14),
             Text(
-              'Notes',
+              AppLocalizations.of(context)!.notes,
               style: TextStyle(color: colors.textSecondary, fontSize: 11),
             ),
             const SizedBox(height: 6),
@@ -213,7 +213,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
               ),
             );
           },
-          child: const Text('Save Changes'),
+          child: Text(AppLocalizations.of(context)!.saveChanges),
         ),
       ],
     );
