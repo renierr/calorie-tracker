@@ -31,8 +31,8 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 
-  final DateFormat _timeFormat = DateFormat.jm();
-  final DateFormat _dateFormat = DateFormat.yMMMd();
+  DateFormat get _timeFormat => DateFormat.jm(Localizations.localeOf(context).toLanguageTag());
+  DateFormat get _dateFormat => DateFormat.yMMMd(Localizations.localeOf(context).toLanguageTag());
 
   // Filter logic matching active dropdown selections
   List<Meal> _getFilteredMeals(List<Meal> allMeals) {
@@ -255,13 +255,13 @@ class _HistoryPageState extends State<HistoryPage> {
                     
                     String rangeText = AppLocalizations.of(context)!.pdfActiveFilter;
                     if (_filterType == 'today') {
-                      rangeText = AppLocalizations.of(context)!.pdfDateRange(DateFormat.yMMMd().format(DateTime.now()));
+                      rangeText = AppLocalizations.of(context)!.pdfDateRange(DateFormat.yMMMd(Localizations.localeOf(context).toLanguageTag()).format(DateTime.now()));
                     } else if (_filterType == 'yesterday') {
-                      rangeText = AppLocalizations.of(context)!.pdfDateRange(DateFormat.yMMMd().format(DateTime.now().subtract(const Duration(days: 1))));
+                      rangeText = AppLocalizations.of(context)!.pdfDateRange(DateFormat.yMMMd(Localizations.localeOf(context).toLanguageTag()).format(DateTime.now().subtract(const Duration(days: 1))));
                     } else if (_filterType == 'week') {
                       rangeText = AppLocalizations.of(context)!.pdfRange7Days;
                     } else if (_filterType == 'custom' && _customStartDate != null && _customEndDate != null) {
-                      rangeText = AppLocalizations.of(context)!.pdfRangeCustom(DateFormat.Md().format(_customStartDate!), DateFormat.Md().format(_customEndDate!));
+                      rangeText = AppLocalizations.of(context)!.pdfRangeCustom(DateFormat.Md(Localizations.localeOf(context).toLanguageTag()).format(_customStartDate!), DateFormat.Md(Localizations.localeOf(context).toLanguageTag()).format(_customEndDate!));
                     } else {
                       rangeText = AppLocalizations.of(context)!.pdfAllTime;
                     }
@@ -392,7 +392,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        _customStartDate == null ? AppLocalizations.of(context)!.startDate : DateFormat.yMd().format(_customStartDate!),
+                        _customStartDate == null ? AppLocalizations.of(context)!.startDate : DateFormat.yMd(Localizations.localeOf(context).toLanguageTag()).format(_customStartDate!),
                         style: TextStyle(color: _customStartDate == null ? AppTheme.textMuted : AppTheme.textPrimary, fontSize: 13),
                       ),
                     ),
@@ -421,7 +421,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        _customEndDate == null ? AppLocalizations.of(context)!.endDate : DateFormat.yMd().format(_customEndDate!),
+                        _customEndDate == null ? AppLocalizations.of(context)!.endDate : DateFormat.yMd(Localizations.localeOf(context).toLanguageTag()).format(_customEndDate!),
                         style: TextStyle(color: _customEndDate == null ? AppTheme.textMuted : AppTheme.textPrimary, fontSize: 13),
                       ),
                     ),

@@ -624,7 +624,7 @@ class _ScanPageState extends State<ScanPage> {
                   const SizedBox(width: 10),
                   Text(AppLocalizations.of(context)!.mealDate, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
                   Text(
-                    DateFormat.yMd().format(_mealDate),
+                    DateFormat.yMd(Localizations.localeOf(context).toLanguageTag()).format(_mealDate),
                     style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   if (_mealDate == DateTime.now().subtract(const Duration(days: 1)) ||

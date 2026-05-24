@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
@@ -92,7 +92,7 @@ class DashboardPage extends StatelessWidget {
   // Widget 1: Horizontal Sliding Date Navigation Strip
   Widget _buildDateNavigationStrip(BuildContext context, AppState appState) {
     final now = DateTime.now();
-    final DateFormat formatter = DateFormat.yMMMd();
+    final DateFormat formatter = DateFormat.yMMMd(Localizations.localeOf(context).toLanguageTag());
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -383,7 +383,7 @@ class DashboardPage extends StatelessWidget {
                     date.month == today.month &&
                     date.day == today.day;
 
-                final String weekday = DateFormat.E().format(date).substring(0, 2);
+                final String weekday = DateFormat.E(Localizations.localeOf(context).toLanguageTag()).format(date).substring(0, 2);
 
                 return Expanded(
                   child: Column(
