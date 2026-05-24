@@ -49,12 +49,33 @@ The project is structured logically around clean architecture principles in the 
 *   **`lib/services/`**:
     *   `gemini_service.dart`: Integrates Google's `google_generative_ai` SDK to run visually structured meal analysis scans.
     *   `pdf_service.dart`: Compiles highly stylized single and range-based nutritional summary PDFs.
-*   **`lib/widgets/responsive_layout.dart`**: Adaptive shell swapping navigation views between Desktop sidebars and Mobile tab bars.
 *   **`lib/pages/`**:
-    *   `dashboard_page.dart`: Interactive statistics circle gauges, day selector, and history bar charts.
-    *   `scan_page.dart`: Interactive camera/gallery handlers and AI nutrition verification spreadsheets.
-    *   `history_page.dart`: Historic listings, custom date filters, individual PDF exports, and aggregate report dialogs.
-    *   `settings_page.dart`: Target macros slider dials, visibility API key controls, and diagnostics reset options.
+    *   `dashboard_page.dart`: Composition screen for dashboard date strips, radial calorie rings, macro trends, and recent meal logs.
+    *   `scan_page.dart`: Coordination page managing Gemini AI visual analysis scans.
+    *   `history_page.dart`: Displays comprehensive lists of historic meal logs.
+    *   `settings_page.dart`: Collects slider configurations and database backups.
+*   **`lib/widgets/`**:
+    *   `responsive_layout.dart`: Adaptive shell swapping navigation views between Desktop sidebars and Mobile tab bars.
+    *   `edit_meal_dialog.dart`: Pop-up validator dialog to edit log macro targets.
+    *   `report_config_dialog.dart`: Parameters collector for compiling ranges summary PDFs.
+    *   `history_filter_panel.dart`: Timeframe drop-downs and start/end calendar selectors.
+    *   `meal_history_card.dart`: Display card for custom logs with zoomable food photos, delete warnings, and quick single-log PDF downloads.
+    *   **`lib/widgets/dashboard/`**:
+        *   `date_navigation_strip.dart`: Sliding date-switcher bar.
+        *   `calorie_ring_card.dart`: Radial progress consumption circle.
+        *   `macros_progress_card.dart`: Linear protein, carb, lipid indicators.
+        *   `trend_chart_card.dart`: Calorie 7-day bar charts.
+        *   `day_quick_logs_card.dart`: Highlights current display day logs.
+    *   **`lib/widgets/scan/`**:
+        *   `scan_image_selector.dart`: Image pickers and manual logging triggers.
+        *   `scan_verification_form.dart`: Verification editor and calendar logger.
+    *   **`lib/widgets/settings/`**:
+        *   `api_config_card.dart`: Secure API key controls.
+        *   `target_goals_card.dart`: budget targets input sliders.
+        *   `maintenance_card.dart`: Purge SQLite database options.
+        *   `language_card.dart`: English/German arb localization dropdown.
+        *   `theme_card.dart`: App light/dark appearance switches.
+        *   `export_card.dart`: SQLite DB copies save selectors.
 
 ## How to Build & Run
 
