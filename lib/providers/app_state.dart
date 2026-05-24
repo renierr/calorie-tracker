@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/db_helper.dart';
 import '../models/meal_model.dart';
+import '../services/sync_service.dart';
 
 class AppState extends ChangeNotifier {
   // SQLite instance
@@ -18,6 +19,9 @@ class AppState extends ChangeNotifier {
   static const String _keyHistoryFilter = 'history_filter';
   static const String _keyLocale = 'app_locale';
   static const String _keyThemeMode = 'theme_mode';
+  static const String _keySyncServerUrl = 'sync_server_url';
+  static const String _keySyncUserId = 'sync_user_id';
+  static const String _keyLastSyncedTime = 'last_synced_time';
 
   // State variables
   String _geminiApiKey = '';
@@ -28,6 +32,11 @@ class AppState extends ChangeNotifier {
   String _historyFilter = 'all';
   String _appLocale = 'en';
   ThemeMode _themeMode = ThemeMode.system;
+
+  String _syncServerUrl = '';
+  String _syncUserId = 'user-1';
+  int? _lastSyncedTime;
+  bool _isSyncing = false;
 
   List<Meal> _meals = [];
   bool _isLoading = false;
@@ -52,6 +61,10 @@ class AppState extends ChangeNotifier {
   bool get isLoading => _isLoading;
   DateTime get selectedDate => _selectedDate;
   int get selectedTabIndex => _selectedTabIndex;
+  String get syncServerUrl => _syncServerUrl;
+  String get syncUserId => _syncUserId;
+  int? get lastSyncedTime => _lastSyncedTime;
+  bool get isSyncing => _isSyncing;
 
   // Filtered meals based on selected day (at midnight local time)
   List<Meal> get mealsForSelectedDate {
@@ -83,6 +96,11 @@ class AppState extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+
+    // Auto sync on startup if enabled
+    if (_syncServerUrl.isNotEmpty) {
+      syncWithBackend();
+    }
   }
 
   // Load configuration and credentials
@@ -97,7 +115,58 @@ class AppState extends ChangeNotifier {
     _appLocale = prefs.getString(_keyLocale) ?? 'en';
     final themeStr = prefs.getString(_keyThemeMode) ?? 'system';
     _themeMode = _parseThemeMode(themeStr);
+
+    _syncServerUrl = prefs.getString(_keySyncServerUrl) ?? '';
+    _syncUserId = prefs.getString(_keySyncUserId) ?? 'user-1';
+    _lastSyncedTime = prefs.getInt(_keyLastSyncedTime);
     notifyListeners();
+  }
+
+  // Save Sync Settings
+  Future<void> saveSyncSettings({
+    required String serverUrl,
+    required String userId,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    _syncServerUrl = serverUrl.trim();
+    _syncUserId = userId.trim();
+
+    await prefs.setString(_keySyncServerUrl, _syncServerUrl);
+    await prefs.setString(_keySyncUserId, _syncUserId);
+    notifyListeners();
+
+    // Auto sync upon updating configuration
+    if (_syncServerUrl.isNotEmpty) {
+      syncWithBackend();
+    }
+  }
+
+  // Synchronize database with Bun server
+  Future<Map<String, int>?> syncWithBackend({bool manual = false}) async {
+    if (_syncServerUrl.isEmpty) return null;
+
+    _isSyncing = true;
+    notifyListeners();
+
+    try {
+      final results = await SyncService.sync(
+        baseUrl: _syncServerUrl,
+        userId: _syncUserId,
+      );
+
+      _lastSyncedTime = DateTime.now().millisecondsSinceEpoch;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_keyLastSyncedTime, _lastSyncedTime!);
+
+      await loadMeals(); // Reload meals from local SQLite
+      return results;
+    } catch (e) {
+      debugPrint('[AppState] Sync failed: $e');
+      rethrow;
+    } finally {
+      _isSyncing = false;
+      notifyListeners();
+    }
   }
 
   // Save Settings
@@ -139,18 +208,29 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> addMeal(Meal meal) async {
-    await _dbHelper.insertMeal(meal);
+    final unsyncedMeal = meal.copyWith(synced: 0);
+    await _dbHelper.insertMeal(unsyncedMeal);
     await loadMeals();
+    if (_syncServerUrl.isNotEmpty) {
+      syncWithBackend();
+    }
   }
 
   Future<void> updateMeal(Meal meal) async {
-    await _dbHelper.updateMeal(meal);
+    final unsyncedMeal = meal.copyWith(synced: 0);
+    await _dbHelper.updateMeal(unsyncedMeal);
     await loadMeals();
+    if (_syncServerUrl.isNotEmpty) {
+      syncWithBackend();
+    }
   }
 
   Future<void> deleteMeal(int id) async {
     await _dbHelper.deleteMeal(id);
     await loadMeals();
+    if (_syncServerUrl.isNotEmpty) {
+      syncWithBackend();
+    }
   }
 
   Future<void> clearAllMeals() async {

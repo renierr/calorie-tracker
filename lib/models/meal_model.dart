@@ -15,6 +15,8 @@ class Meal {
   final String? notes;
   final int timestamp;
   final int updatedAt;
+  final int synced; // 0 = unsynced, 1 = synced
+  final int deleted; // 0 = active, 1 = soft-deleted
 
   Meal({
     this.id,
@@ -29,6 +31,8 @@ class Meal {
     this.notes,
     required this.timestamp,
     required this.updatedAt,
+    this.synced = 0,
+    this.deleted = 0,
   });
 
   // Convert a Meal into a Map for SQLite insertion
@@ -46,6 +50,8 @@ class Meal {
       'notes': notes,
       'timestamp': timestamp,
       'updatedAt': updatedAt,
+      'synced': synced,
+      'deleted': deleted,
     };
   }
 
@@ -66,6 +72,8 @@ class Meal {
           map['timestamp'] as int? ?? DateTime.now().millisecondsSinceEpoch,
       updatedAt:
           map['updatedAt'] as int? ?? DateTime.now().millisecondsSinceEpoch,
+      synced: map['synced'] as int? ?? 0,
+      deleted: map['deleted'] as int? ?? 0,
     );
   }
 
@@ -168,6 +176,8 @@ class Meal {
     String? notes,
     int? timestamp,
     int? updatedAt,
+    int? synced,
+    int? deleted,
   }) {
     return Meal(
       id: id ?? this.id,
@@ -182,6 +192,8 @@ class Meal {
       notes: notes ?? this.notes,
       timestamp: timestamp ?? this.timestamp,
       updatedAt: updatedAt ?? this.updatedAt,
+      synced: synced ?? this.synced,
+      deleted: deleted ?? this.deleted,
     );
   }
 }

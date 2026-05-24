@@ -9,6 +9,7 @@ import '../widgets/settings/maintenance_card.dart';
 import '../widgets/settings/language_card.dart';
 import '../widgets/settings/theme_card.dart';
 import '../widgets/settings/export_card.dart';
+import '../widgets/settings/sync_config_card.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -24,6 +25,8 @@ class _SettingsPageState extends State<SettingsPage> {
   late TextEditingController _proteinController;
   late TextEditingController _carbsController;
   late TextEditingController _fatController;
+  late TextEditingController _syncServerUrlController;
+  late TextEditingController _syncUserIdController;
 
   @override
   void initState() {
@@ -41,6 +44,10 @@ class _SettingsPageState extends State<SettingsPage> {
       text: appState.carbsGoal.toString(),
     );
     _fatController = TextEditingController(text: appState.fatGoal.toString());
+    _syncServerUrlController = TextEditingController(
+      text: appState.syncServerUrl,
+    );
+    _syncUserIdController = TextEditingController(text: appState.syncUserId);
   }
 
   @override
@@ -50,6 +57,8 @@ class _SettingsPageState extends State<SettingsPage> {
     _proteinController.dispose();
     _carbsController.dispose();
     _fatController.dispose();
+    _syncServerUrlController.dispose();
+    _syncUserIdController.dispose();
     super.dispose();
   }
 
@@ -67,6 +76,12 @@ class _SettingsPageState extends State<SettingsPage> {
       protein: protein,
       carbs: carbs,
       fat: fat,
+    );
+
+    // Save sync settings
+    await appState.saveSyncSettings(
+      serverUrl: _syncServerUrlController.text.trim(),
+      userId: _syncUserIdController.text.trim(),
     );
 
     if (!mounted) return;
@@ -98,6 +113,14 @@ class _SettingsPageState extends State<SettingsPage> {
               LanguageCard(appState: appState),
               const SizedBox(height: 20),
               ThemeCard(appState: appState),
+              const SizedBox(height: 20),
+
+              // Panel 2.5: Cloud Sync Configuration
+              SyncConfigCard(
+                serverUrlController: _syncServerUrlController,
+                userIdController: _syncUserIdController,
+                appState: appState,
+              ),
               const SizedBox(height: 20),
 
               // Panel 3: Calorie & Macro Target configuration

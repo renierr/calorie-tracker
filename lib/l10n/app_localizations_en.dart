@@ -510,4 +510,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reEvaluationSuccess => 'Meal re-evaluated successfully!';
+
+  @override
+  String get syncSettings => 'Cloud Sync Settings';
+
+  @override
+  String get syncSettingsDesc =>
+      'Configure your backend server connection to backup and synchronize your meal database across multiple devices.';
+
+  @override
+  String get syncServerUrl => 'Sync Server URL';
+
+  @override
+  String get syncServerUrlHint => 'e.g. http://localhost:3000';
+
+  @override
+  String get syncUserId => 'Sync User ID';
+
+  @override
+  String get syncUserIdHint => 'e.g. user-1';
+
+  @override
+  String get syncNowBtn => 'Sync Database Now';
+
+  @override
+  String get syncingStatus => 'Synchronizing with server...';
+
+  @override
+  String syncSuccess(int pulled, int pushed) {
+    return 'Sync completed! Pulled: $pulled, Pushed: $pushed';
+  }
+
+  @override
+  String syncFailed(String error) {
+    return 'Sync failed: $error';
+  }
+
+  @override
+  String lastSyncedLabel(String time) {
+    return 'Last Synced: $time';
+  }
+
+  @override
+  String get neverSynced => 'Never Synced';
 }

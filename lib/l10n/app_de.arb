@@ -194,5 +194,41 @@
       }
     }
   },
-  "reEvaluationSuccess": "Mahlzeit erfolgreich neu bewertet!"
+  "reEvaluationSuccess": "Mahlzeit erfolgreich neu bewertet!",
+  "syncSettings": "Cloud-Synchronisation",
+  "syncSettingsDesc": "Konfigurieren Sie Ihre Serververbindung, um Ihre Mahlzeiten-Datenbank auf mehreren Geräten zu sichern und zu synchronisieren.",
+  "syncServerUrl": "Server-URL",
+  "syncServerUrlHint": "z.B. http://localhost:3000",
+  "syncUserId": "Benutzer-ID",
+  "syncUserIdHint": "z.B. user-1",
+  "syncNowBtn": "Jetzt synchronisieren",
+  "syncingStatus": "Synchronisierung mit dem Server...",
+  "syncSuccess": "Synchronisation erfolgreich! Empfangen: {pulled}, Gesendet: {pushed}",
+  "@syncSuccess": {
+    "placeholders": {
+      "pulled": {
+        "type": "int"
+      },
+      "pushed": {
+        "type": "int"
+      }
+    }
+  },
+  "syncFailed": "Synchronisation fehlgeschlagen: {error}",
+  "@syncFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "lastSyncedLabel": "Zuletzt synchronisiert: {time}",
+  "@lastSyncedLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "neverSynced": "Noch nie synchronisiert"
 }

@@ -194,5 +194,41 @@
       }
     }
   },
-  "reEvaluationSuccess": "Meal re-evaluated successfully!"
+  "reEvaluationSuccess": "Meal re-evaluated successfully!",
+  "syncSettings": "Cloud Sync Settings",
+  "syncSettingsDesc": "Configure your backend server connection to backup and synchronize your meal database across multiple devices.",
+  "syncServerUrl": "Sync Server URL",
+  "syncServerUrlHint": "e.g. http://localhost:3000",
+  "syncUserId": "Sync User ID",
+  "syncUserIdHint": "e.g. user-1",
+  "syncNowBtn": "Sync Database Now",
+  "syncingStatus": "Synchronizing with server...",
+  "syncSuccess": "Sync completed! Pulled: {pulled}, Pushed: {pushed}",
+  "@syncSuccess": {
+    "placeholders": {
+      "pulled": {
+        "type": "int"
+      },
+      "pushed": {
+        "type": "int"
+      }
+    }
+  },
+  "syncFailed": "Sync failed: {error}",
+  "@syncFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "lastSyncedLabel": "Last Synced: {time}",
+  "@lastSyncedLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "neverSynced": "Never Synced"
 }

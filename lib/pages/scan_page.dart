@@ -281,7 +281,11 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   // Layout: Scan trigger action
-  Widget _buildTriggerButton(bool hasApiKey, String apiKey, String languageCode) {
+  Widget _buildTriggerButton(
+    bool hasApiKey,
+    String apiKey,
+    String languageCode,
+  ) {
     final colors = AppTheme.of(context);
     if (!hasApiKey) {
       return Column(

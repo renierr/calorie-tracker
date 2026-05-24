@@ -511,4 +511,47 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reEvaluationSuccess => 'Mahlzeit erfolgreich neu bewertet!';
+
+  @override
+  String get syncSettings => 'Cloud-Synchronisation';
+
+  @override
+  String get syncSettingsDesc =>
+      'Konfigurieren Sie Ihre Serververbindung, um Ihre Mahlzeiten-Datenbank auf mehreren Geräten zu sichern und zu synchronisieren.';
+
+  @override
+  String get syncServerUrl => 'Server-URL';
+
+  @override
+  String get syncServerUrlHint => 'z.B. http://localhost:3000';
+
+  @override
+  String get syncUserId => 'Benutzer-ID';
+
+  @override
+  String get syncUserIdHint => 'z.B. user-1';
+
+  @override
+  String get syncNowBtn => 'Jetzt synchronisieren';
+
+  @override
+  String get syncingStatus => 'Synchronisierung mit dem Server...';
+
+  @override
+  String syncSuccess(int pulled, int pushed) {
+    return 'Synchronisation erfolgreich! Empfangen: $pulled, Gesendet: $pushed';
+  }
+
+  @override
+  String syncFailed(String error) {
+    return 'Synchronisation fehlgeschlagen: $error';
+  }
+
+  @override
+  String lastSyncedLabel(String time) {
+    return 'Zuletzt synchronisiert: $time';
+  }
+
+  @override
+  String get neverSynced => 'Noch nie synchronisiert';
 }

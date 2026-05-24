@@ -1003,6 +1003,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Meal re-evaluated successfully!'**
   String get reEvaluationSuccess;
+
+  /// No description provided for @syncSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Sync Settings'**
+  String get syncSettings;
+
+  /// No description provided for @syncSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure your backend server connection to backup and synchronize your meal database across multiple devices.'**
+  String get syncSettingsDesc;
+
+  /// No description provided for @syncServerUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Server URL'**
+  String get syncServerUrl;
+
+  /// No description provided for @syncServerUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. http://localhost:3000'**
+  String get syncServerUrlHint;
+
+  /// No description provided for @syncUserId.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync User ID'**
+  String get syncUserId;
+
+  /// No description provided for @syncUserIdHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. user-1'**
+  String get syncUserIdHint;
+
+  /// No description provided for @syncNowBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Database Now'**
+  String get syncNowBtn;
+
+  /// No description provided for @syncingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Synchronizing with server...'**
+  String get syncingStatus;
+
+  /// No description provided for @syncSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync completed! Pulled: {pulled}, Pushed: {pushed}'**
+  String syncSuccess(int pulled, int pushed);
+
+  /// No description provided for @syncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed: {error}'**
+  String syncFailed(String error);
+
+  /// No description provided for @lastSyncedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Synced: {time}'**
+  String lastSyncedLabel(String time);
+
+  /// No description provided for @neverSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Never Synced'**
+  String get neverSynced;
 }
 
 class _AppLocalizationsDelegate

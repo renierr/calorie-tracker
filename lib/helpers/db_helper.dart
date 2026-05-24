@@ -6,7 +6,7 @@ import '../models/meal_model.dart';
 
 class DbHelper {
   static const String _dbName = 'calorie_tracker.db';
-  static const int _dbVersion = 1;
+  static const int _dbVersion = 2;
   static const String tableMeals = 'meals';
 
   // Private constructor
@@ -34,7 +34,12 @@ class DbHelper {
     }
     final String path = p.join(docDir.path, _dbName);
 
-    return await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: _dbVersion,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -51,9 +56,22 @@ class DbHelper {
         imageBytes BLOB,
         notes TEXT,
         timestamp INTEGER NOT NULL,
-        updatedAt INTEGER NOT NULL
+        updatedAt INTEGER NOT NULL,
+        synced INTEGER NOT NULL DEFAULT 0,
+        deleted INTEGER NOT NULL DEFAULT 0
       )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+        'ALTER TABLE $tableMeals ADD COLUMN synced INTEGER NOT NULL DEFAULT 1',
+      );
+      await db.execute(
+        'ALTER TABLE $tableMeals ADD COLUMN deleted INTEGER NOT NULL DEFAULT 0',
+      );
+    }
   }
 
   // CRUD Operations
@@ -71,6 +89,7 @@ class DbHelper {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       tableMeals,
+      where: 'deleted = 0',
       orderBy: 'timestamp DESC',
     );
 
@@ -83,7 +102,7 @@ class DbHelper {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       tableMeals,
-      where: 'id = ?',
+      where: 'id = ? AND deleted = 0',
       whereArgs: [id],
     );
 
@@ -97,7 +116,7 @@ class DbHelper {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       tableMeals,
-      where: 'shortId = ?',
+      where: 'shortId = ? AND deleted = 0',
       whereArgs: [shortId],
     );
 
@@ -119,7 +138,30 @@ class DbHelper {
 
   Future<int> deleteMeal(int id) async {
     final Database db = await database;
-    return await db.delete(tableMeals, where: 'id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      columns: ['synced', 'shortId'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      final int synced = maps.first['synced'] as int? ?? 0;
+      if (synced == 0) {
+        return await db.delete(tableMeals, where: 'id = ?', whereArgs: [id]);
+      } else {
+        return await db.update(
+          tableMeals,
+          {
+            'deleted': 1,
+            'synced': 0,
+            'updatedAt': DateTime.now().millisecondsSinceEpoch,
+          },
+          where: 'id = ?',
+          whereArgs: [id],
+        );
+      }
+    }
+    return 0;
   }
 
   Future<String> get databasePath async {
@@ -137,5 +179,34 @@ class DbHelper {
   Future<int> clearDatabase() async {
     final Database db = await database;
     return await db.delete(tableMeals);
+  }
+
+  Future<List<Meal>> getUnsyncedMeals() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      where: 'synced = 0',
+    );
+    return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
+  }
+
+  Future<List<Meal>> getActiveAndDeletedMeals() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(tableMeals);
+    return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
+  }
+
+  Future<void> finalizeSync(String shortId, bool wasDeleted) async {
+    final Database db = await database;
+    if (wasDeleted) {
+      await db.delete(tableMeals, where: 'shortId = ?', whereArgs: [shortId]);
+    } else {
+      await db.update(
+        tableMeals,
+        {'synced': 1},
+        where: 'shortId = ?',
+        whereArgs: [shortId],
+      );
+    }
   }
 }
