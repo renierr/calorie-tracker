@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/db_helper.dart';
@@ -220,4 +221,72 @@ class AppState extends ChangeNotifier {
   // Export database
   Future<File> exportDatabase({required String destPath}) =>
       _dbHelper.exportDatabase(destPath: destPath);
+
+  // Export meals list to a standard JSON string
+  Future<String> exportMealsToJson(List<Meal> mealsToExport) async {
+    final Map<String, dynamic> exportMap = {
+      'version': '1.0.0',
+      'exportedAt': DateTime.now().toUtc().toIso8601String(),
+      'settings': {
+        'calorieGoal': _calorieGoal,
+        'proteinGoal': _proteinGoal,
+        'carbsGoal': _carbsGoal,
+        'fatGoal': _fatGoal,
+      },
+      'meals': mealsToExport.map((m) => m.toJsonExport()).toList(),
+    };
+    return const JsonEncoder.withIndent('  ').convert(exportMap);
+  }
+
+  // Import meals from a JSON string (Full Envelope, Raw Array, or Single Meal)
+  // Ignoring and omitting settings from the envelope.
+  Future<int> importMealsFromJson(String jsonContent) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final decoded = json.decode(jsonContent);
+      List<dynamic> mealsJsonList = [];
+
+      if (decoded is Map<String, dynamic>) {
+        if (decoded.containsKey('meals') && decoded['meals'] is List) {
+          // Full Envelope standard
+          mealsJsonList = decoded['meals'] as List;
+        } else {
+          // Single Entry Map
+          mealsJsonList = [decoded];
+        }
+      } else if (decoded is List) {
+        // Raw Array
+        mealsJsonList = decoded;
+      } else {
+        throw const FormatException('Invalid JSON payload structure');
+      }
+
+      int importCount = 0;
+      for (final item in mealsJsonList) {
+        if (item is Map<String, dynamic>) {
+          final meal = Meal.fromJsonExport(item);
+
+          // Collision deduplication by shortId
+          final existingMeal = await _dbHelper.getMealByShortId(meal.shortId);
+          if (existingMeal != null) {
+            // Overwrite existing meal with the new data, keeping its primary database ID
+            final mergedMeal = meal.copyWith(id: existingMeal.id);
+            await _dbHelper.updateMeal(mergedMeal);
+          } else {
+            // Insert as a new entry
+            await _dbHelper.insertMeal(meal);
+          }
+          importCount++;
+        }
+      }
+
+      await loadMeals();
+      return importCount;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

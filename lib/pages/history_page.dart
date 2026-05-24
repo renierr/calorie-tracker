@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:file_selector/file_selector.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
@@ -19,6 +21,8 @@ class _HistoryPageState extends State<HistoryPage> {
   String _filterType = 'all'; // 'all', 'today', 'yesterday', 'week', 'custom'
   DateTime? _customStartDate;
   DateTime? _customEndDate;
+  bool _isSelectionMode = false;
+  final Set<int> _selectedMealIds = {};
 
   @override
   void initState() {
@@ -451,7 +455,50 @@ class _HistoryPageState extends State<HistoryPage> {
     final List<Meal> filteredMeals = _getFilteredMeals(appState.meals);
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.historyTitle)),
+      appBar: AppBar(
+        title: _isSelectionMode
+            ? Text(
+                AppLocalizations.of(
+                  context,
+                )!.selectedCount(_selectedMealIds.length),
+              )
+            : Text(AppLocalizations.of(context)!.historyTitle),
+        leading: _isSelectionMode
+            ? IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  setState(() {
+                    _isSelectionMode = false;
+                    _selectedMealIds.clear();
+                  });
+                },
+              )
+            : null,
+        actions: [
+          if (!_isSelectionMode)
+            IconButton(
+              icon: const Icon(Icons.checklist),
+              tooltip: AppLocalizations.of(context)!.selectMeals,
+              onPressed: () {
+                setState(() {
+                  _isSelectionMode = true;
+                });
+              },
+            )
+          else
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _selectedMealIds.clear();
+                });
+              },
+              child: Text(
+                AppLocalizations.of(context)!.deselectAll,
+                style: const TextStyle(color: Colors.white70),
+              ),
+            ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -459,6 +506,10 @@ class _HistoryPageState extends State<HistoryPage> {
             // Filter Toolbar Box
             const SizedBox(height: 10),
             _buildFilterPanel(context),
+            const SizedBox(height: 15),
+
+            // Import/Export Action Card
+            _buildDataActionsCard(context, appState, filteredMeals),
             const SizedBox(height: 15),
 
             // Top action button card if meals are loaded
@@ -483,6 +534,187 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildSelectionIndicator(Meal meal) {
+    final isSelected = _selectedMealIds.contains(meal.id);
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: isSelected ? AppTheme.accentEmerald : Colors.transparent,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: isSelected ? AppTheme.accentEmerald : Colors.white30,
+          width: 2,
+        ),
+      ),
+      child: isSelected
+          ? const Icon(Icons.check, size: 14, color: Colors.white)
+          : null,
+    );
+  }
+
+  Widget _buildDataActionsCard(
+    BuildContext context,
+    AppState appState,
+    List<Meal> filteredMeals,
+  ) {
+    final colors = AppTheme.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              icon: const Icon(
+                Icons.upload,
+                size: 18,
+                color: AppTheme.accentEmerald,
+              ),
+              label: Text(
+                AppLocalizations.of(context)!.importLabel,
+                style: const TextStyle(
+                  color: AppTheme.accentEmerald,
+                  fontSize: 13,
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(
+                  color: AppTheme.accentEmerald,
+                  width: 1.2,
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () => _handleImport(context, appState),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.download, size: 18),
+              label: Text(
+                AppLocalizations.of(context)!.exportLabel,
+                style: const TextStyle(fontSize: 13),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.accentEmerald,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () => _handleExport(context, appState, filteredMeals),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleImport(BuildContext context, AppState appState) async {
+    try {
+      final XFile? file = await openFile(
+        acceptedTypeGroups: <XTypeGroup>[
+          const XTypeGroup(label: 'JSON Backup', extensions: <String>['json']),
+        ],
+      );
+      if (file == null) return;
+
+      final String content = await file.readAsString();
+      final int count = await appState.importMealsFromJson(content);
+
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.importMealsSuccess(count),
+          ),
+          backgroundColor: AppTheme.accentEmerald,
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.importMealsError(e.toString()),
+          ),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleExport(
+    BuildContext context,
+    AppState appState,
+    List<Meal> filteredMeals,
+  ) async {
+    final List<Meal> mealsToExport;
+    if (_selectedMealIds.isNotEmpty) {
+      mealsToExport = appState.meals
+          .where((m) => _selectedMealIds.contains(m.id))
+          .toList();
+    } else {
+      mealsToExport = filteredMeals;
+    }
+
+    if (mealsToExport.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No meals found to export.'),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final FileSaveLocation? location = await getSaveLocation(
+        suggestedName: 'nutriscan_export_$timestamp.json',
+        acceptedTypeGroups: <XTypeGroup>[
+          const XTypeGroup(label: 'JSON Backup', extensions: <String>['json']),
+        ],
+      );
+      if (location == null) return;
+
+      final String jsonContent = await appState.exportMealsToJson(
+        mealsToExport,
+      );
+      final File file = File(location.path);
+      await file.writeAsString(jsonContent);
+
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.exportMealsSuccess),
+          backgroundColor: AppTheme.accentEmerald,
+        ),
+      );
+
+      setState(() {
+        _isSelectionMode = false;
+        _selectedMealIds.clear();
+      });
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.exportMealsError(e.toString()),
+          ),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+    }
   }
 
   Widget _buildFilterPanel(BuildContext context) {
@@ -698,235 +930,297 @@ class _HistoryPageState extends State<HistoryPage> {
     final colors = AppTheme.of(context);
     final mealDate = DateTime.fromMillisecondsSinceEpoch(meal.timestamp);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: AppTheme.premiumCardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header info
-          Row(
-            children: [
-              Text(
-                _dateFormat.format(mealDate),
-                style: TextStyle(
-                  color: colors.textSecondary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                _timeFormat.format(mealDate),
-                style: TextStyle(color: colors.textMuted, fontSize: 11),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  meal.shortId,
-                  style: TextStyle(color: colors.textMuted, fontSize: 10),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
+    final isSelected = _selectedMealIds.contains(meal.id);
 
-          // Core visual row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Photo Thumbnail
-              GestureDetector(
-                onTap: meal.imageBytes != null
-                    ? () => _showImagePreview(context, meal.imageBytes!)
-                    : null,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: colors.surfaceLight,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white12, width: 0.5),
-                  ),
-                  child: meal.imageBytes != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.memory(
-                            meal.imageBytes!,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : const Icon(
-                          Icons.restaurant,
-                          color: AppTheme.accentEmerald,
-                          size: 24,
+    return GestureDetector(
+      onTap: () {
+        if (_isSelectionMode) {
+          setState(() {
+            if (_selectedMealIds.contains(meal.id)) {
+              _selectedMealIds.remove(meal.id);
+            } else {
+              _selectedMealIds.add(meal.id!);
+            }
+          });
+        }
+      },
+      onLongPress: () {
+        if (!_isSelectionMode) {
+          setState(() {
+            _isSelectionMode = true;
+            _selectedMealIds.add(meal.id!);
+          });
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: AppTheme.premiumCardDecoration(
+          showGlow: _isSelectionMode && isSelected,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_isSelectionMode)
+              Padding(
+                padding: const EdgeInsets.only(top: 2, right: 12),
+                child: _buildSelectionIndicator(meal),
+              ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header info
+                  Row(
+                    children: [
+                      Text(
+                        _dateFormat.format(mealDate),
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
                         ),
-                ),
-              ),
-              const SizedBox(width: 14),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _timeFormat.format(mealDate),
+                        style: TextStyle(color: colors.textMuted, fontSize: 11),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          meal.shortId,
+                          style: TextStyle(
+                            color: colors.textMuted,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
 
-              // Title and Macros Details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  // Core visual row
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Photo Thumbnail
+                      GestureDetector(
+                        onTap: meal.imageBytes != null
+                            ? () => _showImagePreview(context, meal.imageBytes!)
+                            : null,
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: colors.surfaceLight,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ),
+                          ),
+                          child: meal.imageBytes != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.memory(
+                                    meal.imageBytes!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.restaurant,
+                                  color: AppTheme.accentEmerald,
+                                  size: 24,
+                                ),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+
+                      // Title and Macros Details
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              meal.foodName,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: colors.textPrimary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.caloriesLabel(meal.calories),
+                              style: const TextStyle(
+                                color: AppTheme.accentEmerald,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              AppLocalizations.of(context)!.macroPerGram(
+                                meal.carbs,
+                                meal.fat,
+                                meal.protein,
+                              ),
+                              style: TextStyle(
+                                color: colors.textSecondary,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  if (meal.notes != null && meal.notes!.trim().isNotEmpty) ...[
+                    const SizedBox(height: 12),
                     Text(
-                      meal.foodName,
+                      meal.notes!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: colors.textPrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.caloriesLabel(meal.calories),
-                      style: const TextStyle(
-                        color: AppTheme.accentEmerald,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.macroPerGram(meal.carbs, meal.fat, meal.protein),
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
+                        color: colors.textMuted,
+                        fontSize: 11,
+                        fontStyle: FontStyle.italic,
                       ),
                     ),
                   ],
-                ),
-              ),
-            ],
-          ),
+                  const SizedBox(height: 12),
+                  const Divider(color: Colors.white10, height: 1),
+                  const SizedBox(height: 10),
 
-          if (meal.notes != null && meal.notes!.trim().isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Text(
-              meal.notes!,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: colors.textMuted,
-                fontSize: 11,
-                fontStyle: FontStyle.italic,
+                  // Action Toolbar Footer
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Single Export PDF
+                      TextButton.icon(
+                        icon: const Icon(Icons.picture_as_pdf, size: 16),
+                        label: Text(
+                          AppLocalizations.of(context)!.pdf,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        onPressed: () async {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                AppLocalizations.of(context)!.generatingMealPdf,
+                              ),
+                            ),
+                          );
+                          await PdfService.generateSingleMealPdf(
+                            meal,
+                            appState.calorieGoal,
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+
+                      // Edit
+                      TextButton.icon(
+                        icon: const Icon(Icons.edit, size: 16),
+                        label: Text(
+                          AppLocalizations.of(context)!.edit,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        onPressed: () =>
+                            _showEditMealDialog(context, appState, meal),
+                      ),
+                      const SizedBox(width: 8),
+
+                      // Delete
+                      TextButton.icon(
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          size: 16,
+                          color: AppTheme.accentRed,
+                        ),
+                        label: Text(
+                          AppLocalizations.of(context)!.delete,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.accentRed,
+                          ),
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: colors.surface,
+                                title: Text(
+                                  AppLocalizations.of(context)!.confirmDelete,
+                                  style: TextStyle(color: AppTheme.accentRed),
+                                ),
+                                content: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.confirmDeleteDesc,
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.cancel,
+                                      style: TextStyle(
+                                        color: colors.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.accentRed,
+                                    ),
+                                    onPressed: () async {
+                                      await appState.deleteMeal(meal.id!);
+                                      if (!context.mounted) return;
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.mealDeleted,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.delete,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
-          const SizedBox(height: 12),
-          const Divider(color: Colors.white10, height: 1),
-          const SizedBox(height: 10),
-
-          // Action Toolbar Footer
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // Single Export PDF
-              TextButton.icon(
-                icon: const Icon(Icons.picture_as_pdf, size: 16),
-                label: Text(
-                  AppLocalizations.of(context)!.pdf,
-                  style: TextStyle(fontSize: 12),
-                ),
-                onPressed: () async {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        AppLocalizations.of(context)!.generatingMealPdf,
-                      ),
-                    ),
-                  );
-                  await PdfService.generateSingleMealPdf(
-                    meal,
-                    appState.calorieGoal,
-                  );
-                },
-              ),
-              const SizedBox(width: 8),
-
-              // Edit
-              TextButton.icon(
-                icon: const Icon(Icons.edit, size: 16),
-                label: Text(
-                  AppLocalizations.of(context)!.edit,
-                  style: TextStyle(fontSize: 12),
-                ),
-                onPressed: () => _showEditMealDialog(context, appState, meal),
-              ),
-              const SizedBox(width: 8),
-
-              // Delete
-              TextButton.icon(
-                icon: const Icon(
-                  Icons.delete_outline,
-                  size: 16,
-                  color: AppTheme.accentRed,
-                ),
-                label: Text(
-                  AppLocalizations.of(context)!.delete,
-                  style: TextStyle(fontSize: 12, color: AppTheme.accentRed),
-                ),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        backgroundColor: colors.surface,
-                        title: Text(
-                          AppLocalizations.of(context)!.confirmDelete,
-                          style: TextStyle(color: AppTheme.accentRed),
-                        ),
-                        content: Text(
-                          AppLocalizations.of(context)!.confirmDeleteDesc,
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(
-                              AppLocalizations.of(context)!.cancel,
-                              style: TextStyle(color: colors.textSecondary),
-                            ),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.accentRed,
-                            ),
-                            onPressed: () async {
-                              await appState.deleteMeal(meal.id!);
-                              if (!context.mounted) return;
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    AppLocalizations.of(context)!.mealDeleted,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Text(AppLocalizations.of(context)!.delete),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -143,5 +143,42 @@
   "pdfRangeCustom": "Zeitraum: {start} - {end}",
   "pdfAllTime": "Alle Einträge",
   "pdfRange7Days": "Zeitraum: Letzte 7 Tage",
-  "pdfActiveFilter": "Aktiver Filterzeitraum"
+  "pdfActiveFilter": "Aktiver Filterzeitraum",
+  "importLabel": "Importieren",
+  "exportLabel": "Exportieren",
+  "importMealsSuccess": "{count} Mahlzeiten erfolgreich importiert.",
+  "@importMealsSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importMealsError": "Fehler beim Importieren: {error}",
+  "@importMealsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exportMealsSuccess": "Mahlzeiten erfolgreich exportiert.",
+  "exportMealsError": "Fehler beim Exportieren: {error}",
+  "@exportMealsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "selectMeals": "Auswählen",
+  "deselectAll": "Auswahl aufheben",
+  "selectedCount": "{count} ausgewählt",
+  "@selectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

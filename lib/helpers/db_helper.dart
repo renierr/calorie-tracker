@@ -93,6 +93,20 @@ class DbHelper {
     return null;
   }
 
+  Future<Meal?> getMealByShortId(String shortId) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      where: 'shortId = ?',
+      whereArgs: [shortId],
+    );
+
+    if (maps.isNotEmpty) {
+      return Meal.fromMap(maps.first);
+    }
+    return null;
+  }
+
   Future<int> updateMeal(Meal meal) async {
     final Database db = await database;
     return await db.update(

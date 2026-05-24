@@ -143,5 +143,42 @@
   "pdfRangeCustom": "Range: {start} - {end}",
   "pdfAllTime": "All-Time Logs",
   "pdfRange7Days": "Range: Last 7 Days",
-  "pdfActiveFilter": "Active Filter Range"
+  "pdfActiveFilter": "Active Filter Range",
+  "importLabel": "Import",
+  "exportLabel": "Export",
+  "importMealsSuccess": "Successfully imported {count} meals.",
+  "@importMealsSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importMealsError": "Failed to import meals: {error}",
+  "@importMealsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exportMealsSuccess": "Meals exported successfully.",
+  "exportMealsError": "Failed to export: {error}",
+  "@exportMealsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "selectMeals": "Select",
+  "deselectAll": "Deselect All",
+  "selectedCount": "{count} selected",
+  "@selectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
