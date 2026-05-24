@@ -172,6 +172,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   updatedAt: DateTime.now().millisecondsSinceEpoch,
                 );
                 await appState.updateMeal(updatedMeal);
+                if (!context.mounted) return;
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Meal updated successfully!'), backgroundColor: AppTheme.accentEmerald),
@@ -385,7 +386,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceLight.withOpacity(0.5),
+                        color: AppTheme.surfaceLight.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -414,7 +415,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceLight.withOpacity(0.5),
+                        color: AppTheme.surfaceLight.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -436,7 +437,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget _buildReportActionCard(BuildContext context, AppState appState, List<Meal> filteredMeals) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-      decoration: AppTheme.premiumCardDecoration(color: AppTheme.surfaceLight.withOpacity(0.4)),
+      decoration: AppTheme.premiumCardDecoration(color: AppTheme.surfaceLight.withValues(alpha: 0.4)),
       child: Row(
         children: [
           Expanded(
@@ -495,7 +496,7 @@ class _HistoryPageState extends State<HistoryPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -615,6 +616,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             style: ElevatedButton.styleFrom(backgroundColor: AppTheme.accentRed),
                             onPressed: () async {
                               await appState.deleteMeal(meal.id!);
+                              if (!context.mounted) return;
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Meal deleted.')),
@@ -641,7 +643,7 @@ class _HistoryPageState extends State<HistoryPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.calendar_today, color: AppTheme.textMuted.withOpacity(0.5), size: 48),
+          Icon(Icons.calendar_today, color: AppTheme.textMuted.withValues(alpha: 0.5), size: 48),
           const SizedBox(height: 16),
           const Text(
             'No History Found',

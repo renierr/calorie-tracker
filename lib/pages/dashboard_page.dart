@@ -186,7 +186,7 @@ class DashboardPage extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: percent,
                   strokeWidth: 14,
-                  backgroundColor: Colors.white.withOpacity(0.05),
+                  backgroundColor: Colors.white.withValues(alpha: 0.05),
                   valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.accentEmerald),
                 ),
               ),
@@ -313,7 +313,7 @@ class DashboardPage extends StatelessWidget {
             children: [
               Container(
                 height: 10,
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
               ),
               FractionallySizedBox(
                 widthFactor: fraction,
@@ -402,8 +402,8 @@ class DashboardPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: isSelectedDate
-                                    ? [AppTheme.accentEmerald, AppTheme.accentEmerald.withOpacity(0.4)]
-                                    : [AppTheme.accentBlue, AppTheme.accentBlue.withOpacity(0.4)],
+                                    ? [AppTheme.accentEmerald, AppTheme.accentEmerald.withValues(alpha: 0.4)]
+                                    : [AppTheme.accentBlue, AppTheme.accentBlue.withValues(alpha: 0.4)],
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                               ),
@@ -470,7 +470,7 @@ class DashboardPage extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    Icon(Icons.restaurant_outlined, color: AppTheme.textMuted.withOpacity(0.5), size: 36),
+                    Icon(Icons.restaurant_outlined, color: AppTheme.textMuted.withValues(alpha: 0.5), size: 36),
                     const SizedBox(height: 10),
                     const Text(
                       'No meals logged for this day.',

@@ -59,6 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
       fat: fat,
     );
 
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Preferences saved successfully!'),
@@ -298,6 +299,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: ElevatedButton.styleFrom(backgroundColor: AppTheme.accentRed),
                           onPressed: () async {
                             await appState.clearAllMeals();
+                            if (!context.mounted) return;
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Database log history cleared.')),

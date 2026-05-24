@@ -226,7 +226,7 @@ class _ScanPageState extends State<ScanPage> {
           // Scanning full-screen loading spinner
           if (_isScanning)
             Container(
-              color: Colors.black.withOpacity(0.8),
+              color: Colors.black.withValues(alpha: 0.8),
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -263,13 +263,13 @@ class _ScanPageState extends State<ScanPage> {
       decoration: BoxDecoration(
         color: AppTheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.08), width: 1),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
       ),
       child: _imageBytes == null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add_a_photo_outlined, color: AppTheme.textSecondary.withOpacity(0.5), size: 48),
+                Icon(Icons.add_a_photo_outlined, color: AppTheme.textSecondary.withValues(alpha: 0.5), size: 48),
                 const SizedBox(height: 14),
                 const Text(
                   'No Meal Photo Selected',
@@ -336,7 +336,7 @@ class _ScanPageState extends State<ScanPage> {
                   top: 12,
                   right: 12,
                   child: FloatingActionButton.small(
-                    backgroundColor: Colors.black.withOpacity(0.6),
+                    backgroundColor: Colors.black.withValues(alpha: 0.6),
                     onPressed: _clearImage,
                     child: const Icon(Icons.close, color: Colors.white),
                   ),
@@ -492,7 +492,7 @@ class _ScanPageState extends State<ScanPage> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentEmerald.withOpacity(0.15),
+                    color: AppTheme.accentEmerald.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(

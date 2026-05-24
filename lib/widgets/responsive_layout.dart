@@ -52,7 +52,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppTheme.accentEmerald.withOpacity(0.15),
+                            color: AppTheme.accentEmerald.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
@@ -102,7 +102,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: AppTheme.accentEmerald.withOpacity(0.2),
+                          backgroundColor: AppTheme.accentEmerald.withValues(alpha: 0.2),
                           child: const Text('ME', style: TextStyle(color: AppTheme.accentEmerald, fontWeight: FontWeight.bold)),
                         ),
                         const SizedBox(width: 12),
@@ -182,7 +182,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.accentEmerald.withOpacity(0.12) : Colors.transparent,
+            color: isSelected ? AppTheme.accentEmerald.withValues(alpha: 0.12) : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(

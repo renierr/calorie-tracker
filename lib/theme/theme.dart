@@ -17,7 +17,7 @@ class AppTheme {
 
   // Border styles
   static final BorderSide cardBorder = BorderSide(
-    color: Colors.white.withOpacity(0.08),
+    color: Colors.white.withValues(alpha: 0.08),
     width: 1,
   );
 
@@ -32,20 +32,20 @@ class AppTheme {
       color: color,
       borderRadius: BorderRadius.circular(borderRadius),
       border: Border.all(
-        color: Colors.white.withOpacity(0.08),
+        color: Colors.white.withValues(alpha: 0.08),
         width: 1,
       ),
       boxShadow: [
         if (showGlow)
           BoxShadow(
-            color: glowColor.withOpacity(0.15),
+            color: glowColor.withValues(alpha: 0.15),
             blurRadius: 20,
             spreadRadius: 2,
             offset: const Offset(0, 4),
           )
         else
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -61,7 +61,7 @@ class AppTheme {
       primaryColor: accentEmerald,
       scaffoldBackgroundColor: background,
       cardColor: surface,
-      dialogBackgroundColor: surface,
+      dialogTheme: DialogThemeData(backgroundColor: surface),
       
       // Text Theme
       textTheme: const TextTheme(
@@ -75,14 +75,14 @@ class AppTheme {
       // Input Decoration
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surfaceLight.withOpacity(0.5),
+        fillColor: surfaceLight.withValues(alpha: 0.5),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -124,7 +124,7 @@ class AppTheme {
       // Navigation Bar Theme
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: surface,
-        indicatorColor: accentEmerald.withOpacity(0.2),
+        indicatorColor: accentEmerald.withValues(alpha: 0.2),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(color: accentEmerald, fontWeight: FontWeight.w600, fontSize: 12);
