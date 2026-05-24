@@ -29,7 +29,10 @@ class DbHelper {
       databaseFactory = databaseFactoryFfi;
     }
 
-    final Directory docDir = await getApplicationDocumentsDirectory();
+    final Directory docDir = await getApplicationSupportDirectory();
+    if (!await docDir.exists()) {
+      await docDir.create(recursive: true);
+    }
     final String path = join(docDir.path, _dbName);
 
     return await openDatabase(

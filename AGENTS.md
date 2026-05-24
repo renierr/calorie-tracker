@@ -6,6 +6,37 @@ Please read and follow these instructions meticulously to maintain code quality 
 
 ---
 
+## Priority Model
+
+- `ALWAYS`: Hard constraints. Do not violate.
+- `PREFER`: Default behavior. Use unless there is a clear reason not to.
+- `WHEN RELEVANT`: Apply only when the task needs it.
+
+---
+
+## ALWAYS
+
+- **Caveman terse style** (caveman.md): REQUIRED. Drop filler, articles, pleasantries.
+- Do not run production compilation or release builds unless the user explicitly asks or final verification was requested.
+- **Git Write Consent**: Do not `git add`, `git commit`, `git push`, or run any git write operation unless the user explicitly says "commit" or "push". Prior consent does not carry forward — each write requires a fresh explicit command.
+- Never mention AI agents, co-authorship, or AI generation in commit messages or code.
+- **State Management & Data Flow**: Always channel database operations, macro targets, and date navigations through `AppState` in `lib/providers/app_state.dart`. Never update local state variables in individual views for data that should persist.
+- **SQLite Constraints**: Database operations are strictly asynchronous. Always return `Future<T>` and handle interactions inside `AppState`. Store images as `Uint8List? imageBytes` (`BLOB` in SQL). Never use native local file paths for persistence.
+- **PDF Class Overlaps**: Always import the PDF layout framework as `pw` (`import 'package:pdf/widgets.dart' as pw;`) to prevent class namespace collisions between PDF widgets (e.g. `pw.Text`) and standard Flutter Material widgets.
+
+---
+
+## PREFER
+
+- Keep answers short and concise.
+- Use English for code, comments, and docs.
+- Use explicit return types for methods and actions.
+- Avoid using custom hex codes inside individual views. Always reference static variables from `AppTheme` in `lib/theme/theme.dart`.
+- Bind UI screens to state changes using `Consumer<AppState>` or `Provider.of<AppState>(context)`. Use `listen: false` when accessing state inside button callbacks or helper actions.
+- Log errors with context, for example: `print('[Service/Page Name] message: $error')`.
+
+---
+
 ## Architectural Guardrails
 
 ### 1. State Management & Data Flow
@@ -77,6 +108,8 @@ To prompt notifications when daily limits are exceeded:
 4.  **Trigger Alert**: If target values are exceeded, call the notification helper to display a system tray banner alert:
     - *Title*: "Daily Calorie Budget Exceeded!"
     - *Body*: "You have consumed $totalCaloriesConsumed of $calorieGoal kcal. Watch your macros!"
+
+---
 
 ## Verification Procedures
 

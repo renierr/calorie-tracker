@@ -22,7 +22,7 @@ class PdfService {
           return pw.Padding(
             padding: const pw.EdgeInsets.all(30),
             child: pw.Column(
-              cross: pw.CrossAxisAlignment.start,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 // Header
                 pw.Row(
@@ -55,13 +55,13 @@ class PdfService {
 
                 // Grid/Row for image and macros
                 pw.Row(
-                  cross: pw.CrossAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     // Macros info
                     pw.Expanded(
                       flex: 3,
                       child: pw.Column(
-                        cross: pw.CrossAxisAlignment.start,
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
                           _buildDetailRow('Calories', '${meal.calories} kcal', isHeader: true),
                           _buildDetailRow('Protein', '${meal.protein} g'),
@@ -218,7 +218,7 @@ class PdfService {
                 ),
                 child: pw.Text(
                   userNotes,
-                  style: const pw.TextStyle(fontSize: 10, fontStyle: pw.FontStyle.italic),
+                  style: pw.TextStyle(fontSize: 10, fontStyle: pw.FontStyle.italic),
                 ),
               ),
               pw.SizedBox(height: 25),
