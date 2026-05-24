@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.antigravity.calorietracker" "\0"
-            VALUE "FileDescription", "calorie_tracker" "\0"
+            VALUE "CompanyName", "de.renier" "\0"
+            VALUE "FileDescription", "Calorie Tracker" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "calorie_tracker" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.antigravity.calorietracker. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 de.renier. All rights reserved." "\0"
             VALUE "OriginalFilename", "calorie_tracker.exe" "\0"
-            VALUE "ProductName", "calorie_tracker" "\0"
+            VALUE "ProductName", "Calorie Tracker" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
