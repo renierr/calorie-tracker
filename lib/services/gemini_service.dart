@@ -46,7 +46,8 @@ class GeminiService {
     final systemInstruction =
         'You are an advanced clinical nutritionist AI. You specialize in visually scanning dishes, estimating portion weights, and breaking down total nutritional content into precise calorie and macronutrient (protein, carbohydrates, lipid fat) totals.';
 
-    final prompt = 'Analyze this food meal photo and estimate its total nutritional content. '
+    final prompt =
+        'Analyze this food meal photo and estimate its total nutritional content. '
         '${userHint.trim().isNotEmpty ? 'Context clue provided by user: "$userHint". ' : ''}'
         'Provide logical, accurate calories, protein, carbs, and fat estimations.';
 
@@ -55,14 +56,30 @@ class GeminiService {
       properties: {
         'foodName': Schema.string(description: 'Brief description of the meal'),
         'calories': Schema.integer(description: 'Estimated energy in kcal'),
-        'protein': Schema.integer(description: 'Estimated protein weight in grams'),
-        'carbs': Schema.integer(description: 'Estimated carbohydrates weight in grams'),
+        'protein': Schema.integer(
+          description: 'Estimated protein weight in grams',
+        ),
+        'carbs': Schema.integer(
+          description: 'Estimated carbohydrates weight in grams',
+        ),
         'fat': Schema.integer(description: 'Estimated lipids weight in grams'),
-        'confidence': Schema.integer(description: 'Estimation confidence rating from 1 to 100'),
+        'confidence': Schema.integer(
+          description: 'Estimation confidence rating from 1 to 100',
+        ),
         'notes': Schema.string(
-            description: 'Breakdown explanation of food portions or components detected'),
+          description:
+              'Breakdown explanation of food portions or components detected',
+        ),
       },
-      requiredProperties: ['foodName', 'calories', 'protein', 'carbs', 'fat', 'confidence', 'notes'],
+      requiredProperties: [
+        'foodName',
+        'calories',
+        'protein',
+        'carbs',
+        'fat',
+        'confidence',
+        'notes',
+      ],
     );
 
     final model = GenerativeModel(
@@ -76,10 +93,7 @@ class GeminiService {
     );
 
     final response = await model.generateContent([
-      Content.multi([
-        TextPart(prompt),
-        DataPart(mimeType, imageBytes),
-      ]),
+      Content.multi([TextPart(prompt), DataPart(mimeType, imageBytes)]),
     ]);
 
     final responseText = response.text;

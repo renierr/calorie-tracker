@@ -7,7 +7,7 @@ import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Create and initialize the app state provider (restores SharedPreferences & DB caches)
   final appState = AppState();
   await appState.init();
@@ -25,13 +25,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'NutriScan Calorie Tracker',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const ResponsiveLayout(),
+    return Consumer<AppState>(
+      builder: (context, appState, _) {
+        return MaterialApp(
+          title: 'NutriScan Calorie Tracker',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.darkTheme,
+          locale: appState.locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const ResponsiveLayout(),
+        );
+      },
     );
   }
 }

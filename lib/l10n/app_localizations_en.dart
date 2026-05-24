@@ -355,6 +355,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dbCleared => 'Database log history cleared.';
 
   @override
+  String get language => 'Language';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get german => 'German';
+
+  @override
+  String get exportDb => 'Export SQLite Database';
+
+  @override
+  String get exportDbDesc =>
+      'Download a copy of the complete meal database for backup or inspection.';
+
+  @override
+  String get exportDbBtn => 'Download Database Copy';
+
+  @override
+  String get dbExported => 'Database copied to Downloads folder.';
+
+  @override
   String get sidebarDashboard => 'Dashboard';
 
   @override

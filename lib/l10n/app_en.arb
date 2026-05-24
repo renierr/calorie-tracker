@@ -111,6 +111,13 @@
   "savePreferences": "Save Preferences",
   "prefsSaved": "Preferences saved successfully!",
   "dbCleared": "Database log history cleared.",
+  "language": "Language",
+  "english": "English",
+  "german": "German",
+  "exportDb": "Export SQLite Database",
+  "exportDbDesc": "Download a copy of the complete meal database for backup or inspection.",
+  "exportDbBtn": "Download Database Copy",
+  "dbExported": "Database copied to Downloads folder.",
 
   "sidebarDashboard": "Dashboard",
   "sidebarScan": "AI Food Scan",

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/db_helper.dart';
@@ -14,6 +15,7 @@ class AppState extends ChangeNotifier {
   static const String _keyCarbsGoal = 'carbs_goal';
   static const String _keyFatGoal = 'fat_goal';
   static const String _keyHistoryFilter = 'history_filter';
+  static const String _keyLocale = 'app_locale';
 
   // State variables
   String _geminiApiKey = '';
@@ -22,6 +24,7 @@ class AppState extends ChangeNotifier {
   int _carbsGoal = 220;
   int _fatGoal = 70;
   String _historyFilter = 'all';
+  String _appLocale = 'en';
 
   List<Meal> _meals = [];
   bool _isLoading = false;
@@ -39,6 +42,8 @@ class AppState extends ChangeNotifier {
   int get carbsGoal => _carbsGoal;
   int get fatGoal => _fatGoal;
   String get historyFilter => _historyFilter;
+  String get appLocale => _appLocale;
+  Locale get locale => Locale(_appLocale);
   List<Meal> get meals => _meals;
   bool get isLoading => _isLoading;
   DateTime get selectedDate => _selectedDate;
@@ -85,6 +90,7 @@ class AppState extends ChangeNotifier {
     _carbsGoal = prefs.getInt(_keyCarbsGoal) ?? 220;
     _fatGoal = prefs.getInt(_keyFatGoal) ?? 70;
     _historyFilter = prefs.getString(_keyHistoryFilter) ?? 'all';
+    _appLocale = prefs.getString(_keyLocale) ?? 'en';
     notifyListeners();
   }
 
@@ -167,4 +173,15 @@ class AppState extends ChangeNotifier {
     _selectedTabIndex = index;
     notifyListeners();
   }
+
+  // Locale
+  Future<void> setLocale(String code) async {
+    _appLocale = code;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyLocale, code);
+  }
+
+  // Export database
+  Future<File> exportDatabase() => _dbHelper.exportDatabase();
 }

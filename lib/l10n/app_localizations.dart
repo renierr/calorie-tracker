@@ -728,6 +728,48 @@ abstract class AppLocalizations {
   /// **'Database log history cleared.'**
   String get dbCleared;
 
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @german.
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get german;
+
+  /// No description provided for @exportDb.
+  ///
+  /// In en, this message translates to:
+  /// **'Export SQLite Database'**
+  String get exportDb;
+
+  /// No description provided for @exportDbDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a copy of the complete meal database for backup or inspection.'**
+  String get exportDbDesc;
+
+  /// No description provided for @exportDbBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Database Copy'**
+  String get exportDbBtn;
+
+  /// No description provided for @dbExported.
+  ///
+  /// In en, this message translates to:
+  /// **'Database copied to Downloads folder.'**
+  String get dbExported;
+
   /// No description provided for @sidebarDashboard.
   ///
   /// In en, this message translates to:

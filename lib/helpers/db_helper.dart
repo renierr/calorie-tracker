@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import '../models/meal_model.dart';
 
@@ -32,13 +32,9 @@ class DbHelper {
     if (!await docDir.exists()) {
       await docDir.create(recursive: true);
     }
-    final String path = join(docDir.path, _dbName);
+    final String path = p.join(docDir.path, _dbName);
 
-    return await openDatabase(
-      path,
-      version: _dbVersion,
-      onCreate: _onCreate,
-    );
+    return await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -109,11 +105,20 @@ class DbHelper {
 
   Future<int> deleteMeal(int id) async {
     final Database db = await database;
-    return await db.delete(
-      tableMeals,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete(tableMeals, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<String> get databasePath async {
+    final Database db = await database;
+    return db.path;
+  }
+
+  Future<File> exportDatabase() async {
+    final String src = await databasePath;
+    final dir = await getApplicationDocumentsDirectory();
+    final dest = File(p.join(dir.path, _dbName));
+    await File(src).copy(dest.path);
+    return dest;
   }
 
   Future<int> clearDatabase() async {

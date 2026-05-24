@@ -92,7 +92,9 @@ class DashboardPage extends StatelessWidget {
   // Widget 1: Horizontal Sliding Date Navigation Strip
   Widget _buildDateNavigationStrip(BuildContext context, AppState appState) {
     final now = DateTime.now();
-    final DateFormat formatter = DateFormat.yMMMd(Localizations.localeOf(context).toLanguageTag());
+    final DateFormat formatter = DateFormat.yMMMd(
+      Localizations.localeOf(context).toLanguageTag(),
+    );
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -134,7 +136,11 @@ class DashboardPage extends StatelessWidget {
             },
             child: Row(
               children: [
-                const Icon(Icons.calendar_month, color: AppTheme.accentEmerald, size: 20),
+                const Icon(
+                  Icons.calendar_month,
+                  color: AppTheme.accentEmerald,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   formatter.format(appState.selectedDate),
@@ -173,10 +179,14 @@ class DashboardPage extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.calorieConsumption,
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 24),
-          
+
           // Visual custom circular progress indicator
           Stack(
             alignment: Alignment.center,
@@ -188,7 +198,9 @@ class DashboardPage extends StatelessWidget {
                   value: percent,
                   strokeWidth: 14,
                   backgroundColor: Colors.white.withValues(alpha: 0.05),
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.accentEmerald),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    AppTheme.accentEmerald,
+                  ),
                 ),
               ),
               Column(
@@ -204,7 +216,10 @@ class DashboardPage extends StatelessWidget {
                   ),
                   Text(
                     AppLocalizations.of(context)!.ofKcal(goal),
-                    style: const TextStyle(color: AppTheme.textMuted, fontSize: 13),
+                    style: const TextStyle(
+                      color: AppTheme.textMuted,
+                      fontSize: 13,
+                    ),
                   ),
                 ],
               ),
@@ -217,17 +232,25 @@ class DashboardPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                remaining >= 0 ? Icons.check_circle_outline : Icons.warning_amber_rounded,
-                color: remaining >= 0 ? AppTheme.accentEmerald : AppTheme.accentRed,
+                remaining >= 0
+                    ? Icons.check_circle_outline
+                    : Icons.warning_amber_rounded,
+                color: remaining >= 0
+                    ? AppTheme.accentEmerald
+                    : AppTheme.accentRed,
                 size: 18,
               ),
               const SizedBox(width: 8),
               Text(
                 remaining >= 0
                     ? AppLocalizations.of(context)!.kcalRemaining(remaining)
-                    : AppLocalizations.of(context)!.kcalOverBudget(remaining.abs()),
+                    : AppLocalizations.of(
+                        context,
+                      )!.kcalOverBudget(remaining.abs()),
                 style: TextStyle(
-                  color: remaining >= 0 ? AppTheme.textPrimary : AppTheme.accentRed,
+                  color: remaining >= 0
+                      ? AppTheme.textPrimary
+                      : AppTheme.accentRed,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -250,7 +273,11 @@ class DashboardPage extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.macroDistribution,
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -301,11 +328,19 @@ class DashboardPage extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w500, fontSize: 13),
+              style: const TextStyle(
+                color: AppTheme.textPrimary,
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+              ),
             ),
             Text(
               '$consumed / $goal g ($percent%)',
-              style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 13),
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
             ),
           ],
         ),
@@ -348,7 +383,9 @@ class DashboardPage extends StatelessWidget {
       return appState.meals
           .where((m) {
             final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
-            return date.year == day.year && date.month == day.month && date.day == day.day;
+            return date.year == day.year &&
+                date.month == day.month &&
+                date.day == day.day;
           })
           .fold(0, (sum, m) => sum + m.calories);
     }).toList();
@@ -365,7 +402,11 @@ class DashboardPage extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.calorieTrend,
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 25),
 
@@ -378,12 +419,17 @@ class DashboardPage extends StatelessWidget {
               children: List.generate(7, (i) {
                 final date = last7Days[i];
                 final calories = dailyTotals[i];
-                final double factor = maxVal > 0 ? (calories / maxVal).clamp(0.0, 1.0) : 0.0;
-                final bool isSelectedDate = date.year == today.year &&
+                final double factor = maxVal > 0
+                    ? (calories / maxVal).clamp(0.0, 1.0)
+                    : 0.0;
+                final bool isSelectedDate =
+                    date.year == today.year &&
                     date.month == today.month &&
                     date.day == today.day;
 
-                final String weekday = DateFormat.E(Localizations.localeOf(context).toLanguageTag()).format(date).substring(0, 2);
+                final String weekday = DateFormat.E(
+                  Localizations.localeOf(context).toLanguageTag(),
+                ).format(date).substring(0, 2);
 
                 return Expanded(
                   child: Column(
@@ -392,7 +438,11 @@ class DashboardPage extends StatelessWidget {
                       // Hover value or visual top label
                       Text(
                         calories > 0 ? '$calories' : '',
-                        style: const TextStyle(fontSize: 9, color: AppTheme.textMuted, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 9,
+                          color: AppTheme.textMuted,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 5),
 
@@ -405,14 +455,28 @@ class DashboardPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: isSelectedDate
-                                    ? [AppTheme.accentEmerald, AppTheme.accentEmerald.withValues(alpha: 0.4)]
-                                    : [AppTheme.accentBlue, AppTheme.accentBlue.withValues(alpha: 0.4)],
+                                    ? [
+                                        AppTheme.accentEmerald,
+                                        AppTheme.accentEmerald.withValues(
+                                          alpha: 0.4,
+                                        ),
+                                      ]
+                                    : [
+                                        AppTheme.accentBlue,
+                                        AppTheme.accentBlue.withValues(
+                                          alpha: 0.4,
+                                        ),
+                                      ],
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                               ),
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(4),
+                              ),
                               border: Border.all(
-                                color: isSelectedDate ? AppTheme.accentEmerald : Colors.transparent,
+                                color: isSelectedDate
+                                    ? AppTheme.accentEmerald
+                                    : Colors.transparent,
                                 width: 0.5,
                               ),
                             ),
@@ -426,8 +490,12 @@ class DashboardPage extends StatelessWidget {
                         weekday,
                         style: TextStyle(
                           fontSize: 12,
-                          color: isSelectedDate ? AppTheme.accentEmerald : AppTheme.textSecondary,
-                          fontWeight: isSelectedDate ? FontWeight.bold : FontWeight.normal,
+                          color: isSelectedDate
+                              ? AppTheme.accentEmerald
+                              : AppTheme.textSecondary,
+                          fontWeight: isSelectedDate
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                       ),
                     ],
@@ -457,7 +525,11 @@ class DashboardPage extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context)!.dayLogSummary,
-                style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 AppLocalizations.of(context)!.logs(meals.length),
@@ -473,7 +545,11 @@ class DashboardPage extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    Icon(Icons.restaurant_outlined, color: AppTheme.textMuted.withValues(alpha: 0.5), size: 36),
+                    Icon(
+                      Icons.restaurant_outlined,
+                      color: AppTheme.textMuted.withValues(alpha: 0.5),
+                      size: 36,
+                    ),
                     const SizedBox(height: 10),
                     Text(
                       AppLocalizations.of(context)!.noMealsLogged,
@@ -487,8 +563,11 @@ class DashboardPage extends StatelessWidget {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: meals.length > 3 ? 3 : meals.length, // Show up to 3 quick logs
-              separatorBuilder: (context, index) => const Divider(color: Colors.white10, height: 1),
+              itemCount: meals.length > 3
+                  ? 3
+                  : meals.length, // Show up to 3 quick logs
+              separatorBuilder: (context, index) =>
+                  const Divider(color: Colors.white10, height: 1),
               itemBuilder: (context, index) {
                 final Meal meal = meals[index];
                 return Padding(
@@ -507,9 +586,16 @@ class DashboardPage extends StatelessWidget {
                         child: meal.imageBytes != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.memory(meal.imageBytes!, fit: BoxFit.cover),
+                                child: Image.memory(
+                                  meal.imageBytes!,
+                                  fit: BoxFit.cover,
+                                ),
                               )
-                            : const Icon(Icons.fastfood, color: AppTheme.accentEmerald, size: 20),
+                            : const Icon(
+                                Icons.fastfood,
+                                color: AppTheme.accentEmerald,
+                                size: 20,
+                              ),
                       ),
                       const SizedBox(width: 14),
 
@@ -530,8 +616,13 @@ class DashboardPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 3),
                             Text(
-                              AppLocalizations.of(context)!.perGram(meal.carbs, meal.fat, meal.protein),
-                              style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
+                              AppLocalizations.of(
+                                context,
+                              )!.perGram(meal.carbs, meal.fat, meal.protein),
+                              style: const TextStyle(
+                                color: AppTheme.textMuted,
+                                fontSize: 11,
+                              ),
                             ),
                           ],
                         ),

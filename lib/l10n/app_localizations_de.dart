@@ -356,6 +356,28 @@ class AppLocalizationsDe extends AppLocalizations {
   String get dbCleared => 'Datenbankverlauf gelöscht.';
 
   @override
+  String get language => 'Sprache';
+
+  @override
+  String get english => 'Englisch';
+
+  @override
+  String get german => 'Deutsch';
+
+  @override
+  String get exportDb => 'SQLite-Datenbank exportieren';
+
+  @override
+  String get exportDbDesc =>
+      'Lade eine Kopie der gesamten Mahlzeitendatenbank zur Sicherung oder Überprüfung herunter.';
+
+  @override
+  String get exportDbBtn => 'Datenbank-Kopie herunterladen';
+
+  @override
+  String get dbExported => 'Datenbank in den Download-Ordner kopiert.';
+
+  @override
   String get sidebarDashboard => 'Dashboard';
 
   @override
@@ -365,7 +387,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get sidebarHistory => 'Verlauf';
 
   @override
-  String get sidebarSettings => 'Ziele';
+  String get sidebarSettings => 'Einstellungen';
 
   @override
   String get navDashboard => 'Dashboard';

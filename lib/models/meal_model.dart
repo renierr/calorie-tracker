@@ -60,8 +60,10 @@ class Meal {
       confidence: map['confidence'] as int? ?? 100,
       imageBytes: map['imageBytes'] as Uint8List?,
       notes: map['notes'] as String?,
-      timestamp: map['timestamp'] as int? ?? DateTime.now().millisecondsSinceEpoch,
-      updatedAt: map['updatedAt'] as int? ?? DateTime.now().millisecondsSinceEpoch,
+      timestamp:
+          map['timestamp'] as int? ?? DateTime.now().millisecondsSinceEpoch,
+      updatedAt:
+          map['updatedAt'] as int? ?? DateTime.now().millisecondsSinceEpoch,
     );
   }
 

@@ -35,13 +35,18 @@ class ResponsiveLayout extends StatelessWidget {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 30,
+                          horizontal: 20,
+                        ),
                         child: Row(
                           children: [
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: AppTheme.accentEmerald.withValues(alpha: 0.15),
+                                color: AppTheme.accentEmerald.withValues(
+                                  alpha: 0.15,
+                                ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: const Icon(
@@ -115,15 +120,35 @@ class ResponsiveLayout extends StatelessWidget {
                         child: Row(
                           children: [
                             CircleAvatar(
-                              backgroundColor: AppTheme.accentEmerald.withValues(alpha: 0.2),
-                              child: const Text('ME', style: TextStyle(color: AppTheme.accentEmerald, fontWeight: FontWeight.bold)),
+                              backgroundColor: AppTheme.accentEmerald
+                                  .withValues(alpha: 0.2),
+                              child: const Text(
+                                'ME',
+                                style: TextStyle(
+                                  color: AppTheme.accentEmerald,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(AppLocalizations.of(context)!.profileName, style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600, fontSize: 13)),
-                                Text(AppLocalizations.of(context)!.profileStatus, style: const TextStyle(color: AppTheme.textMuted, fontSize: 10)),
+                                Text(
+                                  AppLocalizations.of(context)!.profileName,
+                                  style: const TextStyle(
+                                    color: AppTheme.textPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.profileStatus,
+                                  style: const TextStyle(
+                                    color: AppTheme.textMuted,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -132,11 +157,7 @@ class ResponsiveLayout extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: ClipRect(
-                    child: _buildPage(currentIndex),
-                  ),
-                ),
+                Expanded(child: ClipRect(child: _buildPage(currentIndex))),
               ],
             ),
           );
@@ -177,11 +198,16 @@ class ResponsiveLayout extends StatelessWidget {
 
   Widget _buildPage(int index) {
     switch (index) {
-      case 0: return const DashboardPage();
-      case 1: return const ScanPage();
-      case 2: return const HistoryPage();
-      case 3: return const SettingsPage();
-      default: return const DashboardPage();
+      case 0:
+        return const DashboardPage();
+      case 1:
+        return const ScanPage();
+      case 2:
+        return const HistoryPage();
+      case 3:
+        return const SettingsPage();
+      default:
+        return const DashboardPage();
     }
   }
 
@@ -203,21 +229,27 @@ class ResponsiveLayout extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.accentEmerald.withValues(alpha: 0.12) : Colors.transparent,
+            color: isSelected
+                ? AppTheme.accentEmerald.withValues(alpha: 0.12)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
             children: [
               Icon(
                 isSelected ? filledIcon : outlineIcon,
-                color: isSelected ? AppTheme.accentEmerald : AppTheme.textSecondary,
+                color: isSelected
+                    ? AppTheme.accentEmerald
+                    : AppTheme.textSecondary,
                 size: 22,
               ),
               const SizedBox(width: 14),
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? AppTheme.accentEmerald : AppTheme.textSecondary,
+                  color: isSelected
+                      ? AppTheme.accentEmerald
+                      : AppTheme.textSecondary,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                   fontSize: 14,
                 ),

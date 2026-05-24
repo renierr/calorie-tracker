@@ -28,7 +28,10 @@ class PdfService {
                   children: [
                     pw.Text(
                       'Nutritional Meal Report',
-                      style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                      style: pw.TextStyle(
+                        fontSize: 24,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
                     ),
                     pw.Text(
                       meal.shortId,
@@ -42,7 +45,10 @@ class PdfService {
                 // Meal Details
                 pw.Text(
                   meal.foodName,
-                  style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                    fontSize: 20,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
                 ),
                 pw.SizedBox(height: 5),
                 pw.Text(
@@ -61,11 +67,18 @@ class PdfService {
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          _buildDetailRow('Calories', '${meal.calories} kcal', isHeader: true),
+                          _buildDetailRow(
+                            'Calories',
+                            '${meal.calories} kcal',
+                            isHeader: true,
+                          ),
                           _buildDetailRow('Protein', '${meal.protein} g'),
                           _buildDetailRow('Carbs', '${meal.carbs} g'),
                           _buildDetailRow('Fat', '${meal.fat} g'),
-                          _buildDetailRow('AI Confidence', '${meal.confidence}%'),
+                          _buildDetailRow(
+                            'AI Confidence',
+                            '${meal.confidence}%',
+                          ),
                         ],
                       ),
                     ),
@@ -78,7 +91,9 @@ class PdfService {
                           height: 150,
                           decoration: pw.BoxDecoration(
                             border: pw.Border.all(color: PdfColors.grey300),
-                            borderRadius: const pw.BorderRadius.all(pw.Radius.circular(6)),
+                            borderRadius: const pw.BorderRadius.all(
+                              pw.Radius.circular(6),
+                            ),
                           ),
                           child: pw.ClipRRect(
                             horizontalRadius: 6,
@@ -98,7 +113,10 @@ class PdfService {
                 if (meal.notes != null && meal.notes!.trim().isNotEmpty) ...[
                   pw.Text(
                     'AI Analysis & Notes',
-                    style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold),
+                    style: pw.TextStyle(
+                      fontSize: 14,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
                   ),
                   pw.SizedBox(height: 8),
                   pw.Container(
@@ -158,11 +176,17 @@ class PdfService {
                 children: [
                   pw.Text(
                     title,
-                    style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                    style: pw.TextStyle(
+                      fontSize: 20,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
                   ),
                   pw.Text(
                     timeframeStr,
-                    style: const pw.TextStyle(color: PdfColors.grey600, fontSize: 10),
+                    style: const pw.TextStyle(
+                      color: PdfColors.grey600,
+                      fontSize: 10,
+                    ),
                   ),
                 ],
               ),
@@ -188,14 +212,29 @@ class PdfService {
             // Performance Cards Grid
             pw.Row(
               children: [
-                _buildSummaryStatCard('Calories', '$totalCalories / $calorieGoal kcal',
-                    totalCalories <= calorieGoal ? pdfEmerald : PdfColors.amber),
+                _buildSummaryStatCard(
+                  'Calories',
+                  '$totalCalories / $calorieGoal kcal',
+                  totalCalories <= calorieGoal ? pdfEmerald : PdfColors.amber,
+                ),
                 pw.SizedBox(width: 10),
-                _buildSummaryStatCard('Protein', '${totalProtein}g / ${proteinGoal}g', PdfColors.blue),
+                _buildSummaryStatCard(
+                  'Protein',
+                  '${totalProtein}g / ${proteinGoal}g',
+                  PdfColors.blue,
+                ),
                 pw.SizedBox(width: 10),
-                _buildSummaryStatCard('Carbs', '${totalCarbs}g / ${carbsGoal}g', PdfColors.orange),
+                _buildSummaryStatCard(
+                  'Carbs',
+                  '${totalCarbs}g / ${carbsGoal}g',
+                  PdfColors.orange,
+                ),
                 pw.SizedBox(width: 10),
-                _buildSummaryStatCard('Fat', '${totalFat}g / ${fatGoal}g', PdfColors.red),
+                _buildSummaryStatCard(
+                  'Fat',
+                  '${totalFat}g / ${fatGoal}g',
+                  PdfColors.red,
+                ),
               ],
             ),
             pw.SizedBox(height: 25),
@@ -204,7 +243,10 @@ class PdfService {
             if (userNotes.trim().isNotEmpty) ...[
               pw.Text(
                 'Report Comments',
-                style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 5),
               pw.Container(
@@ -212,11 +254,16 @@ class PdfService {
                 padding: const pw.EdgeInsets.all(10),
                 decoration: pw.BoxDecoration(
                   color: PdfColors.grey100,
-                  border: pw.Border(left: pw.BorderSide(color: pdfEmerald, width: 3)),
+                  border: pw.Border(
+                    left: pw.BorderSide(color: pdfEmerald, width: 3),
+                  ),
                 ),
                 child: pw.Text(
                   userNotes,
-                  style: pw.TextStyle(fontSize: 10, fontStyle: pw.FontStyle.italic),
+                  style: pw.TextStyle(
+                    fontSize: 10,
+                    fontStyle: pw.FontStyle.italic,
+                  ),
                 ),
               ),
               pw.SizedBox(height: 25),
@@ -256,7 +303,9 @@ class PdfService {
                 ),
                 // Table Rows
                 ...meals.map((meal) {
-                  final date = DateTime.fromMillisecondsSinceEpoch(meal.timestamp);
+                  final date = DateTime.fromMillisecondsSinceEpoch(
+                    meal.timestamp,
+                  );
                   return pw.TableRow(
                     children: [
                       _buildTableCell(_dateFormat.format(date)),
@@ -277,10 +326,15 @@ class PdfService {
             if (includeImages && meals.any((m) => m.imageBytes != null)) ...[
               pw.Text(
                 'Meal Photo Album',
-                style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 10),
-              _buildPhotoAlbumGrid(meals.where((m) => m.imageBytes != null).toList()),
+              _buildPhotoAlbumGrid(
+                meals.where((m) => m.imageBytes != null).toList(),
+              ),
             ],
           ];
         },
@@ -295,7 +349,11 @@ class PdfService {
 
   // PDF Layout Helpers
 
-  static pw.Widget _buildDetailRow(String label, String value, {bool isHeader = false}) {
+  static pw.Widget _buildDetailRow(
+    String label,
+    String value, {
+    bool isHeader = false,
+  }) {
     return pw.Padding(
       padding: const pw.EdgeInsets.symmetric(vertical: 4),
       child: pw.Row(
@@ -321,7 +379,11 @@ class PdfService {
     );
   }
 
-  static pw.Widget _buildSummaryStatCard(String label, String val, PdfColor accentColor) {
+  static pw.Widget _buildSummaryStatCard(
+    String label,
+    String val,
+    PdfColor accentColor,
+  ) {
     return pw.Expanded(
       child: pw.Container(
         padding: const pw.EdgeInsets.all(8),
@@ -339,7 +401,11 @@ class PdfService {
             pw.SizedBox(height: 3),
             pw.Text(
               val,
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11, color: accentColor),
+              style: pw.TextStyle(
+                fontWeight: pw.FontWeight.bold,
+                fontSize: 11,
+                color: accentColor,
+              ),
             ),
           ],
         ),
@@ -377,7 +443,9 @@ class PdfService {
                 padding: const pw.EdgeInsets.all(4),
                 decoration: pw.BoxDecoration(
                   border: pw.Border.all(color: PdfColors.grey300),
-                  borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
+                  borderRadius: const pw.BorderRadius.all(
+                    pw.Radius.circular(4),
+                  ),
                 ),
                 child: pw.Column(
                   children: [
@@ -396,7 +464,10 @@ class PdfService {
                     ),
                     pw.Text(
                       '${m.calories} kcal',
-                      style: const pw.TextStyle(fontSize: 6, color: PdfColors.grey600),
+                      style: const pw.TextStyle(
+                        fontSize: 6,
+                        color: PdfColors.grey600,
+                      ),
                     ),
                   ],
                 ),
