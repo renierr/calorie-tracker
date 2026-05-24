@@ -866,6 +866,12 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get navSettings;
 
+  /// No description provided for @navSettingsCompact.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefs'**
+  String get navSettingsCompact;
+
   /// No description provided for @profileName.
   ///
   /// In en, this message translates to:

@@ -165,81 +165,172 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            // Filter Toolbar Box
-            const SizedBox(height: 10),
-            HistoryFilterPanel(
-              filterType: _filterType,
-              customStartDate: _customStartDate,
-              customEndDate: _customEndDate,
-              onFilterTypeChanged: (val) {
-                setState(() {
-                  _filterType = val;
-                });
-                appState.setHistoryFilter(val);
-              },
-              onStartDateChanged: (val) {
-                setState(() {
-                  _customStartDate = val;
-                });
-              },
-              onEndDateChanged: (val) {
-                setState(() {
-                  _customEndDate = val;
-                });
-              },
-            ),
-            const SizedBox(height: 15),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final bool useFullPageScroll = constraints.maxWidth < 700;
 
-            // Import/Export Action Card
-            _buildDataActionsCard(context, appState, filteredMeals),
-            const SizedBox(height: 15),
-
-            // Top action button card if meals are loaded
-            if (filteredMeals.isNotEmpty) ...[
-              _buildReportActionCard(context, appState, filteredMeals),
-              const SizedBox(height: 15),
-            ],
-
-            // Active meals logs listing
-            Expanded(
-              child: filteredMeals.isEmpty
-                  ? _buildEmptyState()
-                  : ListView.builder(
-                      itemCount: filteredMeals.length,
-                      itemBuilder: (context, index) {
-                        final Meal meal = filteredMeals[index];
-                        final isSelected = _selectedMealIds.contains(meal.id);
-                        return MealHistoryCard(
-                          meal: meal,
-                          appState: appState,
-                          isSelectionMode: _isSelectionMode,
-                          isSelected: isSelected,
-                          onTap: () {
-                            if (_isSelectionMode) {
-                              setState(() {
-                                if (_selectedMealIds.contains(meal.id)) {
-                                  _selectedMealIds.remove(meal.id);
-                                } else {
-                                  _selectedMealIds.add(meal.id!);
-                                }
-                              });
-                            }
-                          },
-                          onLongPress: () {
-                            if (!_isSelectionMode) {
-                              setState(() {
-                                _isSelectionMode = true;
-                                _selectedMealIds.add(meal.id!);
-                              });
-                            }
-                          },
-                        );
+            if (useFullPageScroll) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // Filter Toolbar Box
+                    const SizedBox(height: 10),
+                    HistoryFilterPanel(
+                      filterType: _filterType,
+                      customStartDate: _customStartDate,
+                      customEndDate: _customEndDate,
+                      onFilterTypeChanged: (val) {
+                        setState(() {
+                          _filterType = val;
+                        });
+                        appState.setHistoryFilter(val);
+                      },
+                      onStartDateChanged: (val) {
+                        setState(() {
+                          _customStartDate = val;
+                        });
+                      },
+                      onEndDateChanged: (val) {
+                        setState(() {
+                          _customEndDate = val;
+                        });
                       },
                     ),
-            ),
-          ],
+                    const SizedBox(height: 15),
+
+                    // Import/Export Action Card
+                    _buildDataActionsCard(context, appState, filteredMeals),
+                    const SizedBox(height: 15),
+
+                    // Top action button card if meals are loaded
+                    if (filteredMeals.isNotEmpty) ...[
+                      _buildReportActionCard(context, appState, filteredMeals),
+                      const SizedBox(height: 15),
+                    ],
+
+                    // Active meals logs listing
+                    if (filteredMeals.isEmpty)
+                      _buildEmptyState()
+                    else
+                      ListView.builder(
+                        itemCount: filteredMeals.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final Meal meal = filteredMeals[index];
+                          final isSelected = _selectedMealIds.contains(meal.id);
+                          return MealHistoryCard(
+                            meal: meal,
+                            appState: appState,
+                            isSelectionMode: _isSelectionMode,
+                            isSelected: isSelected,
+                            onTap: () {
+                              if (_isSelectionMode) {
+                                setState(() {
+                                  if (_selectedMealIds.contains(meal.id)) {
+                                    _selectedMealIds.remove(meal.id);
+                                  } else {
+                                    _selectedMealIds.add(meal.id!);
+                                  }
+                                });
+                              }
+                            },
+                            onLongPress: () {
+                              if (!_isSelectionMode) {
+                                setState(() {
+                                  _isSelectionMode = true;
+                                  _selectedMealIds.add(meal.id!);
+                                });
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              );
+            }
+
+            return Column(
+              children: [
+                // Filter Toolbar Box
+                const SizedBox(height: 10),
+                HistoryFilterPanel(
+                  filterType: _filterType,
+                  customStartDate: _customStartDate,
+                  customEndDate: _customEndDate,
+                  onFilterTypeChanged: (val) {
+                    setState(() {
+                      _filterType = val;
+                    });
+                    appState.setHistoryFilter(val);
+                  },
+                  onStartDateChanged: (val) {
+                    setState(() {
+                      _customStartDate = val;
+                    });
+                  },
+                  onEndDateChanged: (val) {
+                    setState(() {
+                      _customEndDate = val;
+                    });
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Import/Export Action Card
+                _buildDataActionsCard(context, appState, filteredMeals),
+                const SizedBox(height: 15),
+
+                // Top action button card if meals are loaded
+                if (filteredMeals.isNotEmpty) ...[
+                  _buildReportActionCard(context, appState, filteredMeals),
+                  const SizedBox(height: 15),
+                ],
+
+                // Active meals logs listing
+                Expanded(
+                  child: filteredMeals.isEmpty
+                      ? _buildEmptyState()
+                      : ListView.builder(
+                          itemCount: filteredMeals.length,
+                          itemBuilder: (context, index) {
+                            final Meal meal = filteredMeals[index];
+                            final isSelected = _selectedMealIds.contains(
+                              meal.id,
+                            );
+                            return MealHistoryCard(
+                              meal: meal,
+                              appState: appState,
+                              isSelectionMode: _isSelectionMode,
+                              isSelected: isSelected,
+                              onTap: () {
+                                if (_isSelectionMode) {
+                                  setState(() {
+                                    if (_selectedMealIds.contains(meal.id)) {
+                                      _selectedMealIds.remove(meal.id);
+                                    } else {
+                                      _selectedMealIds.add(meal.id!);
+                                    }
+                                  });
+                                }
+                              },
+                              onLongPress: () {
+                                if (!_isSelectionMode) {
+                                  setState(() {
+                                    _isSelectionMode = true;
+                                    _selectedMealIds.add(meal.id!);
+                                  });
+                                }
+                              },
+                            );
+                          },
+                        ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

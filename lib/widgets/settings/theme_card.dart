@@ -24,12 +24,15 @@ class ThemeCard extends StatelessWidget {
             children: [
               const Icon(Icons.palette, color: AppTheme.accentAmber, size: 20),
               const SizedBox(width: 10),
-              Text(
-                AppLocalizations.of(context)!.appearance,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)!.appearance,
+                  maxLines: 2,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],

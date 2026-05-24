@@ -30,12 +30,15 @@ class _ExportCardState extends State<ExportCard> {
             children: [
               const Icon(Icons.backup, color: AppTheme.accentEmerald, size: 20),
               const SizedBox(width: 10),
-              Text(
-                AppLocalizations.of(context)!.exportDb,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)!.exportDb,
+                  maxLines: 2,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],

@@ -401,41 +401,99 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                       : Colors.black.withValues(alpha: 0.08),
                 ),
               ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    color: AppTheme.accentEmerald,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    AppLocalizations.of(context)!.mealDate,
-                    style: TextStyle(color: colors.textSecondary, fontSize: 13),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    DateFormat.yMd(locale).format(_mealDate),
-                    style: TextStyle(
-                      color: colors.textPrimary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                  if (_mealDate ==
-                          DateTime.now().subtract(const Duration(days: 1)) ||
-                      _mealDate.isBefore(
-                        DateTime.now().subtract(const Duration(days: 1)),
-                      ))
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Icon(
-                        Icons.edit_calendar,
-                        color: AppTheme.accentAmber,
-                        size: 16,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final bool isNarrow = constraints.maxWidth < 360;
+                  final Widget staleDateIcon =
+                      (_mealDate ==
+                              DateTime.now().subtract(
+                                const Duration(days: 1),
+                              ) ||
+                          _mealDate.isBefore(
+                            DateTime.now().subtract(const Duration(days: 1)),
+                          ))
+                      ? const Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Icon(
+                            Icons.edit_calendar,
+                            color: AppTheme.accentAmber,
+                            size: 16,
+                          ),
+                        )
+                      : const SizedBox.shrink();
+
+                  if (isNarrow) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.calendar_today,
+                              color: AppTheme.accentEmerald,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              AppLocalizations.of(context)!.mealDate,
+                              style: TextStyle(
+                                color: colors.textSecondary,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                DateFormat.yMd(locale).format(_mealDate),
+                                style: TextStyle(
+                                  color: colors.textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            staleDateIcon,
+                          ],
+                        ),
+                      ],
+                    );
+                  }
+
+                  return Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_today,
+                        color: AppTheme.accentEmerald,
+                        size: 18,
                       ),
-                    ),
-                ],
+                      const SizedBox(width: 10),
+                      Text(
+                        AppLocalizations.of(context)!.mealDate,
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          DateFormat.yMd(locale).format(_mealDate),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: colors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                      staleDateIcon,
+                    ],
+                  );
+                },
               ),
             ),
           ),

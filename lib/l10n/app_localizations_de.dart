@@ -428,6 +428,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get navSettings => 'Einstellungen';
 
   @override
+  String get navSettingsCompact => 'Einst.';
+
+  @override
   String get profileName => 'Mein Profil';
 
   @override

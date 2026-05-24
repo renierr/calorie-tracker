@@ -25,12 +25,15 @@ class MaintenanceCard extends StatelessWidget {
             children: [
               const Icon(Icons.dangerous, color: AppTheme.accentRed, size: 20),
               const SizedBox(width: 10),
-              Text(
-                AppLocalizations.of(context)!.dangerZone,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)!.dangerZone,
+                  maxLines: 2,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],

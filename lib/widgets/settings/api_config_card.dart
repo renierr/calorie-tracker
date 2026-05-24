@@ -30,12 +30,15 @@ class _ApiConfigCardState extends State<ApiConfigCard> {
             children: [
               const Icon(Icons.key, color: AppTheme.accentEmerald, size: 20),
               const SizedBox(width: 10),
-              Text(
-                AppLocalizations.of(context)!.apiCredentials,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)!.apiCredentials,
+                  maxLines: 2,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],

@@ -427,6 +427,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSettings => 'Settings';
 
   @override
+  String get navSettingsCompact => 'Prefs';
+
+  @override
   String get profileName => 'My Profile';
 
   @override

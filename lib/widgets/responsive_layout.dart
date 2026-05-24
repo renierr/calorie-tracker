@@ -19,6 +19,7 @@ class ResponsiveLayout extends StatelessWidget {
     return Consumer<AppState>(
       builder: (context, appState, _) {
         final int currentIndex = appState.selectedTabIndex;
+        final bool useCompactNavLabels = screenWidth < 420;
         final colors = AppTheme.of(context);
 
         if (isDesktop) {
@@ -191,7 +192,9 @@ class ResponsiveLayout extends StatelessWidget {
                 NavigationDestination(
                   icon: Icon(Icons.settings_outlined),
                   selectedIcon: Icon(Icons.settings),
-                  label: AppLocalizations.of(context)!.navSettings,
+                  label: useCompactNavLabels
+                      ? AppLocalizations.of(context)!.navSettingsCompact
+                      : AppLocalizations.of(context)!.navSettings,
                 ),
               ],
             ),
