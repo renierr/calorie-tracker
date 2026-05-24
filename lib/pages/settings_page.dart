@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:file_selector/file_selector.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
@@ -515,15 +515,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               onPressed: () async {
+                final timestamp = DateTime.now().millisecondsSinceEpoch;
+                final location = await getSaveLocation(
+                  suggestedName: 'nutriscan_db_$timestamp.db',
+                );
+                if (location == null) return;
                 try {
-                  await appState.exportDatabase();
-                  final dir = await getApplicationDocumentsDirectory();
+                  await appState.exportDatabase(destPath: location.path);
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        '${AppLocalizations.of(context)!.dbExported} ${dir.path}',
-                      ),
+                      content: Text(AppLocalizations.of(context)!.dbExported),
                       backgroundColor: AppTheme.accentEmerald,
                     ),
                   );

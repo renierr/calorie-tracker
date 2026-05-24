@@ -183,5 +183,6 @@ class AppState extends ChangeNotifier {
   }
 
   // Export database
-  Future<File> exportDatabase() => _dbHelper.exportDatabase();
+  Future<File> exportDatabase({required String destPath}) =>
+      _dbHelper.exportDatabase(destPath: destPath);
 }

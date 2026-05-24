@@ -111,6 +111,110 @@ To prompt notifications when daily limits are exceeded:
 
 ---
 
+## Multi-Language / Localization Rules
+
+### String Management
+- **ALWAYS** use `AppLocalizations.of(context)!` for every user-facing string. Never hardcode English text.
+- **ALWAYS** add new strings to **both** `lib/l10n/app_en.arb` and `lib/l10n/app_de.arb` together. After editing ARB files, run:
+  ```bash
+  flutter gen-l10n
+  ```
+  This regenerates `app_localizations.dart`, `app_localizations_en.dart`, and `app_localizations_de.dart`.
+- Always keep ARB keys consistent across both languages. A missing key in one ARB will cause a gen-l10n error.
+
+### Locale-Aware Date Formatting
+- All `DateFormat` constructors **must** receive the locale explicitly:
+  ```dart
+  final locale = Localizations.localeOf(context).toLanguageTag();
+  DateFormat('MMM d, yyyy', locale).format(...)
+  ```
+- Never use `DateFormat('...')` without a locale — it falls back to system locale, which may differ from the app's selected language.
+
+### Language Persistence & Switching
+- User's language choice is stored in `SharedPreferences` under key `app_locale` via `AppState.setLocale(code)`.
+- `MaterialApp.locale` reads `AppState.locale` via `Consumer<AppState>` — switching the dropdown instantly rebuilds the entire app in the chosen language.
+- Default locale is `'en'` (English). When no preference is saved, English is assumed.
+
+### Settings Page Language Selector
+- Located in `_buildLanguageCard()` inside `lib/pages/settings_page.dart`.
+- Uses a `DropdownButton<String>` with values `'en'` and `'de'`.
+- On change, calls `appState.setLocale(val)`.
+
+---
+
+## DB Export Feature
+
+- **Button**: "Download Database Copy" in settings page (`_buildExportCard()` in `lib/pages/settings_page.dart`).
+- **Flow**: Calls `getSaveLocation()` from `package:file_selector` → opens native Windows "Save As" dialog → passes chosen path to `AppState.exportDatabase(destPath:)` → copies the live SQLite file.
+- **Never** show file paths in the UI. The success snackbar uses the localized `dbExported` string only.
+- **Backend**: `DbHelper.exportDatabase({required String destPath})` in `lib/helpers/db_helper.dart:116`.
+
+---
+
+## History Page & Meal Display Rules
+
+- Meal names in history cards use `maxLines: 2` with `overflow: TextOverflow.ellipsis`.
+- Meal images are tappable — opens a full-screen `InteractiveViewer` wrapped in a `GestureDetector` for pinch-to-zoom.
+- All `DateFormat` calls in history use locale-aware formatting (see localization rules).
+
+---
+
+## Tab Navigation Rules
+
+- `selectedTabIndex` is stored in `AppState`, not in widget local state.
+- `AppState.selectTab(index)` updates the index and calls `notifyListeners()`.
+- After saving a meal in scan page, auto-navigate to Dashboard: `appState.selectTab(0)`.
+- Use `Consumer<AppState>` in `ResponsiveLayout` to rebuild when tab changes.
+
+---
+
+## Input Validation
+
+- Nutrition fields (calories, protein, carbs, fat) use `FilteringTextInputFormatter.digitsOnly` to enforce numeric input.
+- Date picker on scan page defaults to today, allows selecting any past date.
+
+---
+
+## App Icon / Branding
+
+- **Source**: `assets/logo/logo.png` — source of truth for all icons.
+- **Android**: Generated via `flutter_launcher_icons` (v0.14.4+). Config in `pubspec.yaml` under `flutter_launcher_icons:`.
+  ```bash
+  flutter pub run flutter_launcher_icons
+  ```
+- **Windows**: `windows/runner/resources/app_icon.ico` (manual 6-size .ico). Regenerate via Python PIL script — not covered by `flutter_launcher_icons`.
+- **App title / launcher label**: "NutriScan" (Android `AndroidManifest.xml`), "NutriScan Calorie Tracker" (`MaterialApp.title`).
+
+---
+
+## Windows Desktop Specifics
+
+- `flutter run` uses MSYS2 bash — file paths with `~` or backslashes may behave unexpectedly.
+- Git on Windows emits `LF will be replaced by CRLF` warnings — these are cosmetic and safe to ignore.
+- The `.ico` at `windows/runner/resources/app_icon.ico` is a multi-resolution file (16×16 through 256×256).
+- `getApplicationDocumentsDirectory()` returns a scoped app-data path (e.g. `C:\Users\<user>\AppData\Roaming\<bundle>\Documents`). For user-facing file operations, always use native save dialogs via `file_selector` (`getSaveLocation()`) — never construct file paths manually.
+
+---
+
+## Package Versions & Dependencies
+
+Key packages and their roles:
+| Package | Purpose |
+|---|---|
+| `sqflite_common_ffi` | SQLite on Windows Desktop (dynamic FFI loading) |
+| `provider` | State management via `ChangeNotifier` |
+| `shared_preferences` | Persisting API key, language, and other settings |
+| `intl` | Date formatting, localization |
+| `flutter_localizations` | Flutter's built-in l10n framework |
+| `image_picker` | Camera / gallery for meal photos |
+| `path_provider` | System directory paths (documents, temp) |
+| `file_selector` | Native "Save As" / "Open" dialogs (desktop) |
+| `pdf` (as `pw`) | PDF report generation |
+| `printing` | PDF preview / print |
+| `google_generative_ai` | Gemini AI meal scanning |
+
+---
+
 ## Verification Procedures
 
 When submitting changes to this codebase, you **must** verify compilation and stability:

@@ -113,10 +113,9 @@ class DbHelper {
     return db.path;
   }
 
-  Future<File> exportDatabase() async {
+  Future<File> exportDatabase({required String destPath}) async {
     final String src = await databasePath;
-    final dir = await getApplicationDocumentsDirectory();
-    final dest = File(p.join(dir.path, _dbName));
+    final dest = File(destPath);
     await File(src).copy(dest.path);
     return dest;
   }
