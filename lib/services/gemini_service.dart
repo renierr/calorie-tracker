@@ -42,19 +42,26 @@ class GeminiService {
     required Uint8List imageBytes,
     required String mimeType,
     required String userHint,
+    String languageCode = 'en',
   }) async {
+    final String targetLanguage = languageCode == 'de' ? 'German' : 'English';
+
     final systemInstruction =
-        'You are an advanced clinical nutritionist AI. You specialize in visually scanning dishes, estimating portion weights, and breaking down total nutritional content into precise calorie and macronutrient (protein, carbohydrates, lipid fat) totals.';
+        'You are an advanced clinical nutritionist AI. You specialize in visually scanning dishes, estimating portion weights, and breaking down total nutritional content into precise calorie and macronutrient (protein, carbohydrates, lipid fat) totals. '
+        'You MUST write all food description names and explanation notes in $targetLanguage.';
 
     final prompt =
         'Analyze this food meal photo and estimate its total nutritional content. '
         '${userHint.trim().isNotEmpty ? 'Context clue provided by user: "$userHint". ' : ''}'
-        'Provide logical, accurate calories, protein, carbs, and fat estimations.';
+        'Provide logical, accurate calories, protein, carbs, and fat estimations. '
+        'You MUST provide the response text fields (foodName and notes) in $targetLanguage.';
 
     // Construct the structured JSON schema matching our model
     final responseSchema = Schema.object(
       properties: {
-        'foodName': Schema.string(description: 'Brief description of the meal'),
+        'foodName': Schema.string(
+          description: 'Brief description of the meal in $targetLanguage',
+        ),
         'calories': Schema.integer(description: 'Estimated energy in kcal'),
         'protein': Schema.integer(
           description: 'Estimated protein weight in grams',
@@ -68,7 +75,7 @@ class GeminiService {
         ),
         'notes': Schema.string(
           description:
-              'Breakdown explanation of food portions or components detected',
+              'Breakdown explanation of food portions or components detected in $targetLanguage',
         ),
       },
       requiredProperties: [

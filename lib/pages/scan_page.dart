@@ -76,7 +76,7 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   // Trigger Gemini AI scanning
-  Future<void> _scanMeal(String apiKey) async {
+  Future<void> _scanMeal(String apiKey, String languageCode) async {
     final colors = AppTheme.of(context);
     if (_imageBytes == null || _selectedImage == null) return;
 
@@ -91,6 +91,7 @@ class _ScanPageState extends State<ScanPage> {
         imageBytes: _imageBytes!,
         mimeType: _selectedImage!.mimeType ?? 'image/jpeg',
         userHint: _hintController.text,
+        languageCode: languageCode,
       );
 
       setState(() {
@@ -170,7 +171,7 @@ class _ScanPageState extends State<ScanPage> {
                     const SizedBox(height: 25),
 
                     // Gemini Trigger Button
-                    _buildTriggerButton(hasApiKey, apiKey),
+                    _buildTriggerButton(hasApiKey, apiKey, appState.appLocale),
                     const SizedBox(height: 20),
                   ],
 
@@ -280,7 +281,7 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   // Layout: Scan trigger action
-  Widget _buildTriggerButton(bool hasApiKey, String apiKey) {
+  Widget _buildTriggerButton(bool hasApiKey, String apiKey, String languageCode) {
     final colors = AppTheme.of(context);
     if (!hasApiKey) {
       return Column(
@@ -364,7 +365,7 @@ class _ScanPageState extends State<ScanPage> {
           child: ElevatedButton.icon(
             icon: const Icon(Icons.auto_awesome),
             label: Text(AppLocalizations.of(context)!.scanAndEstimate),
-            onPressed: () => _scanMeal(apiKey),
+            onPressed: () => _scanMeal(apiKey, languageCode),
           ),
         ),
         const SizedBox(height: 12),
