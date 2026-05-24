@@ -35,7 +35,7 @@ class AIAnalysisResult {
 }
 
 class GeminiService {
-  static const String _modelName = 'gemini-1.5-flash';
+  static const String _modelName = 'gemini-2.5-flash';
 
   static Future<AIAnalysisResult> performAIAnalysis({
     required String apiKey,

@@ -18,6 +18,17 @@ class _HistoryPageState extends State<HistoryPage> {
   DateTime? _customStartDate;
   DateTime? _customEndDate;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final appState = Provider.of<AppState>(context, listen: false);
+      setState(() {
+        _filterType = appState.historyFilter;
+      });
+    });
+  }
+
   final DateFormat _timeFormat = DateFormat('jm');
   final DateFormat _dateFormat = DateFormat('MMMM d, yyyy');
 
@@ -317,8 +328,8 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  // Widget 1: Responsive Date Toggles dropdown & calendars
   Widget _buildFilterPanel(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: AppTheme.premiumCardDecoration(),
@@ -343,9 +354,11 @@ class _HistoryPageState extends State<HistoryPage> {
                   DropdownMenuItem(value: 'custom', child: Text('Custom Range')),
                 ],
                 onChanged: (val) {
+                  final filterVal = val ?? 'all';
                   setState(() {
-                    _filterType = val ?? 'all';
+                    _filterType = filterVal;
                   });
+                  appState.setHistoryFilter(filterVal);
                 },
               ),
             ],

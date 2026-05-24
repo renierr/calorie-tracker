@@ -13,6 +13,7 @@ class AppState extends ChangeNotifier {
   static const String _keyProteinGoal = 'protein_goal';
   static const String _keyCarbsGoal = 'carbs_goal';
   static const String _keyFatGoal = 'fat_goal';
+  static const String _keyHistoryFilter = 'history_filter';
 
   // State variables
   String _geminiApiKey = '';
@@ -20,6 +21,7 @@ class AppState extends ChangeNotifier {
   int _proteinGoal = 130;
   int _carbsGoal = 220;
   int _fatGoal = 70;
+  String _historyFilter = 'all';
 
   List<Meal> _meals = [];
   bool _isLoading = false;
@@ -33,6 +35,7 @@ class AppState extends ChangeNotifier {
   int get proteinGoal => _proteinGoal;
   int get carbsGoal => _carbsGoal;
   int get fatGoal => _fatGoal;
+  String get historyFilter => _historyFilter;
   List<Meal> get meals => _meals;
   bool get isLoading => _isLoading;
   DateTime get selectedDate => _selectedDate;
@@ -77,6 +80,7 @@ class AppState extends ChangeNotifier {
     _proteinGoal = prefs.getInt(_keyProteinGoal) ?? 130;
     _carbsGoal = prefs.getInt(_keyCarbsGoal) ?? 220;
     _fatGoal = prefs.getInt(_keyFatGoal) ?? 70;
+    _historyFilter = prefs.getString(_keyHistoryFilter) ?? 'all';
     notifyListeners();
   }
 
@@ -102,6 +106,14 @@ class AppState extends ChangeNotifier {
     await prefs.setInt(_keyFatGoal, _fatGoal);
 
     notifyListeners();
+  }
+
+  // Set and persist history filter
+  Future<void> setHistoryFilter(String filter) async {
+    _historyFilter = filter;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyHistoryFilter, filter);
   }
 
   // Database Meal Actions

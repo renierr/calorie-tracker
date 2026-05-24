@@ -101,3 +101,77 @@ On first startup, navigate to the **Goal Settings** panel:
 1.  Paste your **Google Gemini API Key** and toggle its visibility to verify it.
 2.  Tune your daily goals: Calorie Budget (kcal), Protein (g), Carbohydrates (g), and Lipid Fats (g).
 3.  Click **Save Preferences**. The app is now fully armed to perform automated visual food scans!
+
+---
+
+## Production Packaging & Distribution Guide
+
+Follow these precise steps to package, compile, and distribute the NutriScan Calorie Tracker app on Windows Desktop and Android.
+
+### 1. Windows Desktop (Standalone Executable)
+
+#### A. Build Command
+Compile the highly optimized, native C++ desktop release bundle:
+```bash
+flutter build windows --release
+```
+
+#### B. Output Directory & Created Files
+The build files are generated under:
+`C:\dev\flutter\calorie-tracker\build\windows\x64\runner\Release\`
+
+The directory contains:
+*   `calorie_tracker.exe`: The primary executable binary file.
+*   `flutter_windows.dll`: The core Flutter engine library.
+*   `sqlite3.dll`: The dynamic SQLite library needed for local database operations.
+*   `data/` (Folder): Contains packaged fonts, assets, raw asset files, and compiled machine code.
+
+#### C. Packaging & Distribution Instruction
+> [!IMPORTANT]
+> **Do not distribute only the `calorie_tracker.exe` file!** 
+> To share the application with other Windows users:
+> 1. Zip the **entire** `Release/` directory (including the `.exe`, all `.dll` files, and the `data/` folder).
+> 2. The recipient must extract the zip folder and run `calorie_tracker.exe` from inside the folder.
+> 3. Alternatively, use installer creators like **Inno Setup** or **WiX Toolset** to bundle this entire directory into a single `.msi` or setup installer.
+
+---
+
+### 2. Android App (APK & AAB bundles)
+
+#### A. Compile Single Portable Installable (Release APK)
+Generates a standalone `.apk` containing resources for all hardware architectures:
+```bash
+flutter build apk --release
+```
+*   **Output Path**: `build/app/outputs/flutter-apk/app-release.apk`
+*   **Distribution**: This single file can be transferred directly to any Android device via USB, email, or download link. Users can install it instantly (requires "Install from Unknown Sources" permission enabled in device settings).
+
+#### B. Compile Splitted Lightweight Packages (Per-ABI APKs)
+Splits the build to generate separate, smaller APK files optimized for specific device processors (arm64-v8a, armeabi-v7a, x86_64), saving user download bandwidth:
+```bash
+flutter build apk --split-per-abi --release
+```
+*   **Output Path**: `build/app/outputs/flutter-apk/` (Generates files named `app-arm64-v8a-release.apk`, `app-armeabi-v7a-release.apk`, etc.)
+
+#### C. Compile App Bundle (AAB for Google Play Store)
+Generates the Google Play Store upload format which dynamically serves optimized resources based on the user's specific handset model:
+```bash
+flutter build appbundle --release
+```
+*   **Output Path**: `build/app/outputs/bundle/release/app-release.aab`
+*   **Distribution**: Upload this `.aab` file directly to the Google Play Console for official application store distribution.
+
+#### D. Production Keystore Signing (Optional but Recommended)
+To prevent security warnings on install, sign your Android build:
+1. Generate a upload keystore using Java's `keytool`:
+   ```bash
+   keytool -genkey -v -keystore C:\Users\renie\upload-keystore.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+   ```
+2. Create an `android/key.properties` file:
+   ```properties
+   storePassword=your-keystore-password
+   keyPassword=your-key-password
+   keyAlias=upload
+   storeFile=C:/Users/renie/upload-keystore.jks
+   ```
+3. The build system in `android/app/build.gradle` will automatically detect these credentials on subsequent release runs to produce a signed production build.

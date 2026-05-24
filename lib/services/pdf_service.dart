@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -9,7 +8,6 @@ final PdfColor pdfEmerald = PdfColor.fromHex('#10B981');
 
 class PdfService {
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-  static final DateFormat _dateOnlyFormat = DateFormat('EEEE, MMMM d, yyyy');
 
   // Generate and download/print a report for a single meal
   static Future<void> generateSingleMealPdf(Meal meal, int calorieGoal) async {
@@ -270,7 +268,7 @@ class PdfService {
                       _buildTableCell('${meal.confidence}%'),
                     ],
                   );
-                }).toList(),
+                }),
               ],
             ),
             pw.SizedBox(height: 30),

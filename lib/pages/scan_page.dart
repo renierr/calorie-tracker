@@ -6,7 +6,6 @@ import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../services/gemini_service.dart';
 import '../models/meal_model.dart';
-import '../helpers/db_helper.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -53,19 +52,21 @@ class _ScanPageState extends State<ScanPage> {
     try {
       final XFile? image = await _picker.pickImage(
         source: source,
-        maxWidth: 1024,
-        maxHeight: 1024,
-        imageQuality: 85,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 80,
       );
       if (image != null) {
         final bytes = await image.readAsBytes();
         setState(() {
           _selectedImage = image;
           _imageBytes = bytes;
-          _showForm = false; // Reset form on new image
+          // Keep form open if it was already open (e.g. manual logging),
+          // otherwise keep it closed so user can scan or log manually
         });
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to pick image: $e')),
       );
@@ -77,8 +78,11 @@ class _ScanPageState extends State<ScanPage> {
     setState(() {
       _selectedImage = null;
       _imageBytes = null;
-      _showForm = false;
-      _scanResult = null;
+      if (_scanResult != null) {
+        // Only reset form if it was an AI scan, keep form open if it's a manual log
+        _showForm = false;
+        _scanResult = null;
+      }
     });
   }
 
@@ -116,6 +120,7 @@ class _ScanPageState extends State<ScanPage> {
       setState(() {
         _isScanning = false;
       });
+      if (!mounted) return;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -172,6 +177,7 @@ class _ScanPageState extends State<ScanPage> {
     _clearImage();
     _hintController.clear();
     
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Meal logged successfully!'),
@@ -292,6 +298,27 @@ class _ScanPageState extends State<ScanPage> {
                     ),
                   ],
                 ),
+                if (!_showForm) ...[
+                  const SizedBox(height: 12),
+                  TextButton.icon(
+                    icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
+                    label: const Text('Log Meal Manually', style: TextStyle(color: AppTheme.accentEmerald)),
+                    onPressed: () {
+                      setState(() {
+                        _showForm = true;
+                        _imageBytes = null;
+                        _selectedImage = null;
+                        _scanResult = null;
+                        _nameController.text = 'New Meal';
+                        _caloriesController.text = '0';
+                        _proteinController.text = '0';
+                        _carbsController.text = '0';
+                        _fatController.text = '0';
+                        _notesController.text = '';
+                      });
+                    },
+                  ),
+                ],
               ],
             )
           : Stack(
@@ -302,7 +329,7 @@ class _ScanPageState extends State<ScanPage> {
                     _imageBytes!,
                     width: double.infinity,
                     height: double.infinity,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   ),
                 ),
                 Positioned(
@@ -353,48 +380,97 @@ class _ScanPageState extends State<ScanPage> {
   // Layout 3: Scan trigger action
   Widget _buildTriggerButton(bool hasApiKey, String apiKey) {
     if (!hasApiKey) {
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: AppTheme.premiumCardDecoration(glowColor: AppTheme.accentRed),
-        child: Column(
-          children: [
-            const Icon(Icons.warning_amber_rounded, color: AppTheme.accentRed, size: 32),
-            const SizedBox(height: 8),
-            const Text(
-              'Gemini API Key Missing',
-              style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+      return Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: AppTheme.premiumCardDecoration(glowColor: AppTheme.accentRed),
+            child: Column(
+              children: [
+                const Icon(Icons.warning_amber_rounded, color: AppTheme.accentRed, size: 32),
+                const SizedBox(height: 8),
+                const Text(
+                  'Gemini API Key Missing',
+                  style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'A valid API key is required to scan photos. Please go to settings and add your Gemini API Key.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                ),
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to settings tab via layout controller if possible
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please navigate to settings panel.')),
+                    );
+                  },
+                  child: const Text('Configure API Key'),
+                ),
+              ],
             ),
-            const SizedBox(height: 6),
-            const Text(
-              'A valid API key is required to scan photos. Please go to settings and add your Gemini API Key.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: OutlinedButton.icon(
+              icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
+              label: const Text('Log Manually with this Photo', style: TextStyle(color: AppTheme.accentEmerald)),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              onPressed: _openManualFormWithPhoto,
             ),
-            const SizedBox(height: 12),
-            TextButton(
-              onPressed: () {
-                // Navigate to settings tab via layout controller if possible
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please navigate to settings panel.')),
-                );
-              },
-              child: const Text('Configure API Key'),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
-    return SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: ElevatedButton.icon(
-        icon: const Icon(Icons.auto_awesome),
-        label: const Text('Scan & Estimate with Gemini'),
-        onPressed: () => _scanMeal(apiKey),
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.auto_awesome),
+            label: const Text('Scan & Estimate with Gemini'),
+            onPressed: () => _scanMeal(apiKey),
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: OutlinedButton.icon(
+            icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
+            label: const Text('Log Manually with this Photo', style: TextStyle(color: AppTheme.accentEmerald)),
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: _openManualFormWithPhoto,
+          ),
+        ),
+      ],
     );
+  }
+
+  void _openManualFormWithPhoto() {
+    setState(() {
+      _showForm = true;
+      _scanResult = null;
+      _nameController.text = 'New Meal';
+      _caloriesController.text = '0';
+      _proteinController.text = '0';
+      _carbsController.text = '0';
+      _fatController.text = '0';
+      _notesController.text = '';
+    });
   }
 
   // Layout 4: AI verification form

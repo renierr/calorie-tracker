@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
-import '../widgets/responsive_layout.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
