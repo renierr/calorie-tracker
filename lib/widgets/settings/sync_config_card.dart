@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../layout/adaptive_breakpoints.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
@@ -160,81 +159,48 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
             ),
           ),
           const SizedBox(height: 20),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final bool isNarrow = AppBreakpoints.isNarrowContentWidth(
-                constraints.maxWidth,
-              );
-              final syncButton = ElevatedButton.icon(
-                onPressed: (syncing || !enabled) ? null : _triggerManualSync,
-                icon: syncing
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _formatLastSynced(widget.appState.lastSyncedTime, context),
+                style: TextStyle(color: colors.textSecondary, fontSize: 11),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: (syncing || !enabled) ? null : _triggerManualSync,
+                  icon: syncing
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
-                        ),
-                      )
-                    : const Icon(Icons.sync, size: 16),
-                label: Text(
-                  syncing
-                      ? AppLocalizations.of(context)!.syncingStatus
-                      : AppLocalizations.of(context)!.syncNowBtn,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(44),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+                        )
+                      : const Icon(Icons.sync, size: 16),
+                  label: Text(
+                    syncing
+                        ? AppLocalizations.of(context)!.syncingStatus
+                        : AppLocalizations.of(context)!.syncNowBtn,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12),
                   ),
-                ),
-              );
-
-              if (isNarrow) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _formatLastSynced(
-                        widget.appState.lastSyncedTime,
-                        context,
-                      ),
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 11,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(width: double.infinity, child: syncButton),
-                  ],
-                );
-              }
-
-              return Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _formatLastSynced(
-                        widget.appState.lastSyncedTime,
-                        context,
-                      ),
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 11,
-                      ),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(44),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  syncButton,
-                ],
-              );
-            },
+                ),
+              ),
+            ],
           ),
           if (_syncMessage != null) ...[
             const SizedBox(height: 15),

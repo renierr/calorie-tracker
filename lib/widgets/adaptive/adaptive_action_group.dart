@@ -20,7 +20,7 @@ class AdaptiveActionGroup extends StatelessWidget {
           return Column(
             children: [
               for (int i = 0; i < actions.length; i++) ...[
-                SizedBox(width: double.infinity, child: actions[i]),
+                actions[i],
                 if (i < actions.length - 1) SizedBox(height: spacing),
               ],
             ],

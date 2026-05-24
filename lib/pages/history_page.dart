@@ -515,68 +515,45 @@ class _HistoryPageState extends State<HistoryPage> {
         context: context,
         color: colors.surfaceLight.withValues(alpha: 0.4),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final bool isNarrow = AppBreakpoints.isNarrowContentWidth(
-            constraints.maxWidth,
-          );
-
-          final reportButton = ElevatedButton.icon(
-            icon: const Icon(Icons.summarize, size: 18),
-            label: Text(
-              AppLocalizations.of(context)!.reportPdf,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.logsInFilter(filteredMeals.length),
+            style: TextStyle(
+              color: colors.textPrimary,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
             ),
-            onPressed: () =>
-                _showReportConfigDialog(context, appState, filteredMeals),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(44),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            ),
-          );
-
-          final summaryText = Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(
-                  context,
-                )!.logsInFilter(filteredMeals.length),
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
+          ),
+          const SizedBox(height: 3),
+          Text(
+            AppLocalizations.of(context)!.compilePdf,
+            style: TextStyle(color: colors.textMuted, fontSize: 11),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.summarize, size: 18),
+              label: Text(
+                AppLocalizations.of(context)!.reportPdf,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
+              ),
+              onPressed: () =>
+                  _showReportConfigDialog(context, appState, filteredMeals),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(44),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
                 ),
               ),
-              const SizedBox(height: 3),
-              Text(
-                AppLocalizations.of(context)!.compilePdf,
-                style: TextStyle(color: colors.textMuted, fontSize: 11),
-              ),
-            ],
-          );
-
-          if (isNarrow) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                summaryText,
-                const SizedBox(height: 10),
-                SizedBox(width: double.infinity, child: reportButton),
-              ],
-            );
-          }
-
-          return Row(
-            children: [
-              Expanded(child: summaryText),
-              const SizedBox(width: 12),
-              reportButton,
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
