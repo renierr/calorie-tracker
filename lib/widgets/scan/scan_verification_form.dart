@@ -198,39 +198,50 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.verifyEstimates,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (widget.scanResult != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.accentEmerald.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.aiMatch(widget.scanResult!.confidence),
-                    style: const TextStyle(
-                      color: AppTheme.accentEmerald,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final bool isNarrow = constraints.maxWidth < 380;
+              return Wrap(
+                spacing: 10,
+                runSpacing: 8,
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  SizedBox(
+                    width: isNarrow ? constraints.maxWidth : null,
+                    child: Text(
+                      AppLocalizations.of(context)!.verifyEstimates,
+                      style: TextStyle(
+                        color: colors.textPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-            ],
+                  if (widget.scanResult != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppTheme.accentEmerald.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.aiMatch(widget.scanResult!.confidence),
+                        style: const TextStyle(
+                          color: AppTheme.accentEmerald,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 20),
 
@@ -429,69 +440,108 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             ),
           ),
           const SizedBox(height: 25),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: _isReEvaluating ? null : widget.onDiscard,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: colors.textPrimary,
-                    side: BorderSide(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white24
-                          : Colors.black26,
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final bool isNarrow = constraints.maxWidth < 430;
+
+              final discardButton = OutlinedButton(
+                onPressed: _isReEvaluating ? null : widget.onDiscard,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: colors.textPrimary,
+                  side: BorderSide(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white24
+                        : Colors.black26,
                   ),
-                  child: Text(AppLocalizations.of(context)!.discard),
+                  minimumSize: const Size.fromHeight(48),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              ),
-              if (widget.imageBytes != null) ...[
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _isReEvaluating ? null : _reEvaluateMeal,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.accentBlue,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: _isReEvaluating
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                            ),
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.auto_awesome, size: 16),
-                              const SizedBox(width: 6),
-                              Text(AppLocalizations.of(context)!.reEvaluate),
-                            ],
+                child: Text(
+                  AppLocalizations.of(context)!.discard,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+              );
+
+              final reEvaluateButton = ElevatedButton(
+                onPressed: _isReEvaluating ? null : _reEvaluateMeal,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.accentBlue,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size.fromHeight(48),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: _isReEvaluating
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
                           ),
-                  ),
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.auto_awesome, size: 16),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              AppLocalizations.of(context)!.reEvaluate,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+              );
+
+              final saveButton = ElevatedButton(
+                onPressed: _isReEvaluating ? null : _saveMeal,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(48),
                 ),
-              ],
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: _isReEvaluating ? null : _saveMeal,
-                  child: Text(AppLocalizations.of(context)!.logAndSave),
+                child: Text(
+                  AppLocalizations.of(context)!.logAndSave,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+              );
+
+              if (isNarrow) {
+                return Column(
+                  children: [
+                    SizedBox(width: double.infinity, child: discardButton),
+                    const SizedBox(height: 10),
+                    if (widget.imageBytes != null) ...[
+                      SizedBox(width: double.infinity, child: reEvaluateButton),
+                      const SizedBox(height: 10),
+                    ],
+                    SizedBox(width: double.infinity, child: saveButton),
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  Expanded(child: discardButton),
+                  if (widget.imageBytes != null) ...[
+                    const SizedBox(width: 12),
+                    Expanded(child: reEvaluateButton),
+                  ],
+                  const SizedBox(width: 12),
+                  Expanded(child: saveButton),
+                ],
+              );
+            },
           ),
         ],
       ),

@@ -112,8 +112,7 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
               ),
               Switch(
                 value: widget.appState.syncEnabled,
-                activeTrackColor:
-                    AppTheme.accentEmerald.withValues(alpha: 0.5),
+                activeTrackColor: AppTheme.accentEmerald.withValues(alpha: 0.5),
                 activeThumbColor: AppTheme.accentEmerald,
                 onChanged: (val) {
                   widget.appState.setSyncEnabled(val);
@@ -160,17 +159,10 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
             ),
           ),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  _formatLastSynced(widget.appState.lastSyncedTime, context),
-                  style: TextStyle(color: colors.textSecondary, fontSize: 11),
-                ),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton.icon(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final bool isNarrow = constraints.maxWidth < 420;
+              final syncButton = ElevatedButton.icon(
                 onPressed: (syncing || !enabled) ? null : _triggerManualSync,
                 icon: syncing
                     ? const SizedBox(
@@ -188,16 +180,58 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
                   syncing
                       ? AppLocalizations.of(context)!.syncingStatus
                       : AppLocalizations.of(context)!.syncNowBtn,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 12),
                 ),
                 style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(44),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 12,
                   ),
                 ),
-              ),
-            ],
+              );
+
+              if (isNarrow) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _formatLastSynced(
+                        widget.appState.lastSyncedTime,
+                        context,
+                      ),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 11,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(width: double.infinity, child: syncButton),
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      _formatLastSynced(
+                        widget.appState.lastSyncedTime,
+                        context,
+                      ),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  syncButton,
+                ],
+              );
+            },
           ),
           if (_syncMessage != null) ...[
             const SizedBox(height: 15),

@@ -338,14 +338,16 @@ class _ScanPageState extends State<ScanPage> {
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
-            height: 52,
             child: OutlinedButton.icon(
               icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
               label: Text(
                 AppLocalizations.of(context)!.logWithPhoto,
+                maxLines: 2,
+                textAlign: TextAlign.center,
                 style: const TextStyle(color: AppTheme.accentEmerald),
               ),
               style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 52),
                 side: const BorderSide(
                   color: AppTheme.accentEmerald,
                   width: 1.2,
@@ -365,24 +367,32 @@ class _ScanPageState extends State<ScanPage> {
       children: [
         SizedBox(
           width: double.infinity,
-          height: 52,
           child: ElevatedButton.icon(
             icon: const Icon(Icons.auto_awesome),
-            label: Text(AppLocalizations.of(context)!.scanAndEstimate),
+            label: Text(
+              AppLocalizations.of(context)!.scanAndEstimate,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 52),
+            ),
             onPressed: () => _scanMeal(apiKey, languageCode),
           ),
         ),
         const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
-          height: 52,
           child: OutlinedButton.icon(
             icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
             label: Text(
               AppLocalizations.of(context)!.logWithPhoto,
+              maxLines: 2,
+              textAlign: TextAlign.center,
               style: const TextStyle(color: AppTheme.accentEmerald),
             ),
             style: OutlinedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 52),
               side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),

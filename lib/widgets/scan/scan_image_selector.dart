@@ -52,8 +52,10 @@ class ScanImageSelector extends StatelessWidget {
                   style: TextStyle(color: colors.textMuted, fontSize: 12),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 12,
+                  runSpacing: 10,
                   children: [
                     ElevatedButton.icon(
                       icon: const Icon(Icons.photo_library),
@@ -64,7 +66,6 @@ class ScanImageSelector extends StatelessWidget {
                         foregroundColor: colors.textPrimary,
                       ),
                     ),
-                    const SizedBox(width: 12),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.camera_alt),
                       label: Text(AppLocalizations.of(context)!.camera),

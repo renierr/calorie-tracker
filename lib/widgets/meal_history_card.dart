@@ -197,8 +197,10 @@ class MealHistoryCard extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   // Action Toolbar Footer
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Wrap(
+                    alignment: WrapAlignment.end,
+                    spacing: 8,
+                    runSpacing: 6,
                     children: [
                       // Single Export PDF
                       TextButton.icon(
@@ -221,7 +223,6 @@ class MealHistoryCard extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(width: 8),
 
                       // Edit
                       TextButton.icon(
@@ -232,7 +233,6 @@ class MealHistoryCard extends StatelessWidget {
                         ),
                         onPressed: () => _showEditMealDialog(context),
                       ),
-                      const SizedBox(width: 8),
 
                       // Delete
                       TextButton.icon(

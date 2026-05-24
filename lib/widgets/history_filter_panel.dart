@@ -31,24 +31,11 @@ class HistoryFilterPanel extends StatelessWidget {
       decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.filter_list,
-                color: AppTheme.accentEmerald,
-                size: 20,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                AppLocalizations.of(context)!.filterTimeframe,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-              const Spacer(),
-              DropdownButton<String>(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final bool isNarrow = constraints.maxWidth < 430;
+              final dropdown = DropdownButton<String>(
+                isExpanded: isNarrow,
                 value: filterType,
                 dropdownColor: colors.surface,
                 iconEnabledColor: colors.textPrimary,
@@ -78,8 +65,59 @@ class HistoryFilterPanel extends StatelessWidget {
                 onChanged: (val) {
                   onFilterTypeChanged(val ?? 'all');
                 },
-              ),
-            ],
+              );
+
+              if (isNarrow) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.filter_list,
+                          color: AppTheme.accentEmerald,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(context)!.filterTimeframe,
+                            style: TextStyle(
+                              color: colors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    dropdown,
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  const Icon(
+                    Icons.filter_list,
+                    color: AppTheme.accentEmerald,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    AppLocalizations.of(context)!.filterTimeframe,
+                    style: TextStyle(
+                      color: colors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const Spacer(),
+                  dropdown,
+                ],
+              );
+            },
           ),
           if (filterType == 'custom') ...[
             const SizedBox(height: 12),

@@ -257,55 +257,74 @@ class _HistoryPageState extends State<HistoryPage> {
         context: context,
         color: colors.surface,
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: OutlinedButton.icon(
-              icon: const Icon(
-                Icons.upload,
-                size: 18,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final bool isNarrow = constraints.maxWidth < 380;
+
+          final importButton = OutlinedButton.icon(
+            icon: const Icon(
+              Icons.upload,
+              size: 18,
+              color: AppTheme.accentEmerald,
+            ),
+            label: Text(
+              AppLocalizations.of(context)!.importLabel,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
                 color: AppTheme.accentEmerald,
+                fontSize: 13,
               ),
-              label: Text(
-                AppLocalizations.of(context)!.importLabel,
-                style: const TextStyle(
-                  color: AppTheme.accentEmerald,
-                  fontSize: 13,
-                ),
-              ),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(
-                  color: AppTheme.accentEmerald,
-                  width: 1.2,
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () => _handleImport(context, appState),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.download, size: 18),
-              label: Text(
-                AppLocalizations.of(context)!.exportLabel,
-                style: const TextStyle(fontSize: 13),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size.fromHeight(44),
+              side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.accentEmerald,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () => _handleExport(context, appState, filteredMeals),
             ),
-          ),
-        ],
+            onPressed: () => _handleImport(context, appState),
+          );
+
+          final exportButton = ElevatedButton.icon(
+            icon: const Icon(Icons.download, size: 18),
+            label: Text(
+              AppLocalizations.of(context)!.exportLabel,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 13),
+            ),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(44),
+              backgroundColor: AppTheme.accentEmerald,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () => _handleExport(context, appState, filteredMeals),
+          );
+
+          if (isNarrow) {
+            return Column(
+              children: [
+                SizedBox(width: double.infinity, child: importButton),
+                const SizedBox(height: 10),
+                SizedBox(width: double.infinity, child: exportButton),
+              ],
+            );
+          }
+
+          return Row(
+            children: [
+              Expanded(child: importButton),
+              const SizedBox(width: 12),
+              Expanded(child: exportButton),
+            ],
+          );
+        },
       ),
     );
   }
@@ -421,43 +440,66 @@ class _HistoryPageState extends State<HistoryPage> {
         context: context,
         color: colors.surfaceLight.withValues(alpha: 0.4),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.logsInFilter(filteredMeals.length),
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  AppLocalizations.of(context)!.compilePdf,
-                  style: TextStyle(color: colors.textMuted, fontSize: 11),
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton.icon(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final bool isNarrow = constraints.maxWidth < 420;
+
+          final reportButton = ElevatedButton.icon(
             icon: const Icon(Icons.summarize, size: 18),
             label: Text(
               AppLocalizations.of(context)!.reportPdf,
+              maxLines: 2,
+              textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 13),
             ),
             onPressed: () =>
                 _showReportConfigDialog(context, appState, filteredMeals),
             style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(44),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             ),
-          ),
-        ],
+          );
+
+          final summaryText = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.logsInFilter(filteredMeals.length),
+                style: TextStyle(
+                  color: colors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                AppLocalizations.of(context)!.compilePdf,
+                style: TextStyle(color: colors.textMuted, fontSize: 11),
+              ),
+            ],
+          );
+
+          if (isNarrow) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                summaryText,
+                const SizedBox(height: 10),
+                SizedBox(width: double.infinity, child: reportButton),
+              ],
+            );
+          }
+
+          return Row(
+            children: [
+              Expanded(child: summaryText),
+              const SizedBox(width: 12),
+              reportButton,
+            ],
+          );
+        },
       ),
     );
   }
