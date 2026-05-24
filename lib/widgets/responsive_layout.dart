@@ -19,6 +19,7 @@ class ResponsiveLayout extends StatelessWidget {
     return Consumer<AppState>(
       builder: (context, appState, _) {
         final int currentIndex = appState.selectedTabIndex;
+        final colors = AppTheme.of(context);
 
         if (isDesktop) {
           return Scaffold(
@@ -26,9 +27,9 @@ class ResponsiveLayout extends StatelessWidget {
               children: [
                 Container(
                   width: 240,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.surface,
-                    border: Border(
+                  decoration: BoxDecoration(
+                    color: colors.surface,
+                    border: const Border(
                       right: BorderSide(color: Colors.white10, width: 1),
                     ),
                   ),
@@ -56,13 +57,13 @@ class ResponsiveLayout extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 12),
-                            const Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'NutriScan',
                                   style: TextStyle(
-                                    color: AppTheme.textPrimary,
+                                    color: colors.textPrimary,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 0.5,
@@ -71,7 +72,7 @@ class ResponsiveLayout extends StatelessWidget {
                                 Text(
                                   'Calorie Tracker',
                                   style: TextStyle(
-                                    color: AppTheme.textMuted,
+                                    color: colors.textMuted,
                                     fontSize: 11,
                                   ),
                                 ),
@@ -83,6 +84,7 @@ class ResponsiveLayout extends StatelessWidget {
                       const Divider(color: Colors.white10, height: 1),
                       const SizedBox(height: 20),
                       _buildSidebarItem(
+                        context: context,
                         index: 0,
                         currentIndex: currentIndex,
                         outlineIcon: Icons.dashboard_outlined,
@@ -91,6 +93,7 @@ class ResponsiveLayout extends StatelessWidget {
                         onTap: appState.selectTab,
                       ),
                       _buildSidebarItem(
+                        context: context,
                         index: 1,
                         currentIndex: currentIndex,
                         outlineIcon: Icons.qr_code_scanner_outlined,
@@ -99,6 +102,7 @@ class ResponsiveLayout extends StatelessWidget {
                         onTap: appState.selectTab,
                       ),
                       _buildSidebarItem(
+                        context: context,
                         index: 2,
                         currentIndex: currentIndex,
                         outlineIcon: Icons.history_outlined,
@@ -107,6 +111,7 @@ class ResponsiveLayout extends StatelessWidget {
                         onTap: appState.selectTab,
                       ),
                       _buildSidebarItem(
+                        context: context,
                         index: 3,
                         currentIndex: currentIndex,
                         outlineIcon: Icons.settings_outlined,
@@ -136,16 +141,16 @@ class ResponsiveLayout extends StatelessWidget {
                               children: [
                                 Text(
                                   AppLocalizations.of(context)!.profileName,
-                                  style: const TextStyle(
-                                    color: AppTheme.textPrimary,
+                                  style: TextStyle(
+                                    color: colors.textPrimary,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 13,
                                   ),
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.profileStatus,
-                                  style: const TextStyle(
-                                    color: AppTheme.textMuted,
+                                  style: TextStyle(
+                                    color: colors.textMuted,
                                     fontSize: 10,
                                   ),
                                 ),
@@ -212,6 +217,7 @@ class ResponsiveLayout extends StatelessWidget {
   }
 
   Widget _buildSidebarItem({
+    required BuildContext context,
     required int index,
     required int currentIndex,
     required IconData outlineIcon,
@@ -220,6 +226,7 @@ class ResponsiveLayout extends StatelessWidget {
     required void Function(int) onTap,
   }) {
     final bool isSelected = currentIndex == index;
+    final colors = AppTheme.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -240,7 +247,7 @@ class ResponsiveLayout extends StatelessWidget {
                 isSelected ? filledIcon : outlineIcon,
                 color: isSelected
                     ? AppTheme.accentEmerald
-                    : AppTheme.textSecondary,
+                    : colors.textSecondary,
                 size: 22,
               ),
               const SizedBox(width: 14),
@@ -249,7 +256,7 @@ class ResponsiveLayout extends StatelessWidget {
                 style: TextStyle(
                   color: isSelected
                       ? AppTheme.accentEmerald
-                      : AppTheme.textSecondary,
+                      : colors.textSecondary,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                   fontSize: 14,
                 ),

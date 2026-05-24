@@ -95,6 +95,8 @@ class _SettingsPageState extends State<SettingsPage> {
               // Panel 2: Language Selection
               _buildLanguageCard(appState),
               const SizedBox(height: 20),
+              _buildThemeCard(appState),
+              const SizedBox(height: 20),
 
               // Panel 3: Calorie & Macro Target configuration
               _buildTargetGoalsCard(),
@@ -128,9 +130,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Segment 1: API Keys Secure field
   Widget _buildApiConfigCard() {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -140,8 +143,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(width: 10),
               Text(
                 AppLocalizations.of(context)!.apiCredentials,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
+                style: TextStyle(
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -151,8 +154,8 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 10),
           Text(
             AppLocalizations.of(context)!.apiCredentialsDesc,
-            style: const TextStyle(
-              color: AppTheme.textSecondary,
+            style: TextStyle(
+              color: colors.textSecondary,
               fontSize: 12,
               height: 1.4,
             ),
@@ -167,7 +170,7 @@ class _SettingsPageState extends State<SettingsPage> {
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscureApiKey ? Icons.visibility_off : Icons.visibility,
-                  color: AppTheme.textSecondary,
+                  color: colors.textSecondary,
                 ),
                 onPressed: () {
                   setState(() {
@@ -184,9 +187,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Segment 2: Daily Target Sliders & numeric inputs
   Widget _buildTargetGoalsCard() {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -200,8 +204,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(width: 10),
               Text(
                 AppLocalizations.of(context)!.dailyTargets,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
+                style: TextStyle(
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -213,7 +217,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // Calories Input
           Text(
             AppLocalizations.of(context)!.calorieBudget,
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+            style: TextStyle(color: colors.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 8),
           TextField(
@@ -232,10 +236,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Protein (g)',
                       style: TextStyle(
-                        color: AppTheme.textSecondary,
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -255,10 +259,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Carbohydrates (g)',
                       style: TextStyle(
-                        color: AppTheme.textSecondary,
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -284,10 +288,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Lipid Fats (g)',
                       style: TextStyle(
-                        color: AppTheme.textSecondary,
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -312,9 +316,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Segment 3: Reset Database diagnostics
   Widget _buildMaintenanceCard(AppState appState) {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(glowColor: AppTheme.accentRed),
+      decoration: AppTheme.premiumCardDecoration(
+        color: colors.surface,
+        glowColor: AppTheme.accentRed,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -324,8 +332,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(width: 10),
               Text(
                 AppLocalizations.of(context)!.dangerZone,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
+                style: TextStyle(
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -335,8 +343,8 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 10),
           Text(
             AppLocalizations.of(context)!.dangerDesc,
-            style: const TextStyle(
-              color: AppTheme.textSecondary,
+            style: TextStyle(
+              color: colors.textSecondary,
               fontSize: 12,
               height: 1.4,
             ),
@@ -361,8 +369,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 showDialog(
                   context: context,
                   builder: (context) {
+                    final colors = AppTheme.of(context);
                     return AlertDialog(
-                      backgroundColor: AppTheme.surface,
+                      backgroundColor: colors.surface,
                       title: Text(
                         AppLocalizations.of(context)!.eraseAll,
                         style: const TextStyle(
@@ -376,9 +385,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           onPressed: () => Navigator.pop(context),
                           child: Text(
                             AppLocalizations.of(context)!.cancel,
-                            style: const TextStyle(
-                              color: AppTheme.textSecondary,
-                            ),
+                            style: TextStyle(color: colors.textSecondary),
                           ),
                         ),
                         ElevatedButton(
@@ -414,9 +421,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildLanguageCard(AppState appState) {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -430,8 +438,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(width: 10),
               Text(
                 AppLocalizations.of(context)!.language,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
+                style: TextStyle(
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -442,13 +450,13 @@ class _SettingsPageState extends State<SettingsPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceLight,
+              color: colors.surfaceLight,
               borderRadius: BorderRadius.circular(12),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: appState.appLocale,
-                dropdownColor: AppTheme.surface,
+                dropdownColor: colors.surface,
                 isExpanded: true,
                 items: const [
                   DropdownMenuItem(value: 'en', child: Text('English')),
@@ -465,10 +473,87 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildExportCard(AppState appState) {
+  Widget _buildThemeCard(AppState appState) {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.palette, color: AppTheme.accentAmber, size: 20),
+              const SizedBox(width: 10),
+              Text(
+                AppLocalizations.of(context)!.appearance,
+                style: TextStyle(
+                  color: colors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: colors.surfaceLight,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: _themeModeValue(appState),
+                dropdownColor: colors.surface,
+                isExpanded: true,
+                items: [
+                  DropdownMenuItem(
+                    value: 'system',
+                    child: Text(AppLocalizations.of(context)!.themeSystem),
+                  ),
+                  DropdownMenuItem(
+                    value: 'light',
+                    child: Text(AppLocalizations.of(context)!.themeLight),
+                  ),
+                  DropdownMenuItem(
+                    value: 'dark',
+                    child: Text(AppLocalizations.of(context)!.themeDark),
+                  ),
+                ],
+                onChanged: (val) {
+                  if (val == 'light') {
+                    appState.setThemeMode(ThemeMode.light);
+                  } else if (val == 'dark') {
+                    appState.setThemeMode(ThemeMode.dark);
+                  } else {
+                    appState.setThemeMode(ThemeMode.system);
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _themeModeValue(AppState appState) {
+    switch (appState.themeMode) {
+      case ThemeMode.light:
+        return 'light';
+      case ThemeMode.dark:
+        return 'dark';
+      default:
+        return 'system';
+    }
+  }
+
+  Widget _buildExportCard(AppState appState) {
+    final colors = AppTheme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -478,8 +563,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(width: 10),
               Text(
                 AppLocalizations.of(context)!.exportDb,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
+                style: TextStyle(
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -489,8 +574,8 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 10),
           Text(
             AppLocalizations.of(context)!.exportDbDesc,
-            style: const TextStyle(
-              color: AppTheme.textSecondary,
+            style: TextStyle(
+              color: colors.textSecondary,
               fontSize: 12,
               height: 1.4,
             ),

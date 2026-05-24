@@ -30,7 +30,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'NutriScan Calorie Tracker',
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.darkTheme,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: appState.themeMode,
           locale: appState.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

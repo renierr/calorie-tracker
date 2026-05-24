@@ -95,6 +95,7 @@ class _ScanPageState extends State<ScanPage> {
 
   // Trigger Gemini AI scanning
   Future<void> _scanMeal(String apiKey) async {
+    final colors = AppTheme.of(context);
     if (_imageBytes == null || _selectedImage == null) return;
 
     setState(() {
@@ -131,14 +132,14 @@ class _ScanPageState extends State<ScanPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: AppTheme.surface,
+          backgroundColor: colors.surface,
           title: Text(
             AppLocalizations.of(context)!.aiError,
             style: const TextStyle(color: AppTheme.accentRed),
           ),
           content: Text(
             AppLocalizations.of(context)!.aiErrorDesc(e.toString()),
-            style: const TextStyle(color: AppTheme.textPrimary),
+            style: TextStyle(color: colors.textPrimary),
           ),
           actions: [
             TextButton(
@@ -207,6 +208,7 @@ class _ScanPageState extends State<ScanPage> {
     final appState = Provider.of<AppState>(context);
     final String apiKey = appState.geminiApiKey;
     final bool hasApiKey = apiKey.trim().isNotEmpty;
+    final colors = AppTheme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.scanTitle)),
@@ -255,8 +257,8 @@ class _ScanPageState extends State<ScanPage> {
                     const SizedBox(height: 24),
                     Text(
                       AppLocalizations.of(context)!.scanningTitle,
-                      style: const TextStyle(
-                        color: AppTheme.textPrimary,
+                      style: TextStyle(
+                        color: colors.textPrimary,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -267,8 +269,8 @@ class _ScanPageState extends State<ScanPage> {
                       child: Text(
                         AppLocalizations.of(context)!.scanningDesc,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: AppTheme.textSecondary,
+                        style: TextStyle(
+                          color: colors.textSecondary,
                           fontSize: 13,
                         ),
                       ),
@@ -284,11 +286,12 @@ class _ScanPageState extends State<ScanPage> {
 
   // Layout 1: Photo selection dashboard
   Widget _buildIntakeSection() {
+    final colors = AppTheme.of(context);
     return Container(
       width: double.infinity,
       height: 260,
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.08),
@@ -301,14 +304,14 @@ class _ScanPageState extends State<ScanPage> {
               children: [
                 Icon(
                   Icons.add_a_photo_outlined,
-                  color: AppTheme.textSecondary.withValues(alpha: 0.5),
+                  color: colors.textSecondary.withValues(alpha: 0.5),
                   size: 48,
                 ),
                 const SizedBox(height: 14),
                 Text(
                   AppLocalizations.of(context)!.noPhotoSelected,
-                  style: const TextStyle(
-                    color: AppTheme.textPrimary,
+                  style: TextStyle(
+                    color: colors.textPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),
@@ -316,10 +319,7 @@ class _ScanPageState extends State<ScanPage> {
                 const SizedBox(height: 6),
                 Text(
                   AppLocalizations.of(context)!.scanPrompt,
-                  style: const TextStyle(
-                    color: AppTheme.textMuted,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: colors.textMuted, fontSize: 12),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -330,7 +330,7 @@ class _ScanPageState extends State<ScanPage> {
                       label: Text(AppLocalizations.of(context)!.gallery),
                       onPressed: () => _pickImage(ImageSource.gallery),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.surfaceLight,
+                        backgroundColor: colors.surfaceLight,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -398,6 +398,7 @@ class _ScanPageState extends State<ScanPage> {
 
   // Layout 2: Optional hint field
   Widget _buildHintField() {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: AppTheme.premiumCardDecoration(),
@@ -414,11 +415,11 @@ class _ScanPageState extends State<ScanPage> {
               const SizedBox(width: 8),
               Text(
                 AppLocalizations.of(context)!.contextClue,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+              style: TextStyle(
+                color: colors.textPrimary,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
               ),
             ],
           ),
@@ -437,6 +438,7 @@ class _ScanPageState extends State<ScanPage> {
 
   // Layout 3: Scan trigger action
   Widget _buildTriggerButton(bool hasApiKey, String apiKey) {
+    final colors = AppTheme.of(context);
     if (!hasApiKey) {
       return Column(
         children: [
@@ -456,20 +458,20 @@ class _ScanPageState extends State<ScanPage> {
                 const SizedBox(height: 8),
                 Text(
                   AppLocalizations.of(context)!.apiKeyMissing,
-                  style: const TextStyle(
-                    color: AppTheme.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                style: TextStyle(
+                  color: colors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  AppLocalizations.of(context)!.apiKeyMissingDesc,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: AppTheme.textSecondary,
-                    fontSize: 12,
-                  ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                AppLocalizations.of(context)!.apiKeyMissingDesc,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: colors.textSecondary,
+                  fontSize: 12,
+                ),
                 ),
                 const SizedBox(height: 12),
                 TextButton(
@@ -564,6 +566,7 @@ class _ScanPageState extends State<ScanPage> {
 
   // Layout 4: AI verification form
   Widget _buildVerificationForm(AppState appState) {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(showGlow: true),
@@ -575,13 +578,13 @@ class _ScanPageState extends State<ScanPage> {
             children: [
               Text(
                 AppLocalizations.of(context)!.verifyEstimates,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              style: TextStyle(
+                color: colors.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-              if (_scanResult != null)
+            ),
+            if (_scanResult != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -609,7 +612,7 @@ class _ScanPageState extends State<ScanPage> {
           // Food Name
           Text(
             AppLocalizations.of(context)!.mealDescription,
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+            style: TextStyle(color: colors.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 6),
           TextField(
@@ -629,8 +632,8 @@ class _ScanPageState extends State<ScanPage> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.caloriesKcal,
-                      style: const TextStyle(
-                        color: AppTheme.textSecondary,
+                      style: TextStyle(
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -650,8 +653,8 @@ class _ScanPageState extends State<ScanPage> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.proteinG,
-                      style: const TextStyle(
-                        color: AppTheme.textSecondary,
+                      style: TextStyle(
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -676,8 +679,8 @@ class _ScanPageState extends State<ScanPage> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.carbsG,
-                      style: const TextStyle(
-                        color: AppTheme.textSecondary,
+                      style: TextStyle(
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -697,8 +700,8 @@ class _ScanPageState extends State<ScanPage> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.fatG,
-                      style: const TextStyle(
-                        color: AppTheme.textSecondary,
+                      style: TextStyle(
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -718,7 +721,7 @@ class _ScanPageState extends State<ScanPage> {
           // Analysis explanations
           Text(
             AppLocalizations.of(context)!.aiNotes,
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+            style: TextStyle(color: colors.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 6),
           TextField(
@@ -746,7 +749,7 @@ class _ScanPageState extends State<ScanPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
               decoration: BoxDecoration(
-                color: AppTheme.surfaceLight.withValues(alpha: 0.5),
+                color: colors.surfaceLight.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
               ),
@@ -760,8 +763,8 @@ class _ScanPageState extends State<ScanPage> {
                   const SizedBox(width: 10),
                   Text(
                     AppLocalizations.of(context)!.mealDate,
-                    style: const TextStyle(
-                      color: AppTheme.textSecondary,
+                    style: TextStyle(
+                      color: colors.textSecondary,
                       fontSize: 13,
                     ),
                   ),
@@ -769,8 +772,8 @@ class _ScanPageState extends State<ScanPage> {
                     DateFormat.yMd(
                       Localizations.localeOf(context).toLanguageTag(),
                     ).format(_mealDate),
-                    style: const TextStyle(
-                      color: AppTheme.textPrimary,
+                    style: TextStyle(
+                      color: colors.textPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),

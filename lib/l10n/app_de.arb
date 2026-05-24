@@ -117,7 +117,13 @@
   "exportDb": "SQLite-Datenbank exportieren",
   "exportDbDesc": "Lade eine Kopie der gesamten Mahlzeitendatenbank zur Sicherung oder Überprüfung herunter.",
   "exportDbBtn": "Datenbank-Kopie herunterladen",
-  "dbExported": "Datenbank in den Download-Ordner kopiert.",
+  "dbExported": "Datenbank erfolgreich exportiert.",
+
+  "appearance": "Darstellung",
+  "themeMode": "Design",
+  "themeSystem": "Systemstandard",
+  "themeLight": "Hell",
+  "themeDark": "Dunkel",
 
   "sidebarDashboard": "Dashboard",
   "sidebarScan": "KI Scan",

@@ -16,6 +16,7 @@ class AppState extends ChangeNotifier {
   static const String _keyFatGoal = 'fat_goal';
   static const String _keyHistoryFilter = 'history_filter';
   static const String _keyLocale = 'app_locale';
+  static const String _keyThemeMode = 'theme_mode';
 
   // State variables
   String _geminiApiKey = '';
@@ -25,6 +26,7 @@ class AppState extends ChangeNotifier {
   int _fatGoal = 70;
   String _historyFilter = 'all';
   String _appLocale = 'en';
+  ThemeMode _themeMode = ThemeMode.system;
 
   List<Meal> _meals = [];
   bool _isLoading = false;
@@ -43,6 +45,7 @@ class AppState extends ChangeNotifier {
   int get fatGoal => _fatGoal;
   String get historyFilter => _historyFilter;
   String get appLocale => _appLocale;
+  ThemeMode get themeMode => _themeMode;
   Locale get locale => Locale(_appLocale);
   List<Meal> get meals => _meals;
   bool get isLoading => _isLoading;
@@ -91,6 +94,8 @@ class AppState extends ChangeNotifier {
     _fatGoal = prefs.getInt(_keyFatGoal) ?? 70;
     _historyFilter = prefs.getString(_keyHistoryFilter) ?? 'all';
     _appLocale = prefs.getString(_keyLocale) ?? 'en';
+    final themeStr = prefs.getString(_keyThemeMode) ?? 'system';
+    _themeMode = _parseThemeMode(themeStr);
     notifyListeners();
   }
 
@@ -180,6 +185,36 @@ class AppState extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyLocale, code);
+  }
+
+  // Theme
+  Future<void> setThemeMode(ThemeMode mode) async {
+    _themeMode = mode;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyThemeMode, _themeModeString(mode));
+  }
+
+  ThemeMode _parseThemeMode(String s) {
+    switch (s) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.system;
+    }
+  }
+
+  String _themeModeString(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return 'light';
+      case ThemeMode.dark:
+        return 'dark';
+      default:
+        return 'system';
+    }
   }
 
   // Export database

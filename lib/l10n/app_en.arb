@@ -117,7 +117,13 @@
   "exportDb": "Export SQLite Database",
   "exportDbDesc": "Download a copy of the complete meal database for backup or inspection.",
   "exportDbBtn": "Download Database Copy",
-  "dbExported": "Database copied to Downloads folder.",
+  "dbExported": "Database exported successfully.",
+
+  "appearance": "Appearance",
+  "themeMode": "Theme",
+  "themeSystem": "System Default",
+  "themeLight": "Light",
+  "themeDark": "Dark",
 
   "sidebarDashboard": "Dashboard",
   "sidebarScan": "AI Food Scan",

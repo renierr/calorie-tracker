@@ -111,12 +111,13 @@ class _HistoryPageState extends State<HistoryPage> {
     showDialog(
       context: context,
       builder: (context) {
+        final colors = AppTheme.of(context);
         return AlertDialog(
-          backgroundColor: AppTheme.surface,
+          backgroundColor: colors.surface,
           title: Text(
             AppLocalizations.of(context)!.editMeal,
             style: TextStyle(
-              color: AppTheme.textPrimary,
+              color: colors.textPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -125,9 +126,9 @@ class _HistoryPageState extends State<HistoryPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Meal Description',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 11),
+                  style: TextStyle(color: colors.textSecondary, fontSize: 11),
                 ),
                 const SizedBox(height: 6),
                 TextField(controller: nameController),
@@ -138,10 +139,10 @@ class _HistoryPageState extends State<HistoryPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Calories (kcal)',
                             style: TextStyle(
-                              color: AppTheme.textSecondary,
+                              color: colors.textSecondary,
                               fontSize: 11,
                             ),
                           ),
@@ -161,10 +162,10 @@ class _HistoryPageState extends State<HistoryPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Protein (g)',
                             style: TextStyle(
-                              color: AppTheme.textSecondary,
+                              color: colors.textSecondary,
                               fontSize: 11,
                             ),
                           ),
@@ -188,10 +189,10 @@ class _HistoryPageState extends State<HistoryPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Carbohydrates (g)',
                             style: TextStyle(
-                              color: AppTheme.textSecondary,
+                              color: colors.textSecondary,
                               fontSize: 11,
                             ),
                           ),
@@ -211,10 +212,10 @@ class _HistoryPageState extends State<HistoryPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Lipid Fat (g)',
                             style: TextStyle(
-                              color: AppTheme.textSecondary,
+                              color: colors.textSecondary,
                               fontSize: 11,
                             ),
                           ),
@@ -232,9 +233,9 @@ class _HistoryPageState extends State<HistoryPage> {
                   ],
                 ),
                 const SizedBox(height: 14),
-                const Text(
+                Text(
                   'Notes',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 11),
+                  style: TextStyle(color: colors.textSecondary, fontSize: 11),
                 ),
                 const SizedBox(height: 6),
                 TextField(controller: notesController, maxLines: 2),
@@ -246,7 +247,7 @@ class _HistoryPageState extends State<HistoryPage> {
               onPressed: () => Navigator.pop(context),
               child: Text(
                 AppLocalizations.of(context)!.cancel,
-                style: TextStyle(color: AppTheme.textSecondary),
+                style: TextStyle(color: colors.textSecondary),
               ),
             ),
             ElevatedButton(
@@ -297,12 +298,13 @@ class _HistoryPageState extends State<HistoryPage> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setStateBuilder) {
+            final colors = AppTheme.of(context);
             return AlertDialog(
-              backgroundColor: AppTheme.surface,
+              backgroundColor: colors.surface,
               title: Text(
                 AppLocalizations.of(context)!.generatePdf,
                 style: TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -313,8 +315,8 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     Text(
                       'This compiles a PDF summarizing the ${filteredMeals.length} meals displayed in the active list.',
-                      style: const TextStyle(
-                        color: AppTheme.textSecondary,
+                      style: TextStyle(
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -322,7 +324,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     Text(
                       AppLocalizations.of(context)!.reportTitle,
                       style: TextStyle(
-                        color: AppTheme.textSecondary,
+                        color: colors.textSecondary,
                         fontSize: 11,
                       ),
                     ),
@@ -332,7 +334,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     Text(
                       AppLocalizations.of(context)!.reportComments,
                       style: TextStyle(
-                        color: AppTheme.textSecondary,
+                        color: colors.textSecondary,
                         fontSize: 11,
                       ),
                     ),
@@ -349,7 +351,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       title: Text(
                         AppLocalizations.of(context)!.includePhotos,
                         style: TextStyle(
-                          color: AppTheme.textPrimary,
+                          color: colors.textPrimary,
                           fontSize: 13,
                         ),
                       ),
@@ -370,7 +372,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     AppLocalizations.of(context)!.cancel,
-                    style: TextStyle(color: AppTheme.textSecondary),
+                    style: TextStyle(color: colors.textSecondary),
                   ),
                 ),
                 ElevatedButton.icon(
@@ -484,6 +486,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Widget _buildFilterPanel(BuildContext context) {
+    final colors = AppTheme.of(context);
     final appState = Provider.of<AppState>(context, listen: false);
     return Container(
       padding: const EdgeInsets.all(12),
@@ -501,7 +504,7 @@ class _HistoryPageState extends State<HistoryPage> {
               Text(
                 AppLocalizations.of(context)!.filterTimeframe,
                 style: TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -509,8 +512,8 @@ class _HistoryPageState extends State<HistoryPage> {
               const Spacer(),
               DropdownButton<String>(
                 value: _filterType,
-                dropdownColor: AppTheme.surface,
-                iconEnabledColor: AppTheme.textPrimary,
+                dropdownColor: colors.surface,
+                iconEnabledColor: colors.textPrimary,
                 underline: const SizedBox(),
                 items: [
                   DropdownMenuItem(
@@ -569,7 +572,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         horizontal: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceLight.withValues(alpha: 0.5),
+                        color: colors.surfaceLight.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -580,8 +583,8 @@ class _HistoryPageState extends State<HistoryPage> {
                               ).format(_customStartDate!),
                         style: TextStyle(
                           color: _customStartDate == null
-                              ? AppTheme.textMuted
-                              : AppTheme.textPrimary,
+                              ? colors.textMuted
+                              : colors.textPrimary,
                           fontSize: 13,
                         ),
                       ),
@@ -610,7 +613,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         horizontal: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceLight.withValues(alpha: 0.5),
+                        color: colors.surfaceLight.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -621,8 +624,8 @@ class _HistoryPageState extends State<HistoryPage> {
                               ).format(_customEndDate!),
                         style: TextStyle(
                           color: _customEndDate == null
-                              ? AppTheme.textMuted
-                              : AppTheme.textPrimary,
+                              ? colors.textMuted
+                              : colors.textPrimary,
                           fontSize: 13,
                         ),
                       ),
@@ -643,10 +646,11 @@ class _HistoryPageState extends State<HistoryPage> {
     AppState appState,
     List<Meal> filteredMeals,
   ) {
+    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
       decoration: AppTheme.premiumCardDecoration(
-        color: AppTheme.surfaceLight.withValues(alpha: 0.4),
+        color: colors.surfaceLight.withValues(alpha: 0.4),
       ),
       child: Row(
         children: [
@@ -658,8 +662,8 @@ class _HistoryPageState extends State<HistoryPage> {
                   AppLocalizations.of(
                     context,
                   )!.logsInFilter(filteredMeals.length),
-                  style: const TextStyle(
-                    color: AppTheme.textPrimary,
+                  style: TextStyle(
+                    color: colors.textPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
@@ -667,7 +671,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 const SizedBox(height: 3),
                 Text(
                   AppLocalizations.of(context)!.compilePdf,
-                  style: TextStyle(color: AppTheme.textMuted, fontSize: 11),
+                  style: TextStyle(color: colors.textMuted, fontSize: 11),
                 ),
               ],
             ),
@@ -691,6 +695,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   // Widget 3: Individual Log Card item
   Widget _buildMealLogCard(BuildContext context, AppState appState, Meal meal) {
+    final colors = AppTheme.of(context);
     final mealDate = DateTime.fromMillisecondsSinceEpoch(meal.timestamp);
 
     return Container(
@@ -705,8 +710,8 @@ class _HistoryPageState extends State<HistoryPage> {
             children: [
               Text(
                 _dateFormat.format(mealDate),
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
+                style: TextStyle(
+                  color: colors.textSecondary,
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
                 ),
@@ -714,7 +719,7 @@ class _HistoryPageState extends State<HistoryPage> {
               const SizedBox(width: 8),
               Text(
                 _timeFormat.format(mealDate),
-                style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
+                style: TextStyle(color: colors.textMuted, fontSize: 11),
               ),
               const Spacer(),
               Container(
@@ -725,10 +730,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
                 child: Text(
                   meal.shortId,
-                  style: const TextStyle(
-                    color: AppTheme.textMuted,
-                    fontSize: 10,
-                  ),
+                  style: TextStyle(color: colors.textMuted, fontSize: 10),
                 ),
               ),
             ],
@@ -748,7 +750,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: AppTheme.surfaceLight,
+                    color: colors.surfaceLight,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.white12, width: 0.5),
                   ),
@@ -778,8 +780,8 @@ class _HistoryPageState extends State<HistoryPage> {
                       meal.foodName,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppTheme.textPrimary,
+                      style: TextStyle(
+                        color: colors.textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
@@ -800,8 +802,8 @@ class _HistoryPageState extends State<HistoryPage> {
                       AppLocalizations.of(
                         context,
                       )!.macroPerGram(meal.carbs, meal.fat, meal.protein),
-                      style: const TextStyle(
-                        color: AppTheme.textSecondary,
+                      style: TextStyle(
+                        color: colors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -817,8 +819,8 @@ class _HistoryPageState extends State<HistoryPage> {
               meal.notes!,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppTheme.textMuted,
+              style: TextStyle(
+                color: colors.textMuted,
                 fontSize: 11,
                 fontStyle: FontStyle.italic,
               ),
@@ -882,7 +884,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        backgroundColor: AppTheme.surface,
+                        backgroundColor: colors.surface,
                         title: Text(
                           AppLocalizations.of(context)!.confirmDelete,
                           style: TextStyle(color: AppTheme.accentRed),
@@ -895,7 +897,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             onPressed: () => Navigator.pop(context),
                             child: Text(
                               AppLocalizations.of(context)!.cancel,
-                              style: TextStyle(color: AppTheme.textSecondary),
+                              style: TextStyle(color: colors.textSecondary),
                             ),
                           ),
                           ElevatedButton(
@@ -931,20 +933,21 @@ class _HistoryPageState extends State<HistoryPage> {
 
   // Widget 4: Empty logs list fallback screen
   Widget _buildEmptyState() {
+    final colors = AppTheme.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.calendar_today,
-            color: AppTheme.textMuted.withValues(alpha: 0.5),
+            color: colors.textMuted.withValues(alpha: 0.5),
             size: 48,
           ),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.noHistory,
             style: TextStyle(
-              color: AppTheme.textPrimary,
+              color: colors.textPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -952,7 +955,7 @@ class _HistoryPageState extends State<HistoryPage> {
           const SizedBox(height: 6),
           Text(
             AppLocalizations.of(context)!.noHistoryDesc,
-            style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
+            style: TextStyle(color: colors.textMuted, fontSize: 13),
           ),
         ],
       ),

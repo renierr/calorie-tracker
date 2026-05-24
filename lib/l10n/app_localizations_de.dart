@@ -375,7 +375,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportDbBtn => 'Datenbank-Kopie herunterladen';
 
   @override
-  String get dbExported => 'Datenbank in den Download-Ordner kopiert.';
+  String get dbExported => 'Datenbank erfolgreich exportiert.';
+
+  @override
+  String get appearance => 'Darstellung';
+
+  @override
+  String get themeMode => 'Design';
+
+  @override
+  String get themeSystem => 'Systemstandard';
+
+  @override
+  String get themeLight => 'Hell';
+
+  @override
+  String get themeDark => 'Dunkel';
 
   @override
   String get sidebarDashboard => 'Dashboard';

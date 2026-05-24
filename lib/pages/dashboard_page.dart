@@ -95,6 +95,7 @@ class DashboardPage extends StatelessWidget {
     final DateFormat formatter = DateFormat.yMMMd(
       Localizations.localeOf(context).toLanguageTag(),
     );
+    final colors = AppTheme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -104,7 +105,7 @@ class DashboardPage extends StatelessWidget {
         children: [
           // Previous Day Button
           IconButton(
-            icon: const Icon(Icons.chevron_left, color: AppTheme.textPrimary),
+            icon: Icon(Icons.chevron_left, color: colors.textPrimary),
             onPressed: () => appState.previousDay(),
           ),
 
@@ -119,11 +120,11 @@ class DashboardPage extends StatelessWidget {
                 builder: (context, child) {
                   return Theme(
                     data: Theme.of(context).copyWith(
-                      colorScheme: const ColorScheme.dark(
+                      colorScheme: ColorScheme.dark(
                         primary: AppTheme.accentEmerald,
                         onPrimary: Colors.white,
-                        surface: AppTheme.surface,
-                        onSurface: AppTheme.textPrimary,
+                        surface: colors.surface,
+                        onSurface: colors.textPrimary,
                       ),
                     ),
                     child: child!,
@@ -144,8 +145,8 @@ class DashboardPage extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   formatter.format(appState.selectedDate),
-                  style: const TextStyle(
-                    color: AppTheme.textPrimary,
+                  style: TextStyle(
+                    color: colors.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -156,7 +157,7 @@ class DashboardPage extends StatelessWidget {
 
           // Next Day Button (Enabled unless selectedDate is today or future)
           IconButton(
-            icon: const Icon(Icons.chevron_right, color: AppTheme.textPrimary),
+            icon: Icon(Icons.chevron_right, color: colors.textPrimary),
             onPressed: () => appState.nextDay(),
           ),
         ],
@@ -170,6 +171,7 @@ class DashboardPage extends StatelessWidget {
     final int goal = appState.calorieGoal;
     final double percent = goal > 0 ? (consumed / goal).clamp(0.0, 1.0) : 0.0;
     final int remaining = goal - consumed;
+    final colors = AppTheme.of(context);
 
     return Container(
       width: double.infinity,
@@ -180,7 +182,7 @@ class DashboardPage extends StatelessWidget {
           Text(
             AppLocalizations.of(context)!.calorieConsumption,
             style: TextStyle(
-              color: AppTheme.textSecondary,
+              color: colors.textSecondary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -208,18 +210,15 @@ class DashboardPage extends StatelessWidget {
                 children: [
                   Text(
                     '$consumed',
-                    style: const TextStyle(
-                      color: AppTheme.textPrimary,
+                    style: TextStyle(
+                      color: colors.textPrimary,
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context)!.ofKcal(goal),
-                    style: const TextStyle(
-                      color: AppTheme.textMuted,
-                      fontSize: 13,
-                    ),
+                    style: TextStyle(color: colors.textMuted, fontSize: 13),
                   ),
                 ],
               ),
@@ -249,7 +248,7 @@ class DashboardPage extends StatelessWidget {
                       )!.kcalOverBudget(remaining.abs()),
                 style: TextStyle(
                   color: remaining >= 0
-                      ? AppTheme.textPrimary
+                      ? colors.textPrimary
                       : AppTheme.accentRed,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
@@ -264,6 +263,7 @@ class DashboardPage extends StatelessWidget {
 
   // Widget 3: Macronutrient Goals Sliders
   Widget _buildMacrosProgressCard(BuildContext context, AppState appState) {
+    final colors = AppTheme.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -274,7 +274,7 @@ class DashboardPage extends StatelessWidget {
           Text(
             AppLocalizations.of(context)!.macroDistribution,
             style: TextStyle(
-              color: AppTheme.textSecondary,
+              color: colors.textSecondary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -287,6 +287,7 @@ class DashboardPage extends StatelessWidget {
             consumed: appState.totalProteinConsumed,
             goal: appState.proteinGoal,
             color: AppTheme.accentBlue,
+            textColor: colors.textPrimary,
           ),
           const SizedBox(height: 15),
 
@@ -296,6 +297,7 @@ class DashboardPage extends StatelessWidget {
             consumed: appState.totalCarbsConsumed,
             goal: appState.carbsGoal,
             color: AppTheme.accentAmber,
+            textColor: colors.textPrimary,
           ),
           const SizedBox(height: 15),
 
@@ -305,6 +307,7 @@ class DashboardPage extends StatelessWidget {
             consumed: appState.totalFatConsumed,
             goal: appState.fatGoal,
             color: AppTheme.accentRed,
+            textColor: colors.textPrimary,
           ),
         ],
       ),
@@ -316,6 +319,7 @@ class DashboardPage extends StatelessWidget {
     required int consumed,
     required int goal,
     required Color color,
+    required Color textColor,
   }) {
     final double fraction = goal > 0 ? (consumed / goal).clamp(0.0, 1.0) : 0.0;
     final int percent = (fraction * 100).toInt();
@@ -328,8 +332,8 @@ class DashboardPage extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
-                color: AppTheme.textPrimary,
+              style: TextStyle(
+                color: textColor,
                 fontWeight: FontWeight.w500,
                 fontSize: 13,
               ),
@@ -392,6 +396,7 @@ class DashboardPage extends StatelessWidget {
 
     final int goal = appState.calorieGoal;
     final int maxVal = [goal, ...dailyTotals].reduce((a, b) => a > b ? a : b);
+    final colors = AppTheme.of(context);
 
     return Container(
       width: double.infinity,
@@ -403,7 +408,7 @@ class DashboardPage extends StatelessWidget {
           Text(
             AppLocalizations.of(context)!.calorieTrend,
             style: TextStyle(
-              color: AppTheme.textSecondary,
+              color: colors.textSecondary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -438,9 +443,9 @@ class DashboardPage extends StatelessWidget {
                       // Hover value or visual top label
                       Text(
                         calories > 0 ? '$calories' : '',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 9,
-                          color: AppTheme.textMuted,
+                          color: colors.textMuted,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -492,7 +497,7 @@ class DashboardPage extends StatelessWidget {
                           fontSize: 12,
                           color: isSelectedDate
                               ? AppTheme.accentEmerald
-                              : AppTheme.textSecondary,
+                              : colors.textSecondary,
                           fontWeight: isSelectedDate
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -512,6 +517,7 @@ class DashboardPage extends StatelessWidget {
   // Widget 5: Quick Meals Logs for the Selected Day
   Widget _buildDayQuickLogsCard(BuildContext context, AppState appState) {
     final meals = appState.mealsForSelectedDate;
+    final colors = AppTheme.of(context);
 
     return Container(
       width: double.infinity,
@@ -526,14 +532,14 @@ class DashboardPage extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.dayLogSummary,
                 style: TextStyle(
-                  color: AppTheme.textSecondary,
+                  color: colors.textSecondary,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 AppLocalizations.of(context)!.logs(meals.length),
-                style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
+                style: TextStyle(color: colors.textMuted, fontSize: 12),
               ),
             ],
           ),
@@ -547,13 +553,13 @@ class DashboardPage extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.restaurant_outlined,
-                      color: AppTheme.textMuted.withValues(alpha: 0.5),
+                      color: colors.textMuted.withValues(alpha: 0.5),
                       size: 36,
                     ),
                     const SizedBox(height: 10),
                     Text(
                       AppLocalizations.of(context)!.noMealsLogged,
-                      style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
+                      style: TextStyle(color: colors.textMuted, fontSize: 13),
                     ),
                   ],
                 ),
@@ -579,7 +585,7 @@ class DashboardPage extends StatelessWidget {
                         width: 46,
                         height: 46,
                         decoration: BoxDecoration(
-                          color: AppTheme.surfaceLight,
+                          color: colors.surfaceLight,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Colors.white12, width: 0.5),
                         ),
@@ -608,8 +614,8 @@ class DashboardPage extends StatelessWidget {
                               meal.foodName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: AppTheme.textPrimary,
+                              style: TextStyle(
+                                color: colors.textPrimary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -619,8 +625,8 @@ class DashboardPage extends StatelessWidget {
                               AppLocalizations.of(
                                 context,
                               )!.perGram(meal.carbs, meal.fat, meal.protein),
-                              style: const TextStyle(
-                                color: AppTheme.textMuted,
+                              style: TextStyle(
+                                color: colors.textMuted,
                                 fontSize: 11,
                               ),
                             ),

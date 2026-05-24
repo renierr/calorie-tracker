@@ -374,7 +374,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportDbBtn => 'Download Database Copy';
 
   @override
-  String get dbExported => 'Database copied to Downloads folder.';
+  String get dbExported => 'Database exported successfully.';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get themeMode => 'Theme';
+
+  @override
+  String get themeSystem => 'System Default';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
 
   @override
   String get sidebarDashboard => 'Dashboard';
