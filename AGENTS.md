@@ -222,7 +222,7 @@ When submitting changes to this codebase, you **must** verify compilation and st
 1.  **Formatting**:
     Ensure code complies with Dart conventions:
     ```bash
-    flutter format ./lib
+    dart format ./lib
     ```
 
 2.  **Analysis**:

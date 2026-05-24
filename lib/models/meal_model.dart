@@ -1,6 +1,6 @@
-import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:math' as dart_math;
+import 'package:flutter/foundation.dart';
 
 class Meal {
   final int? id;
@@ -149,7 +149,7 @@ class Meal {
       final base64Str = parts[1];
       return base64Decode(base64Str);
     } catch (e) {
-      print('[MealModel] Failed to decode base64 image: $e');
+      debugPrint('[MealModel] Failed to decode base64 image: $e');
       return null;
     }
   }
