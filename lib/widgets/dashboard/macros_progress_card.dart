@@ -14,7 +14,7 @@ class MacrosProgressCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,6 +30,7 @@ class MacrosProgressCard extends StatelessWidget {
 
           // Protein bar
           _buildMacroSlider(
+            context: context,
             label: AppLocalizations.of(context)!.protein,
             consumed: appState.totalProteinConsumed,
             goal: appState.proteinGoal,
@@ -40,6 +41,7 @@ class MacrosProgressCard extends StatelessWidget {
 
           // Carbs bar
           _buildMacroSlider(
+            context: context,
             label: AppLocalizations.of(context)!.carbs,
             consumed: appState.totalCarbsConsumed,
             goal: appState.carbsGoal,
@@ -50,6 +52,7 @@ class MacrosProgressCard extends StatelessWidget {
 
           // Fat bar
           _buildMacroSlider(
+            context: context,
             label: AppLocalizations.of(context)!.fat,
             consumed: appState.totalFatConsumed,
             goal: appState.fatGoal,
@@ -62,6 +65,7 @@ class MacrosProgressCard extends StatelessWidget {
   }
 
   Widget _buildMacroSlider({
+    required BuildContext context,
     required String label,
     required int consumed,
     required int goal,
@@ -102,7 +106,9 @@ class MacrosProgressCard extends StatelessWidget {
             children: [
               Container(
                 height: 10,
-                color: Colors.white.withValues(alpha: 0.05),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white.withValues(alpha: 0.05)
+                    : Colors.black.withValues(alpha: 0.05),
               ),
               FractionallySizedBox(
                 widthFactor: fraction,

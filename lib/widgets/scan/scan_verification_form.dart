@@ -122,7 +122,10 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(showGlow: true),
+      decoration: AppTheme.premiumCardDecoration(
+        context: context,
+        showGlow: true,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -304,7 +307,11 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
               decoration: BoxDecoration(
                 color: colors.surfaceLight.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                border: Border.all(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : Colors.black.withValues(alpha: 0.08),
+                ),
               ),
               child: Row(
                 children: [
@@ -351,8 +358,12 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                 child: OutlinedButton(
                   onPressed: widget.onDiscard,
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    side: const BorderSide(color: Colors.white24),
+                    foregroundColor: colors.textPrimary,
+                    side: BorderSide(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white24
+                          : Colors.black26,
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

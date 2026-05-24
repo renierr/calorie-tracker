@@ -46,7 +46,7 @@ class TrendChartCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,7 +75,9 @@ class TrendChartCard extends StatelessWidget {
                 selectedColor: AppTheme.accentEmerald,
                 unselectedColor: AppTheme.accentBlue,
                 textColor: colors.textMuted,
-                gridColor: Colors.white.withValues(alpha: 0.04),
+                gridColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white.withValues(alpha: 0.04)
+                    : Colors.black.withValues(alpha: 0.04),
               ),
             ),
           ),

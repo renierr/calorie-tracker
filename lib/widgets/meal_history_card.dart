@@ -41,6 +41,7 @@ class MealHistoryCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: AppTheme.premiumCardDecoration(
+          context: context,
           showGlow: isSelectionMode && isSelected,
         ),
         child: Row(
@@ -49,7 +50,7 @@ class MealHistoryCard extends StatelessWidget {
             if (isSelectionMode)
               Padding(
                 padding: const EdgeInsets.only(top: 2, right: 12),
-                child: _buildSelectionIndicator(isSelected),
+                child: _buildSelectionIndicator(context, isSelected),
               ),
             Expanded(
               child: Column(
@@ -78,7 +79,7 @@ class MealHistoryCard extends StatelessWidget {
                           vertical: 3,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
+                          color: colors.surfaceLight,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
@@ -109,7 +110,11 @@ class MealHistoryCard extends StatelessWidget {
                             color: colors.surfaceLight,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: Colors.white12,
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white12
+                                  : Colors.black.withValues(alpha: 0.08),
                               width: 0.5,
                             ),
                           ),
@@ -188,7 +193,7 @@ class MealHistoryCard extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 12),
-                  const Divider(color: Colors.white10, height: 1),
+                  Divider(color: colors.surfaceLight, height: 1),
                   const SizedBox(height: 10),
 
                   // Action Toolbar Footer
@@ -256,7 +261,7 @@ class MealHistoryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionIndicator(bool isSelected) {
+  Widget _buildSelectionIndicator(BuildContext context, bool isSelected) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
       width: 24,
@@ -265,7 +270,11 @@ class MealHistoryCard extends StatelessWidget {
         color: isSelected ? AppTheme.accentEmerald : Colors.transparent,
         shape: BoxShape.circle,
         border: Border.all(
-          color: isSelected ? AppTheme.accentEmerald : Colors.white30,
+          color: isSelected
+              ? AppTheme.accentEmerald
+              : (Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white30
+                    : Colors.black26),
           width: 2,
         ),
       ),

@@ -19,7 +19,10 @@ class _ApiConfigCardState extends State<ApiConfigCard> {
     final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
+      decoration: AppTheme.premiumCardDecoration(
+        context: context,
+        color: colors.surface,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

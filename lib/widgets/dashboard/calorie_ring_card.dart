@@ -19,7 +19,10 @@ class CalorieRingCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-      decoration: AppTheme.premiumCardDecoration(showGlow: percent >= 1.0),
+      decoration: AppTheme.premiumCardDecoration(
+        context: context,
+        showGlow: percent >= 1.0,
+      ),
       child: Column(
         children: [
           Text(
@@ -42,7 +45,10 @@ class CalorieRingCard extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: percent,
                   strokeWidth: 14,
-                  backgroundColor: Colors.white.withValues(alpha: 0.05),
+                  backgroundColor:
+                      Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withValues(alpha: 0.05)
+                      : Colors.black.withValues(alpha: 0.05),
                   valueColor: const AlwaysStoppedAnimation<Color>(
                     AppTheme.accentEmerald,
                   ),

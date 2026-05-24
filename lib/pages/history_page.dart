@@ -116,6 +116,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final List<Meal> filteredMeals = _getFilteredMeals(appState.meals);
+    final colors = AppTheme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -157,7 +158,7 @@ class _HistoryPageState extends State<HistoryPage> {
               },
               child: Text(
                 AppLocalizations.of(context)!.deselectAll,
-                style: const TextStyle(color: Colors.white70),
+                style: TextStyle(color: colors.textSecondary),
               ),
             ),
         ],
@@ -252,7 +253,10 @@ class _HistoryPageState extends State<HistoryPage> {
     final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: AppTheme.premiumCardDecoration(color: colors.surface),
+      decoration: AppTheme.premiumCardDecoration(
+        context: context,
+        color: colors.surface,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -414,6 +418,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
       decoration: AppTheme.premiumCardDecoration(
+        context: context,
         color: colors.surfaceLight.withValues(alpha: 0.4),
       ),
       child: Row(

@@ -29,8 +29,8 @@ class ResponsiveLayout extends StatelessWidget {
                   width: 240,
                   decoration: BoxDecoration(
                     color: colors.surface,
-                    border: const Border(
-                      right: BorderSide(color: Colors.white10, width: 1),
+                    border: Border(
+                      right: BorderSide(color: colors.surfaceLight, width: 1),
                     ),
                   ),
                   child: Column(
@@ -81,7 +81,7 @@ class ResponsiveLayout extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Divider(color: Colors.white10, height: 1),
+                      Divider(color: colors.surfaceLight, height: 1),
                       const SizedBox(height: 20),
                       _buildSidebarItem(
                         context: context,

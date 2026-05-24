@@ -18,7 +18,7 @@ class DateNavigationStrip extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(context: context),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

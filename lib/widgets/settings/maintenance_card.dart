@@ -14,6 +14,7 @@ class MaintenanceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(
+        context: context,
         color: colors.surface,
         glowColor: AppTheme.accentRed,
       ),

@@ -244,7 +244,7 @@ class _ScanPageState extends State<ScanPage> {
     final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -289,6 +289,7 @@ class _ScanPageState extends State<ScanPage> {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: AppTheme.premiumCardDecoration(
+              context: context,
               glowColor: AppTheme.accentRed,
             ),
             child: Column(

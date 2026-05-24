@@ -28,7 +28,7 @@ class HistoryFilterPanel extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         children: [
           Row(

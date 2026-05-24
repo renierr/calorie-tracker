@@ -17,7 +17,7 @@ class DayQuickLogsCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(),
+      decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -68,7 +68,7 @@ class DayQuickLogsCard extends StatelessWidget {
                   ? 3
                   : meals.length, // Show up to 3 quick logs
               separatorBuilder: (context, index) =>
-                  const Divider(color: Colors.white10, height: 1),
+                  Divider(color: colors.surfaceLight, height: 1),
               itemBuilder: (context, index) {
                 final Meal meal = meals[index];
                 return Padding(
@@ -82,7 +82,13 @@ class DayQuickLogsCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: colors.surfaceLight,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.white12, width: 0.5),
+                          border: Border.all(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white12
+                                : Colors.black.withValues(alpha: 0.08),
+                            width: 0.5,
+                          ),
                         ),
                         child: meal.imageBytes != null
                             ? ClipRRect(

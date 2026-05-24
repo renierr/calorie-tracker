@@ -51,27 +51,33 @@ class AppTheme {
 
   // Card decoration with glassmorphism glow
   static BoxDecoration premiumCardDecoration({
+    required BuildContext context,
     Color? color,
     double borderRadius = 16.0,
     bool showGlow = false,
     Color glowColor = accentEmerald,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = of(context);
     return BoxDecoration(
-      color: color,
+      color: color ?? colors.surface,
       borderRadius: BorderRadius.circular(borderRadius),
-      border: Border.all(color: const Color(0x14FFFFFF), width: 1),
+      border: Border.all(
+        color: isDark ? const Color(0x14FFFFFF) : const Color(0x0F000000),
+        width: 1,
+      ),
       boxShadow: [
         if (showGlow)
           BoxShadow(
-            color: glowColor.withValues(alpha: 0.15),
+            color: glowColor.withValues(alpha: isDark ? 0.15 : 0.12),
             blurRadius: 20,
             spreadRadius: 2,
             offset: const Offset(0, 4),
           )
         else
           BoxShadow(
-            color: const Color(0x33000000),
-            blurRadius: 10,
+            color: isDark ? const Color(0x33000000) : const Color(0x0D000000),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
       ],

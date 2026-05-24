@@ -27,14 +27,7 @@ class ScanImageSelector extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 260,
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.08),
-          width: 1,
-        ),
-      ),
+      decoration: AppTheme.premiumCardDecoration(context: context),
       child: imageBytes == null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +61,7 @@ class ScanImageSelector extends StatelessWidget {
                       onPressed: onPickGallery,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: colors.surfaceLight,
+                        foregroundColor: colors.textPrimary,
                       ),
                     ),
                     const SizedBox(width: 12),
