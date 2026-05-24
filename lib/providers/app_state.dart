@@ -22,6 +22,7 @@ class AppState extends ChangeNotifier {
   static const String _keySyncServerUrl = 'sync_server_url';
   static const String _keySyncUserId = 'sync_user_id';
   static const String _keyLastSyncedTime = 'last_synced_time';
+  static const String _keySyncEnabled = 'sync_enabled';
 
   // State variables
   String _geminiApiKey = '';
@@ -37,6 +38,7 @@ class AppState extends ChangeNotifier {
   String _syncUserId = 'user-1';
   int? _lastSyncedTime;
   bool _isSyncing = false;
+  bool _syncEnabled = false;
 
   List<Meal> _meals = [];
   bool _isLoading = false;
@@ -65,6 +67,7 @@ class AppState extends ChangeNotifier {
   String get syncUserId => _syncUserId;
   int? get lastSyncedTime => _lastSyncedTime;
   bool get isSyncing => _isSyncing;
+  bool get syncEnabled => _syncEnabled;
 
   // Filtered meals based on selected day (at midnight local time)
   List<Meal> get mealsForSelectedDate {
@@ -97,9 +100,22 @@ class AppState extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
 
-    // Auto sync on startup if enabled
-    if (_syncServerUrl.isNotEmpty) {
-      syncWithBackend();
+    // Auto sync on startup if backend is enabled and reachable
+    if (_syncEnabled && _syncServerUrl.isNotEmpty) {
+      _trySyncIfAvailable();
+    }
+  }
+
+  // Check backend health before syncing (used for non-manual triggers)
+  Future<void> _trySyncIfAvailable() async {
+    if (!_syncEnabled || _syncServerUrl.isEmpty) return;
+    try {
+      final available = await SyncService.isBackendAvailable(_syncServerUrl);
+      if (available) {
+        await syncWithBackend();
+      }
+    } catch (e) {
+      debugPrint('[AppState] Background sync skipped: $e');
     }
   }
 
@@ -119,6 +135,7 @@ class AppState extends ChangeNotifier {
     _syncServerUrl = prefs.getString(_keySyncServerUrl) ?? '';
     _syncUserId = prefs.getString(_keySyncUserId) ?? 'user-1';
     _lastSyncedTime = prefs.getInt(_keyLastSyncedTime);
+    _syncEnabled = prefs.getBool(_keySyncEnabled) ?? false;
     notifyListeners();
   }
 
@@ -134,16 +151,23 @@ class AppState extends ChangeNotifier {
     await prefs.setString(_keySyncServerUrl, _syncServerUrl);
     await prefs.setString(_keySyncUserId, _syncUserId);
     notifyListeners();
+  }
 
-    // Auto sync upon updating configuration
-    if (_syncServerUrl.isNotEmpty) {
-      syncWithBackend();
+  // Toggle sync enabled/disabled
+  Future<void> setSyncEnabled(bool enabled) async {
+    _syncEnabled = enabled;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keySyncEnabled, enabled);
+
+    if (_syncEnabled && _syncServerUrl.isNotEmpty) {
+      _trySyncIfAvailable();
     }
   }
 
   // Synchronize database with Bun server
   Future<Map<String, int>?> syncWithBackend({bool manual = false}) async {
-    if (_syncServerUrl.isEmpty) return null;
+    if (!_syncEnabled || _syncServerUrl.isEmpty) return null;
 
     _isSyncing = true;
     notifyListeners();
@@ -211,8 +235,8 @@ class AppState extends ChangeNotifier {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _dbHelper.insertMeal(unsyncedMeal);
     await loadMeals();
-    if (_syncServerUrl.isNotEmpty) {
-      syncWithBackend();
+    if (_syncEnabled) {
+      _trySyncIfAvailable();
     }
   }
 
@@ -220,16 +244,16 @@ class AppState extends ChangeNotifier {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _dbHelper.updateMeal(unsyncedMeal);
     await loadMeals();
-    if (_syncServerUrl.isNotEmpty) {
-      syncWithBackend();
+    if (_syncEnabled) {
+      _trySyncIfAvailable();
     }
   }
 
   Future<void> deleteMeal(int id) async {
     await _dbHelper.deleteMeal(id);
     await loadMeals();
-    if (_syncServerUrl.isNotEmpty) {
-      syncWithBackend();
+    if (_syncEnabled) {
+      _trySyncIfAvailable();
     }
   }
 

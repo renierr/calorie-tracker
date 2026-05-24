@@ -23,7 +23,12 @@ class DashboardPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () => appState.loadMeals(),
+            onPressed: () {
+              appState.loadMeals();
+              if (appState.syncEnabled) {
+                appState.syncWithBackend();
+              }
+            },
             tooltip: AppLocalizations.of(context)!.reloadDatabase,
           ),
         ],

@@ -132,14 +132,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const SizedBox(height: 20),
 
-              // Panel 4: Reset database safety controls
-              MaintenanceCard(appState: appState),
-              const SizedBox(height: 20),
-
-              // Panel 5: Export database
-              ExportCard(appState: appState),
-              const SizedBox(height: 30),
-
               // Bottom Save Settings Button
               SizedBox(
                 width: double.infinity,
@@ -150,6 +142,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   onPressed: () => _saveSettings(appState),
                 ),
               ),
+              const SizedBox(height: 30),
+
+              // Panel 4: Reset database safety controls
+              MaintenanceCard(appState: appState),
+              const SizedBox(height: 20),
+
+              // Panel 5: Export database
+              ExportCard(appState: appState),
               const SizedBox(height: 30),
             ],
           ),

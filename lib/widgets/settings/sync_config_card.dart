@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../theme/theme.dart';
@@ -82,6 +81,7 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
     final bool syncing = widget.appState.isSyncing || _isSyncingLocal;
+    final bool enabled = widget.appState.syncEnabled;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -100,13 +100,24 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
                 size: 20,
               ),
               const SizedBox(width: 10),
-              Text(
-                AppLocalizations.of(context)!.syncSettings,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)!.syncSettings,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
+              ),
+              Switch(
+                value: widget.appState.syncEnabled,
+                activeTrackColor:
+                    AppTheme.accentEmerald.withValues(alpha: 0.5),
+                activeThumbColor: AppTheme.accentEmerald,
+                onChanged: (val) {
+                  widget.appState.setSyncEnabled(val);
+                },
               ),
             ],
           ),
@@ -122,6 +133,7 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
           const SizedBox(height: 20),
           TextField(
             controller: widget.serverUrlController,
+            enabled: enabled,
             keyboardType: TextInputType.url,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.syncServerUrlHint,
@@ -136,6 +148,7 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
           const SizedBox(height: 15),
           TextField(
             controller: widget.userIdController,
+            enabled: enabled,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.syncUserIdHint,
               labelText: AppLocalizations.of(context)!.syncUserId,
@@ -158,7 +171,7 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
               ),
               const SizedBox(width: 10),
               ElevatedButton.icon(
-                onPressed: syncing ? null : _triggerManualSync,
+                onPressed: (syncing || !enabled) ? null : _triggerManualSync,
                 icon: syncing
                     ? const SizedBox(
                         width: 16,
@@ -192,13 +205,13 @@ class _SyncConfigCardState extends State<SyncConfigCard> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: _syncSuccess
-                    ? AppTheme.accentEmerald.withOpacity(0.1)
-                    : AppTheme.accentRed.withOpacity(0.1),
+                    ? AppTheme.accentEmerald.withValues(alpha: 0.1)
+                    : AppTheme.accentRed.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: _syncSuccess
-                      ? AppTheme.accentEmerald.withOpacity(0.3)
-                      : AppTheme.accentRed.withOpacity(0.3),
+                      ? AppTheme.accentEmerald.withValues(alpha: 0.3)
+                      : AppTheme.accentRed.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
