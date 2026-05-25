@@ -1,16 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 import '../models/meal_model.dart';
+import '../helpers/file_save_helper.dart';
+import '../l10n/app_localizations.dart';
 
 final PdfColor pdfEmerald = PdfColor.fromHex('#10B981');
 
 class PdfService {
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd HH:mm');
 
-  // Generate and download/print a report for a single meal
-  static Future<void> generateSingleMealPdf(Meal meal, int calorieGoal) async {
+  // Generate and download a report for a single meal
+  static Future<void> generateSingleMealPdf(
+    BuildContext context,
+    Meal meal,
+    int calorieGoal,
+  ) async {
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -139,14 +145,34 @@ class PdfService {
       ),
     );
 
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-      name: 'Meal-Report-${meal.shortId}.pdf',
-    );
+    final localizations = AppLocalizations.of(context)!;
+    try {
+      final bytes = await pdf.save();
+      final destPath = await FileSaveHelper.saveFile(
+        suggestedName: 'Meal-Report-${meal.shortId}.pdf',
+        bytes: bytes,
+      );
+      if (destPath == null || !context.mounted) return;
+
+      FileSaveHelper.showSuccessNotification(
+        context: context,
+        savedPath: destPath,
+        androidDownloadMessage: localizations.pdfExportedDownloads,
+        generalMessageBuilder: (displayPath) =>
+            localizations.pdfExportedTo(displayPath),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      FileSaveHelper.showErrorNotification(
+        context: context,
+        errorMessage: localizations.pdfExportFailed(e.toString()),
+      );
+    }
   }
 
-  // Generate and print a summary report over multiple meals (daily or date range)
+  // Generate and download a summary report over multiple meals (daily or date range)
   static Future<void> generateSummaryReport({
+    required BuildContext context,
     required List<Meal> meals,
     required String title,
     required String timeframeStr,
@@ -341,10 +367,29 @@ class PdfService {
       ),
     );
 
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-      name: 'Summary-Nutritional-Report.pdf',
-    );
+    final localizations = AppLocalizations.of(context)!;
+    try {
+      final bytes = await pdf.save();
+      final destPath = await FileSaveHelper.saveFile(
+        suggestedName: 'Summary-Nutritional-Report.pdf',
+        bytes: bytes,
+      );
+      if (destPath == null || !context.mounted) return;
+
+      FileSaveHelper.showSuccessNotification(
+        context: context,
+        savedPath: destPath,
+        androidDownloadMessage: localizations.pdfExportedDownloads,
+        generalMessageBuilder: (displayPath) =>
+            localizations.pdfExportedTo(displayPath),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      FileSaveHelper.showErrorNotification(
+        context: context,
+        errorMessage: localizations.pdfExportFailed(e.toString()),
+      );
+    }
   }
 
   // PDF Layout Helpers

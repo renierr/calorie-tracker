@@ -1183,6 +1183,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Database export failed: {error}'**
   String dbExportFailed(String error);
+
+  /// No description provided for @pdfExportedDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF report exported to Downloads folder!'**
+  String get pdfExportedDownloads;
+
+  /// No description provided for @pdfExportedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF report exported to: {path}'**
+  String pdfExportedTo(String path);
+
+  /// No description provided for @pdfExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF generation failed: {error}'**
+  String pdfExportFailed(String error);
 }
 
 class _AppLocalizationsDelegate

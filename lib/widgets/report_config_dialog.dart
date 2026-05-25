@@ -158,6 +158,7 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
             );
 
             await PdfService.generateSummaryReport(
+              context: context,
               meals: widget.filteredMeals,
               title: _titleController.text.trim(),
               timeframeStr: rangeText,

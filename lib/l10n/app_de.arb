@@ -290,6 +290,23 @@
         "type": "String"
       }
     }
+  },
+  "pdfExportedDownloads": "PDF-Bericht in den Download-Ordner exportiert!",
+  "pdfExportedTo": "PDF-Bericht exportiert nach: {path}",
+  "@pdfExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfExportFailed": "PDF-Generierung fehlgeschlagen: {error}",
+  "@pdfExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
 

@@ -621,4 +621,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String dbExportFailed(String error) {
     return 'Database export failed: $error';
   }
+
+  @override
+  String get pdfExportedDownloads => 'PDF report exported to Downloads folder!';
+
+  @override
+  String pdfExportedTo(String path) {
+    return 'PDF report exported to: $path';
+  }
+
+  @override
+  String pdfExportFailed(String error) {
+    return 'PDF generation failed: $error';
+  }
 }

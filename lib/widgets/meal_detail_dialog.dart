@@ -287,6 +287,7 @@ class MealDetailDialog extends StatelessWidget {
                                   ),
                                 );
                                 await PdfService.generateSingleMealPdf(
+                                  context,
                                   currentMeal,
                                   currentAppState.calorieGoal,
                                 );

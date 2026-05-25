@@ -623,4 +623,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String dbExportFailed(String error) {
     return 'Datenbankexport fehlgeschlagen: $error';
   }
+
+  @override
+  String get pdfExportedDownloads =>
+      'PDF-Bericht in den Download-Ordner exportiert!';
+
+  @override
+  String pdfExportedTo(String path) {
+    return 'PDF-Bericht exportiert nach: $path';
+  }
+
+  @override
+  String pdfExportFailed(String error) {
+    return 'PDF-Generierung fehlgeschlagen: $error';
+  }
 }
