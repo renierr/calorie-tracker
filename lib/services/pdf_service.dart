@@ -11,14 +11,18 @@ import 'pdf/pdf_trend_chart.dart';
 final PdfColor pdfEmerald = PdfColor.fromHex('#10B981');
 
 class PdfService {
-  static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-
   // Generate and download a report for a single meal
   static Future<void> generateSingleMealPdf(
     BuildContext context,
     Meal meal,
     int calorieGoal,
   ) async {
+    final localizations = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final DateFormat localizedDateTimeFormat = DateFormat.yMMMd(
+      locale,
+    ).add_jm();
+
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -35,7 +39,7 @@ class PdfService {
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text(
-                      'Nutritional Meal Report',
+                      localizations.pdfSingleMealReport,
                       style: pw.TextStyle(
                         fontSize: 24,
                         fontWeight: pw.FontWeight.bold,
@@ -60,7 +64,11 @@ class PdfService {
                 ),
                 pw.SizedBox(height: 5),
                 pw.Text(
-                  'Logged on: ${_dateFormat.format(DateTime.fromMillisecondsSinceEpoch(meal.timestamp))}',
+                  localizations.pdfLoggedOn(
+                    localizedDateTimeFormat.format(
+                      DateTime.fromMillisecondsSinceEpoch(meal.timestamp),
+                    ),
+                  ),
                   style: const pw.TextStyle(color: PdfColors.grey600),
                 ),
                 pw.SizedBox(height: 20),
@@ -76,15 +84,24 @@ class PdfService {
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
                           _buildDetailRow(
-                            'Calories',
+                            localizations.caloriesKcal.replaceAll(
+                              ' (kcal)',
+                              '',
+                            ),
                             '${meal.calories} kcal',
                             isHeader: true,
                           ),
-                          _buildDetailRow('Protein', '${meal.protein} g'),
-                          _buildDetailRow('Carbs', '${meal.carbs} g'),
-                          _buildDetailRow('Fat', '${meal.fat} g'),
                           _buildDetailRow(
-                            'AI Confidence',
+                            localizations.protein,
+                            '${meal.protein} g',
+                          ),
+                          _buildDetailRow(
+                            localizations.carbs,
+                            '${meal.carbs} g',
+                          ),
+                          _buildDetailRow(localizations.fat, '${meal.fat} g'),
+                          _buildDetailRow(
+                            localizations.pdfAiConfidence,
                             '${meal.confidence}%',
                           ),
                         ],
@@ -120,7 +137,7 @@ class PdfService {
                 // Meal Notes
                 if (meal.notes != null && meal.notes!.trim().isNotEmpty) ...[
                   pw.Text(
-                    'AI Analysis & Notes',
+                    localizations.pdfNotes,
                     style: pw.TextStyle(
                       fontSize: 14,
                       fontWeight: pw.FontWeight.bold,
@@ -147,7 +164,6 @@ class PdfService {
       ),
     );
 
-    final localizations = AppLocalizations.of(context)!;
     try {
       final bytes = await pdf.save();
       final destPath = await FileSaveHelper.saveFile(
@@ -193,6 +209,10 @@ class PdfService {
     final int totalFat = meals.fold(0, (sum, m) => sum + m.fat);
 
     final localizations = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final DateFormat localizedDateTimeFormat = DateFormat.yMMMd(
+      locale,
+    ).add_jm();
 
     pdf.addPage(
       pw.MultiPage(
@@ -343,7 +363,7 @@ class PdfService {
                 meal: meal,
                 includeImages: includeImages,
                 localizations: localizations,
-                dateFormat: _dateFormat,
+                dateFormat: localizedDateTimeFormat,
               );
             }),
           ];

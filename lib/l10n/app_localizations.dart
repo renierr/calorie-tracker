@@ -998,6 +998,24 @@ abstract class AppLocalizations {
   /// **'Calorie Trend'**
   String get pdfCalorieTrend;
 
+  /// No description provided for @pdfSingleMealReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutritional Meal Report'**
+  String get pdfSingleMealReport;
+
+  /// No description provided for @pdfNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Analysis & Notes'**
+  String get pdfNotes;
+
+  /// No description provided for @pdfAiConfidence.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Confidence'**
+  String get pdfAiConfidence;
+
   /// No description provided for @importLabel.
   ///
   /// In en, this message translates to:

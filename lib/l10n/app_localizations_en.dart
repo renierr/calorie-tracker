@@ -503,6 +503,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pdfCalorieTrend => 'Calorie Trend';
 
   @override
+  String get pdfSingleMealReport => 'Nutritional Meal Report';
+
+  @override
+  String get pdfNotes => 'AI Analysis & Notes';
+
+  @override
+  String get pdfAiConfidence => 'AI Confidence';
+
+  @override
   String get importLabel => 'Import';
 
   @override

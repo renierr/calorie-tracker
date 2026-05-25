@@ -504,6 +504,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pdfCalorieTrend => 'Kalorientrend';
 
   @override
+  String get pdfSingleMealReport => 'Ernährungsbericht der Mahlzeit';
+
+  @override
+  String get pdfNotes => 'KI-Analyse & Notizen';
+
+  @override
+  String get pdfAiConfidence => 'KI-Konfidenz';
+
+  @override
   String get importLabel => 'Importieren';
 
   @override
