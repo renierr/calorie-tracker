@@ -4,6 +4,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../adaptive/adaptive_card_header.dart';
+import '../adaptive/responsive_icon_button.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
@@ -43,41 +44,23 @@ class MaintenanceCard extends StatelessWidget {
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton.icon(
+            child: ResponsiveIconButton(
               icon: const Icon(Icons.delete_forever, color: AppTheme.accentRed),
-              label: Text(
-                AppLocalizations.of(context)!.clearHistory,
-                style: const TextStyle(color: AppTheme.accentRed),
-              ),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppTheme.accentRed, width: 1.2),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              label: AppLocalizations.of(context)!.clearHistory,
+              color: AppTheme.accentRed,
               onPressed: () => _confirmEraseAll(context),
             ),
           ),
           const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton.icon(
+            child: ResponsiveIconButton(
               icon: const Icon(
                 Icons.settings_backup_restore,
                 color: AppTheme.accentRed,
               ),
-              label: Text(
-                AppLocalizations.of(context)!.restoreDbBtn,
-                style: const TextStyle(color: AppTheme.accentRed),
-              ),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppTheme.accentRed, width: 1.2),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              label: AppLocalizations.of(context)!.restoreDbBtn,
+              color: AppTheme.accentRed,
               onPressed: () => _handleRestoreFlow(context),
             ),
           ),

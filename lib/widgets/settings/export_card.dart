@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:path_provider/path_provider.dart';
 import '../adaptive/adaptive_card_header.dart';
+import '../adaptive/responsive_icon_button.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
@@ -46,22 +47,10 @@ class _ExportCardState extends State<ExportCard> {
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton.icon(
+            child: ResponsiveIconButton(
               icon: const Icon(Icons.download, color: AppTheme.accentEmerald),
-              label: Text(
-                AppLocalizations.of(context)!.exportDbBtn,
-                style: const TextStyle(color: AppTheme.accentEmerald),
-              ),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(
-                  color: AppTheme.accentEmerald,
-                  width: 1.2,
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              label: AppLocalizations.of(context)!.exportDbBtn,
+              color: AppTheme.accentEmerald,
               onPressed: _exportDbFlow,
             ),
           ),
