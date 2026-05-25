@@ -171,35 +171,42 @@ class AppAdaptiveLayout extends StatelessWidget {
           );
         }
 
-        return Scaffold(
-          body: _buildPage(currentIndex),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: currentIndex,
-            onDestinationSelected: (index) => appState.selectTab(index),
-            destinations: [
-              NavigationDestination(
-                icon: Icon(Icons.dashboard_outlined),
-                selectedIcon: Icon(Icons.dashboard),
-                label: AppLocalizations.of(context)!.navDashboard,
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.qr_code_scanner_outlined),
-                selectedIcon: Icon(Icons.qr_code_scanner),
-                label: AppLocalizations.of(context)!.navScan,
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.history_outlined),
-                selectedIcon: Icon(Icons.history),
-                label: AppLocalizations.of(context)!.navHistory,
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: useCompactNavLabels
-                    ? AppLocalizations.of(context)!.navSettingsCompact
-                    : AppLocalizations.of(context)!.navSettings,
-              ),
-            ],
+        return PopScope(
+          canPop: currentIndex == 0,
+          onPopInvokedWithResult: (bool didPop, Object? result) {
+            if (didPop) return;
+            appState.selectTab(0);
+          },
+          child: Scaffold(
+            body: _buildPage(currentIndex),
+            bottomNavigationBar: NavigationBar(
+              selectedIndex: currentIndex,
+              onDestinationSelected: (index) => appState.selectTab(index),
+              destinations: [
+                NavigationDestination(
+                  icon: const Icon(Icons.dashboard_outlined),
+                  selectedIcon: const Icon(Icons.dashboard),
+                  label: AppLocalizations.of(context)!.navDashboard,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.qr_code_scanner_outlined),
+                  selectedIcon: const Icon(Icons.qr_code_scanner),
+                  label: AppLocalizations.of(context)!.navScan,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.history_outlined),
+                  selectedIcon: const Icon(Icons.history),
+                  label: AppLocalizations.of(context)!.navHistory,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.settings_outlined),
+                  selectedIcon: const Icon(Icons.settings),
+                  label: useCompactNavLabels
+                      ? AppLocalizations.of(context)!.navSettingsCompact
+                      : AppLocalizations.of(context)!.navSettings,
+                ),
+              ],
+            ),
           ),
         );
       },

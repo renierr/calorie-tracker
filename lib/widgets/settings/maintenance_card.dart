@@ -63,7 +63,10 @@ class MaintenanceCard extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
-              icon: const Icon(Icons.settings_backup_restore, color: AppTheme.accentRed),
+              icon: const Icon(
+                Icons.settings_backup_restore,
+                color: AppTheme.accentRed,
+              ),
               label: Text(
                 AppLocalizations.of(context)!.restoreDbBtn,
                 style: const TextStyle(color: AppTheme.accentRed),
@@ -154,22 +157,34 @@ class MaintenanceCard extends StatelessWidget {
         }
 
         if (backupDir == null || !await backupDir.exists()) {
-          _showSnackBar(scaffoldMessenger, localizations.noBackupsFound, isError: true);
+          _showSnackBar(
+            scaffoldMessenger,
+            localizations.noBackupsFound,
+            isError: true,
+          );
           return;
         }
 
         final List<FileSystemEntity> files = await backupDir.list().toList();
         final List<File> dbFiles = files
             .whereType<File>()
-            .where((file) =>
-                p.basename(file.path).startsWith('nutriscan_db_') &&
-                file.path.endsWith('.db'))
+            .where(
+              (file) =>
+                  p.basename(file.path).startsWith('nutriscan_db_') &&
+                  file.path.endsWith('.db'),
+            )
             .toList();
 
-        dbFiles.sort((a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()));
+        dbFiles.sort(
+          (a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()),
+        );
 
         if (dbFiles.isEmpty) {
-          _showSnackBar(scaffoldMessenger, localizations.noBackupsFound, isError: true);
+          _showSnackBar(
+            scaffoldMessenger,
+            localizations.noBackupsFound,
+            isError: true,
+          );
           return;
         }
 
@@ -184,14 +199,20 @@ class MaintenanceCard extends StatelessWidget {
 
       await appState.restoreDatabase(selectedPath);
 
-      _showSnackBar(scaffoldMessenger, localizations.dbRestored, isError: false);
+      _showSnackBar(
+        scaffoldMessenger,
+        localizations.dbRestored,
+        isError: false,
+      );
     } catch (e) {
       _showSnackBar(scaffoldMessenger, 'Restore failed: $e', isError: true);
     }
   }
 
   Future<String?> _showFileSelectionDialog(
-      BuildContext context, List<File> files) async {
+    BuildContext context,
+    List<File> files,
+  ) async {
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
 
@@ -242,7 +263,10 @@ class MaintenanceCard extends StatelessWidget {
                   ),
                   child: ListTile(
                     dense: true,
-                    leading: const Icon(Icons.backup, color: AppTheme.accentEmerald),
+                    leading: const Icon(
+                      Icons.backup,
+                      color: AppTheme.accentEmerald,
+                    ),
                     title: Text(
                       filename,
                       style: TextStyle(
@@ -254,8 +278,13 @@ class MaintenanceCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: Text(
-                      displayDate.isNotEmpty ? '$displayDate  •  $sizeKb KB' : '$sizeKb KB',
-                      style: TextStyle(color: colors.textSecondary, fontSize: 11),
+                      displayDate.isNotEmpty
+                          ? '$displayDate  •  $sizeKb KB'
+                          : '$sizeKb KB',
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 11,
+                      ),
                     ),
                     trailing: const Icon(Icons.chevron_right, size: 16),
                     onTap: () {
@@ -327,8 +356,11 @@ class MaintenanceCard extends StatelessWidget {
     return result ?? false;
   }
 
-  void _showSnackBar(ScaffoldMessengerState scaffoldMessenger, String message,
-      {required bool isError}) {
+  void _showSnackBar(
+    ScaffoldMessengerState scaffoldMessenger,
+    String message, {
+    required bool isError,
+  }) {
     scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(message),
