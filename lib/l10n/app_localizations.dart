@@ -773,7 +773,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportDbDesc.
   ///
   /// In en, this message translates to:
-  /// **'Download a copy of the complete meal database for backup or inspection.'**
+  /// **'Download a copy of the database. On Desktop, a save dialog will open. On Android, the copy is stored in your device\'s Android/data folder for backup.'**
   String get exportDbDesc;
 
   /// No description provided for @exportDbBtn.

@@ -118,7 +118,7 @@
   "english": "Englisch",
   "german": "Deutsch",
   "exportDb": "SQLite-Datenbank exportieren",
-  "exportDbDesc": "Lade eine Kopie der gesamten Mahlzeitendatenbank zur Sicherung oder Überprüfung herunter.",
+  "exportDbDesc": "Lade eine Kopie der Datenbank herunter. Auf dem Desktop öffnet sich ein Speicher-Dialog. Auf Android wird sie im Android/data Ordner des Geräts gesichert.",
   "exportDbBtn": "Datenbank-Kopie herunterladen",
   "dbExported": "Datenbank erfolgreich exportiert.",
 

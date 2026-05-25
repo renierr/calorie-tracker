@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:path_provider/path_provider.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
@@ -70,12 +72,25 @@ class _ExportCardState extends State<ExportCard> {
 
   Future<void> _exportDbFlow() async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final location = await getSaveLocation(
-      suggestedName: 'nutriscan_db_$timestamp.db',
-    );
-    if (location == null) return;
+    String? destPath;
+
     try {
-      await widget.appState.exportDatabase(destPath: location.path);
+      if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+        final location = await getSaveLocation(
+          suggestedName: 'nutriscan_db_$timestamp.db',
+        );
+        if (location == null) return;
+        destPath = location.path;
+      } else if (Platform.isAndroid) {
+        final dir = await getExternalStorageDirectory();
+        if (dir == null) throw Exception("External storage not available");
+        destPath = '${dir.path}/nutriscan_db_$timestamp.db';
+      } else {
+        final dir = await getApplicationDocumentsDirectory();
+        destPath = '${dir.path}/nutriscan_db_$timestamp.db';
+      }
+
+      await widget.appState.exportDatabase(destPath: destPath);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -380,7 +380,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get exportDbDesc =>
-      'Lade eine Kopie der gesamten Mahlzeitendatenbank zur Sicherung oder Überprüfung herunter.';
+      'Lade eine Kopie der Datenbank herunter. Auf dem Desktop öffnet sich ein Speicher-Dialog. Auf Android wird sie im Android/data Ordner des Geräts gesichert.';
 
   @override
   String get exportDbBtn => 'Datenbank-Kopie herunterladen';

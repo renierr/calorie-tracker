@@ -379,7 +379,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportDbDesc =>
-      'Download a copy of the complete meal database for backup or inspection.';
+      'Download a copy of the database. On Desktop, a save dialog will open. On Android, the copy is stored in your device\'s Android/data folder for backup.';
 
   @override
   String get exportDbBtn => 'Download Database Copy';
