@@ -1,13 +1,16 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:path_provider/path_provider.dart';
 import '../widgets/custom_notification.dart';
 
 class FileSaveHelper {
+  static const _channel = MethodChannel('de.renier.calorie_tracker/file_save');
+
   /// Resolves the save path for a file and optionally writes [bytes] to it.
-  /// Checks for actual write access on Android before selecting a path.
+  /// On Android, uses MediaStore to save to public Downloads folder.
+  /// On Desktop, uses native Save As dialog.
   /// Returns the resolved save path, or null if the user cancelled (on Desktop).
   static Future<String?> saveFile({
     required String suggestedName,
@@ -28,57 +31,17 @@ class FileSaveHelper {
         await file.writeAsBytes(bytes);
       }
     } else if (Platform.isAndroid) {
-      final Directory publicDownloadDir = Directory(
-        '/storage/emulated/0/Download',
-      );
-      File? savedFile;
+      if (bytes == null) return null;
 
-      // 1. Try public Download folder with write check
-      if (await publicDownloadDir.exists()) {
-        try {
-          final File file = File('${publicDownloadDir.path}/$suggestedName');
-          if (bytes != null) {
-            await file.writeAsBytes(bytes);
-          } else {
-            await file.writeAsString('temp');
-            await file.delete();
-          }
-          savedFile = file;
-        } catch (_) {
-          // Silently swallow to fallback
-        }
-      }
+      // Determine MIME type from file extension
+      final mimeType = _mimeTypeFromName(suggestedName);
 
-      // 2. Fallback to external storage directory
-      if (savedFile == null) {
-        try {
-          final Directory? appDir = await getExternalStorageDirectory();
-          if (appDir != null) {
-            final File file = File('${appDir.path}/$suggestedName');
-            if (bytes != null) {
-              await file.writeAsBytes(bytes);
-            } else {
-              await file.writeAsString('temp');
-              await file.delete();
-            }
-            savedFile = file;
-          }
-        } catch (_) {
-          // Silently swallow to fallback
-        }
-      }
-
-      // 3. Fallback to app documents directory
-      if (savedFile == null) {
-        final Directory docDir = await getApplicationDocumentsDirectory();
-        final File file = File('${docDir.path}/$suggestedName');
-        if (bytes != null) {
-          await file.writeAsBytes(bytes);
-        }
-        savedFile = file;
-      }
-
-      destPath = savedFile.path;
+      // Use MediaStore via platform channel for proper Downloads access
+      destPath = await _channel.invokeMethod<String>('saveToDownloads', {
+        'bytes': bytes,
+        'fileName': suggestedName,
+        'mimeType': mimeType,
+      });
     } else {
       // iOS or other platforms
       final Directory docDir = await getApplicationDocumentsDirectory();
@@ -92,6 +55,29 @@ class FileSaveHelper {
     return destPath;
   }
 
+  /// Returns MIME type based on file extension.
+  static String _mimeTypeFromName(String fileName) {
+    final ext = fileName.split('.').last.toLowerCase();
+    switch (ext) {
+      case 'pdf':
+        return 'application/pdf';
+      case 'db':
+      case 'sqlite':
+        return 'application/x-sqlite3';
+      case 'json':
+        return 'application/json';
+      case 'csv':
+        return 'text/csv';
+      case 'png':
+        return 'image/png';
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+      default:
+        return 'application/octet-stream';
+    }
+  }
+
   /// Formats the success message and shows a custom notification dialog.
   static void showSuccessNotification({
     required BuildContext context,
@@ -100,8 +86,7 @@ class FileSaveHelper {
     required String Function(String displayPath) generalMessageBuilder,
   }) {
     String message;
-    if (Platform.isAndroid &&
-        savedPath.startsWith('/storage/emulated/0/Download')) {
+    if (Platform.isAndroid) {
       message = androidDownloadMessage;
     } else {
       final displayPath = savedPath.length > 40
