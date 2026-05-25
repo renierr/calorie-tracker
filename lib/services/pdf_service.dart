@@ -221,12 +221,12 @@ class PdfService {
         : localizations.pdfRangeCustom(
             DateFormat.yMMMd(locale).format(
               DateTime.fromMillisecondsSinceEpoch(
-                sortedSummaryMeals.first.timestamp,
+                sortedSummaryMeals.last.timestamp, // newest (end)
               ),
             ),
             DateFormat.yMMMd(locale).format(
               DateTime.fromMillisecondsSinceEpoch(
-                sortedSummaryMeals.last.timestamp,
+                sortedSummaryMeals.first.timestamp, // oldest (start)
               ),
             ),
           );

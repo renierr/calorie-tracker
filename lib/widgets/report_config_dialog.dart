@@ -32,16 +32,25 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
   late final TextEditingController _titleController;
   late final TextEditingController _notesController;
   bool _includeImages = true;
+  bool _isTitleInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(
-      text: widget.filterType == 'today'
-          ? 'Daily Nutritional Summary'
-          : 'Nutritional Analysis Summary',
-    );
+    _titleController = TextEditingController();
     _notesController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isTitleInitialized) {
+      final localizations = AppLocalizations.of(context)!;
+      _titleController.text = widget.filterType == 'today'
+          ? localizations.pdfDailySummary
+          : localizations.pdfAnalysisSummary;
+      _isTitleInitialized = true;
+    }
   }
 
   @override
@@ -142,9 +151,11 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
             } else if (widget.filterType == 'custom' &&
                 widget.customStartDate != null &&
                 widget.customEndDate != null) {
+              final start = widget.customStartDate!.isBefore(widget.customEndDate!) ? widget.customStartDate! : widget.customEndDate!;
+              final end = widget.customStartDate!.isBefore(widget.customEndDate!) ? widget.customEndDate! : widget.customStartDate!;
               rangeText = AppLocalizations.of(context)!.pdfRangeCustom(
-                DateFormat.Md(locale).format(widget.customStartDate!),
-                DateFormat.Md(locale).format(widget.customEndDate!),
+                DateFormat.yMMMd(locale).format(end),
+                DateFormat.yMMMd(locale).format(start),
               );
             } else {
               rangeText = AppLocalizations.of(context)!.pdfAllTime;
