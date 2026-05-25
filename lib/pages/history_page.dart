@@ -48,19 +48,33 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   // Trigger Summary Report Config Modal
-  void _showReportConfigDialog(
+  Future<void> _showReportConfigDialog(
     BuildContext context,
     AppState appState,
     List<Meal> filteredMeals,
-  ) {
+  ) async {
     final List<Meal> mealsToReport;
     if (_selectedMealIds.isNotEmpty) {
-      mealsToReport = appState.meals
+      mealsToReport = filteredMeals
           .where((m) => _selectedMealIds.contains(m.id))
           .toList();
     } else {
-      mealsToReport = filteredMeals;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentEmerald),
+          ),
+        ),
+      );
+      mealsToReport = await appState.getMealsForFilter(includeImages: true);
+      if (context.mounted) {
+        Navigator.of(context).pop(); // dismiss loading
+      }
     }
+
+    if (!context.mounted) return;
 
     showDialog(
       context: context,
@@ -361,14 +375,27 @@ class _HistoryPageState extends State<HistoryPage> {
   ) async {
     final List<Meal> mealsToExport;
     if (_selectedMealIds.isNotEmpty) {
-      mealsToExport = appState.meals
+      mealsToExport = filteredMeals
           .where((m) => _selectedMealIds.contains(m.id))
           .toList();
     } else {
-      mealsToExport = filteredMeals;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentEmerald),
+          ),
+        ),
+      );
+      mealsToExport = await appState.getMealsForFilter(includeImages: true);
+      if (context.mounted) {
+        Navigator.of(context).pop(); // dismiss loading
+      }
     }
 
     if (mealsToExport.isEmpty) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('No meals found to export.'),
@@ -435,7 +462,9 @@ class _HistoryPageState extends State<HistoryPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            AppLocalizations.of(context)!.logsInFilter(filteredMeals.length),
+            AppLocalizations.of(
+              context,
+            )!.logsInFilter(appState.historyTotalCount),
             style: TextStyle(
               color: colors.textPrimary,
               fontWeight: FontWeight.bold,

@@ -247,7 +247,7 @@ class DbHelper {
   }
 
   Future<List<Meal>> getMealsPaginated({
-    required int limit,
+    int? limit,
     int? beforeTimestamp,
     String filterType = 'all',
     DateTime? customStart,
@@ -371,6 +371,67 @@ class DbHelper {
     );
 
     return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
+  }
+
+  Future<int> getMealsCount({
+    String filterType = 'all',
+    DateTime? customStart,
+    DateTime? customEnd,
+  }) async {
+    final Database db = await database;
+    final List<String> whereClauses = ['deleted = 0'];
+    final List<dynamic> whereArgs = [];
+
+    final now = DateTime.now();
+    final todayMidnight = DateTime(now.year, now.month, now.day);
+
+    if (filterType == 'today') {
+      final start = todayMidnight.millisecondsSinceEpoch;
+      final end =
+          todayMidnight.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
+      whereClauses.add('timestamp >= ? AND timestamp <= ?');
+      whereArgs.addAll([start, end]);
+    } else if (filterType == 'yesterday') {
+      final yesterday = todayMidnight.subtract(const Duration(days: 1));
+      final start = yesterday.millisecondsSinceEpoch;
+      final end =
+          yesterday.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
+      whereClauses.add('timestamp >= ? AND timestamp <= ?');
+      whereArgs.addAll([start, end]);
+    } else if (filterType == 'week') {
+      final sevenDaysAgo = todayMidnight.subtract(const Duration(days: 6));
+      final start = sevenDaysAgo.millisecondsSinceEpoch;
+      whereClauses.add('timestamp >= ?');
+      whereArgs.add(start);
+    } else if (filterType == 'custom' &&
+        customStart != null &&
+        customEnd != null) {
+      final start = DateTime(
+        customStart.year,
+        customStart.month,
+        customStart.day,
+      ).millisecondsSinceEpoch;
+      final end = DateTime(
+        customEnd.year,
+        customEnd.month,
+        customEnd.day,
+        23,
+        59,
+        59,
+        999,
+      ).millisecondsSinceEpoch;
+      whereClauses.add('timestamp >= ? AND timestamp <= ?');
+      whereArgs.addAll([start, end]);
+    }
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+      'SELECT COUNT(*) FROM $tableMeals WHERE ${whereClauses.join(' AND ')}',
+      whereArgs,
+    );
+    if (maps.isNotEmpty && maps.first.isNotEmpty) {
+      return maps.first.values.first as int? ?? 0;
+    }
+    return 0;
   }
 
   Future<Uint8List?> getMealImageBytes(int id) async {

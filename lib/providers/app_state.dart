@@ -54,6 +54,7 @@ class AppState extends ChangeNotifier {
   List<Meal> _paginatedMeals = [];
   bool _hasMore = true;
   bool _isFetchingMore = false;
+  int _historyTotalCount = 0;
   DateTime? _historyCustomStartDate;
   DateTime? _historyCustomEndDate;
 
@@ -84,6 +85,7 @@ class AppState extends ChangeNotifier {
   List<Meal> get paginatedMeals => _paginatedMeals;
   bool get hasMore => _hasMore;
   bool get isFetchingMore => _isFetchingMore;
+  int get historyTotalCount => _historyTotalCount;
   DateTime? get historyCustomStartDate => _historyCustomStartDate;
   DateTime? get historyCustomEndDate => _historyCustomEndDate;
 
@@ -258,6 +260,16 @@ class AppState extends ChangeNotifier {
   }
 
   // Lazy Loaded / Paginated History loading
+  Future<List<Meal>> getMealsForFilter({required bool includeImages}) async {
+    return await _dbHelper.getMealsPaginated(
+      limit: null,
+      filterType: _historyFilter,
+      customStart: _historyCustomStartDate,
+      customEnd: _historyCustomEndDate,
+      includeImages: includeImages,
+    );
+  }
+
   Future<void> loadFirstPageHistory({bool showLoading = true}) async {
     if (showLoading) {
       _isLoading = true;
@@ -275,6 +287,12 @@ class AppState extends ChangeNotifier {
     );
 
     _hasMore = _paginatedMeals.length == 20;
+
+    _historyTotalCount = await _dbHelper.getMealsCount(
+      filterType: _historyFilter,
+      customStart: _historyCustomStartDate,
+      customEnd: _historyCustomEndDate,
+    );
 
     if (showLoading) {
       _isLoading = false;
