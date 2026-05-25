@@ -12,6 +12,7 @@ class ReportConfigDialog extends StatefulWidget {
   final String filterType;
   final DateTime? customStartDate;
   final DateTime? customEndDate;
+  final VoidCallback? onReportGenerated;
 
   const ReportConfigDialog({
     super.key,
@@ -20,6 +21,7 @@ class ReportConfigDialog extends StatefulWidget {
     required this.filterType,
     this.customStartDate,
     this.customEndDate,
+    this.onReportGenerated,
   });
 
   @override
@@ -166,6 +168,10 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
               carbsGoal: widget.appState.carbsGoal,
               fatGoal: widget.appState.fatGoal,
             );
+
+            if (widget.onReportGenerated != null) {
+              widget.onReportGenerated!();
+            }
           },
         ),
       ],

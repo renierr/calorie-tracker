@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_selector/file_selector.dart';
-import '../layout/adaptive_breakpoints.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
@@ -102,14 +101,29 @@ class _HistoryPageState extends State<HistoryPage> {
     AppState appState,
     List<Meal> filteredMeals,
   ) {
+    final List<Meal> mealsToReport;
+    if (_selectedMealIds.isNotEmpty) {
+      mealsToReport = appState.meals
+          .where((m) => _selectedMealIds.contains(m.id))
+          .toList();
+    } else {
+      mealsToReport = filteredMeals;
+    }
+
     showDialog(
       context: context,
       builder: (context) => ReportConfigDialog(
         appState: appState,
-        filteredMeals: filteredMeals,
+        filteredMeals: mealsToReport,
         filterType: _filterType,
         customStartDate: _customStartDate,
         customEndDate: _customEndDate,
+        onReportGenerated: () {
+          setState(() {
+            _isSelectionMode = false;
+            _selectedMealIds.clear();
+          });
+        },
       ),
     );
   }
@@ -167,174 +181,85 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final bool useFullPageScroll = AppBreakpoints.isPhoneWidth(
-              constraints.maxWidth,
-            );
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Import/Export Action Card
+              const SizedBox(height: 10),
+              _buildDataActionsCard(context, appState, filteredMeals),
+              const SizedBox(height: 15),
 
-            if (useFullPageScroll) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // Filter Toolbar Box
-                    const SizedBox(height: 10),
-                    HistoryFilterPanel(
-                      filterType: _filterType,
-                      customStartDate: _customStartDate,
-                      customEndDate: _customEndDate,
-                      onFilterTypeChanged: (val) {
-                        setState(() {
-                          _filterType = val;
-                        });
-                        appState.setHistoryFilter(val);
-                      },
-                      onStartDateChanged: (val) {
-                        setState(() {
-                          _customStartDate = val;
-                        });
-                      },
-                      onEndDateChanged: (val) {
-                        setState(() {
-                          _customEndDate = val;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 15),
+              // Filter Toolbar Box
+              HistoryFilterPanel(
+                filterType: _filterType,
+                customStartDate: _customStartDate,
+                customEndDate: _customEndDate,
+                onFilterTypeChanged: (val) {
+                  setState(() {
+                    _filterType = val;
+                  });
+                  appState.setHistoryFilter(val);
+                },
+                onStartDateChanged: (val) {
+                  setState(() {
+                    _customStartDate = val;
+                  });
+                },
+                onEndDateChanged: (val) {
+                  setState(() {
+                    _customEndDate = val;
+                  });
+                },
+              ),
+              const SizedBox(height: 15),
 
-                    // Import/Export Action Card
-                    _buildDataActionsCard(context, appState, filteredMeals),
-                    const SizedBox(height: 15),
-
-                    // Top action button card if meals are loaded
-                    if (filteredMeals.isNotEmpty) ...[
-                      _buildReportActionCard(context, appState, filteredMeals),
-                      const SizedBox(height: 15),
-                    ],
-
-                    // Active meals logs listing
-                    if (filteredMeals.isEmpty)
-                      _buildEmptyState()
-                    else
-                      ListView.builder(
-                        itemCount: filteredMeals.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final Meal meal = filteredMeals[index];
-                          final isSelected = _selectedMealIds.contains(meal.id);
-                          return MealHistoryCard(
-                            meal: meal,
-                            appState: appState,
-                            isSelectionMode: _isSelectionMode,
-                            isSelected: isSelected,
-                            onTap: () {
-                              if (_isSelectionMode) {
-                                setState(() {
-                                  if (_selectedMealIds.contains(meal.id)) {
-                                    _selectedMealIds.remove(meal.id);
-                                  } else {
-                                    _selectedMealIds.add(meal.id!);
-                                  }
-                                });
-                              }
-                            },
-                            onLongPress: () {
-                              if (!_isSelectionMode) {
-                                setState(() {
-                                  _isSelectionMode = true;
-                                  _selectedMealIds.add(meal.id!);
-                                });
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              );
-            }
-
-            return Column(
-              children: [
-                // Filter Toolbar Box
-                const SizedBox(height: 10),
-                HistoryFilterPanel(
-                  filterType: _filterType,
-                  customStartDate: _customStartDate,
-                  customEndDate: _customEndDate,
-                  onFilterTypeChanged: (val) {
-                    setState(() {
-                      _filterType = val;
-                    });
-                    appState.setHistoryFilter(val);
-                  },
-                  onStartDateChanged: (val) {
-                    setState(() {
-                      _customStartDate = val;
-                    });
-                  },
-                  onEndDateChanged: (val) {
-                    setState(() {
-                      _customEndDate = val;
-                    });
-                  },
-                ),
+              // Top action button card if meals are loaded
+              if (filteredMeals.isNotEmpty) ...[
+                _buildReportActionCard(context, appState, filteredMeals),
                 const SizedBox(height: 15),
-
-                // Import/Export Action Card
-                _buildDataActionsCard(context, appState, filteredMeals),
-                const SizedBox(height: 15),
-
-                // Top action button card if meals are loaded
-                if (filteredMeals.isNotEmpty) ...[
-                  _buildReportActionCard(context, appState, filteredMeals),
-                  const SizedBox(height: 15),
-                ],
-
-                // Active meals logs listing
-                Expanded(
-                  child: filteredMeals.isEmpty
-                      ? _buildEmptyState()
-                      : ListView.builder(
-                          itemCount: filteredMeals.length,
-                          itemBuilder: (context, index) {
-                            final Meal meal = filteredMeals[index];
-                            final isSelected = _selectedMealIds.contains(
-                              meal.id,
-                            );
-                            return MealHistoryCard(
-                              meal: meal,
-                              appState: appState,
-                              isSelectionMode: _isSelectionMode,
-                              isSelected: isSelected,
-                              onTap: () {
-                                if (_isSelectionMode) {
-                                  setState(() {
-                                    if (_selectedMealIds.contains(meal.id)) {
-                                      _selectedMealIds.remove(meal.id);
-                                    } else {
-                                      _selectedMealIds.add(meal.id!);
-                                    }
-                                  });
-                                }
-                              },
-                              onLongPress: () {
-                                if (!_isSelectionMode) {
-                                  setState(() {
-                                    _isSelectionMode = true;
-                                    _selectedMealIds.add(meal.id!);
-                                  });
-                                }
-                              },
-                            );
-                          },
-                        ),
-                ),
               ],
-            );
-          },
+
+              // Active meals logs listing
+              if (filteredMeals.isEmpty)
+                _buildEmptyState()
+              else
+                ListView.builder(
+                  itemCount: filteredMeals.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final Meal meal = filteredMeals[index];
+                    final isSelected = _selectedMealIds.contains(meal.id);
+                    return MealHistoryCard(
+                      meal: meal,
+                      appState: appState,
+                      isSelectionMode: _isSelectionMode,
+                      isSelected: isSelected,
+                      onTap: () {
+                        if (_isSelectionMode) {
+                          setState(() {
+                            if (_selectedMealIds.contains(meal.id)) {
+                              _selectedMealIds.remove(meal.id);
+                            } else {
+                              _selectedMealIds.add(meal.id!);
+                            }
+                          });
+                        }
+                      },
+                      onLongPress: () {
+                        if (!_isSelectionMode) {
+                          setState(() {
+                            _isSelectionMode = true;
+                            _selectedMealIds.add(meal.id!);
+                          });
+                        }
+                      },
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
@@ -398,6 +323,26 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
             ),
             onPressed: () => _handleExport(context, appState, filteredMeals),
+          ),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.summarize, size: 18),
+            label: Text(
+              AppLocalizations.of(context)!.reportPdf,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 13),
+            ),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(44),
+              backgroundColor: AppTheme.accentEmerald,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () =>
+                _showReportConfigDialog(context, appState, filteredMeals),
           ),
         ],
       ),
@@ -510,13 +455,13 @@ class _HistoryPageState extends State<HistoryPage> {
   ) {
     final colors = AppTheme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: AppTheme.premiumCardDecoration(
         context: context,
         color: colors.surfaceLight.withValues(alpha: 0.4),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             AppLocalizations.of(context)!.logsInFilter(filteredMeals.length),
@@ -526,33 +471,7 @@ class _HistoryPageState extends State<HistoryPage> {
               fontSize: 13,
             ),
           ),
-          const SizedBox(height: 3),
-          Text(
-            AppLocalizations.of(context)!.compilePdf,
-            style: TextStyle(color: colors.textMuted, fontSize: 11),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.summarize, size: 18),
-              label: Text(
-                AppLocalizations.of(context)!.reportPdf,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-              ),
-              onPressed: () =>
-                  _showReportConfigDialog(context, appState, filteredMeals),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(44),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
-              ),
-            ),
-          ),
+          Icon(Icons.filter_list, size: 16, color: colors.textSecondary),
         ],
       ),
     );
