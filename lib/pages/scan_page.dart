@@ -8,6 +8,7 @@ import '../providers/app_state.dart';
 import '../services/gemini_service.dart';
 import '../widgets/scan/scan_image_selector.dart';
 import '../widgets/scan/scan_verification_form.dart';
+import '../widgets/adaptive/adaptive_card_header.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -242,30 +243,16 @@ class _ScanPageState extends State<ScanPage> {
 
   // Layout: Optional hint field
   Widget _buildHintField() {
-    final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.lightbulb_outline,
-                color: AppTheme.accentEmerald,
-                size: 18,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                AppLocalizations.of(context)!.contextClue,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ],
+          AdaptiveCardHeader(
+            icon: Icons.lightbulb_outline,
+            iconColor: AppTheme.accentEmerald,
+            title: AppLocalizations.of(context)!.contextClue,
           ),
           const SizedBox(height: 12),
           TextField(
