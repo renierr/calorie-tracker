@@ -24,6 +24,8 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - **SQLite Constraints**: Database operations are strictly asynchronous. Return `Future<T>` and handle inside `AppState`. Store images as `Uint8List? imageBytes` (`BLOB` in SQL). Never use native local file paths for persistence.
 - **PDF Class Overlaps**: Import PDF framework as `pw` (`import 'package:pdf/widgets.dart' as pw;`) to prevent collisions with standard Material widgets.
 - **Small Screen Fitting**: Always use responsive layouts (like `Wrap` instead of horizontal `Row` for actions, and scrollable/grid metrics) in dialogs, modals, and cards to prevent overflow on mobile.
+- **Cross-Platform File Saving**: Always check OS before saving files (e.g. SQLite database copies, downloaded images). On Desktop, use `getSaveLocation()`. On Android, implement automatic fallback from public Download (`/storage/emulated/0/Download`) to app-specific directory (`getExternalStorageDirectory()`) to avoid permission/platform crashes.
+- **Prevent Duplicated UI/Dialog Code**: Extract custom dialogs, overlays, notification components, or recurring visual elements to `lib/widgets/` immediately. Never copy-paste presentation logic across views.
 
 ---
 
@@ -80,6 +82,8 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 ---
 
 ## Verification Procedures
+
+*Note: Formatting and static analysis are only required when Dart/source code files are changed. They are not necessary when only markdown documentation, images, or static assets are modified.*
 
 1. **Formatting**: `dart format ./lib`
 2. **Analysis**: `flutter analyze`

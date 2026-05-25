@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:path_provider/path_provider.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
 import '../services/pdf_service.dart';
 import '../l10n/app_localizations.dart';
 import 'edit_meal_dialog.dart';
+import 'custom_notification.dart';
 
 class MealDetailDialog extends StatelessWidget {
   final Meal meal;
@@ -475,38 +477,94 @@ class MealDetailDialog extends StatelessWidget {
 
   Future<void> _downloadImage(BuildContext context, Meal currentMeal) async {
     if (currentMeal.imageBytes == null) return;
+    final localizations = AppLocalizations.of(context)!;
 
     try {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final FileSaveLocation? location = await getSaveLocation(
-        suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
-        acceptedTypeGroups: <XTypeGroup>[
-          const XTypeGroup(
-            label: 'JPEG Image',
-            extensions: <String>['jpg', 'jpeg'],
-          ),
-          const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
-        ],
-      );
-      if (location == null) return;
+      String? savedPath;
 
-      final File file = File(location.path);
-      await file.writeAsBytes(currentMeal.imageBytes!);
+      if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+        final FileSaveLocation? location = await getSaveLocation(
+          suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
+          acceptedTypeGroups: <XTypeGroup>[
+            const XTypeGroup(
+              label: 'JPEG Image',
+              extensions: <String>['jpg', 'jpeg'],
+            ),
+            const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
+          ],
+        );
+        if (location == null) return;
+        final File file = File(location.path);
+        await file.writeAsBytes(currentMeal.imageBytes!);
+        savedPath = location.path;
+      } else if (Platform.isAndroid) {
+        final String fileName = 'meal_${currentMeal.shortId}_$timestamp.jpg';
+        final Directory publicDownloadDir = Directory('/storage/emulated/0/Download');
+        File? savedFile;
+
+        // 1. Try public Download folder
+        if (await publicDownloadDir.exists()) {
+          try {
+            final File file = File('${publicDownloadDir.path}/$fileName');
+            await file.writeAsBytes(currentMeal.imageBytes!);
+            savedFile = file;
+          } catch (_) {
+            // Silently swallow to fallback
+          }
+        }
+
+        // 2. Fallback to external storage directory
+        if (savedFile == null) {
+          try {
+            final Directory? appDir = await getExternalStorageDirectory();
+            if (appDir != null) {
+              final File file = File('${appDir.path}/$fileName');
+              await file.writeAsBytes(currentMeal.imageBytes!);
+              savedFile = file;
+            }
+          } catch (_) {
+            // Silently swallow to fallback
+          }
+        }
+
+        // 3. Fallback to app documents directory
+        if (savedFile == null) {
+          final Directory docDir = await getApplicationDocumentsDirectory();
+          final File file = File('${docDir.path}/$fileName');
+          await file.writeAsBytes(currentMeal.imageBytes!);
+          savedFile = file;
+        }
+
+        savedPath = savedFile.path;
+      } else {
+        // iOS or other platforms
+        final String fileName = 'meal_${currentMeal.shortId}_$timestamp.jpg';
+        final Directory docDir = await getApplicationDocumentsDirectory();
+        final File file = File('${docDir.path}/$fileName');
+        await file.writeAsBytes(currentMeal.imageBytes!);
+        savedPath = file.path;
+      }
 
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Image saved successfully!'),
-          backgroundColor: AppTheme.accentEmerald,
-        ),
-      );
+
+      String message;
+      if (Platform.isAndroid && savedPath.startsWith('/storage/emulated/0/Download')) {
+        message = localizations.imageSavedDownloads;
+      } else {
+        final displayPath = savedPath.length > 40
+            ? '...${savedPath.substring(savedPath.length - 37)}'
+            : savedPath;
+        message = localizations.imageSavedTo(displayPath);
+      }
+
+      showNotificationDialog(context, message, isError: false);
     } catch (e) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to save image: $e'),
-          backgroundColor: AppTheme.accentRed,
-        ),
+      showNotificationDialog(
+        context,
+        localizations.imageSaveFailed(e.toString()),
+        isError: true,
       );
     }
   }

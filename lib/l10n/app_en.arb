@@ -255,6 +255,41 @@
         "type": "String"
       }
     }
+  },
+  "imageSavedSuccess": "Image saved successfully!",
+  "imageSavedDownloads": "Image saved to Downloads folder!",
+  "imageSavedTo": "Image saved to: {path}",
+  "@imageSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "imageSaveFailed": "Failed to save image: {error}",
+  "@imageSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dbExportedDownloads": "Database exported to Downloads folder!",
+  "dbExportedTo": "Database exported to: {path}",
+  "@dbExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "dbExportFailed": "Database export failed: {error}",
+  "@dbExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
 

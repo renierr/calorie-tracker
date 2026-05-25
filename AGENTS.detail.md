@@ -4,11 +4,25 @@ This document provides deep technical details, schemas, and protocol flows for k
 
 ---
 
-## 1. Database Backup & Restore Specifications
+## 1. Database Backup, Restore, & File Downloading Specifications
+
+### Cross-Platform File Saving & Export (Images, Databases, Reports)
+To ensure seamless, crash-free file exporting (e.g. SQLite database copies, downloaded images, PDF reports) across different operating systems, follow this platform logic:
+
+- **Desktop (Windows, macOS, Linux)**:
+  - Always use `getSaveLocation()` from `package:file_selector` to open a native file picker dialogue.
+  - Require user to select the destination, then write the bytes directly.
+
+- **Mobile (Android)**:
+  - Do NOT call `getSaveLocation()`, which throws `UnimplementedError` on Android.
+  - Implement a three-stage automated fallback flow:
+    1. **Public Download Folder**: Try `/storage/emulated/0/Download/` first. If folder exists and is writable, save the file there so it is easily accessible.
+    2. **App External Storage Fallback**: If public write fails or folder is restricted, use `getExternalStorageDirectory()` (resolves to `/storage/emulated/0/Android/data/<package_name>/files/`). This requires zero permissions.
+    3. **App Document Sandbox Fallback**: If external storage is missing or unmounted, fallback to the secure `getApplicationDocumentsDirectory()` folder.
+  - **Notification Placement**: Never show `ScaffoldMessenger` snackbars inside dialogs (as they render behind the active dialog in the page's route). Display an auto-dismissing, elegant overlay `Dialog` centered on screen with `barrierColor: Colors.black26`.
 
 ### Native SQLite Database Export
 - **Path to Copy**: Defined in `DbHelper.exportDatabase({required String destPath})`. Retrieves the active SQLite database path and uses Dart's `File(src).copy(destPath)` to copy the live SQLite file.
-- **Save Location**: Always determined via `getSaveLocation()` from `package:file_selector`. The UI must never expose absolute paths to the user. Success is shown using localized strings only.
 
 ### Native SQLite Database Restore
 - **Backend Flow**: Implemented in `DbHelper.restoreDatabase({required String backupPath})`.

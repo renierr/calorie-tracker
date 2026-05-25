@@ -592,4 +592,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String gitHash(String hash) {
     return 'Git Hash: $hash';
   }
+
+  @override
+  String get imageSavedSuccess => 'Image saved successfully!';
+
+  @override
+  String get imageSavedDownloads => 'Image saved to Downloads folder!';
+
+  @override
+  String imageSavedTo(String path) {
+    return 'Image saved to: $path';
+  }
+
+  @override
+  String imageSaveFailed(String error) {
+    return 'Failed to save image: $error';
+  }
+
+  @override
+  String get dbExportedDownloads => 'Database exported to Downloads folder!';
+
+  @override
+  String dbExportedTo(String path) {
+    return 'Database exported to: $path';
+  }
+
+  @override
+  String dbExportFailed(String error) {
+    return 'Database export failed: $error';
+  }
 }

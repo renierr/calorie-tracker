@@ -593,4 +593,34 @@ class AppLocalizationsDe extends AppLocalizations {
   String gitHash(String hash) {
     return 'Git-Hash: $hash';
   }
+
+  @override
+  String get imageSavedSuccess => 'Bild erfolgreich gespeichert!';
+
+  @override
+  String get imageSavedDownloads => 'Bild im Download-Ordner gespeichert!';
+
+  @override
+  String imageSavedTo(String path) {
+    return 'Bild gespeichert unter: $path';
+  }
+
+  @override
+  String imageSaveFailed(String error) {
+    return 'Bild konnte nicht gespeichert werden: $error';
+  }
+
+  @override
+  String get dbExportedDownloads =>
+      'Datenbank in den Download-Ordner exportiert!';
+
+  @override
+  String dbExportedTo(String path) {
+    return 'Datenbank exportiert nach: $path';
+  }
+
+  @override
+  String dbExportFailed(String error) {
+    return 'Datenbankexport fehlgeschlagen: $error';
+  }
 }

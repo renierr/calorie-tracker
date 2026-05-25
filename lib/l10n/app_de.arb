@@ -255,6 +255,41 @@
         "type": "String"
       }
     }
+  },
+  "imageSavedSuccess": "Bild erfolgreich gespeichert!",
+  "imageSavedDownloads": "Bild im Download-Ordner gespeichert!",
+  "imageSavedTo": "Bild gespeichert unter: {path}",
+  "@imageSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "imageSaveFailed": "Bild konnte nicht gespeichert werden: {error}",
+  "@imageSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dbExportedDownloads": "Datenbank in den Download-Ordner exportiert!",
+  "dbExportedTo": "Datenbank exportiert nach: {path}",
+  "@dbExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "dbExportFailed": "Datenbankexport fehlgeschlagen: {error}",
+  "@dbExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
 

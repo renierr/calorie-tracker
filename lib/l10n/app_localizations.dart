@@ -1141,6 +1141,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Git Hash: {hash}'**
   String gitHash(String hash);
+
+  /// No description provided for @imageSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Image saved successfully!'**
+  String get imageSavedSuccess;
+
+  /// No description provided for @imageSavedDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Image saved to Downloads folder!'**
+  String get imageSavedDownloads;
+
+  /// No description provided for @imageSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Image saved to: {path}'**
+  String imageSavedTo(String path);
+
+  /// No description provided for @imageSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save image: {error}'**
+  String imageSaveFailed(String error);
+
+  /// No description provided for @dbExportedDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Database exported to Downloads folder!'**
+  String get dbExportedDownloads;
+
+  /// No description provided for @dbExportedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Database exported to: {path}'**
+  String dbExportedTo(String path);
+
+  /// No description provided for @dbExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Database export failed: {error}'**
+  String dbExportFailed(String error);
 }
 
 class _AppLocalizationsDelegate
