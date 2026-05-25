@@ -49,6 +49,14 @@ class AppState extends ChangeNotifier {
   // Tab index for navigation (0=Dashboard, 1=Scan, 2=History, 3=Settings)
   int _selectedTabIndex = 0;
 
+  // Lazy loading & Pagination states
+  List<Meal> _selectedDateMeals = [];
+  List<Meal> _paginatedMeals = [];
+  bool _hasMore = true;
+  bool _isFetchingMore = false;
+  DateTime? _historyCustomStartDate;
+  DateTime? _historyCustomEndDate;
+
   // Getters
   String get geminiApiKey => _geminiApiKey;
   int get calorieGoal => _calorieGoal;
@@ -69,15 +77,15 @@ class AppState extends ChangeNotifier {
   bool get isSyncing => _isSyncing;
   bool get syncEnabled => _syncEnabled;
 
-  // Filtered meals based on selected day (at midnight local time)
-  List<Meal> get mealsForSelectedDate {
-    return _meals.where((meal) {
-      final mealDate = DateTime.fromMillisecondsSinceEpoch(meal.timestamp);
-      return mealDate.year == _selectedDate.year &&
-          mealDate.month == _selectedDate.month &&
-          mealDate.day == _selectedDate.day;
-    }).toList();
-  }
+  // Optimized lazy-loaded selected date meals
+  List<Meal> get mealsForSelectedDate => _selectedDateMeals;
+
+  // Paginated states
+  List<Meal> get paginatedMeals => _paginatedMeals;
+  bool get hasMore => _hasMore;
+  bool get isFetchingMore => _isFetchingMore;
+  DateTime? get historyCustomStartDate => _historyCustomStartDate;
+  DateTime? get historyCustomEndDate => _historyCustomEndDate;
 
   // Daily totals calculations
   int get totalCaloriesConsumed =>
@@ -220,14 +228,81 @@ class AppState extends ChangeNotifier {
   // Set and persist history filter
   Future<void> setHistoryFilter(String filter) async {
     _historyFilter = filter;
+    await loadFirstPageHistory();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyHistoryFilter, filter);
   }
 
+  // Set history custom dates and trigger load
+  Future<void> setHistoryCustomDates(DateTime? start, DateTime? end) async {
+    _historyCustomStartDate = start;
+    _historyCustomEndDate = end;
+    await loadFirstPageHistory();
+  }
+
   // Database Meal Actions
   Future<void> loadMeals() async {
-    _meals = await _dbHelper.getAllMeals();
+    _meals = await _dbHelper.getAllMeals(includeImages: false);
+    await loadSelectedDateMeals();
+    await loadFirstPageHistory(showLoading: false);
+    notifyListeners();
+  }
+
+  Future<void> loadSelectedDateMeals() async {
+    _selectedDateMeals = await _dbHelper.getMealsForDate(
+      _selectedDate,
+      includeImages: true,
+    );
+    notifyListeners();
+  }
+
+  // Lazy Loaded / Paginated History loading
+  Future<void> loadFirstPageHistory({bool showLoading = true}) async {
+    if (showLoading) {
+      _isLoading = true;
+      notifyListeners();
+    }
+
+    _hasMore = true;
+    _isFetchingMore = false;
+    _paginatedMeals = await _dbHelper.getMealsPaginated(
+      limit: 20,
+      filterType: _historyFilter,
+      customStart: _historyCustomStartDate,
+      customEnd: _historyCustomEndDate,
+      includeImages: true,
+    );
+
+    _hasMore = _paginatedMeals.length == 20;
+
+    if (showLoading) {
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> fetchNextPageHistory() async {
+    if (_isFetchingMore || !_hasMore) return;
+
+    _isFetchingMore = true;
+    notifyListeners();
+
+    final int? beforeTimestamp = _paginatedMeals.isNotEmpty
+        ? _paginatedMeals.last.timestamp
+        : null;
+    final nextPageMeals = await _dbHelper.getMealsPaginated(
+      limit: 20,
+      beforeTimestamp: beforeTimestamp,
+      filterType: _historyFilter,
+      customStart: _historyCustomStartDate,
+      customEnd: _historyCustomEndDate,
+      includeImages: true,
+    );
+
+    _paginatedMeals.addAll(nextPageMeals);
+    _hasMore = nextPageMeals.length == 20;
+    _isFetchingMore = false;
     notifyListeners();
   }
 
@@ -265,17 +340,17 @@ class AppState extends ChangeNotifier {
   // Day Navigation
   void selectDate(DateTime date) {
     _selectedDate = date;
-    notifyListeners();
+    loadSelectedDateMeals();
   }
 
   void nextDay() {
     _selectedDate = _selectedDate.add(const Duration(days: 1));
-    notifyListeners();
+    loadSelectedDateMeals();
   }
 
   void previousDay() {
     _selectedDate = _selectedDate.subtract(const Duration(days: 1));
-    notifyListeners();
+    loadSelectedDateMeals();
   }
 
   // Tab Navigation
@@ -334,6 +409,16 @@ class AppState extends ChangeNotifier {
 
   // Export meals list to a standard JSON string
   Future<String> exportMealsToJson(List<Meal> mealsToExport) async {
+    final List<Meal> fullMeals = [];
+    for (final meal in mealsToExport) {
+      if (meal.id != null && meal.imageBytes == null) {
+        final imgBytes = await _dbHelper.getMealImageBytes(meal.id!);
+        fullMeals.add(meal.copyWith(imageBytes: imgBytes));
+      } else {
+        fullMeals.add(meal);
+      }
+    }
+
     final Map<String, dynamic> exportMap = {
       'version': '1.0.0',
       'exportedAt': DateTime.now().toUtc().toIso8601String(),
@@ -343,7 +428,7 @@ class AppState extends ChangeNotifier {
         'carbsGoal': _carbsGoal,
         'fatGoal': _fatGoal,
       },
-      'meals': mealsToExport.map((m) => m.toJsonExport()).toList(),
+      'meals': fullMeals.map((m) => m.toJsonExport()).toList(),
     };
     return const JsonEncoder.withIndent('  ').convert(exportMap);
   }

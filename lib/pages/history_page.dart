@@ -19,79 +19,31 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  String _filterType = 'all'; // 'all', 'today', 'yesterday', 'week', 'custom'
-  DateTime? _customStartDate;
-  DateTime? _customEndDate;
   bool _isSelectionMode = false;
   final Set<int> _selectedMealIds = {};
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final appState = Provider.of<AppState>(context, listen: false);
-      setState(() {
-        _filterType = appState.historyFilter;
-      });
+      appState.loadFirstPageHistory(showLoading: false);
     });
   }
 
-  // Filter logic matching active dropdown selections
-  List<Meal> _getFilteredMeals(List<Meal> allMeals) {
-    final now = DateTime.now();
-    final todayMidnight = DateTime(now.year, now.month, now.day);
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-    switch (_filterType) {
-      case 'today':
-        return allMeals.where((m) {
-          final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
-          return date.year == now.year &&
-              date.month == now.month &&
-              date.day == now.day;
-        }).toList();
-
-      case 'yesterday':
-        final yesterday = now.subtract(const Duration(days: 1));
-        return allMeals.where((m) {
-          final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
-          return date.year == yesterday.year &&
-              date.month == yesterday.month &&
-              date.day == yesterday.day;
-        }).toList();
-
-      case 'week':
-        final sevenDaysAgo = todayMidnight.subtract(const Duration(days: 6));
-        return allMeals.where((m) {
-          final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
-          return date.isAfter(sevenDaysAgo) ||
-              date.millisecondsSinceEpoch ==
-                  sevenDaysAgo.millisecondsSinceEpoch;
-        }).toList();
-
-      case 'custom':
-        if (_customStartDate == null || _customEndDate == null) return allMeals;
-        final start = DateTime(
-          _customStartDate!.year,
-          _customStartDate!.month,
-          _customStartDate!.day,
-        );
-        final end = DateTime(
-          _customEndDate!.year,
-          _customEndDate!.month,
-          _customEndDate!.day,
-          23,
-          59,
-          59,
-          999,
-        );
-        return allMeals.where((m) {
-          final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
-          return date.isAfter(start) && date.isBefore(end);
-        }).toList();
-
-      case 'all':
-      default:
-        return allMeals;
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      Provider.of<AppState>(context, listen: false).fetchNextPageHistory();
     }
   }
 
@@ -115,9 +67,9 @@ class _HistoryPageState extends State<HistoryPage> {
       builder: (context) => ReportConfigDialog(
         appState: appState,
         filteredMeals: mealsToReport,
-        filterType: _filterType,
-        customStartDate: _customStartDate,
-        customEndDate: _customEndDate,
+        filterType: appState.historyFilter,
+        customStartDate: appState.historyCustomStartDate,
+        customEndDate: appState.historyCustomEndDate,
         onReportGenerated: () {
           setState(() {
             _isSelectionMode = false;
@@ -131,7 +83,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
-    final List<Meal> filteredMeals = _getFilteredMeals(appState.meals);
+    final List<Meal> filteredMeals = appState.paginatedMeals;
     final colors = AppTheme.of(context);
 
     return Scaffold(
@@ -181,85 +133,104 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Import/Export Action Card
-              const SizedBox(height: 10),
-              _buildDataActionsCard(context, appState, filteredMeals),
-              const SizedBox(height: 15),
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  // Import/Export Action Card
+                  const SizedBox(height: 10),
+                  _buildDataActionsCard(context, appState, filteredMeals),
+                  const SizedBox(height: 15),
 
-              // Filter Toolbar Box
-              HistoryFilterPanel(
-                filterType: _filterType,
-                customStartDate: _customStartDate,
-                customEndDate: _customEndDate,
-                onFilterTypeChanged: (val) {
-                  setState(() {
-                    _filterType = val;
-                  });
-                  appState.setHistoryFilter(val);
-                },
-                onStartDateChanged: (val) {
-                  setState(() {
-                    _customStartDate = val;
-                  });
-                },
-                onEndDateChanged: (val) {
-                  setState(() {
-                    _customEndDate = val;
-                  });
-                },
+                  // Filter Toolbar Box
+                  HistoryFilterPanel(
+                    filterType: appState.historyFilter,
+                    customStartDate: appState.historyCustomStartDate,
+                    customEndDate: appState.historyCustomEndDate,
+                    onFilterTypeChanged: (val) {
+                      appState.setHistoryFilter(val);
+                    },
+                    onStartDateChanged: (val) {
+                      appState.setHistoryCustomDates(
+                        val,
+                        appState.historyCustomEndDate,
+                      );
+                    },
+                    onEndDateChanged: (val) {
+                      appState.setHistoryCustomDates(
+                        appState.historyCustomStartDate,
+                        val,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Top action button card if meals are loaded
+                  if (filteredMeals.isNotEmpty) ...[
+                    _buildReportActionCard(context, appState, filteredMeals),
+                    const SizedBox(height: 15),
+                  ],
+                ],
               ),
-              const SizedBox(height: 15),
+            ),
 
-              // Top action button card if meals are loaded
-              if (filteredMeals.isNotEmpty) ...[
-                _buildReportActionCard(context, appState, filteredMeals),
-                const SizedBox(height: 15),
-              ],
+            // Active meals logs listing
+            if (filteredMeals.isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: _buildEmptyState(),
+              )
+            else
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  if (index == filteredMeals.length) {
+                    return appState.isFetchingMore
+                        ? const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppTheme.accentEmerald,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink();
+                  }
 
-              // Active meals logs listing
-              if (filteredMeals.isEmpty)
-                _buildEmptyState()
-              else
-                ListView.builder(
-                  itemCount: filteredMeals.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final Meal meal = filteredMeals[index];
-                    final isSelected = _selectedMealIds.contains(meal.id);
-                    return MealHistoryCard(
-                      meal: meal,
-                      appState: appState,
-                      isSelectionMode: _isSelectionMode,
-                      isSelected: isSelected,
-                      onTap: () {
-                        if (_isSelectionMode) {
-                          setState(() {
-                            if (_selectedMealIds.contains(meal.id)) {
-                              _selectedMealIds.remove(meal.id);
-                            } else {
-                              _selectedMealIds.add(meal.id!);
-                            }
-                          });
-                        }
-                      },
-                      onLongPress: () {
-                        if (!_isSelectionMode) {
-                          setState(() {
-                            _isSelectionMode = true;
+                  final Meal meal = filteredMeals[index];
+                  final isSelected = _selectedMealIds.contains(meal.id);
+                  return MealHistoryCard(
+                    meal: meal,
+                    appState: appState,
+                    isSelectionMode: _isSelectionMode,
+                    isSelected: isSelected,
+                    onTap: () {
+                      if (_isSelectionMode) {
+                        setState(() {
+                          if (_selectedMealIds.contains(meal.id)) {
+                            _selectedMealIds.remove(meal.id);
+                          } else {
                             _selectedMealIds.add(meal.id!);
-                          });
-                        }
-                      },
-                    );
-                  },
-                ),
-              const SizedBox(height: 16),
-            ],
-          ),
+                          }
+                        });
+                      }
+                    },
+                    onLongPress: () {
+                      if (!_isSelectionMode) {
+                        setState(() {
+                          _isSelectionMode = true;
+                          _selectedMealIds.add(meal.id!);
+                        });
+                      }
+                    },
+                  );
+                }, childCount: filteredMeals.length + 1),
+              ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          ],
         ),
       ),
     );

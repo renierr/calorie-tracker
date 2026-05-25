@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -85,10 +86,29 @@ class DbHelper {
     );
   }
 
-  Future<List<Meal>> getAllMeals() async {
+  Future<List<Meal>> getAllMeals({bool includeImages = false}) async {
     final Database db = await database;
+
+    final List<String> columns = [
+      'id',
+      'shortId',
+      'foodName',
+      'calories',
+      'protein',
+      'carbs',
+      'fat',
+      'confidence',
+      'notes',
+      'timestamp',
+      'updatedAt',
+      'synced',
+      'deleted',
+      if (includeImages) 'imageBytes',
+    ];
+
     final List<Map<String, dynamic>> maps = await db.query(
       tableMeals,
+      columns: columns,
       where: 'deleted = 0',
       orderBy: 'timestamp DESC',
     );
@@ -224,5 +244,146 @@ class DbHelper {
         whereArgs: [shortId],
       );
     }
+  }
+
+  Future<List<Meal>> getMealsPaginated({
+    required int limit,
+    int? beforeTimestamp,
+    String filterType = 'all',
+    DateTime? customStart,
+    DateTime? customEnd,
+    bool includeImages = false,
+  }) async {
+    final Database db = await database;
+
+    final List<String> columns = [
+      'id',
+      'shortId',
+      'foodName',
+      'calories',
+      'protein',
+      'carbs',
+      'fat',
+      'confidence',
+      'notes',
+      'timestamp',
+      'updatedAt',
+      'synced',
+      'deleted',
+      if (includeImages) 'imageBytes',
+    ];
+
+    final List<String> whereClauses = ['deleted = 0'];
+    final List<dynamic> whereArgs = [];
+
+    if (beforeTimestamp != null) {
+      whereClauses.add('timestamp < ?');
+      whereArgs.add(beforeTimestamp);
+    }
+
+    final now = DateTime.now();
+    final todayMidnight = DateTime(now.year, now.month, now.day);
+
+    if (filterType == 'today') {
+      final start = todayMidnight.millisecondsSinceEpoch;
+      final end =
+          todayMidnight.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
+      whereClauses.add('timestamp >= ? AND timestamp <= ?');
+      whereArgs.addAll([start, end]);
+    } else if (filterType == 'yesterday') {
+      final yesterday = todayMidnight.subtract(const Duration(days: 1));
+      final start = yesterday.millisecondsSinceEpoch;
+      final end =
+          yesterday.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
+      whereClauses.add('timestamp >= ? AND timestamp <= ?');
+      whereArgs.addAll([start, end]);
+    } else if (filterType == 'week') {
+      final sevenDaysAgo = todayMidnight.subtract(const Duration(days: 6));
+      final start = sevenDaysAgo.millisecondsSinceEpoch;
+      whereClauses.add('timestamp >= ?');
+      whereArgs.add(start);
+    } else if (filterType == 'custom' &&
+        customStart != null &&
+        customEnd != null) {
+      final start = DateTime(
+        customStart.year,
+        customStart.month,
+        customStart.day,
+      ).millisecondsSinceEpoch;
+      final end = DateTime(
+        customEnd.year,
+        customEnd.month,
+        customEnd.day,
+        23,
+        59,
+        59,
+        999,
+      ).millisecondsSinceEpoch;
+      whereClauses.add('timestamp >= ? AND timestamp <= ?');
+      whereArgs.addAll([start, end]);
+    }
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      columns: columns,
+      where: whereClauses.isEmpty ? null : whereClauses.join(' AND '),
+      whereArgs: whereArgs.isEmpty ? null : whereArgs,
+      orderBy: 'timestamp DESC',
+      limit: limit,
+    );
+
+    return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
+  }
+
+  Future<List<Meal>> getMealsForDate(
+    DateTime date, {
+    bool includeImages = true,
+  }) async {
+    final Database db = await database;
+    final todayMidnight = DateTime(date.year, date.month, date.day);
+    final start = todayMidnight.millisecondsSinceEpoch;
+    final end =
+        todayMidnight.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
+
+    final List<String> columns = [
+      'id',
+      'shortId',
+      'foodName',
+      'calories',
+      'protein',
+      'carbs',
+      'fat',
+      'confidence',
+      'notes',
+      'timestamp',
+      'updatedAt',
+      'synced',
+      'deleted',
+      if (includeImages) 'imageBytes',
+    ];
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      columns: columns,
+      where: 'deleted = 0 AND timestamp >= ? AND timestamp <= ?',
+      whereArgs: [start, end],
+      orderBy: 'timestamp DESC',
+    );
+
+    return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
+  }
+
+  Future<Uint8List?> getMealImageBytes(int id) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      columns: ['imageBytes'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return maps.first['imageBytes'] as Uint8List?;
+    }
+    return null;
   }
 }
