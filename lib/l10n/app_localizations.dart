@@ -788,6 +788,54 @@ abstract class AppLocalizations {
   /// **'Database exported successfully.'**
   String get dbExported;
 
+  /// No description provided for @restoreDb.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore SQLite Database'**
+  String get restoreDb;
+
+  /// No description provided for @restoreDbDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore a previous backup of your complete database. This will overwrite all your current meal records.'**
+  String get restoreDbDesc;
+
+  /// No description provided for @restoreDbBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Database Backup'**
+  String get restoreDbBtn;
+
+  /// No description provided for @confirmRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Database?'**
+  String get confirmRestore;
+
+  /// No description provided for @confirmRestoreDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you absolutely sure you want to restore this database backup? All your current logged meals and photos will be permanently replaced. This action cannot be undone.'**
+  String get confirmRestoreDesc;
+
+  /// No description provided for @noBackupsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No database backup files found.'**
+  String get noBackupsFound;
+
+  /// No description provided for @selectBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a Backup File'**
+  String get selectBackup;
+
+  /// No description provided for @dbRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Database restored successfully.'**
+  String get dbRestored;
+
   /// No description provided for @appearance.
   ///
   /// In en, this message translates to:

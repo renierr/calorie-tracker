@@ -326,6 +326,12 @@ class AppState extends ChangeNotifier {
   Future<File> exportDatabase({required String destPath}) =>
       _dbHelper.exportDatabase(destPath: destPath);
 
+  // Restore database
+  Future<void> restoreDatabase(String backupPath) async {
+    await _dbHelper.restoreDatabase(backupPath: backupPath);
+    await loadMeals();
+  }
+
   // Export meals list to a standard JSON string
   Future<String> exportMealsToJson(List<Meal> mealsToExport) async {
     final Map<String, dynamic> exportMap = {

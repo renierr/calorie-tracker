@@ -389,6 +389,32 @@ class AppLocalizationsDe extends AppLocalizations {
   String get dbExported => 'Datenbank erfolgreich exportiert.';
 
   @override
+  String get restoreDb => 'SQLite-Datenbank wiederherstellen';
+
+  @override
+  String get restoreDbDesc =>
+      'Stelle eine vorherige Sicherung deiner gesamten Datenbank wieder her. Dies überschreibt alle deine aktuellen Mahlzeiteneinträge.';
+
+  @override
+  String get restoreDbBtn => 'Datenbank-Sicherung wiederherstellen';
+
+  @override
+  String get confirmRestore => 'Datenbank wiederherstellen?';
+
+  @override
+  String get confirmRestoreDesc =>
+      'Bist du dir absolut sicher, dass du diese Datenbanksicherung wiederherstellen möchtest? Alle deine aktuellen protokollierten Mahlzeiten und Fotos werden dauerhaft ersetzt. Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get noBackupsFound => 'Keine Datenbanksicherungsdateien gefunden.';
+
+  @override
+  String get selectBackup => 'Wähle eine Sicherungsdatei';
+
+  @override
+  String get dbRestored => 'Datenbank erfolgreich wiederhergestellt.';
+
+  @override
   String get appearance => 'Darstellung';
 
   @override

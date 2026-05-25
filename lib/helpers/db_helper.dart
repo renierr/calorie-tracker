@@ -176,6 +176,22 @@ class DbHelper {
     return dest;
   }
 
+  Future<void> restoreDatabase({required String backupPath}) async {
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
+    final Directory docDir = await getApplicationSupportDirectory();
+    final String path = p.join(docDir.path, _dbName);
+    final backupFile = File(backupPath);
+    if (await backupFile.exists()) {
+      await backupFile.copy(path);
+    } else {
+      throw Exception("Backup file does not exist");
+    }
+    await database;
+  }
+
   Future<int> clearDatabase() async {
     final Database db = await database;
     return await db.delete(tableMeals);

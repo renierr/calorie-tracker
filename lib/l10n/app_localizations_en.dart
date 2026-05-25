@@ -388,6 +388,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dbExported => 'Database exported successfully.';
 
   @override
+  String get restoreDb => 'Restore SQLite Database';
+
+  @override
+  String get restoreDbDesc =>
+      'Restore a previous backup of your complete database. This will overwrite all your current meal records.';
+
+  @override
+  String get restoreDbBtn => 'Restore Database Backup';
+
+  @override
+  String get confirmRestore => 'Restore Database?';
+
+  @override
+  String get confirmRestoreDesc =>
+      'Are you absolutely sure you want to restore this database backup? All your current logged meals and photos will be permanently replaced. This action cannot be undone.';
+
+  @override
+  String get noBackupsFound => 'No database backup files found.';
+
+  @override
+  String get selectBackup => 'Select a Backup File';
+
+  @override
+  String get dbRestored => 'Database restored successfully.';
+
+  @override
   String get appearance => 'Appearance';
 
   @override
