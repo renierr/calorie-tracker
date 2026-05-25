@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:file_selector/file_selector.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
@@ -109,6 +111,21 @@ class MealDetailDialog extends StatelessWidget {
                           child: const Icon(Icons.close, color: Colors.white),
                         ),
                       ),
+                      if (currentMeal.imageBytes != null)
+                        Positioned(
+                          top: 12,
+                          left: 12,
+                          child: FloatingActionButton.small(
+                            heroTag: 'download_detail_${currentMeal.id}',
+                            backgroundColor: Colors.black54,
+                            onPressed: () =>
+                                _downloadImage(context, currentMeal),
+                            child: const Icon(
+                              Icons.download,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
 
@@ -433,5 +450,43 @@ class MealDetailDialog extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _downloadImage(BuildContext context, Meal currentMeal) async {
+    if (currentMeal.imageBytes == null) return;
+
+    try {
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final FileSaveLocation? location = await getSaveLocation(
+        suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
+        acceptedTypeGroups: <XTypeGroup>[
+          const XTypeGroup(
+            label: 'JPEG Image',
+            extensions: <String>['jpg', 'jpeg'],
+          ),
+          const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
+        ],
+      );
+      if (location == null) return;
+
+      final File file = File(location.path);
+      await file.writeAsBytes(currentMeal.imageBytes!);
+
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Image saved successfully!'),
+          backgroundColor: AppTheme.accentEmerald,
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to save image: $e'),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+    }
   }
 }
