@@ -48,6 +48,11 @@ class TargetGoalsCard extends StatelessWidget {
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.calorieHint,
             ),
+            onTap: () {
+              if (caloriesController.text == '0') {
+                caloriesController.clear();
+              }
+            },
           ),
           const SizedBox(height: 16),
 
@@ -72,6 +77,11 @@ class TargetGoalsCard extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!.proteinHint,
                       ),
+                      onTap: () {
+                        if (proteinController.text == '0') {
+                          proteinController.clear();
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -95,6 +105,11 @@ class TargetGoalsCard extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!.carbsHint,
                       ),
+                      onTap: () {
+                        if (carbsController.text == '0') {
+                          carbsController.clear();
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -124,6 +139,11 @@ class TargetGoalsCard extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!.fatHint,
                       ),
+                      onTap: () {
+                        if (fatController.text == '0') {
+                          fatController.clear();
+                        }
+                      },
                     ),
                   ],
                 ),

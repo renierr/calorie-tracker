@@ -95,6 +95,11 @@ class _EditMealDialogState extends State<EditMealDialog> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        onTap: () {
+                          if (_caloriesController.text == '0') {
+                            _caloriesController.clear();
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -118,6 +123,11 @@ class _EditMealDialogState extends State<EditMealDialog> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        onTap: () {
+                          if (_proteinController.text == '0') {
+                            _proteinController.clear();
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -145,6 +155,11 @@ class _EditMealDialogState extends State<EditMealDialog> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        onTap: () {
+                          if (_carbsController.text == '0') {
+                            _carbsController.clear();
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -168,6 +183,11 @@ class _EditMealDialogState extends State<EditMealDialog> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        onTap: () {
+                          if (_fatController.text == '0') {
+                            _fatController.clear();
+                          }
+                        },
                       ),
                     ],
                   ),

@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_selector/file_selector.dart';
-import 'package:path_provider/path_provider.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../adaptive/responsive_icon_button.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
-import '../custom_notification.dart';
+import '../../helpers/file_save_helper.dart';
 
 class ExportCard extends StatefulWidget {
   final AppState appState;
@@ -63,74 +60,27 @@ class _ExportCardState extends State<ExportCard> {
   Future<void> _exportDbFlow() async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final localizations = AppLocalizations.of(context)!;
-    String? destPath;
-
     try {
-      if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-        final location = await getSaveLocation(
-          suggestedName: 'nutriscan_db_$timestamp.db',
-        );
-        if (location == null) return;
-        destPath = location.path;
-      } else if (Platform.isAndroid) {
-        final String fileName = 'nutriscan_db_$timestamp.db';
-        final Directory publicDownloadDir = Directory('/storage/emulated/0/Download');
-
-        // 1. Try public Download folder
-        if (await publicDownloadDir.exists()) {
-          try {
-            final File file = File('${publicDownloadDir.path}/$fileName');
-            // Check if we can write to it by writing a dummy byte or just copying.
-            // exportDatabase will do the actual write. We assign the path first.
-            destPath = file.path;
-          } catch (_) {
-            destPath = null;
-          }
-        }
-
-        // 2. Fallback to external storage directory
-        if (destPath == null) {
-          try {
-            final Directory? appDir = await getExternalStorageDirectory();
-            if (appDir != null) {
-              destPath = '${appDir.path}/$fileName';
-            }
-          } catch (_) {
-            destPath = null;
-          }
-        }
-
-        // 3. Fallback to app documents directory
-        if (destPath == null) {
-          final Directory docDir = await getApplicationDocumentsDirectory();
-          destPath = '${docDir.path}/$fileName';
-        }
-      } else {
-        // iOS or other platforms
-        final Directory dir = await getApplicationDocumentsDirectory();
-        destPath = '${dir.path}/nutriscan_db_$timestamp.db';
-      }
+      final destPath = await FileSaveHelper.saveFile(
+        suggestedName: 'nutriscan_db_$timestamp.db',
+      );
+      if (destPath == null) return;
 
       await widget.appState.exportDatabase(destPath: destPath);
       if (!mounted) return;
 
-      String message;
-      if (Platform.isAndroid && destPath.startsWith('/storage/emulated/0/Download')) {
-        message = localizations.dbExportedDownloads;
-      } else {
-        final displayPath = destPath.length > 40
-            ? '...${destPath.substring(destPath.length - 37)}'
-            : destPath;
-        message = localizations.dbExportedTo(displayPath);
-      }
-
-      showNotificationDialog(context, message, isError: false);
+      FileSaveHelper.showSuccessNotification(
+        context: context,
+        savedPath: destPath,
+        androidDownloadMessage: localizations.dbExportedDownloads,
+        generalMessageBuilder: (displayPath) =>
+            localizations.dbExportedTo(displayPath),
+      );
     } catch (e) {
       if (!mounted) return;
-      showNotificationDialog(
-        context,
-        localizations.dbExportFailed(e.toString()),
-        isError: true,
+      FileSaveHelper.showErrorNotification(
+        context: context,
+        errorMessage: localizations.dbExportFailed(e.toString()),
       );
     }
   }

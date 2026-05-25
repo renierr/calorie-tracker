@@ -1,16 +1,14 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:file_selector/file_selector.dart';
-import 'package:path_provider/path_provider.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
 import '../services/pdf_service.dart';
 import '../l10n/app_localizations.dart';
+import '../helpers/file_save_helper.dart';
 import 'edit_meal_dialog.dart';
-import 'custom_notification.dart';
 
 class MealDetailDialog extends StatelessWidget {
   final Meal meal;
@@ -481,90 +479,33 @@ class MealDetailDialog extends StatelessWidget {
 
     try {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      String? savedPath;
+      final savedPath = await FileSaveHelper.saveFile(
+        suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
+        acceptedTypeGroups: <XTypeGroup>[
+          const XTypeGroup(
+            label: 'JPEG Image',
+            extensions: <String>['jpg', 'jpeg'],
+          ),
+          const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
+        ],
+        bytes: currentMeal.imageBytes,
+      );
 
-      if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-        final FileSaveLocation? location = await getSaveLocation(
-          suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
-          acceptedTypeGroups: <XTypeGroup>[
-            const XTypeGroup(
-              label: 'JPEG Image',
-              extensions: <String>['jpg', 'jpeg'],
-            ),
-            const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
-          ],
-        );
-        if (location == null) return;
-        final File file = File(location.path);
-        await file.writeAsBytes(currentMeal.imageBytes!);
-        savedPath = location.path;
-      } else if (Platform.isAndroid) {
-        final String fileName = 'meal_${currentMeal.shortId}_$timestamp.jpg';
-        final Directory publicDownloadDir = Directory('/storage/emulated/0/Download');
-        File? savedFile;
-
-        // 1. Try public Download folder
-        if (await publicDownloadDir.exists()) {
-          try {
-            final File file = File('${publicDownloadDir.path}/$fileName');
-            await file.writeAsBytes(currentMeal.imageBytes!);
-            savedFile = file;
-          } catch (_) {
-            // Silently swallow to fallback
-          }
-        }
-
-        // 2. Fallback to external storage directory
-        if (savedFile == null) {
-          try {
-            final Directory? appDir = await getExternalStorageDirectory();
-            if (appDir != null) {
-              final File file = File('${appDir.path}/$fileName');
-              await file.writeAsBytes(currentMeal.imageBytes!);
-              savedFile = file;
-            }
-          } catch (_) {
-            // Silently swallow to fallback
-          }
-        }
-
-        // 3. Fallback to app documents directory
-        if (savedFile == null) {
-          final Directory docDir = await getApplicationDocumentsDirectory();
-          final File file = File('${docDir.path}/$fileName');
-          await file.writeAsBytes(currentMeal.imageBytes!);
-          savedFile = file;
-        }
-
-        savedPath = savedFile.path;
-      } else {
-        // iOS or other platforms
-        final String fileName = 'meal_${currentMeal.shortId}_$timestamp.jpg';
-        final Directory docDir = await getApplicationDocumentsDirectory();
-        final File file = File('${docDir.path}/$fileName');
-        await file.writeAsBytes(currentMeal.imageBytes!);
-        savedPath = file.path;
-      }
+      if (savedPath == null) return;
 
       if (!context.mounted) return;
-
-      String message;
-      if (Platform.isAndroid && savedPath.startsWith('/storage/emulated/0/Download')) {
-        message = localizations.imageSavedDownloads;
-      } else {
-        final displayPath = savedPath.length > 40
-            ? '...${savedPath.substring(savedPath.length - 37)}'
-            : savedPath;
-        message = localizations.imageSavedTo(displayPath);
-      }
-
-      showNotificationDialog(context, message, isError: false);
+      FileSaveHelper.showSuccessNotification(
+        context: context,
+        savedPath: savedPath,
+        androidDownloadMessage: localizations.imageSavedDownloads,
+        generalMessageBuilder: (displayPath) =>
+            localizations.imageSavedTo(displayPath),
+      );
     } catch (e) {
       if (!context.mounted) return;
-      showNotificationDialog(
-        context,
-        localizations.imageSaveFailed(e.toString()),
-        isError: true,
+      FileSaveHelper.showErrorNotification(
+        context: context,
+        errorMessage: localizations.imageSaveFailed(e.toString()),
       );
     }
   }
