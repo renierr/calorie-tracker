@@ -1081,6 +1081,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Never Synced'**
   String get neverSynced;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String appVersion(String version);
+
+  /// No description provided for @gitHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Git Hash: {hash}'**
+  String gitHash(String hash);
 }
 
 class _AppLocalizationsDelegate

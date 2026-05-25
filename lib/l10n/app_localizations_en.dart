@@ -556,4 +556,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get neverSynced => 'Never Synced';
+
+  @override
+  String appVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String gitHash(String hash) {
+    return 'Git Hash: $hash';
+  }
 }

@@ -43,3 +43,23 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+tasks.register("generateVersion") {
+    doLast {
+        exec {
+            workingDir("../../")
+            // On Windows, commandLine needs cmd /c if executing a shell script, but dart is an executable.
+            // Using a cross-platform command line array.
+            if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+                commandLine("cmd", "/c", "dart run tool/generate_version.dart")
+            } else {
+                commandLine("dart", "run", "tool/generate_version.dart")
+            }
+        }
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn("generateVersion")
+}
+

@@ -38,3 +38,12 @@ target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
 # Run the Flutter tool portions of the build. This must not be removed.
 add_dependencies(${BINARY_NAME} flutter_assemble)
+
+# Automatically generate version.dart before building the executable
+add_custom_target(generate_version
+  COMMAND dart run "${CMAKE_SOURCE_DIR}/../tool/generate_version.dart"
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/.."
+  COMMENT "Generating version.dart..."
+)
+add_dependencies(${BINARY_NAME} generate_version)
+

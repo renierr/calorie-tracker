@@ -231,5 +231,22 @@
       }
     }
   },
-  "neverSynced": "Never Synced"
+  "neverSynced": "Never Synced",
+  "appVersion": "Version {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "gitHash": "Git Hash: {hash}",
+  "@gitHash": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  }
 }
+
