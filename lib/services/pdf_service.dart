@@ -214,6 +214,23 @@ class PdfService {
       locale,
     ).add_jm();
 
+    final List<Meal> sortedSummaryMeals = List<Meal>.from(meals)
+      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    final String computedTimeframe = sortedSummaryMeals.isEmpty
+        ? ''
+        : localizations.pdfRangeCustom(
+            DateFormat.yMMMd(locale).format(
+              DateTime.fromMillisecondsSinceEpoch(
+                sortedSummaryMeals.first.timestamp,
+              ),
+            ),
+            DateFormat.yMMMd(locale).format(
+              DateTime.fromMillisecondsSinceEpoch(
+                sortedSummaryMeals.last.timestamp,
+              ),
+            ),
+          );
+
     pdf.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
@@ -258,6 +275,17 @@ class PdfService {
         build: (pw.Context context) {
           return [
             pw.SizedBox(height: 10),
+            if (computedTimeframe.isNotEmpty) ...[
+              pw.Text(
+                computedTimeframe,
+                style: pw.TextStyle(
+                  fontSize: 10,
+                  fontWeight: pw.FontWeight.bold,
+                  color: pdfGrey,
+                ),
+              ),
+              pw.SizedBox(height: 8),
+            ],
 
             // Performance Cards Wrap/Row
             pw.Row(
