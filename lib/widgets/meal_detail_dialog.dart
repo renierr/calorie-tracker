@@ -37,10 +37,13 @@ class MealDetailDialog extends StatelessWidget {
       child: Consumer<AppState>(
         builder: (context, currentAppState, child) {
           // Reactively fetch the latest version of the meal from AppState
-          final currentMeal = currentAppState.meals.firstWhere(
+          var currentMeal = currentAppState.meals.firstWhere(
             (m) => m.id == meal.id,
             orElse: () => meal,
           );
+          if (currentMeal.imageBytes == null && meal.imageBytes != null) {
+            currentMeal = currentMeal.copyWith(imageBytes: meal.imageBytes);
+          }
 
           final mealDate = DateTime.fromMillisecondsSinceEpoch(
             currentMeal.timestamp,
