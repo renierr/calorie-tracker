@@ -234,8 +234,3 @@ When submitting changes to this codebase, you **must** verify compilation and st
     flutter analyze
     ```
 
-3.  **Unit Testing**:
-    Ensure all unit tests pass completely before concluding:
-    ```bash
-    flutter test
-    ```

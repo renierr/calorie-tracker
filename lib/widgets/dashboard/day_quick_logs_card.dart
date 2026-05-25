@@ -3,7 +3,8 @@ import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
 import '../../l10n/app_localizations.dart';
-import '../mini_macro_chip.dart';
+import '../meal_detail_dialog.dart';
+import 'quick_log_item.dart';
 
 class DayQuickLogsCard extends StatelessWidget {
   final AppState appState;
@@ -70,117 +71,34 @@ class DayQuickLogsCard extends StatelessWidget {
                   Divider(color: colors.surfaceLight, height: 1),
               itemBuilder: (context, index) {
                 final Meal meal = meals[index];
-
-                // Dynamically extract short localized macro labels (e.g. 'P'/'E', 'C'/'K', 'F'/'F')
-                final perGramStr = AppLocalizations.of(
-                  context,
-                )!.perGram(0, 0, 0);
-                final cleanParts = perGramStr
-                    .split(' ')
-                    .where((s) => s.isNotEmpty)
-                    .toList();
-                final pLabel = cleanParts.isNotEmpty
-                    ? cleanParts[0].replaceAll(':', '')
-                    : 'P';
-                final cLabel = cleanParts.length > 2
-                    ? cleanParts[2].replaceAll(':', '')
-                    : 'C';
-                final fLabel = cleanParts.length > 4
-                    ? cleanParts[4].replaceAll(':', '')
-                    : 'F';
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: [
-                      // Thumbnail Photo or fallback icon
-                      Container(
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: colors.surfaceLight,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white12
-                                : Colors.black.withValues(alpha: 0.08),
-                            width: 0.5,
-                          ),
-                        ),
-                        child: meal.imageBytes != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.memory(
-                                  meal.imageBytes!,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.fastfood,
-                                color: AppTheme.accentEmerald,
-                                size: 20,
-                              ),
-                      ),
-                      const SizedBox(width: 14),
-
-                      // Text Info
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              meal.foodName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: colors.textPrimary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 4,
-                              children: [
-                                MiniMacroChip(
-                                  label: pLabel,
-                                  value: '${meal.protein}g',
-                                  color: AppTheme.accentBlue,
-                                ),
-                                MiniMacroChip(
-                                  label: cLabel,
-                                  value: '${meal.carbs}g',
-                                  color: AppTheme.accentAmber,
-                                ),
-                                MiniMacroChip(
-                                  label: fLabel,
-                                  value: '${meal.fat}g',
-                                  color: AppTheme.accentRed,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Calorie Count Indicator
-                      Text(
-                        AppLocalizations.of(context)!.kcalLabel(meal.calories),
-                        style: const TextStyle(
-                          color: AppTheme.accentEmerald,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                return QuickLogItem(
+                  meal: meal,
+                  onTap: () => _showMealDetailDialog(context, meal),
                 );
               },
             ),
         ],
       ),
+    );
+  }
+
+  void _showMealDetailDialog(BuildContext context, Meal meal) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Meal Details',
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (context, anim1, anim2) => const SizedBox.shrink(),
+      transitionBuilder: (context, anim1, anim2, child) {
+        return Transform.scale(
+          scale: anim1.value,
+          child: Opacity(
+            opacity: anim1.value,
+            child: MealDetailDialog(meal: meal, appState: appState),
+          ),
+        );
+      },
     );
   }
 }

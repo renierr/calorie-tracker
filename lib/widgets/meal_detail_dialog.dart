@@ -24,10 +24,16 @@ class MealDetailDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
     final locale = Localizations.localeOf(context).toLanguageTag();
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double horizontalPadding = screenWidth < 600 ? 12.0 : 40.0;
 
     return Dialog(
       backgroundColor: colors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: 24.0,
+      ),
       child: Consumer<AppState>(
         builder: (context, currentAppState, child) {
           // Reactively fetch the latest version of the meal from AppState
@@ -179,41 +185,47 @@ class MealDetailDialog extends StatelessWidget {
                         const SizedBox(height: 16),
 
                         // Macro Grid Layout with premium card badges
-                        GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          childAspectRatio: 2.3,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          children: [
-                            _buildMacroMetricCard(
-                              context,
-                              '${currentMeal.calories} kcal',
-                              AppLocalizations.of(
-                                context,
-                              )!.caloriesKcal.replaceAll(' (kcal)', ''),
-                              AppTheme.accentEmerald,
-                            ),
-                            _buildMacroMetricCard(
-                              context,
-                              '${currentMeal.protein}g',
-                              AppLocalizations.of(context)!.protein,
-                              AppTheme.accentBlue,
-                            ),
-                            _buildMacroMetricCard(
-                              context,
-                              '${currentMeal.carbs}g',
-                              AppLocalizations.of(context)!.carbs,
-                              AppTheme.accentAmber,
-                            ),
-                            _buildMacroMetricCard(
-                              context,
-                              '${currentMeal.fat}g',
-                              AppLocalizations.of(context)!.fat,
-                              AppTheme.accentRed,
-                            ),
-                          ],
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final double gridWidth = constraints.maxWidth;
+                            final double cardWidth = (gridWidth - 10) / 2;
+                            return Wrap(
+                              spacing: 10,
+                              runSpacing: 10,
+                              children: [
+                                _buildMacroMetricCard(
+                                  context,
+                                  width: cardWidth,
+                                  value: '${currentMeal.calories} kcal',
+                                  label: AppLocalizations.of(
+                                    context,
+                                  )!.caloriesKcal.replaceAll(' (kcal)', ''),
+                                  color: AppTheme.accentEmerald,
+                                ),
+                                _buildMacroMetricCard(
+                                  context,
+                                  width: cardWidth,
+                                  value: '${currentMeal.protein}g',
+                                  label: AppLocalizations.of(context)!.protein,
+                                  color: AppTheme.accentBlue,
+                                ),
+                                _buildMacroMetricCard(
+                                  context,
+                                  width: cardWidth,
+                                  value: '${currentMeal.carbs}g',
+                                  label: AppLocalizations.of(context)!.carbs,
+                                  color: AppTheme.accentAmber,
+                                ),
+                                _buildMacroMetricCard(
+                                  context,
+                                  width: cardWidth,
+                                  value: '${currentMeal.fat}g',
+                                  label: AppLocalizations.of(context)!.fat,
+                                  color: AppTheme.accentRed,
+                                ),
+                              ],
+                            );
+                          },
                         ),
                         const SizedBox(height: 18),
 
@@ -322,15 +334,17 @@ class MealDetailDialog extends StatelessWidget {
   }
 
   Widget _buildMacroMetricCard(
-    BuildContext context,
-    String value,
-    String label,
-    Color color,
-  ) {
+    BuildContext context, {
+    required double width,
+    required String value,
+    required String label,
+    required Color color,
+  }) {
     final colors = AppTheme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      width: width,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: isDark ? 0.08 : 0.05),
         borderRadius: BorderRadius.circular(10),
@@ -342,24 +356,31 @@ class MealDetailDialog extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.w800,
-              fontSize: 15,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              value,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w800,
+                fontSize: 15,
+              ),
             ),
           ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
+          const SizedBox(height: 4),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              label,
+              style: TextStyle(
+                color: colors.textSecondary,
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
