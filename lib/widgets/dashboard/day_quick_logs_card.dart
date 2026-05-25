@@ -3,6 +3,7 @@ import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
 import '../../l10n/app_localizations.dart';
+import '../mini_macro_chip.dart';
 
 class DayQuickLogsCard extends StatelessWidget {
   final AppState appState;
@@ -143,23 +144,20 @@ class DayQuickLogsCard extends StatelessWidget {
                               spacing: 6,
                               runSpacing: 4,
                               children: [
-                                _buildMiniMacroChip(
-                                  context,
-                                  pLabel,
-                                  '${meal.protein}g',
-                                  AppTheme.accentBlue,
+                                MiniMacroChip(
+                                  label: pLabel,
+                                  value: '${meal.protein}g',
+                                  color: AppTheme.accentBlue,
                                 ),
-                                _buildMiniMacroChip(
-                                  context,
-                                  cLabel,
-                                  '${meal.carbs}g',
-                                  AppTheme.accentAmber,
+                                MiniMacroChip(
+                                  label: cLabel,
+                                  value: '${meal.carbs}g',
+                                  color: AppTheme.accentAmber,
                                 ),
-                                _buildMiniMacroChip(
-                                  context,
-                                  fLabel,
-                                  '${meal.fat}g',
-                                  AppTheme.accentRed,
+                                MiniMacroChip(
+                                  label: fLabel,
+                                  value: '${meal.fat}g',
+                                  color: AppTheme.accentRed,
                                 ),
                               ],
                             ),
@@ -181,45 +179,6 @@ class DayQuickLogsCard extends StatelessWidget {
                 );
               },
             ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMiniMacroChip(
-    BuildContext context,
-    String label,
-    String value,
-    Color color,
-  ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: isDark ? 0.08 : 0.05),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: color.withValues(alpha: isDark ? 0.2 : 0.15),
-          width: 0.8,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 5,
-            height: 5,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: 4),
-          Text(
-            '$label: $value',
-            style: TextStyle(
-              color: color,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
         ],
       ),
     );

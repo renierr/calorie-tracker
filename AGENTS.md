@@ -36,6 +36,7 @@ Please read and follow these instructions meticulously to maintain code quality 
 - Bind UI screens to state changes using `Consumer<AppState>` or `Provider.of<AppState>(context)`. Use `listen: false` when accessing state inside button callbacks or helper actions.
 - Log errors with context, for example: `print('[Service/Page Name] message: $error')`.
 - Extract internal widgets (like dialogs, detailed cards, or list items) into their own files under `lib/widgets/` to promote modular, clean, and easily maintainable codebase structure.
+- Avoid duplicating user interface rendering code. Extract highly repetitive visual components (like custom cards, progress rings, and chip/badge indicators such as the `MiniMacroChip` widget) into shared reusable widgets in `lib/widgets/` to promote consistency, visual harmony, and code maintainability.
 
 ---
 
