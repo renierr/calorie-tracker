@@ -64,13 +64,30 @@ class DayQuickLogsCard extends StatelessWidget {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: meals.length > 3
-                  ? 3
-                  : meals.length, // Show up to 3 quick logs
+              itemCount: meals.length,
               separatorBuilder: (context, index) =>
                   Divider(color: colors.surfaceLight, height: 1),
               itemBuilder: (context, index) {
                 final Meal meal = meals[index];
+
+                // Dynamically extract short localized macro labels (e.g. 'P'/'E', 'C'/'K', 'F'/'F')
+                final perGramStr = AppLocalizations.of(
+                  context,
+                )!.perGram(0, 0, 0);
+                final cleanParts = perGramStr
+                    .split(' ')
+                    .where((s) => s.isNotEmpty)
+                    .toList();
+                final pLabel = cleanParts.isNotEmpty
+                    ? cleanParts[0].replaceAll(':', '')
+                    : 'P';
+                final cLabel = cleanParts.length > 2
+                    ? cleanParts[2].replaceAll(':', '')
+                    : 'C';
+                final fLabel = cleanParts.length > 4
+                    ? cleanParts[4].replaceAll(':', '')
+                    : 'F';
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(
@@ -121,15 +138,30 @@ class DayQuickLogsCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 3),
-                            Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.perGram(meal.carbs, meal.fat, meal.protein),
-                              style: TextStyle(
-                                color: colors.textMuted,
-                                fontSize: 11,
-                              ),
+                            const SizedBox(height: 5),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 4,
+                              children: [
+                                _buildMiniMacroChip(
+                                  context,
+                                  pLabel,
+                                  '${meal.protein}g',
+                                  AppTheme.accentBlue,
+                                ),
+                                _buildMiniMacroChip(
+                                  context,
+                                  cLabel,
+                                  '${meal.carbs}g',
+                                  AppTheme.accentAmber,
+                                ),
+                                _buildMiniMacroChip(
+                                  context,
+                                  fLabel,
+                                  '${meal.fat}g',
+                                  AppTheme.accentRed,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -149,6 +181,45 @@ class DayQuickLogsCard extends StatelessWidget {
                 );
               },
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMiniMacroChip(
+    BuildContext context,
+    String label,
+    String value,
+    Color color,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: isDark ? 0.08 : 0.05),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: color.withValues(alpha: isDark ? 0.2 : 0.15),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 5,
+            height: 5,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '$label: $value',
+            style: TextStyle(
+              color: color,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );

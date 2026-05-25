@@ -33,6 +33,22 @@ class MealHistoryCard extends StatelessWidget {
     final timeFormat = DateFormat.jm(locale);
     final dateFormat = DateFormat.yMMMd(locale);
 
+    // Dynamically extract short localized macro labels (e.g. 'P'/'E', 'C'/'K', 'F'/'F')
+    final perGramStr = AppLocalizations.of(context)!.perGram(0, 0, 0);
+    final cleanParts = perGramStr
+        .split(' ')
+        .where((s) => s.isNotEmpty)
+        .toList();
+    final pLabel = cleanParts.isNotEmpty
+        ? cleanParts[0].replaceAll(':', '')
+        : 'P';
+    final cLabel = cleanParts.length > 2
+        ? cleanParts[2].replaceAll(':', '')
+        : 'C';
+    final fLabel = cleanParts.length > 4
+        ? cleanParts[4].replaceAll(':', '')
+        : 'F';
+
     return GestureDetector(
       onTap: () {
         if (isSelectionMode) {
@@ -164,19 +180,19 @@ class MealHistoryCard extends StatelessWidget {
                                 ),
                                 _buildMiniMacroChip(
                                   context,
-                                  'P',
+                                  pLabel,
                                   '${meal.protein}g',
                                   AppTheme.accentBlue,
                                 ),
                                 _buildMiniMacroChip(
                                   context,
-                                  'C',
+                                  cLabel,
                                   '${meal.carbs}g',
                                   AppTheme.accentAmber,
                                 ),
                                 _buildMiniMacroChip(
                                   context,
-                                  'F',
+                                  fLabel,
                                   '${meal.fat}g',
                                   AppTheme.accentRed,
                                 ),
