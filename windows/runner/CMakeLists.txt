@@ -45,5 +45,6 @@ add_custom_target(generate_version
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/.."
   COMMENT "Generating version.dart..."
 )
-add_dependencies(${BINARY_NAME} generate_version)
+add_dependencies(flutter_assemble generate_version)
+
 
