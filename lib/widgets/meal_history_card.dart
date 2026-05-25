@@ -3,9 +3,8 @@ import 'package:intl/intl.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
-import '../services/pdf_service.dart';
 import '../l10n/app_localizations.dart';
-import 'edit_meal_dialog.dart';
+import 'meal_detail_dialog.dart';
 
 class MealHistoryCard extends StatelessWidget {
   final Meal meal;
@@ -35,7 +34,13 @@ class MealHistoryCard extends StatelessWidget {
     final dateFormat = DateFormat.yMMMd(locale);
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (isSelectionMode) {
+          onTap();
+        } else {
+          _showMealDetailDialog(context);
+        }
+      },
       onLongPress: onLongPress,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -99,39 +104,33 @@ class MealHistoryCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Photo Thumbnail
-                      GestureDetector(
-                        onTap: meal.imageBytes != null
-                            ? () => _showImagePreview(context)
-                            : null,
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: colors.surfaceLight,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color:
-                                  Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white12
-                                  : Colors.black.withValues(alpha: 0.08),
-                              width: 0.5,
-                            ),
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: colors.surfaceLight,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white12
+                                : Colors.black.withValues(alpha: 0.08),
+                            width: 0.5,
                           ),
-                          child: meal.imageBytes != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.memory(
-                                    meal.imageBytes!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : const Icon(
-                                  Icons.restaurant,
-                                  color: AppTheme.accentEmerald,
-                                  size: 24,
-                                ),
                         ),
+                        child: meal.imageBytes != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.memory(
+                                  meal.imageBytes!,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.restaurant,
+                                color: AppTheme.accentEmerald,
+                                size: 24,
+                              ),
                       ),
                       const SizedBox(width: 14),
 
@@ -150,28 +149,38 @@ class MealHistoryCard extends StatelessWidget {
                                 fontSize: 15,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.caloriesLabel(meal.calories),
-                              style: const TextStyle(
-                                color: AppTheme.accentEmerald,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              AppLocalizations.of(context)!.macroPerGram(
-                                meal.carbs,
-                                meal.fat,
-                                meal.protein,
-                              ),
-                              style: TextStyle(
-                                color: colors.textSecondary,
-                                fontSize: 12,
-                              ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 4,
+                              children: [
+                                _buildMiniMacroChip(
+                                  context,
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.caloriesKcal.replaceAll(' (kcal)', ''),
+                                  '${meal.calories}',
+                                  AppTheme.accentEmerald,
+                                ),
+                                _buildMiniMacroChip(
+                                  context,
+                                  'P',
+                                  '${meal.protein}g',
+                                  AppTheme.accentBlue,
+                                ),
+                                _buildMiniMacroChip(
+                                  context,
+                                  'C',
+                                  '${meal.carbs}g',
+                                  AppTheme.accentAmber,
+                                ),
+                                _buildMiniMacroChip(
+                                  context,
+                                  'F',
+                                  '${meal.fat}g',
+                                  AppTheme.accentRed,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -192,71 +201,50 @@ class MealHistoryCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                  const SizedBox(height: 12),
-                  Divider(color: colors.surfaceLight, height: 1),
-                  const SizedBox(height: 10),
-
-                  // Action Toolbar Footer
-                  Wrap(
-                    alignment: WrapAlignment.end,
-                    spacing: 8,
-                    runSpacing: 6,
-                    children: [
-                      // Single Export PDF
-                      TextButton.icon(
-                        icon: const Icon(Icons.picture_as_pdf, size: 16),
-                        label: Text(
-                          AppLocalizations.of(context)!.pdf,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        onPressed: () async {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                AppLocalizations.of(context)!.generatingMealPdf,
-                              ),
-                            ),
-                          );
-                          await PdfService.generateSingleMealPdf(
-                            meal,
-                            appState.calorieGoal,
-                          );
-                        },
-                      ),
-
-                      // Edit
-                      TextButton.icon(
-                        icon: const Icon(Icons.edit, size: 16),
-                        label: Text(
-                          AppLocalizations.of(context)!.edit,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        onPressed: () => _showEditMealDialog(context),
-                      ),
-
-                      // Delete
-                      TextButton.icon(
-                        icon: const Icon(
-                          Icons.delete_outline,
-                          size: 16,
-                          color: AppTheme.accentRed,
-                        ),
-                        label: Text(
-                          AppLocalizations.of(context)!.delete,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppTheme.accentRed,
-                          ),
-                        ),
-                        onPressed: () => _confirmDeleteMeal(context),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMiniMacroChip(
+    BuildContext context,
+    String label,
+    String value,
+    Color color,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: isDark ? 0.08 : 0.05),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: color.withValues(alpha: isDark ? 0.2 : 0.15),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 5,
+            height: 5,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '$label: $value',
+            style: TextStyle(
+              color: color,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -284,80 +272,21 @@ class MealHistoryCard extends StatelessWidget {
     );
   }
 
-  void _showImagePreview(BuildContext context) {
-    showDialog(
+  void _showMealDetailDialog(BuildContext context) {
+    showGeneralDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.all(16),
-        child: Stack(
-          alignment: Alignment.topRight,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: InteractiveViewer(
-                child: Image.memory(meal.imageBytes!, fit: BoxFit.contain),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: FloatingActionButton.small(
-                heroTag: 'close_preview_${meal.id}',
-                backgroundColor: Colors.black54,
-                onPressed: () => Navigator.pop(context),
-                child: const Icon(Icons.close, color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showEditMealDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => EditMealDialog(meal: meal, appState: appState),
-    );
-  }
-
-  void _confirmDeleteMeal(BuildContext context) {
-    final colors = AppTheme.of(context);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: colors.surface,
-          title: Text(
-            AppLocalizations.of(context)!.confirmDelete,
-            style: const TextStyle(color: AppTheme.accentRed),
+      barrierDismissible: true,
+      barrierLabel: 'Meal Details',
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (context, anim1, anim2) => const SizedBox.shrink(),
+      transitionBuilder: (context, anim1, anim2, child) {
+        return Transform.scale(
+          scale: anim1.value,
+          child: Opacity(
+            opacity: anim1.value,
+            child: MealDetailDialog(meal: meal, appState: appState),
           ),
-          content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                AppLocalizations.of(context)!.cancel,
-                style: TextStyle(color: colors.textSecondary),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.accentRed,
-              ),
-              onPressed: () async {
-                await appState.deleteMeal(meal.id!);
-                if (!context.mounted) return;
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!.mealDeleted),
-                  ),
-                );
-              },
-              child: Text(AppLocalizations.of(context)!.delete),
-            ),
-          ],
         );
       },
     );

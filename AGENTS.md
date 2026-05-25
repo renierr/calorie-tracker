@@ -23,6 +23,7 @@ Please read and follow these instructions meticulously to maintain code quality 
 - **State Management & Data Flow**: Always channel database operations, macro targets, and date navigations through `AppState` in `lib/providers/app_state.dart`. Never update local state variables in individual views for data that should persist.
 - **SQLite Constraints**: Database operations are strictly asynchronous. Always return `Future<T>` and handle interactions inside `AppState`. Store images as `Uint8List? imageBytes` (`BLOB` in SQL). Never use native local file paths for persistence.
 - **PDF Class Overlaps**: Always import the PDF layout framework as `pw` (`import 'package:pdf/widgets.dart' as pw;`) to prevent class namespace collisions between PDF widgets (e.g. `pw.Text`) and standard Flutter Material widgets.
+- **Small Screen Fitting & Wrap Layouts**: Always use responsive layouts (like `Wrap` instead of horizontal `Row` for multiple buttons/controls, and `GridView` or scrollable metrics) inside dialogs, modals, and detail cards to ensure clean fit and prevent overflows or text squishing on small mobile screens.
 
 ---
 
@@ -34,6 +35,7 @@ Please read and follow these instructions meticulously to maintain code quality 
 - Avoid using custom hex codes inside individual views. Always reference static variables from `AppTheme` in `lib/theme/theme.dart`.
 - Bind UI screens to state changes using `Consumer<AppState>` or `Provider.of<AppState>(context)`. Use `listen: false` when accessing state inside button callbacks or helper actions.
 - Log errors with context, for example: `print('[Service/Page Name] message: $error')`.
+- Extract internal widgets (like dialogs, detailed cards, or list items) into their own files under `lib/widgets/` to promote modular, clean, and easily maintainable codebase structure.
 
 ---
 
