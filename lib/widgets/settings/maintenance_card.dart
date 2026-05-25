@@ -132,31 +132,41 @@ class MaintenanceCard extends StatelessWidget {
         if (file == null) return;
         selectedPath = file.path;
       } else {
-        Directory? backupDir;
+        final List<File> dbFiles = [];
+        final List<Directory> dirsToScan = [];
+
         if (Platform.isAndroid) {
-          backupDir = await getExternalStorageDirectory();
+          final publicDownloadDir = Directory('/storage/emulated/0/Download');
+          if (await publicDownloadDir.exists()) {
+            dirsToScan.add(publicDownloadDir);
+          }
+          final extDir = await getExternalStorageDirectory();
+          if (extDir != null && await extDir.exists()) {
+            dirsToScan.add(extDir);
+          }
         } else {
-          backupDir = await getApplicationDocumentsDirectory();
+          final docDir = await getApplicationDocumentsDirectory();
+          if (await docDir.exists()) {
+            dirsToScan.add(docDir);
+          }
         }
 
-        if (backupDir == null || !await backupDir.exists()) {
-          _showSnackBar(
-            scaffoldMessenger,
-            localizations.noBackupsFound,
-            isError: true,
-          );
-          return;
+        for (final dir in dirsToScan) {
+          try {
+            final List<FileSystemEntity> files = await dir.list().toList();
+            final List<File> found = files
+                .whereType<File>()
+                .where(
+                  (file) =>
+                      p.basename(file.path).startsWith('nutriscan_db_') &&
+                      file.path.endsWith('.db'),
+                )
+                .toList();
+            dbFiles.addAll(found);
+          } catch (_) {
+            // Silently swallow list permission errors for specific folders
+          }
         }
-
-        final List<FileSystemEntity> files = await backupDir.list().toList();
-        final List<File> dbFiles = files
-            .whereType<File>()
-            .where(
-              (file) =>
-                  p.basename(file.path).startsWith('nutriscan_db_') &&
-                  file.path.endsWith('.db'),
-            )
-            .toList();
 
         dbFiles.sort(
           (a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()),
