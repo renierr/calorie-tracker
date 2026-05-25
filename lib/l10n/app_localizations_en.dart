@@ -492,6 +492,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pdfActiveFilter => 'Active Filter Range';
 
   @override
+  String pdfEntriesFollowing(int count) {
+    return '$count entries following';
+  }
+
+  @override
+  String get pdfEntriesLabel => 'Total Entries';
+
+  @override
+  String get pdfCalorieTrend => 'Calorie Trend';
+
+  @override
   String get importLabel => 'Import';
 
   @override

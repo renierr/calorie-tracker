@@ -156,6 +156,16 @@
   "pdfAllTime": "Alle Einträge",
   "pdfRange7Days": "Zeitraum: Letzte 7 Tage",
   "pdfActiveFilter": "Aktiver Filterzeitraum",
+  "pdfEntriesFollowing": "{count} Einträge folgen",
+  "@pdfEntriesFollowing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfEntriesLabel": "Einträge gesamt",
+  "pdfCalorieTrend": "Kalorientrend",
   "importLabel": "Importieren",
   "exportLabel": "Exportieren",
   "importMealsSuccess": "{count} Mahlzeiten erfolgreich importiert.",

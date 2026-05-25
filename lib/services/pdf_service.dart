@@ -5,6 +5,8 @@ import 'package:pdf/widgets.dart' as pw;
 import '../models/meal_model.dart';
 import '../helpers/file_save_helper.dart';
 import '../l10n/app_localizations.dart';
+import 'pdf/pdf_meal_card.dart';
+import 'pdf/pdf_trend_chart.dart';
 
 final PdfColor pdfEmerald = PdfColor.fromHex('#10B981');
 
@@ -190,6 +192,8 @@ class PdfService {
     final int totalCarbs = meals.fold(0, (sum, m) => sum + m.carbs);
     final int totalFat = meals.fold(0, (sum, m) => sum + m.fat);
 
+    final localizations = AppLocalizations.of(context)!;
+
     pdf.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
@@ -235,49 +239,88 @@ class PdfService {
           return [
             pw.SizedBox(height: 10),
 
-            // Performance Cards Grid
+            // Performance Cards Wrap/Row
             pw.Row(
               children: [
-                _buildSummaryStatCard(
-                  'Calories',
-                  '$totalCalories / $calorieGoal kcal',
-                  totalCalories <= calorieGoal ? pdfEmerald : PdfColors.amber,
+                pw.Expanded(
+                  child: PdfMealCardHelper.buildSummaryStatCard(
+                    label: localizations.caloriesKcal.replaceAll(' (kcal)', ''),
+                    value: '$totalCalories kcal',
+                    accentColor: pdfEmerald,
+                  ),
                 ),
-                pw.SizedBox(width: 10),
-                _buildSummaryStatCard(
-                  'Protein',
-                  '${totalProtein}g / ${proteinGoal}g',
-                  PdfColors.blue,
+                pw.SizedBox(width: 8),
+                pw.Expanded(
+                  child: PdfMealCardHelper.buildSummaryStatCard(
+                    label: localizations.protein,
+                    value: '${totalProtein}g',
+                    accentColor: pdfBlue,
+                  ),
                 ),
-                pw.SizedBox(width: 10),
-                _buildSummaryStatCard(
-                  'Carbs',
-                  '${totalCarbs}g / ${carbsGoal}g',
-                  PdfColors.orange,
+                pw.SizedBox(width: 8),
+                pw.Expanded(
+                  child: PdfMealCardHelper.buildSummaryStatCard(
+                    label: localizations.carbs,
+                    value: '${totalCarbs}g',
+                    accentColor: pdfAmber,
+                  ),
                 ),
-                pw.SizedBox(width: 10),
-                _buildSummaryStatCard(
-                  'Fat',
-                  '${totalFat}g / ${fatGoal}g',
-                  PdfColors.red,
+                pw.SizedBox(width: 8),
+                pw.Expanded(
+                  child: PdfMealCardHelper.buildSummaryStatCard(
+                    label: localizations.fat,
+                    value: '${totalFat}g',
+                    accentColor: pdfRed,
+                  ),
+                ),
+                pw.SizedBox(width: 8),
+                pw.Expanded(
+                  child: PdfMealCardHelper.buildSummaryStatCard(
+                    label: localizations.pdfEntriesLabel,
+                    value: '${meals.length}',
+                    accentColor: pdfGrey,
+                  ),
                 ),
               ],
             ),
-            pw.SizedBox(height: 25),
+            pw.SizedBox(height: 15),
 
-            // Custom User Notes Section
-            if (userNotes.trim().isNotEmpty) ...[
-              pw.Text(
-                'Report Comments',
-                style: pw.TextStyle(
-                  fontSize: 12,
-                  fontWeight: pw.FontWeight.bold,
+            // Calorie Trend Chart
+            PdfTrendChartHelper.buildTrendChart(
+              meals: meals,
+              localizations: localizations,
+              pdfDocument: pdf.document,
+            ),
+
+            // Meals section header & entries following indicator
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text(
+                  localizations.dayLogSummary,
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
                 ),
-              ),
-              pw.SizedBox(height: 5),
+                pw.Text(
+                  localizations.pdfEntriesFollowing(meals.length),
+                  style: pw.TextStyle(
+                    fontSize: 8,
+                    color: pdfGrey,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+
+            // Custom User Notes Section (relocated between summary/trend and cards list)
+            if (userNotes.trim().isNotEmpty) ...[
               pw.Container(
                 width: double.infinity,
                 padding: const pw.EdgeInsets.all(10),
+                margin: const pw.EdgeInsets.only(bottom: 15),
                 decoration: pw.BoxDecoration(
                   color: PdfColors.grey100,
                   border: pw.Border(
@@ -287,87 +330,27 @@ class PdfService {
                 child: pw.Text(
                   userNotes,
                   style: pw.TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                     fontStyle: pw.FontStyle.italic,
                   ),
                 ),
               ),
-              pw.SizedBox(height: 25),
             ],
 
-            // Meals Listing Table
-            pw.Text(
-              'Logged Meal Listing',
-              style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold),
-            ),
-            pw.SizedBox(height: 8),
-
-            pw.Table(
-              border: pw.TableBorder.all(color: PdfColors.grey300, width: 0.5),
-              columnWidths: const {
-                0: pw.FlexColumnWidth(3), // Date/Time
-                1: pw.FlexColumnWidth(5), // Meal Name
-                2: pw.FlexColumnWidth(2), // Calories
-                3: pw.FlexColumnWidth(1.5), // Protein
-                4: pw.FlexColumnWidth(1.5), // Carbs
-                5: pw.FlexColumnWidth(1.5), // Fat
-                6: pw.FlexColumnWidth(1.5), // Confidence
-              },
-              children: [
-                // Table Header
-                pw.TableRow(
-                  decoration: const pw.BoxDecoration(color: PdfColors.grey200),
-                  children: [
-                    _buildTableCell('Time', isHeader: true),
-                    _buildTableCell('Meal Name', isHeader: true),
-                    _buildTableCell('Calories', isHeader: true),
-                    _buildTableCell('Prot', isHeader: true),
-                    _buildTableCell('Carb', isHeader: true),
-                    _buildTableCell('Fat', isHeader: true),
-                    _buildTableCell('Conf', isHeader: true),
-                  ],
-                ),
-                // Table Rows
-                ...meals.map((meal) {
-                  final date = DateTime.fromMillisecondsSinceEpoch(
-                    meal.timestamp,
-                  );
-                  return pw.TableRow(
-                    children: [
-                      _buildTableCell(_dateFormat.format(date)),
-                      _buildTableCell(meal.foodName),
-                      _buildTableCell('${meal.calories} kcal'),
-                      _buildTableCell('${meal.protein}g'),
-                      _buildTableCell('${meal.carbs}g'),
-                      _buildTableCell('${meal.fat}g'),
-                      _buildTableCell('${meal.confidence}%'),
-                    ],
-                  );
-                }),
-              ],
-            ),
-            pw.SizedBox(height: 30),
-
-            // Image Gallery Block (if selected and meals have images)
-            if (includeImages && meals.any((m) => m.imageBytes != null)) ...[
-              pw.Text(
-                'Meal Photo Album',
-                style: pw.TextStyle(
-                  fontSize: 12,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-              pw.SizedBox(height: 10),
-              _buildPhotoAlbumGrid(
-                meals.where((m) => m.imageBytes != null).toList(),
-              ),
-            ],
+            // Meals Listing Cards
+            ...meals.map((meal) {
+              return PdfMealCardHelper.buildMealCard(
+                meal: meal,
+                includeImages: includeImages,
+                localizations: localizations,
+                dateFormat: _dateFormat,
+              );
+            }),
           ];
         },
       ),
     );
 
-    final localizations = AppLocalizations.of(context)!;
     try {
       final bytes = await pdf.save();
       final destPath = await FileSaveHelper.saveFile(
@@ -422,110 +405,5 @@ class PdfService {
         ],
       ),
     );
-  }
-
-  static pw.Widget _buildSummaryStatCard(
-    String label,
-    String val,
-    PdfColor accentColor,
-  ) {
-    return pw.Expanded(
-      child: pw.Container(
-        padding: const pw.EdgeInsets.all(8),
-        decoration: pw.BoxDecoration(
-          border: pw.Border.all(color: PdfColors.grey300),
-          borderRadius: const pw.BorderRadius.all(pw.Radius.circular(6)),
-        ),
-        child: pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Text(
-              label,
-              style: const pw.TextStyle(color: PdfColors.grey600, fontSize: 8),
-            ),
-            pw.SizedBox(height: 3),
-            pw.Text(
-              val,
-              style: pw.TextStyle(
-                fontWeight: pw.FontWeight.bold,
-                fontSize: 11,
-                color: accentColor,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static pw.Widget _buildTableCell(String text, {bool isHeader = false}) {
-    return pw.Padding(
-      padding: const pw.EdgeInsets.all(5),
-      child: pw.Text(
-        text,
-        textAlign: isHeader ? pw.TextAlign.center : pw.TextAlign.left,
-        style: pw.TextStyle(
-          fontSize: 8,
-          fontWeight: isHeader ? pw.FontWeight.bold : pw.FontWeight.normal,
-        ),
-      ),
-    );
-  }
-
-  static pw.Widget _buildPhotoAlbumGrid(List<Meal> imageMeals) {
-    // Generate simple rows of image cells
-    final List<pw.Widget> rows = [];
-    for (int i = 0; i < imageMeals.length; i += 3) {
-      final List<pw.Widget> rowChildren = [];
-      for (int j = 0; j < 3; j++) {
-        final index = i + j;
-        if (index < imageMeals.length) {
-          final m = imageMeals[index];
-          rowChildren.add(
-            pw.Expanded(
-              child: pw.Container(
-                margin: const pw.EdgeInsets.all(4),
-                padding: const pw.EdgeInsets.all(4),
-                decoration: pw.BoxDecoration(
-                  border: pw.Border.all(color: PdfColors.grey300),
-                  borderRadius: const pw.BorderRadius.all(
-                    pw.Radius.circular(4),
-                  ),
-                ),
-                child: pw.Column(
-                  children: [
-                    pw.Container(
-                      height: 80,
-                      child: pw.Image(
-                        pw.MemoryImage(m.imageBytes!),
-                        fit: pw.BoxFit.cover,
-                      ),
-                    ),
-                    pw.SizedBox(height: 4),
-                    pw.Text(
-                      m.foodName,
-                      maxLines: 1,
-                      style: const pw.TextStyle(fontSize: 7),
-                    ),
-                    pw.Text(
-                      '${m.calories} kcal',
-                      style: const pw.TextStyle(
-                        fontSize: 6,
-                        color: PdfColors.grey600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        } else {
-          rowChildren.add(pw.Expanded(child: pw.SizedBox()));
-        }
-      }
-      rows.add(pw.Row(children: rowChildren));
-    }
-
-    return pw.Column(children: rows);
   }
 }

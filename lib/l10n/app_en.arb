@@ -156,6 +156,16 @@
   "pdfAllTime": "All-Time Logs",
   "pdfRange7Days": "Range: Last 7 Days",
   "pdfActiveFilter": "Active Filter Range",
+  "pdfEntriesFollowing": "{count} entries following",
+  "@pdfEntriesFollowing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfEntriesLabel": "Total Entries",
+  "pdfCalorieTrend": "Calorie Trend",
   "importLabel": "Import",
   "exportLabel": "Export",
   "importMealsSuccess": "Successfully imported {count} meals.",

@@ -493,6 +493,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pdfActiveFilter => 'Aktiver Filterzeitraum';
 
   @override
+  String pdfEntriesFollowing(int count) {
+    return '$count Einträge folgen';
+  }
+
+  @override
+  String get pdfEntriesLabel => 'Einträge gesamt';
+
+  @override
+  String get pdfCalorieTrend => 'Kalorientrend';
+
+  @override
   String get importLabel => 'Importieren';
 
   @override

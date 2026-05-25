@@ -980,6 +980,24 @@ abstract class AppLocalizations {
   /// **'Active Filter Range'**
   String get pdfActiveFilter;
 
+  /// No description provided for @pdfEntriesFollowing.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} entries following'**
+  String pdfEntriesFollowing(int count);
+
+  /// No description provided for @pdfEntriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Entries'**
+  String get pdfEntriesLabel;
+
+  /// No description provided for @pdfCalorieTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie Trend'**
+  String get pdfCalorieTrend;
+
   /// No description provided for @importLabel.
   ///
   /// In en, this message translates to:
