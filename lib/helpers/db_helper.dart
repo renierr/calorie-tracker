@@ -7,7 +7,7 @@ import '../models/meal_model.dart';
 
 class DbHelper {
   static const String _dbName = 'calorie_tracker.db';
-  static const int _dbVersion = 2;
+  static const int _dbVersion = 3;
   static const String tableMeals = 'meals';
 
   // Private constructor
@@ -59,7 +59,8 @@ class DbHelper {
         timestamp INTEGER NOT NULL,
         updatedAt INTEGER NOT NULL,
         synced INTEGER NOT NULL DEFAULT 0,
-        deleted INTEGER NOT NULL DEFAULT 0
+        deleted INTEGER NOT NULL DEFAULT 0,
+        isFavorite INTEGER NOT NULL DEFAULT 0
       )
     ''');
   }
@@ -71,6 +72,11 @@ class DbHelper {
       );
       await db.execute(
         'ALTER TABLE $tableMeals ADD COLUMN deleted INTEGER NOT NULL DEFAULT 0',
+      );
+    }
+    if (oldVersion < 3) {
+      await db.execute(
+        'ALTER TABLE $tableMeals ADD COLUMN isFavorite INTEGER NOT NULL DEFAULT 0',
       );
     }
   }
@@ -103,6 +109,7 @@ class DbHelper {
       'updatedAt',
       'synced',
       'deleted',
+      'isFavorite',
       if (includeImages) 'imageBytes',
     ];
 
@@ -270,6 +277,7 @@ class DbHelper {
       'updatedAt',
       'synced',
       'deleted',
+      'isFavorite',
       if (includeImages) 'imageBytes',
     ];
 
@@ -359,6 +367,7 @@ class DbHelper {
       'updatedAt',
       'synced',
       'deleted',
+      'isFavorite',
       if (includeImages) 'imageBytes',
     ];
 
@@ -446,5 +455,33 @@ class DbHelper {
       return maps.first['imageBytes'] as Uint8List?;
     }
     return null;
+  }
+
+  Future<List<Meal>> getFavoriteMeals({bool includeImages = true}) async {
+    final Database db = await database;
+    final List<String> columns = [
+      'id',
+      'shortId',
+      'foodName',
+      'calories',
+      'protein',
+      'carbs',
+      'fat',
+      'confidence',
+      'notes',
+      'timestamp',
+      'updatedAt',
+      'synced',
+      'deleted',
+      'isFavorite',
+      if (includeImages) 'imageBytes',
+    ];
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      columns: columns,
+      where: 'deleted = 0 AND isFavorite = 1',
+      orderBy: 'timestamp DESC',
+    );
+    return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
   }
 }

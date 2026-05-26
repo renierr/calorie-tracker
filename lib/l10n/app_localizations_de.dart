@@ -608,6 +608,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get neverSynced => 'Noch nie synchronisiert';
 
   @override
+  String get favoriteMeals => 'Lieblingsgerichte';
+
+  @override
+  String get noFavoritesYet =>
+      'Noch keine Lieblingsgerichte. Markiere ein Gericht in den Details als Favorit.';
+
+  @override
   String appVersion(String version) {
     return 'Version $version';
   }

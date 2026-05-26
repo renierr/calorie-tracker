@@ -120,6 +120,24 @@ class MealDetailDialog extends StatelessWidget {
                           child: const Icon(Icons.close, color: Colors.white),
                         ),
                       ),
+                      Positioned(
+                        top: 12,
+                        right: 60,
+                        child: FloatingActionButton.small(
+                          heroTag: 'favorite_detail_${currentMeal.id}',
+                          backgroundColor: Colors.black54,
+                          onPressed: () =>
+                              currentAppState.toggleFavoriteMeal(currentMeal),
+                          child: Icon(
+                            currentMeal.isFavorite == 1
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: currentMeal.isFavorite == 1
+                                ? AppTheme.accentRed
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
                       if (currentMeal.imageBytes != null)
                         Positioned(
                           top: 12,

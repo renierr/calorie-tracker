@@ -8,6 +8,7 @@ import '../providers/app_state.dart';
 import '../services/gemini_service.dart';
 import '../widgets/scan/scan_image_selector.dart';
 import '../widgets/scan/scan_verification_form.dart';
+import '../widgets/scan/scan_favorites_list.dart';
 import '../widgets/adaptive/adaptive_card_header.dart';
 
 class ScanPage extends StatefulWidget {
@@ -187,6 +188,11 @@ class _ScanPageState extends State<ScanPage> {
                     showForm: _showForm,
                   ),
                   const SizedBox(height: 20),
+
+                  if (_imageBytes == null && !_showForm) ...[
+                    ScanFavoritesList(appState: appState),
+                    const SizedBox(height: 20),
+                  ],
 
                   if (_imageBytes != null && !_showForm && !_isScanning) ...[
                     // User context clue input

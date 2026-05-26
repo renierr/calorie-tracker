@@ -218,6 +218,7 @@ class SyncService {
           updatedAt: serverUpdatedAt,
           synced: 1, // Marked as synced in SQLite immediately
           deleted: 0,
+          isFavorite: lRec?.isFavorite ?? 0,
         );
 
         if (lRec != null) {

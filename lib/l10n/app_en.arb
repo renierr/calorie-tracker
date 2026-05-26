@@ -254,6 +254,8 @@
     }
   },
   "neverSynced": "Never Synced",
+  "favoriteMeals": "Favorite Meals",
+  "noFavoritesYet": "No favorite meals yet. Mark a meal as favorite in its details dialog.",
   "appVersion": "Version {version}",
   "@appVersion": {
     "placeholders": {

@@ -1172,6 +1172,18 @@ abstract class AppLocalizations {
   /// **'Never Synced'**
   String get neverSynced;
 
+  /// No description provided for @favoriteMeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Meals'**
+  String get favoriteMeals;
+
+  /// No description provided for @noFavoritesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorite meals yet. Mark a meal as favorite in its details dialog.'**
+  String get noFavoritesYet;
+
   /// No description provided for @appVersion.
   ///
   /// In en, this message translates to:

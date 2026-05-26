@@ -254,6 +254,8 @@
     }
   },
   "neverSynced": "Noch nie synchronisiert",
+  "favoriteMeals": "Lieblingsgerichte",
+  "noFavoritesYet": "Noch keine Lieblingsgerichte. Markiere ein Gericht in den Details als Favorit.",
   "appVersion": "Version {version}",
   "@appVersion": {
     "placeholders": {

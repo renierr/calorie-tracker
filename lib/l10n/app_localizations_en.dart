@@ -607,6 +607,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get neverSynced => 'Never Synced';
 
   @override
+  String get favoriteMeals => 'Favorite Meals';
+
+  @override
+  String get noFavoritesYet =>
+      'No favorite meals yet. Mark a meal as favorite in its details dialog.';
+
+  @override
   String appVersion(String version) {
     return 'Version $version';
   }

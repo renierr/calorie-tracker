@@ -17,6 +17,7 @@ class Meal {
   final int updatedAt;
   final int synced; // 0 = unsynced, 1 = synced
   final int deleted; // 0 = active, 1 = soft-deleted
+  final int isFavorite; // 0 = not favorite, 1 = favorite
 
   Meal({
     this.id,
@@ -33,6 +34,7 @@ class Meal {
     required this.updatedAt,
     this.synced = 0,
     this.deleted = 0,
+    this.isFavorite = 0,
   });
 
   // Convert a Meal into a Map for SQLite insertion
@@ -52,6 +54,7 @@ class Meal {
       'updatedAt': updatedAt,
       'synced': synced,
       'deleted': deleted,
+      'isFavorite': isFavorite,
     };
   }
 
@@ -74,6 +77,7 @@ class Meal {
           map['updatedAt'] as int? ?? DateTime.now().millisecondsSinceEpoch,
       synced: map['synced'] as int? ?? 0,
       deleted: map['deleted'] as int? ?? 0,
+      isFavorite: map['isFavorite'] as int? ?? 0,
     );
   }
 
@@ -91,6 +95,7 @@ class Meal {
       'timestamp': timestamp,
       'updatedAt': updatedAt,
       'image': _bytesToBase64DataUri(imageBytes),
+      'isFavorite': isFavorite,
     };
   }
 
@@ -114,6 +119,7 @@ class Meal {
           json['timestamp'] as int? ?? DateTime.now().millisecondsSinceEpoch,
       updatedAt:
           json['updatedAt'] as int? ?? DateTime.now().millisecondsSinceEpoch,
+      isFavorite: json['isFavorite'] as int? ?? 0,
     );
   }
 
@@ -178,6 +184,7 @@ class Meal {
     int? updatedAt,
     int? synced,
     int? deleted,
+    int? isFavorite,
   }) {
     return Meal(
       id: id ?? this.id,
@@ -194,6 +201,7 @@ class Meal {
       updatedAt: updatedAt ?? this.updatedAt,
       synced: synced ?? this.synced,
       deleted: deleted ?? this.deleted,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 }

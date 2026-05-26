@@ -42,6 +42,7 @@ class AppState extends ChangeNotifier {
   bool _syncEnabled = false;
 
   List<Meal> _meals = [];
+  List<Meal> _favoriteMeals = [];
   bool _isLoading = false;
 
   // Selected date for Dashboard tracking (defaults to today)
@@ -73,6 +74,7 @@ class AppState extends ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
   Locale get locale => Locale(_appLocale);
   List<Meal> get meals => _meals;
+  List<Meal> get favoriteMeals => _favoriteMeals;
   bool get isLoading => _isLoading;
   DateTime get selectedDate => _selectedDate;
   int get selectedTabIndex => _selectedTabIndex;
@@ -251,6 +253,7 @@ class AppState extends ChangeNotifier {
   // Database Meal Actions
   Future<void> loadMeals() async {
     _meals = await _dbHelper.getAllMeals(includeImages: false);
+    _favoriteMeals = await _dbHelper.getFavoriteMeals(includeImages: true);
     await loadSelectedDateMeals();
     await loadFirstPageHistory(showLoading: false);
     notifyListeners();
@@ -349,6 +352,19 @@ class AppState extends ChangeNotifier {
 
   Future<void> deleteMeal(int id) async {
     await _dbHelper.deleteMeal(id);
+    await loadMeals();
+    if (_syncEnabled) {
+      _trySyncIfAvailable();
+    }
+  }
+
+  Future<void> toggleFavoriteMeal(Meal meal) async {
+    final updated = meal.copyWith(
+      isFavorite: meal.isFavorite == 1 ? 0 : 1,
+      synced: 0,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    await _dbHelper.updateMeal(updated);
     await loadMeals();
     if (_syncEnabled) {
       _trySyncIfAvailable();
