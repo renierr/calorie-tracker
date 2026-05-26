@@ -61,9 +61,6 @@ class FileSaveHelper {
     switch (ext) {
       case 'pdf':
         return 'application/pdf';
-      case 'db':
-      case 'sqlite':
-        return 'application/x-sqlite3';
       case 'json':
         return 'application/json';
       case 'csv':
