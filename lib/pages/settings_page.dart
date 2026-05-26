@@ -49,10 +49,14 @@ class _SettingsPageState extends State<SettingsPage> {
       text: appState.syncServerUrl,
     );
     _syncUserIdController = TextEditingController(text: appState.syncUserId);
+
+    appState.addListener(_onStateChanged);
   }
 
   @override
   void dispose() {
+    final appState = Provider.of<AppState>(context, listen: false);
+    appState.removeListener(_onStateChanged);
     _apiKeyController.dispose();
     _caloriesController.dispose();
     _proteinController.dispose();
@@ -61,6 +65,32 @@ class _SettingsPageState extends State<SettingsPage> {
     _syncServerUrlController.dispose();
     _syncUserIdController.dispose();
     super.dispose();
+  }
+
+  void _onStateChanged() {
+    if (!mounted) return;
+    final appState = Provider.of<AppState>(context, listen: false);
+    if (_apiKeyController.text != appState.geminiApiKey) {
+      _apiKeyController.text = appState.geminiApiKey;
+    }
+    if (_caloriesController.text != appState.calorieGoal.toString()) {
+      _caloriesController.text = appState.calorieGoal.toString();
+    }
+    if (_proteinController.text != appState.proteinGoal.toString()) {
+      _proteinController.text = appState.proteinGoal.toString();
+    }
+    if (_carbsController.text != appState.carbsGoal.toString()) {
+      _carbsController.text = appState.carbsGoal.toString();
+    }
+    if (_fatController.text != appState.fatGoal.toString()) {
+      _fatController.text = appState.fatGoal.toString();
+    }
+    if (_syncServerUrlController.text != appState.syncServerUrl) {
+      _syncServerUrlController.text = appState.syncServerUrl;
+    }
+    if (_syncUserIdController.text != appState.syncUserId) {
+      _syncUserIdController.text = appState.syncUserId;
+    }
   }
 
   // Trigger Settings Save Helper

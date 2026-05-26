@@ -466,6 +466,96 @@ class AppState extends ChangeNotifier {
     await loadMeals();
   }
 
+  // Export all settings to a standard JSON string
+  Future<String> exportSettingsToJson() async {
+    final Map<String, dynamic> exportMap = {
+      'version': '1.0.0',
+      'exportedAt': DateTime.now().toUtc().toIso8601String(),
+      'settings': {
+        'geminiApiKey': _geminiApiKey,
+        'calorieGoal': _calorieGoal,
+        'proteinGoal': _proteinGoal,
+        'carbsGoal': _carbsGoal,
+        'fatGoal': _fatGoal,
+        'historyFilter': _historyFilter,
+        'appLocale': _appLocale,
+        'themeMode': _themeModeString(_themeMode),
+        'syncServerUrl': _syncServerUrl,
+        'syncUserId': _syncUserId,
+        'syncEnabled': _syncEnabled,
+      },
+    };
+    return const JsonEncoder.withIndent('  ').convert(exportMap);
+  }
+
+  // Restore/Import settings from a JSON string
+  Future<void> importSettingsFromJson(String jsonContent) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final decoded = json.decode(jsonContent);
+      if (decoded is! Map<String, dynamic> ||
+          !decoded.containsKey('settings')) {
+        throw const FormatException('Invalid settings JSON format');
+      }
+
+      final settings = decoded['settings'] as Map<String, dynamic>;
+      final prefs = await SharedPreferences.getInstance();
+
+      if (settings.containsKey('geminiApiKey')) {
+        _geminiApiKey = settings['geminiApiKey'] as String? ?? '';
+        await prefs.setString(_keyGeminiApiKey, _geminiApiKey);
+      }
+      if (settings.containsKey('calorieGoal')) {
+        _calorieGoal = settings['calorieGoal'] as int? ?? 2000;
+        await prefs.setInt(_keyCalorieGoal, _calorieGoal);
+      }
+      if (settings.containsKey('proteinGoal')) {
+        _proteinGoal = settings['proteinGoal'] as int? ?? 130;
+        await prefs.setInt(_keyProteinGoal, _proteinGoal);
+      }
+      if (settings.containsKey('carbsGoal')) {
+        _carbsGoal = settings['carbsGoal'] as int? ?? 220;
+        await prefs.setInt(_keyCarbsGoal, _carbsGoal);
+      }
+      if (settings.containsKey('fatGoal')) {
+        _fatGoal = settings['fatGoal'] as int? ?? 70;
+        await prefs.setInt(_keyFatGoal, _fatGoal);
+      }
+      if (settings.containsKey('historyFilter')) {
+        _historyFilter = settings['historyFilter'] as String? ?? 'all';
+        await prefs.setString(_keyHistoryFilter, _historyFilter);
+      }
+      if (settings.containsKey('appLocale')) {
+        _appLocale = settings['appLocale'] as String? ?? 'en';
+        await prefs.setString(_keyLocale, _appLocale);
+      }
+      if (settings.containsKey('themeMode')) {
+        final themeStr = settings['themeMode'] as String? ?? 'system';
+        _themeMode = _parseThemeMode(themeStr);
+        await prefs.setString(_keyThemeMode, themeStr);
+      }
+      if (settings.containsKey('syncServerUrl')) {
+        _syncServerUrl = settings['syncServerUrl'] as String? ?? '';
+        await prefs.setString(_keySyncServerUrl, _syncServerUrl);
+      }
+      if (settings.containsKey('syncUserId')) {
+        _syncUserId = settings['syncUserId'] as String? ?? 'user-1';
+        await prefs.setString(_keySyncUserId, _syncUserId);
+      }
+      if (settings.containsKey('syncEnabled')) {
+        _syncEnabled = settings['syncEnabled'] as bool? ?? false;
+        await prefs.setBool(_keySyncEnabled, _syncEnabled);
+      }
+
+      notifyListeners();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   // Export meals list to a standard JSON string
   Future<String> exportMealsToJson(List<Meal> mealsToExport) async {
     final List<Meal> fullMeals = [];

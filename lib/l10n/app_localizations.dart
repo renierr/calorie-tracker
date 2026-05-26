@@ -707,7 +707,7 @@ abstract class AppLocalizations {
   /// No description provided for @dangerDesc.
   ///
   /// In en, this message translates to:
-  /// **'Clearing your database will permanently remove all tracked foods, calorie metrics, and meal photos from SQLite. This action is irreversible.'**
+  /// **'Permanently erase data or restore database/settings backups.'**
   String get dangerDesc;
 
   /// No description provided for @clearHistory.
@@ -770,23 +770,29 @@ abstract class AppLocalizations {
   /// **'German'**
   String get german;
 
-  /// No description provided for @exportDb.
+  /// No description provided for @exportSectionTitle.
   ///
   /// In en, this message translates to:
-  /// **'Export SQLite Database'**
-  String get exportDb;
+  /// **'Backup Center'**
+  String get exportSectionTitle;
 
-  /// No description provided for @exportDbDesc.
+  /// No description provided for @exportSectionDesc.
   ///
   /// In en, this message translates to:
-  /// **'Download a copy of the database. On Desktop, a save dialog will open. On Android, the copy is stored in your device\'s Android/data folder for backup.'**
-  String get exportDbDesc;
+  /// **'Export your SQLite database or local app settings.'**
+  String get exportSectionDesc;
 
   /// No description provided for @exportDbBtn.
   ///
   /// In en, this message translates to:
-  /// **'Download Database Copy'**
+  /// **'Export Database'**
   String get exportDbBtn;
+
+  /// No description provided for @exportSettingsBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Settings'**
+  String get exportSettingsBtn;
 
   /// No description provided for @dbExported.
   ///
@@ -794,23 +800,35 @@ abstract class AppLocalizations {
   /// **'Database exported successfully.'**
   String get dbExported;
 
-  /// No description provided for @restoreDb.
+  /// No description provided for @settingsExported.
   ///
   /// In en, this message translates to:
-  /// **'Restore SQLite Database'**
-  String get restoreDb;
+  /// **'Settings exported successfully.'**
+  String get settingsExported;
 
-  /// No description provided for @restoreDbDesc.
+  /// No description provided for @settingsExportFailed.
   ///
   /// In en, this message translates to:
-  /// **'Restore a previous backup of your complete database. This will overwrite all your current meal records.'**
-  String get restoreDbDesc;
+  /// **'Settings export failed: {error}'**
+  String settingsExportFailed(String error);
+
+  /// No description provided for @settingsImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings import failed: {error}'**
+  String settingsImportFailed(String error);
 
   /// No description provided for @restoreDbBtn.
   ///
   /// In en, this message translates to:
-  /// **'Restore Database Backup'**
+  /// **'Restore Database'**
   String get restoreDbBtn;
+
+  /// No description provided for @restoreSettingsBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Settings'**
+  String get restoreSettingsBtn;
 
   /// No description provided for @confirmRestore.
   ///
@@ -824,23 +842,53 @@ abstract class AppLocalizations {
   /// **'Are you absolutely sure you want to restore this database backup? All your current logged meals and photos will be permanently replaced. This action cannot be undone.'**
   String get confirmRestoreDesc;
 
+  /// No description provided for @confirmRestoreSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Settings?'**
+  String get confirmRestoreSettings;
+
+  /// No description provided for @confirmRestoreSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you absolutely sure you want to restore these settings? This will overwrite your current daily goals, API key, and preferences. This action cannot be undone.'**
+  String get confirmRestoreSettingsDesc;
+
   /// No description provided for @noBackupsFound.
   ///
   /// In en, this message translates to:
   /// **'No database backup files found.'**
   String get noBackupsFound;
 
+  /// No description provided for @noSettingsBackupsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No settings backup files found.'**
+  String get noSettingsBackupsFound;
+
   /// No description provided for @selectBackup.
   ///
   /// In en, this message translates to:
-  /// **'Select a Backup File'**
+  /// **'Select a Database Backup File'**
   String get selectBackup;
+
+  /// No description provided for @selectSettingsBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a Settings Backup File'**
+  String get selectSettingsBackup;
 
   /// No description provided for @dbRestored.
   ///
   /// In en, this message translates to:
   /// **'Database restored successfully.'**
   String get dbRestored;
+
+  /// No description provided for @settingsRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings restored successfully.'**
+  String get settingsRestored;
 
   /// No description provided for @appearance.
   ///

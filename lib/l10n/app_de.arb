@@ -107,7 +107,7 @@
   "carbsHint": "z.B. 220",
   "fatHint": "z.B. 70",
   "dangerZone": "Gefahrenzone & Wartung",
-  "dangerDesc": "Das Zurücksetzen der Datenbank entfernt dauerhaft alle erfassten Lebensmittel, Kalorienmesswerte und Mahlzeitfotos aus SQLite. Diese Aktion ist unwiderruflich.",
+  "dangerDesc": "Daten endgültig löschen oder Datenbank-/Einstellungs-Sicherungen wiederherstellen.",
   "clearHistory": "Gesamten Verlauf löschen",
   "eraseAll": "Alle Daten löschen?",
   "eraseAllDesc": "Bist du absolut sicher, dass du die SQLite-Datenbank dauerhaft löschen möchtest? Dies löscht alle deine Mahlzeiten, Fotos und Verlaufsdaten. Diese Aktion kann nicht rückgängig gemacht werden.",
@@ -118,18 +118,40 @@
   "language": "Sprache",
   "english": "Englisch",
   "german": "Deutsch",
-  "exportDb": "SQLite-Datenbank exportieren",
-  "exportDbDesc": "Lade eine Kopie der Datenbank herunter. Auf dem Desktop öffnet sich ein Speicher-Dialog. Auf Android wird sie im Android/data Ordner des Geräts gesichert.",
-  "exportDbBtn": "Datenbank-Kopie herunterladen",
+  "exportSectionTitle": "Sicherungscenter",
+  "exportSectionDesc": "Exportiere deine SQLite-Datenbank oder die lokalen App-Einstellungen.",
+  "exportDbBtn": "Datenbank exportieren",
+  "exportSettingsBtn": "Einstellungen exportieren",
   "dbExported": "Datenbank erfolgreich exportiert.",
-  "restoreDb": "SQLite-Datenbank wiederherstellen",
-  "restoreDbDesc": "Stelle eine vorherige Sicherung deiner gesamten Datenbank wieder her. Dies überschreibt alle deine aktuellen Mahlzeiteneinträge.",
-  "restoreDbBtn": "Datenbank-Sicherung wiederherstellen",
+  "settingsExported": "Einstellungen erfolgreich exportiert.",
+  "settingsExportFailed": "Export der Einstellungen fehlgeschlagen: {error}",
+  "@settingsExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportFailed": "Import der Einstellungen fehlgeschlagen: {error}",
+  "@settingsImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreDbBtn": "Datenbank wiederherstellen",
+  "restoreSettingsBtn": "Einstellungen wiederherstellen",
   "confirmRestore": "Datenbank wiederherstellen?",
   "confirmRestoreDesc": "Bist du dir absolut sicher, dass du diese Datenbanksicherung wiederherstellen möchtest? Alle deine aktuellen protokollierten Mahlzeiten und Fotos werden dauerhaft ersetzt. Diese Aktion kann nicht rückgängig gemacht werden.",
+  "confirmRestoreSettings": "Einstellungen wiederherstellen?",
+  "confirmRestoreSettingsDesc": "Bist du dir absolut sicher, dass du diese Einstellungen wiederherstellen möchtest? Dies überschreibt deine aktuellen täglichen Ziele, den API-Schlüssel und deine Einstellungen. Diese Aktion kann nicht rückgängig gemacht werden.",
   "noBackupsFound": "Keine Datenbanksicherungsdateien gefunden.",
-  "selectBackup": "Wähle eine Sicherungsdatei",
+  "noSettingsBackupsFound": "Keine Einstellungs-Sicherungsdateien gefunden.",
+  "selectBackup": "Wähle eine Datenbank-Sicherungsdatei",
+  "selectSettingsBackup": "Wähle eine Einstellungs-Sicherungsdatei",
   "dbRestored": "Datenbank erfolgreich wiederhergestellt.",
+  "settingsRestored": "Einstellungen erfolgreich wiederhergestellt.",
 
   "appearance": "Darstellung",
   "themeMode": "Design",

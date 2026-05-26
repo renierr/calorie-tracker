@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../adaptive/responsive_icon_button.dart';
@@ -19,6 +21,7 @@ class _ExportCardState extends State<ExportCard> {
   @override
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(
@@ -31,11 +34,11 @@ class _ExportCardState extends State<ExportCard> {
           AdaptiveCardHeader(
             icon: Icons.backup,
             iconColor: AppTheme.accentEmerald,
-            title: AppLocalizations.of(context)!.exportDb,
+            title: localizations.exportSectionTitle,
           ),
           const SizedBox(height: 10),
           Text(
-            AppLocalizations.of(context)!.exportDbDesc,
+            localizations.exportSectionDesc,
             style: TextStyle(
               color: colors.textSecondary,
               fontSize: 12,
@@ -47,9 +50,19 @@ class _ExportCardState extends State<ExportCard> {
             width: double.infinity,
             child: ResponsiveIconButton(
               icon: const Icon(Icons.download, color: AppTheme.accentEmerald),
-              label: AppLocalizations.of(context)!.exportDbBtn,
+              label: localizations.exportDbBtn,
               color: AppTheme.accentEmerald,
               onPressed: _exportDbFlow,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ResponsiveIconButton(
+              icon: const Icon(Icons.settings, color: AppTheme.accentBlue),
+              label: localizations.exportSettingsBtn,
+              color: AppTheme.accentBlue,
+              onPressed: _exportSettingsFlow,
             ),
           ),
         ],
@@ -78,6 +91,32 @@ class _ExportCardState extends State<ExportCard> {
       FileSaveHelper.showErrorNotification(
         context: context,
         errorMessage: localizations.dbExportFailed(e.toString()),
+      );
+    }
+  }
+
+  Future<void> _exportSettingsFlow() async {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final localizations = AppLocalizations.of(context)!;
+    try {
+      final settingsJson = await widget.appState.exportSettingsToJson();
+      final bytes = Uint8List.fromList(utf8.encode(settingsJson));
+      if (!mounted) return;
+
+      await FileSaveHelper.saveFile(
+        context: context,
+        suggestedName: 'nutriscan_settings_$timestamp.json',
+        bytes: bytes,
+        successMessageAndroid: localizations.settingsExported,
+        successMessageGeneralBuilder: (displayPath) =>
+            localizations.settingsExported,
+        errorMessageBuilder: (e) => localizations.settingsExportFailed(e),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      FileSaveHelper.showErrorNotification(
+        context: context,
+        errorMessage: localizations.settingsExportFailed(e.toString()),
       );
     }
   }

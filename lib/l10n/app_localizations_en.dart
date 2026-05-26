@@ -344,7 +344,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dangerDesc =>
-      'Clearing your database will permanently remove all tracked foods, calorie metrics, and meal photos from SQLite. This action is irreversible.';
+      'Permanently erase data or restore database/settings backups.';
 
   @override
   String get clearHistory => 'Clear All Food Logs History';
@@ -378,27 +378,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get german => 'German';
 
   @override
-  String get exportDb => 'Export SQLite Database';
+  String get exportSectionTitle => 'Backup Center';
 
   @override
-  String get exportDbDesc =>
-      'Download a copy of the database. On Desktop, a save dialog will open. On Android, the copy is stored in your device\'s Android/data folder for backup.';
+  String get exportSectionDesc =>
+      'Export your SQLite database or local app settings.';
 
   @override
-  String get exportDbBtn => 'Download Database Copy';
+  String get exportDbBtn => 'Export Database';
+
+  @override
+  String get exportSettingsBtn => 'Export Settings';
 
   @override
   String get dbExported => 'Database exported successfully.';
 
   @override
-  String get restoreDb => 'Restore SQLite Database';
+  String get settingsExported => 'Settings exported successfully.';
 
   @override
-  String get restoreDbDesc =>
-      'Restore a previous backup of your complete database. This will overwrite all your current meal records.';
+  String settingsExportFailed(String error) {
+    return 'Settings export failed: $error';
+  }
 
   @override
-  String get restoreDbBtn => 'Restore Database Backup';
+  String settingsImportFailed(String error) {
+    return 'Settings import failed: $error';
+  }
+
+  @override
+  String get restoreDbBtn => 'Restore Database';
+
+  @override
+  String get restoreSettingsBtn => 'Restore Settings';
 
   @override
   String get confirmRestore => 'Restore Database?';
@@ -408,13 +420,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you absolutely sure you want to restore this database backup? All your current logged meals and photos will be permanently replaced. This action cannot be undone.';
 
   @override
+  String get confirmRestoreSettings => 'Restore Settings?';
+
+  @override
+  String get confirmRestoreSettingsDesc =>
+      'Are you absolutely sure you want to restore these settings? This will overwrite your current daily goals, API key, and preferences. This action cannot be undone.';
+
+  @override
   String get noBackupsFound => 'No database backup files found.';
 
   @override
-  String get selectBackup => 'Select a Backup File';
+  String get noSettingsBackupsFound => 'No settings backup files found.';
+
+  @override
+  String get selectBackup => 'Select a Database Backup File';
+
+  @override
+  String get selectSettingsBackup => 'Select a Settings Backup File';
 
   @override
   String get dbRestored => 'Database restored successfully.';
+
+  @override
+  String get settingsRestored => 'Settings restored successfully.';
 
   @override
   String get appearance => 'Appearance';

@@ -345,7 +345,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get dangerDesc =>
-      'Das Zurücksetzen der Datenbank entfernt dauerhaft alle erfassten Lebensmittel, Kalorienmesswerte und Mahlzeitfotos aus SQLite. Diese Aktion ist unwiderruflich.';
+      'Daten endgültig löschen oder Datenbank-/Einstellungs-Sicherungen wiederherstellen.';
 
   @override
   String get clearHistory => 'Gesamten Verlauf löschen';
@@ -379,27 +379,39 @@ class AppLocalizationsDe extends AppLocalizations {
   String get german => 'Deutsch';
 
   @override
-  String get exportDb => 'SQLite-Datenbank exportieren';
+  String get exportSectionTitle => 'Sicherungscenter';
 
   @override
-  String get exportDbDesc =>
-      'Lade eine Kopie der Datenbank herunter. Auf dem Desktop öffnet sich ein Speicher-Dialog. Auf Android wird sie im Android/data Ordner des Geräts gesichert.';
+  String get exportSectionDesc =>
+      'Exportiere deine SQLite-Datenbank oder die lokalen App-Einstellungen.';
 
   @override
-  String get exportDbBtn => 'Datenbank-Kopie herunterladen';
+  String get exportDbBtn => 'Datenbank exportieren';
+
+  @override
+  String get exportSettingsBtn => 'Einstellungen exportieren';
 
   @override
   String get dbExported => 'Datenbank erfolgreich exportiert.';
 
   @override
-  String get restoreDb => 'SQLite-Datenbank wiederherstellen';
+  String get settingsExported => 'Einstellungen erfolgreich exportiert.';
 
   @override
-  String get restoreDbDesc =>
-      'Stelle eine vorherige Sicherung deiner gesamten Datenbank wieder her. Dies überschreibt alle deine aktuellen Mahlzeiteneinträge.';
+  String settingsExportFailed(String error) {
+    return 'Export der Einstellungen fehlgeschlagen: $error';
+  }
 
   @override
-  String get restoreDbBtn => 'Datenbank-Sicherung wiederherstellen';
+  String settingsImportFailed(String error) {
+    return 'Import der Einstellungen fehlgeschlagen: $error';
+  }
+
+  @override
+  String get restoreDbBtn => 'Datenbank wiederherstellen';
+
+  @override
+  String get restoreSettingsBtn => 'Einstellungen wiederherstellen';
 
   @override
   String get confirmRestore => 'Datenbank wiederherstellen?';
@@ -409,13 +421,30 @@ class AppLocalizationsDe extends AppLocalizations {
       'Bist du dir absolut sicher, dass du diese Datenbanksicherung wiederherstellen möchtest? Alle deine aktuellen protokollierten Mahlzeiten und Fotos werden dauerhaft ersetzt. Diese Aktion kann nicht rückgängig gemacht werden.';
 
   @override
+  String get confirmRestoreSettings => 'Einstellungen wiederherstellen?';
+
+  @override
+  String get confirmRestoreSettingsDesc =>
+      'Bist du dir absolut sicher, dass du diese Einstellungen wiederherstellen möchtest? Dies überschreibt deine aktuellen täglichen Ziele, den API-Schlüssel und deine Einstellungen. Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
   String get noBackupsFound => 'Keine Datenbanksicherungsdateien gefunden.';
 
   @override
-  String get selectBackup => 'Wähle eine Sicherungsdatei';
+  String get noSettingsBackupsFound =>
+      'Keine Einstellungs-Sicherungsdateien gefunden.';
+
+  @override
+  String get selectBackup => 'Wähle eine Datenbank-Sicherungsdatei';
+
+  @override
+  String get selectSettingsBackup => 'Wähle eine Einstellungs-Sicherungsdatei';
 
   @override
   String get dbRestored => 'Datenbank erfolgreich wiederhergestellt.';
+
+  @override
+  String get settingsRestored => 'Einstellungen erfolgreich wiederhergestellt.';
 
   @override
   String get appearance => 'Darstellung';

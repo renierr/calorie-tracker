@@ -107,7 +107,7 @@
   "carbsHint": "e.g. 220",
   "fatHint": "e.g. 70",
   "dangerZone": "Danger Zone & Maintenance",
-  "dangerDesc": "Clearing your database will permanently remove all tracked foods, calorie metrics, and meal photos from SQLite. This action is irreversible.",
+  "dangerDesc": "Permanently erase data or restore database/settings backups.",
   "clearHistory": "Clear All Food Logs History",
   "eraseAll": "Erase All Data?",
   "eraseAllDesc": "Are you absolutely sure you want to permanently clear the SQLite database? This deletes all your logged meal stats, photos, and historical progress. This action cannot be undone.",
@@ -118,18 +118,40 @@
   "language": "Language",
   "english": "English",
   "german": "German",
-  "exportDb": "Export SQLite Database",
-  "exportDbDesc": "Download a copy of the database. On Desktop, a save dialog will open. On Android, the copy is stored in your device's Android/data folder for backup.",
-  "exportDbBtn": "Download Database Copy",
+  "exportSectionTitle": "Backup Center",
+  "exportSectionDesc": "Export your SQLite database or local app settings.",
+  "exportDbBtn": "Export Database",
+  "exportSettingsBtn": "Export Settings",
   "dbExported": "Database exported successfully.",
-  "restoreDb": "Restore SQLite Database",
-  "restoreDbDesc": "Restore a previous backup of your complete database. This will overwrite all your current meal records.",
-  "restoreDbBtn": "Restore Database Backup",
+  "settingsExported": "Settings exported successfully.",
+  "settingsExportFailed": "Settings export failed: {error}",
+  "@settingsExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportFailed": "Settings import failed: {error}",
+  "@settingsImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreDbBtn": "Restore Database",
+  "restoreSettingsBtn": "Restore Settings",
   "confirmRestore": "Restore Database?",
   "confirmRestoreDesc": "Are you absolutely sure you want to restore this database backup? All your current logged meals and photos will be permanently replaced. This action cannot be undone.",
+  "confirmRestoreSettings": "Restore Settings?",
+  "confirmRestoreSettingsDesc": "Are you absolutely sure you want to restore these settings? This will overwrite your current daily goals, API key, and preferences. This action cannot be undone.",
   "noBackupsFound": "No database backup files found.",
-  "selectBackup": "Select a Backup File",
+  "noSettingsBackupsFound": "No settings backup files found.",
+  "selectBackup": "Select a Database Backup File",
+  "selectSettingsBackup": "Select a Settings Backup File",
   "dbRestored": "Database restored successfully.",
+  "settingsRestored": "Settings restored successfully.",
 
   "appearance": "Appearance",
   "themeMode": "Theme",
