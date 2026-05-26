@@ -151,8 +151,14 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
             } else if (widget.filterType == 'custom' &&
                 widget.customStartDate != null &&
                 widget.customEndDate != null) {
-              final start = widget.customStartDate!.isBefore(widget.customEndDate!) ? widget.customStartDate! : widget.customEndDate!;
-              final end = widget.customStartDate!.isBefore(widget.customEndDate!) ? widget.customEndDate! : widget.customStartDate!;
+              final start =
+                  widget.customStartDate!.isBefore(widget.customEndDate!)
+                  ? widget.customStartDate!
+                  : widget.customEndDate!;
+              final end =
+                  widget.customStartDate!.isBefore(widget.customEndDate!)
+                  ? widget.customEndDate!
+                  : widget.customStartDate!;
               rangeText = AppLocalizations.of(context)!.pdfRangeCustom(
                 DateFormat.yMMMd(locale).format(end),
                 DateFormat.yMMMd(locale).format(start),

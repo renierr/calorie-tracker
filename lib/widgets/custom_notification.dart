@@ -9,9 +9,9 @@ void showNotificationDialog(
 }) {
   showDialog(
     context: context,
-    barrierColor: Colors.black26,
+    barrierColor: Colors.black38,
     builder: (BuildContext ctx) {
-      Future.delayed(const Duration(milliseconds: 2500), () {
+      Future.delayed(const Duration(milliseconds: 2800), () {
         if (ctx.mounted) {
           Navigator.of(ctx).pop();
         }
@@ -19,34 +19,42 @@ void showNotificationDialog(
 
       final colors = AppTheme.of(context);
       return Dialog(
-        backgroundColor: colors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: AppTheme.premiumCardDecoration(
-            context: context,
-            color: colors.surface,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                isError ? Icons.error_outline : Icons.check_circle_outline,
-                color: isError ? AppTheme.accentRed : AppTheme.accentEmerald,
-                size: 24,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: AppTheme.premiumCardDecoration(
+                context: context,
+                color: colors.surface,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  message,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    isError ? Icons.error_outline : Icons.check_circle_outline,
+                    color: isError
+                        ? AppTheme.accentRed
+                        : AppTheme.accentEmerald,
+                    size: 24,
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                        color: colors.textPrimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       );

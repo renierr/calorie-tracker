@@ -164,28 +164,17 @@ class PdfService {
       ),
     );
 
-    try {
-      final bytes = await pdf.save();
-      final destPath = await FileSaveHelper.saveFile(
-        suggestedName: 'Meal-Report-${meal.shortId}.pdf',
-        bytes: bytes,
-      );
-      if (destPath == null || !context.mounted) return;
-
-      FileSaveHelper.showSuccessNotification(
-        context: context,
-        savedPath: destPath,
-        androidDownloadMessage: localizations.pdfExportedDownloads,
-        generalMessageBuilder: (displayPath) =>
-            localizations.pdfExportedTo(displayPath),
-      );
-    } catch (e) {
-      if (!context.mounted) return;
-      FileSaveHelper.showErrorNotification(
-        context: context,
-        errorMessage: localizations.pdfExportFailed(e.toString()),
-      );
-    }
+    final bytes = await pdf.save();
+    if (!context.mounted) return;
+    await FileSaveHelper.saveFile(
+      context: context,
+      suggestedName: 'Meal-Report-${meal.shortId}.pdf',
+      bytes: bytes,
+      successMessageAndroid: localizations.pdfExportedDownloads,
+      successMessageGeneralBuilder: (displayPath) =>
+          localizations.pdfExportedTo(displayPath),
+      errorMessageBuilder: (e) => localizations.pdfExportFailed(e),
+    );
   }
 
   // Generate and download a summary report over multiple meals (daily or date range)
@@ -399,28 +388,17 @@ class PdfService {
       ),
     );
 
-    try {
-      final bytes = await pdf.save();
-      final destPath = await FileSaveHelper.saveFile(
-        suggestedName: 'Summary-Nutritional-Report.pdf',
-        bytes: bytes,
-      );
-      if (destPath == null || !context.mounted) return;
-
-      FileSaveHelper.showSuccessNotification(
-        context: context,
-        savedPath: destPath,
-        androidDownloadMessage: localizations.pdfExportedDownloads,
-        generalMessageBuilder: (displayPath) =>
-            localizations.pdfExportedTo(displayPath),
-      );
-    } catch (e) {
-      if (!context.mounted) return;
-      FileSaveHelper.showErrorNotification(
-        context: context,
-        errorMessage: localizations.pdfExportFailed(e.toString()),
-      );
-    }
+    final bytes = await pdf.save();
+    if (!context.mounted) return;
+    await FileSaveHelper.saveFile(
+      context: context,
+      suggestedName: 'Summary-Nutritional-Report.pdf',
+      bytes: bytes,
+      successMessageAndroid: localizations.pdfExportedDownloads,
+      successMessageGeneralBuilder: (displayPath) =>
+          localizations.pdfExportedTo(displayPath),
+      errorMessageBuilder: (e) => localizations.pdfExportFailed(e),
+    );
   }
 
   // PDF Layout Helpers

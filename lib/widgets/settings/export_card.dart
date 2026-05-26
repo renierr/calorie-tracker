@@ -61,20 +61,17 @@ class _ExportCardState extends State<ExportCard> {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final localizations = AppLocalizations.of(context)!;
     try {
-      final destPath = await FileSaveHelper.saveFile(
-        suggestedName: 'nutriscan_db_$timestamp.db',
-      );
-      if (destPath == null) return;
-
-      await widget.appState.exportDatabase(destPath: destPath);
+      final bytes = await widget.appState.getDatabaseBytes();
       if (!mounted) return;
 
-      FileSaveHelper.showSuccessNotification(
+      await FileSaveHelper.saveFile(
         context: context,
-        savedPath: destPath,
-        androidDownloadMessage: localizations.dbExportedDownloads,
-        generalMessageBuilder: (displayPath) =>
+        suggestedName: 'nutriscan_db_$timestamp.db',
+        bytes: bytes,
+        successMessageAndroid: localizations.dbExportedDownloads,
+        successMessageGeneralBuilder: (displayPath) =>
             localizations.dbExportedTo(displayPath),
+        errorMessageBuilder: (e) => localizations.dbExportFailed(e),
       );
     } catch (e) {
       if (!mounted) return;

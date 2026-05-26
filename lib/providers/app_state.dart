@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/db_helper.dart';
@@ -418,6 +419,12 @@ class AppState extends ChangeNotifier {
   // Export database
   Future<File> exportDatabase({required String destPath}) =>
       _dbHelper.exportDatabase(destPath: destPath);
+
+  // Read database bytes for direct exporting
+  Future<Uint8List> getDatabaseBytes() async {
+    final String path = await _dbHelper.databasePath;
+    return await File(path).readAsBytes();
+  }
 
   // Restore database
   Future<void> restoreDatabase(String backupPath) async {

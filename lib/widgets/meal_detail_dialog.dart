@@ -480,37 +480,23 @@ class MealDetailDialog extends StatelessWidget {
   Future<void> _downloadImage(BuildContext context, Meal currentMeal) async {
     if (currentMeal.imageBytes == null) return;
     final localizations = AppLocalizations.of(context)!;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-    try {
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final savedPath = await FileSaveHelper.saveFile(
-        suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
-        acceptedTypeGroups: <XTypeGroup>[
-          const XTypeGroup(
-            label: 'JPEG Image',
-            extensions: <String>['jpg', 'jpeg'],
-          ),
-          const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
-        ],
-        bytes: currentMeal.imageBytes,
-      );
-
-      if (savedPath == null) return;
-
-      if (!context.mounted) return;
-      FileSaveHelper.showSuccessNotification(
-        context: context,
-        savedPath: savedPath,
-        androidDownloadMessage: localizations.imageSavedDownloads,
-        generalMessageBuilder: (displayPath) =>
-            localizations.imageSavedTo(displayPath),
-      );
-    } catch (e) {
-      if (!context.mounted) return;
-      FileSaveHelper.showErrorNotification(
-        context: context,
-        errorMessage: localizations.imageSaveFailed(e.toString()),
-      );
-    }
+    await FileSaveHelper.saveFile(
+      context: context,
+      suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
+      acceptedTypeGroups: <XTypeGroup>[
+        const XTypeGroup(
+          label: 'JPEG Image',
+          extensions: <String>['jpg', 'jpeg'],
+        ),
+        const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
+      ],
+      bytes: currentMeal.imageBytes,
+      successMessageAndroid: localizations.imageSavedDownloads,
+      successMessageGeneralBuilder: (displayPath) =>
+          localizations.imageSavedTo(displayPath),
+      errorMessageBuilder: (e) => localizations.imageSaveFailed(e),
+    );
   }
 }
