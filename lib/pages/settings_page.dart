@@ -202,7 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
             runSpacing: 4,
             children: [
               Text(
-                localizations.appVersion(appVersion),
+                localizations.appVersion(AppVersion.version),
                 style: TextStyle(color: colors.textSecondary, fontSize: 12),
               ),
               Text(
@@ -215,7 +215,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Icon(Icons.commit, color: colors.textMuted, size: 14),
                   const SizedBox(width: 4),
                   Text(
-                    localizations.gitHash(gitHash),
+                    localizations.gitHash(AppVersion.commitHash),
                     style: TextStyle(
                       color: colors.textSecondary,
                       fontSize: 12,

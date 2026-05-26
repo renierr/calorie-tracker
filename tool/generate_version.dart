@@ -36,20 +36,22 @@ void main() async {
     print('Could not retrieve git hash: $e');
   }
 
-  // 3. Write lib/version.dart
+  // 3. Write lib/version.g.dart
   try {
-    final outputFile = File('lib/version.dart');
+    final outputFile = File('lib/version.g.dart');
     // Ensure parent directories exist
     await outputFile.parent.create(recursive: true);
     
     final content = '''// Generated file. Do not edit.
-const String appVersion = '$version';
+part of 'version.dart';
+
+const String rawVersion = '$version';
 const String gitHash = '$gitHash';
 ''';
     await outputFile.writeAsString(content);
     print('Version generated: $version ($gitHash)');
   } catch (e) {
-    print('Failed to write lib/version.dart: $e');
+    print('Failed to write lib/version.g.dart: $e');
     exit(1);
   }
 }
