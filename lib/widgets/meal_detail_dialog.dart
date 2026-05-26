@@ -306,6 +306,18 @@ class MealDetailDialog extends StatelessWidget {
                               onPressed: () =>
                                   _showEditMealDialog(context, currentMeal),
                             ),
+                            // Use as template (New)
+                            TextButton.icon(
+                              icon: const Icon(Icons.add_to_photos, size: 16),
+                              label: Text(
+                                AppLocalizations.of(context)!.templateAsNew,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                              onPressed: () {
+                                currentAppState.setTemplateMeal(currentMeal);
+                                Navigator.pop(context);
+                              },
+                            ),
                             // Delete log
                             TextButton.icon(
                               icon: const Icon(

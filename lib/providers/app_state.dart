@@ -50,6 +50,9 @@ class AppState extends ChangeNotifier {
   // Tab index for navigation (0=Dashboard, 1=Scan, 2=History, 3=Settings)
   int _selectedTabIndex = 0;
 
+  // Template meal for manual entry
+  Meal? _templateMeal;
+
   // Lazy loading & Pagination states
   List<Meal> _selectedDateMeals = [];
   List<Meal> _paginatedMeals = [];
@@ -73,6 +76,7 @@ class AppState extends ChangeNotifier {
   bool get isLoading => _isLoading;
   DateTime get selectedDate => _selectedDate;
   int get selectedTabIndex => _selectedTabIndex;
+  Meal? get templateMeal => _templateMeal;
   String get syncServerUrl => _syncServerUrl;
   String get syncUserId => _syncUserId;
   int? get lastSyncedTime => _lastSyncedTime;
@@ -375,6 +379,20 @@ class AppState extends ChangeNotifier {
   // Tab Navigation
   void selectTab(int index) {
     _selectedTabIndex = index;
+    notifyListeners();
+  }
+
+  // Template Meal for scan/manual entry
+  void setTemplateMeal(Meal? meal) {
+    _templateMeal = meal;
+    if (meal != null) {
+      _selectedTabIndex = 1;
+    }
+    notifyListeners();
+  }
+
+  void clearTemplateMeal() {
+    _templateMeal = null;
     notifyListeners();
   }
 

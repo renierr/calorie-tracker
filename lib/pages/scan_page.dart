@@ -138,6 +138,28 @@ class _ScanPageState extends State<ScanPage> {
     final bool hasApiKey = apiKey.trim().isNotEmpty;
     final colors = AppTheme.of(context);
 
+    if (appState.templateMeal != null) {
+      final template = appState.templateMeal!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() {
+          _imageBytes = template.imageBytes;
+          _selectedImage = null;
+          _showForm = true;
+          _scanResult = AIAnalysisResult(
+            foodName: template.foodName,
+            calories: template.calories,
+            protein: template.protein,
+            carbs: template.carbs,
+            fat: template.fat,
+            confidence: template.confidence,
+            notes: template.notes ?? '',
+          );
+        });
+        appState.clearTemplateMeal();
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.scanTitle)),
       body: Stack(
@@ -186,6 +208,9 @@ class _ScanPageState extends State<ScanPage> {
                         setState(() {
                           _showForm = false;
                           _scanResult = null;
+                          if (_selectedImage == null) {
+                            _imageBytes = null;
+                          }
                         });
                       },
                       onSaveSuccess: () {

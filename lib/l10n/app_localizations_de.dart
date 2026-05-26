@@ -244,6 +244,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get delete => 'Löschen';
 
   @override
+  String get templateAsNew => 'Neu';
+
+  @override
   String get confirmDelete => 'Löschen bestätigen';
 
   @override

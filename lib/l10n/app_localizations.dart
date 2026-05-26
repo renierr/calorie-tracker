@@ -518,6 +518,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @templateAsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get templateAsNew;
+
   /// No description provided for @confirmDelete.
   ///
   /// In en, this message translates to:

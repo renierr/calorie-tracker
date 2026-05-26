@@ -75,6 +75,7 @@
   "pdf": "PDF",
   "edit": "Bearbeiten",
   "delete": "Löschen",
+  "templateAsNew": "Neu",
   "confirmDelete": "Löschen bestätigen",
   "confirmDeleteDesc": "Bist du sicher, dass du diese Mahlzeit endgültig löschen möchtest? Dies kann nicht rückgängig gemacht werden.",
   "cancel": "Abbrechen",

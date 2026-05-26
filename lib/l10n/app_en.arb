@@ -75,6 +75,7 @@
   "pdf": "PDF",
   "edit": "Edit",
   "delete": "Delete",
+  "templateAsNew": "New",
   "confirmDelete": "Confirm Deletion",
   "confirmDeleteDesc": "Are you sure you want to permanently delete this logged meal? This cannot be undone.",
   "cancel": "Cancel",
