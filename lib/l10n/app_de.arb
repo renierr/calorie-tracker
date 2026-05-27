@@ -349,6 +349,39 @@
   "bodyWeightKg": "Körpergewicht (kg)",
   "bodyWeightTrend": "Gewichtstrend",
   "optionalWeight": "Körpergewicht (optional in kg)",
-  "weightShort": "G"
+  "weightShort": "G",
+  "aiSettingsTitle": "KI-Bilderkennung konfigurieren",
+  "aiSettingsDesc": "Konfigurieren Sie Ihr bevorzugtes KI-Bilderkennungsmodell für das Scannen von Mahlzeiten.",
+  "aiProviderLabel": "KI-Anbieter",
+  "aiModelLabel": "Erkennungsmodell",
+  "customUrlLabel": "Eigene API-Endpunkt-Basis-URL",
+  "customUrlHint": "z. B. http://localhost:11434/v1",
+  "customModelHint": "z. B. llama3.2-vision",
+  "validateConnection": "Verbindung prüfen",
+  "validateSuccess": "Zugangsdaten sind gültig!",
+  "validationFailed": "Validierung fehlgeschlagen: {error}",
+  "@validationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSettingsSaved": "KI-Konfiguration erfolgreich gespeichert!",
+  "activeAiConfig": "Aktiv: {provider} ({model})",
+  "@activeAiConfig": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "enterApiKey": "Geben Sie Ihren API-Schlüssel ein",
+  "apiKeyLabel": "API-Autorisierungsschlüssel",
+  "configureAiProvider": "KI-Anbieter konfigurieren",
+  "configureAiProviderDesc": "Ändern Sie KI-Modelle, Endpunkte oder Schlüssel"
 }
 

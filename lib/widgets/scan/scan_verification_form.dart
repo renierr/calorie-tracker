@@ -5,7 +5,7 @@ import '../../layout/adaptive_breakpoints.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
-import '../../services/gemini_service.dart';
+import '../../services/ai_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../adaptive/adaptive_action_group.dart';
 
@@ -80,8 +80,12 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   Future<void> _reEvaluateMeal() async {
     if (widget.imageBytes == null) return;
 
-    final apiKey = widget.appState.geminiApiKey;
-    if (apiKey.trim().isEmpty) {
+    final apiKey = widget.appState.aiApiKey.isNotEmpty
+        ? widget.appState.aiApiKey
+        : widget.appState.geminiApiKey;
+    final hasApiKey =
+        widget.appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
+    if (!hasApiKey) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.apiKeyMissing)),
       );
@@ -104,12 +108,10 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         customHint += 'Additional context/adjustments: "$currentNotes". ';
       }
 
-      final result = await GeminiService.performAIAnalysis(
-        apiKey: apiKey,
+      final result = await widget.appState.performAIAnalysis(
         imageBytes: widget.imageBytes!,
         mimeType: 'image/jpeg',
         userHint: customHint,
-        languageCode: widget.appState.appLocale,
       );
 
       setState(() {

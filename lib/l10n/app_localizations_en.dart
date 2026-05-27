@@ -316,10 +316,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The AI Meal Scanner requires a Google Gemini API Key. Your key is saved locally in private app settings.';
 
   @override
-  String get enterApiKey => 'Enter your Gemini API Key';
+  String get enterApiKey => 'Enter your API credential key';
 
   @override
-  String get apiKeyLabel => 'Gemini API Key';
+  String get apiKeyLabel => 'API Authorization Key';
 
   @override
   String get dailyTargets => 'Daily Nutritional Targets';
@@ -704,4 +704,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weightShort => 'W';
+
+  @override
+  String get aiSettingsTitle => 'AI Vision Configuration';
+
+  @override
+  String get aiSettingsDesc =>
+      'Configure your preferred AI vision model for meal scanning.';
+
+  @override
+  String get aiProviderLabel => 'AI Provider';
+
+  @override
+  String get aiModelLabel => 'Vision Model';
+
+  @override
+  String get customUrlLabel => 'Custom API Endpoint Base URL';
+
+  @override
+  String get customUrlHint => 'e.g. http://localhost:11434/v1';
+
+  @override
+  String get customModelHint => 'e.g. llama3.2-vision';
+
+  @override
+  String get validateConnection => 'Validate Connection';
+
+  @override
+  String get validateSuccess => 'Credentials are valid!';
+
+  @override
+  String validationFailed(String error) {
+    return 'Validation failed: $error';
+  }
+
+  @override
+  String get aiSettingsSaved => 'AI Configuration saved successfully!';
+
+  @override
+  String activeAiConfig(String provider, String model) {
+    return 'Active: $provider ($model)';
+  }
+
+  @override
+  String get configureAiProvider => 'Configure AI Provider';
+
+  @override
+  String get configureAiProviderDesc =>
+      'Change AI vision models, endpoints, or keys';
 }

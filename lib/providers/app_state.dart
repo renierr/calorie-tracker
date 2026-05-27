@@ -6,14 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/db_helper.dart';
 import '../models/meal_model.dart';
 import '../services/sync_service.dart';
+import '../services/ai_service.dart';
 
 part 'app_state_meals.dart';
 part 'app_state_settings.dart';
 part 'app_state_sync.dart';
 part 'app_state_navigation.dart';
+part 'app_state_ai.dart';
 
 class AppState extends ChangeNotifier
-    with _MealState, _SettingsState, _SyncState, _NavigationState {
+    with _MealState, _SettingsState, _SyncState, _NavigationState, _AiState {
   // SQLite instance
   final DbHelper _dbHelper = DbHelper.instance;
 
@@ -31,8 +33,17 @@ class AppState extends ChangeNotifier
   static const String _keyLastSyncedTime = 'last_synced_time';
   static const String _keySyncEnabled = 'sync_enabled';
 
+  static const String _keyAiProvider = 'ai_provider';
+  static const String _keyAiModel = 'ai_model';
+  static const String _keyAiApiKey = 'ai_api_key';
+  static const String _keyAiCustomUrl = 'ai_custom_url';
+
   // State variables
   String _geminiApiKey = '';
+  String _aiProvider = 'gemini';
+  String _aiModel = 'gemini-2.5-flash';
+  String _aiApiKey = '';
+  String _aiCustomUrl = '';
   int _calorieGoal = 2000;
   int _proteinGoal = 130;
   int _carbsGoal = 220;

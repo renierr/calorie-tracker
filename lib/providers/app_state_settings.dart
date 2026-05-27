@@ -20,6 +20,8 @@ mixin _SettingsState on ChangeNotifier {
     _state._syncUserId = prefs.getString(AppState._keySyncUserId) ?? 'user-1';
     _state._lastSyncedTime = prefs.getInt(AppState._keyLastSyncedTime);
     _state._syncEnabled = prefs.getBool(AppState._keySyncEnabled) ?? false;
+
+    await _state.loadAISettings();
     notifyListeners();
   }
 
@@ -125,6 +127,10 @@ mixin _SettingsState on ChangeNotifier {
         'syncServerUrl': _state._syncServerUrl,
         'syncUserId': _state._syncUserId,
         'syncEnabled': _state._syncEnabled,
+        'aiProvider': _state._aiProvider,
+        'aiModel': _state._aiModel,
+        'aiApiKey': _state._aiApiKey,
+        'aiCustomUrl': _state._aiCustomUrl,
       },
     };
     return const JsonEncoder.withIndent('  ').convert(exportMap);
@@ -194,6 +200,22 @@ mixin _SettingsState on ChangeNotifier {
       if (settings.containsKey('syncEnabled')) {
         _state._syncEnabled = settings['syncEnabled'] as bool? ?? false;
         await prefs.setBool(AppState._keySyncEnabled, _state._syncEnabled);
+      }
+      if (settings.containsKey('aiProvider')) {
+        _state._aiProvider = settings['aiProvider'] as String? ?? 'gemini';
+        await prefs.setString(AppState._keyAiProvider, _state._aiProvider);
+      }
+      if (settings.containsKey('aiModel')) {
+        _state._aiModel = settings['aiModel'] as String? ?? 'gemini-2.5-flash';
+        await prefs.setString(AppState._keyAiModel, _state._aiModel);
+      }
+      if (settings.containsKey('aiApiKey')) {
+        _state._aiApiKey = settings['aiApiKey'] as String? ?? '';
+        await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
+      }
+      if (settings.containsKey('aiCustomUrl')) {
+        _state._aiCustomUrl = settings['aiCustomUrl'] as String? ?? '';
+        await prefs.setString(AppState._keyAiCustomUrl, _state._aiCustomUrl);
       }
 
       notifyListeners();

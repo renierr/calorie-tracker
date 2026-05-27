@@ -317,10 +317,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Der KI-Scanner benötigt einen Google Gemini API-Schlüssel. Dein Schlüssel wird lokal in den App-Einstellungen gespeichert.';
 
   @override
-  String get enterApiKey => 'Gemini API-Schlüssel eingeben';
+  String get enterApiKey => 'Geben Sie Ihren API-Schlüssel ein';
 
   @override
-  String get apiKeyLabel => 'Gemini API-Schlüssel';
+  String get apiKeyLabel => 'API-Autorisierungsschlüssel';
 
   @override
   String get dailyTargets => 'Tägliche Nährstoffziele';
@@ -708,4 +708,52 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get weightShort => 'G';
+
+  @override
+  String get aiSettingsTitle => 'KI-Bilderkennung konfigurieren';
+
+  @override
+  String get aiSettingsDesc =>
+      'Konfigurieren Sie Ihr bevorzugtes KI-Bilderkennungsmodell für das Scannen von Mahlzeiten.';
+
+  @override
+  String get aiProviderLabel => 'KI-Anbieter';
+
+  @override
+  String get aiModelLabel => 'Erkennungsmodell';
+
+  @override
+  String get customUrlLabel => 'Eigene API-Endpunkt-Basis-URL';
+
+  @override
+  String get customUrlHint => 'z. B. http://localhost:11434/v1';
+
+  @override
+  String get customModelHint => 'z. B. llama3.2-vision';
+
+  @override
+  String get validateConnection => 'Verbindung prüfen';
+
+  @override
+  String get validateSuccess => 'Zugangsdaten sind gültig!';
+
+  @override
+  String validationFailed(String error) {
+    return 'Validierung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get aiSettingsSaved => 'KI-Konfiguration erfolgreich gespeichert!';
+
+  @override
+  String activeAiConfig(String provider, String model) {
+    return 'Aktiv: $provider ($model)';
+  }
+
+  @override
+  String get configureAiProvider => 'KI-Anbieter konfigurieren';
+
+  @override
+  String get configureAiProviderDesc =>
+      'Ändern Sie KI-Modelle, Endpunkte oder Schlüssel';
 }

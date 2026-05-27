@@ -653,13 +653,13 @@ abstract class AppLocalizations {
   /// No description provided for @enterApiKey.
   ///
   /// In en, this message translates to:
-  /// **'Enter your Gemini API Key'**
+  /// **'Enter your API credential key'**
   String get enterApiKey;
 
   /// No description provided for @apiKeyLabel.
   ///
   /// In en, this message translates to:
-  /// **'Gemini API Key'**
+  /// **'API Authorization Key'**
   String get apiKeyLabel;
 
   /// No description provided for @dailyTargets.
@@ -1327,6 +1327,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'W'**
   String get weightShort;
+
+  /// No description provided for @aiSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Vision Configuration'**
+  String get aiSettingsTitle;
+
+  /// No description provided for @aiSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure your preferred AI vision model for meal scanning.'**
+  String get aiSettingsDesc;
+
+  /// No description provided for @aiProviderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Provider'**
+  String get aiProviderLabel;
+
+  /// No description provided for @aiModelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vision Model'**
+  String get aiModelLabel;
+
+  /// No description provided for @customUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom API Endpoint Base URL'**
+  String get customUrlLabel;
+
+  /// No description provided for @customUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. http://localhost:11434/v1'**
+  String get customUrlHint;
+
+  /// No description provided for @customModelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. llama3.2-vision'**
+  String get customModelHint;
+
+  /// No description provided for @validateConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Validate Connection'**
+  String get validateConnection;
+
+  /// No description provided for @validateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Credentials are valid!'**
+  String get validateSuccess;
+
+  /// No description provided for @validationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Validation failed: {error}'**
+  String validationFailed(String error);
+
+  /// No description provided for @aiSettingsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Configuration saved successfully!'**
+  String get aiSettingsSaved;
+
+  /// No description provided for @activeAiConfig.
+  ///
+  /// In en, this message translates to:
+  /// **'Active: {provider} ({model})'**
+  String activeAiConfig(String provider, String model);
+
+  /// No description provided for @configureAiProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure AI Provider'**
+  String get configureAiProvider;
+
+  /// No description provided for @configureAiProviderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Change AI vision models, endpoints, or keys'**
+  String get configureAiProviderDesc;
 }
 
 class _AppLocalizationsDelegate

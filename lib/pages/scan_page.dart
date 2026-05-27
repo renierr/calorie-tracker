@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
-import '../services/gemini_service.dart';
+import '../services/ai_service.dart';
 import '../widgets/scan/scan_image_selector.dart';
 import '../widgets/scan/scan_verification_form.dart';
 import '../widgets/scan/scan_favorites_list.dart';
@@ -77,8 +77,8 @@ class _ScanPageState extends State<ScanPage> {
     });
   }
 
-  // Trigger Gemini AI scanning
-  Future<void> _scanMeal(String apiKey, String languageCode) async {
+  // Trigger AI scanning
+  Future<void> _scanMeal(AppState appState) async {
     final colors = AppTheme.of(context);
     if (_imageBytes == null || _selectedImage == null) return;
 
@@ -88,12 +88,10 @@ class _ScanPageState extends State<ScanPage> {
     });
 
     try {
-      final result = await GeminiService.performAIAnalysis(
-        apiKey: apiKey,
+      final result = await appState.performAIAnalysis(
         imageBytes: _imageBytes!,
         mimeType: _selectedImage!.mimeType ?? 'image/jpeg',
         userHint: _hintController.text,
-        languageCode: languageCode,
       );
 
       setState(() {
@@ -135,8 +133,11 @@ class _ScanPageState extends State<ScanPage> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
-    final String apiKey = appState.geminiApiKey;
-    final bool hasApiKey = apiKey.trim().isNotEmpty;
+    final String apiKey = appState.aiApiKey.isNotEmpty
+        ? appState.aiApiKey
+        : appState.geminiApiKey;
+    final bool hasApiKey =
+        appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
     final colors = AppTheme.of(context);
 
     if (appState.templateMeal != null) {
@@ -199,8 +200,8 @@ class _ScanPageState extends State<ScanPage> {
                     _buildHintField(),
                     const SizedBox(height: 25),
 
-                    // Gemini Trigger Button
-                    _buildTriggerButton(hasApiKey, apiKey, appState.appLocale),
+                    // AI Trigger Button
+                    _buildTriggerButton(hasApiKey, appState),
                     const SizedBox(height: 20),
                   ],
 
@@ -299,11 +300,7 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   // Layout: Scan trigger action
-  Widget _buildTriggerButton(
-    bool hasApiKey,
-    String apiKey,
-    String languageCode,
-  ) {
+  Widget _buildTriggerButton(bool hasApiKey, AppState appState) {
     final colors = AppTheme.of(context);
     if (!hasApiKey) {
       return Column(
@@ -395,7 +392,7 @@ class _ScanPageState extends State<ScanPage> {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 52),
             ),
-            onPressed: () => _scanMeal(apiKey, languageCode),
+            onPressed: () => _scanMeal(appState),
           ),
         ),
         const SizedBox(height: 12),

@@ -3,13 +3,14 @@ import 'package:provider/provider.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
-import '../widgets/settings/api_config_card.dart';
+import 'ai_settings_page.dart';
 import '../widgets/settings/target_goals_card.dart';
 import '../widgets/settings/maintenance_card.dart';
 import '../widgets/settings/language_card.dart';
 import '../widgets/settings/theme_card.dart';
 import '../widgets/settings/export_card.dart';
 import '../widgets/settings/sync_config_card.dart';
+import '../widgets/adaptive/adaptive_card_header.dart';
 import '../version.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -23,7 +24,6 @@ class _SettingsPageState extends State<SettingsPage> {
   late final AppState _appState;
 
   // Form field controllers
-  late TextEditingController _apiKeyController;
   late TextEditingController _caloriesController;
   late TextEditingController _proteinController;
   late TextEditingController _carbsController;
@@ -36,7 +36,6 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
     // Pre-populate fields from active State
     _appState = Provider.of<AppState>(context, listen: false);
-    _apiKeyController = TextEditingController(text: _appState.geminiApiKey);
     _caloriesController = TextEditingController(
       text: _appState.calorieGoal.toString(),
     );
@@ -58,7 +57,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void dispose() {
     _appState.removeListener(_onStateChanged);
-    _apiKeyController.dispose();
     _caloriesController.dispose();
     _proteinController.dispose();
     _carbsController.dispose();
@@ -71,9 +69,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void _onStateChanged() {
     if (!mounted) return;
     final appState = _appState;
-    if (_apiKeyController.text != appState.geminiApiKey) {
-      _apiKeyController.text = appState.geminiApiKey;
-    }
     if (_caloriesController.text != appState.calorieGoal.toString()) {
       _caloriesController.text = appState.calorieGoal.toString();
     }
@@ -96,14 +91,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Trigger Settings Save Helper
   Future<void> _saveSettings(AppState appState) async {
-    final String apiKey = _apiKeyController.text.trim();
     final int calories = int.tryParse(_caloriesController.text) ?? 2000;
     final int protein = int.tryParse(_proteinController.text) ?? 130;
     final int carbs = int.tryParse(_carbsController.text) ?? 220;
     final int fat = int.tryParse(_fatController.text) ?? 70;
 
     await appState.saveSettings(
-      apiKey: apiKey,
+      apiKey: appState.geminiApiKey,
       calories: calories,
       protein: protein,
       carbs: carbs,
@@ -137,8 +131,8 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Panel 1: API Configuration
-              ApiConfigCard(apiKeyController: _apiKeyController),
+              // Panel 1: AI Provider Configuration navigation tile
+              _buildAiProviderConfigTile(context, appState),
               const SizedBox(height: 20),
 
               // Panel 2: Language Selection
@@ -256,6 +250,99 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAiProviderConfigTile(BuildContext context, AppState appState) {
+    final colors = AppTheme.of(context);
+    final localizations = AppLocalizations.of(context)!;
+
+    final providerName = appState.aiProvider.toUpperCase();
+    final modelName = appState.aiModel;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumCardDecoration(
+        context: context,
+        color: colors.surface,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AdaptiveCardHeader(
+            icon: Icons.key,
+            iconColor: AppTheme.accentEmerald,
+            title: localizations.configureAiProvider,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            localizations.configureAiProviderDesc,
+            style: TextStyle(
+              color: colors.textSecondary,
+              fontSize: 12,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 15),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            decoration: BoxDecoration(
+              color: colors.surfaceLight.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.insights,
+                  color: AppTheme.accentEmerald,
+                  size: 16,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    localizations.activeAiConfig(providerName, modelName),
+                    style: TextStyle(
+                      color: colors.textPrimary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 15),
+          SizedBox(
+            width: double.infinity,
+            height: 44,
+            child: OutlinedButton.icon(
+              icon: const Icon(Icons.tune, size: 18),
+              label: Text(
+                localizations.configureAiProvider,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppTheme.accentEmerald,
+                side: const BorderSide(
+                  color: AppTheme.accentEmerald,
+                  width: 1.2,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AISettingsPage(),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

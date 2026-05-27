@@ -349,6 +349,39 @@
   "bodyWeightKg": "Body Weight (kg)",
   "bodyWeightTrend": "Body Weight Trend",
   "optionalWeight": "Body Weight (optional kg)",
-  "weightShort": "W"
+  "weightShort": "W",
+  "aiSettingsTitle": "AI Vision Configuration",
+  "aiSettingsDesc": "Configure your preferred AI vision model for meal scanning.",
+  "aiProviderLabel": "AI Provider",
+  "aiModelLabel": "Vision Model",
+  "customUrlLabel": "Custom API Endpoint Base URL",
+  "customUrlHint": "e.g. http://localhost:11434/v1",
+  "customModelHint": "e.g. llama3.2-vision",
+  "validateConnection": "Validate Connection",
+  "validateSuccess": "Credentials are valid!",
+  "validationFailed": "Validation failed: {error}",
+  "@validationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSettingsSaved": "AI Configuration saved successfully!",
+  "activeAiConfig": "Active: {provider} ({model})",
+  "@activeAiConfig": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "enterApiKey": "Enter your API credential key",
+  "apiKeyLabel": "API Authorization Key",
+  "configureAiProvider": "Configure AI Provider",
+  "configureAiProviderDesc": "Change AI vision models, endpoints, or keys"
 }
 
