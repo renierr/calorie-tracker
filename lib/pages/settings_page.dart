@@ -20,6 +20,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late final AppState _appState;
+
   // Form field controllers
   late TextEditingController _apiKeyController;
   late TextEditingController _caloriesController;
@@ -33,30 +35,29 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     // Pre-populate fields from active State
-    final appState = Provider.of<AppState>(context, listen: false);
-    _apiKeyController = TextEditingController(text: appState.geminiApiKey);
+    _appState = Provider.of<AppState>(context, listen: false);
+    _apiKeyController = TextEditingController(text: _appState.geminiApiKey);
     _caloriesController = TextEditingController(
-      text: appState.calorieGoal.toString(),
+      text: _appState.calorieGoal.toString(),
     );
     _proteinController = TextEditingController(
-      text: appState.proteinGoal.toString(),
+      text: _appState.proteinGoal.toString(),
     );
     _carbsController = TextEditingController(
-      text: appState.carbsGoal.toString(),
+      text: _appState.carbsGoal.toString(),
     );
-    _fatController = TextEditingController(text: appState.fatGoal.toString());
+    _fatController = TextEditingController(text: _appState.fatGoal.toString());
     _syncServerUrlController = TextEditingController(
-      text: appState.syncServerUrl,
+      text: _appState.syncServerUrl,
     );
-    _syncUserIdController = TextEditingController(text: appState.syncUserId);
+    _syncUserIdController = TextEditingController(text: _appState.syncUserId);
 
-    appState.addListener(_onStateChanged);
+    _appState.addListener(_onStateChanged);
   }
 
   @override
   void dispose() {
-    final appState = Provider.of<AppState>(context, listen: false);
-    appState.removeListener(_onStateChanged);
+    _appState.removeListener(_onStateChanged);
     _apiKeyController.dispose();
     _caloriesController.dispose();
     _proteinController.dispose();
@@ -69,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _onStateChanged() {
     if (!mounted) return;
-    final appState = Provider.of<AppState>(context, listen: false);
+    final appState = _appState;
     if (_apiKeyController.text != appState.geminiApiKey) {
       _apiKeyController.text = appState.geminiApiKey;
     }
