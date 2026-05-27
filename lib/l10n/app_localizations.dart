@@ -1411,6 +1411,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change AI vision models, endpoints, or keys'**
   String get configureAiProviderDesc;
+
+  /// No description provided for @geminiInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Gemini API Key'**
+  String get geminiInfoTitle;
+
+  /// No description provided for @geminiInfoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI Meal Scanner securely connects to Google\'s Gemini models to estimate calories and portion weights from your food photos.'**
+  String get geminiInfoDesc;
+
+  /// No description provided for @geminiStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Visit Google AI Studio at: https://aistudio.google.com/api-keys'**
+  String get geminiStep1;
+
+  /// No description provided for @geminiStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Sign in with your standard Google account.'**
+  String get geminiStep2;
+
+  /// No description provided for @geminiStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Click the \'Create API Key\' button.'**
+  String get geminiStep3;
+
+  /// No description provided for @geminiStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Copy the generated key and paste it here.'**
+  String get geminiStep4;
+
+  /// No description provided for @copyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Link'**
+  String get copyLink;
+
+  /// No description provided for @linkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied to clipboard!'**
+  String get linkCopied;
 }
 
 class _AppLocalizationsDelegate

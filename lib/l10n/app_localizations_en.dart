@@ -752,4 +752,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get configureAiProviderDesc =>
       'Change AI vision models, endpoints, or keys';
+
+  @override
+  String get geminiInfoTitle => 'Get Gemini API Key';
+
+  @override
+  String get geminiInfoDesc =>
+      'The AI Meal Scanner securely connects to Google\'s Gemini models to estimate calories and portion weights from your food photos.';
+
+  @override
+  String get geminiStep1 =>
+      '1. Visit Google AI Studio at: https://aistudio.google.com/api-keys';
+
+  @override
+  String get geminiStep2 => '2. Sign in with your standard Google account.';
+
+  @override
+  String get geminiStep3 => '3. Click the \'Create API Key\' button.';
+
+  @override
+  String get geminiStep4 => '4. Copy the generated key and paste it here.';
+
+  @override
+  String get copyLink => 'Copy Link';
+
+  @override
+  String get linkCopied => 'Link copied to clipboard!';
 }

@@ -4,6 +4,7 @@ import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/adaptive/adaptive_card_header.dart';
+import '../widgets/settings/gemini_info_dialog.dart';
 
 class AISettingsPage extends StatefulWidget {
   const AISettingsPage({super.key});
@@ -351,53 +352,91 @@ class _AISettingsPageState extends State<AISettingsPage> {
                           return null;
                         },
                       ),
+                      if (_selectedProvider == 'gemini') ...[
+                        const SizedBox(height: 10),
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const GeminiInfoDialog(),
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(4),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 6,
+                              horizontal: 4,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.help_outline,
+                                  size: 14,
+                                  color: AppTheme.accentEmerald,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  localizations.geminiInfoTitle,
+                                  style: const TextStyle(
+                                    color: AppTheme.accentEmerald,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
                 const SizedBox(height: 30),
 
-                // Action buttons: Validate & Save
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
+                Row(
                   children: [
-                    SizedBox(
-                      height: 52,
-                      child: OutlinedButton.icon(
-                        icon: _isValidating
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: OutlinedButton.icon(
+                          icon: _isValidating
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppTheme.accentEmerald,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.bolt,
                                   color: AppTheme.accentEmerald,
                                 ),
-                              )
-                            : const Icon(
-                                Icons.bolt,
-                                color: AppTheme.accentEmerald,
-                              ),
-                        label: Text(
-                          localizations.validateConnection,
-                          style: const TextStyle(
-                            color: AppTheme.accentEmerald,
-                            fontWeight: FontWeight.bold,
+                          label: Text(
+                            localizations.validateConnection,
+                            style: const TextStyle(
+                              color: AppTheme.accentEmerald,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              color: AppTheme.accentEmerald,
+                              width: 1.5,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: _isValidating || _isSaving
+                              ? null
+                              : _validateConnection,
                         ),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                            color: AppTheme.accentEmerald,
-                            width: 1.5,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        onPressed: _isValidating || _isSaving
-                            ? null
-                            : _validateConnection,
                       ),
                     ),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: SizedBox(
                         height: 52,

@@ -382,6 +382,14 @@
   "enterApiKey": "Enter your API credential key",
   "apiKeyLabel": "API Authorization Key",
   "configureAiProvider": "Configure AI Provider",
-  "configureAiProviderDesc": "Change AI vision models, endpoints, or keys"
+  "configureAiProviderDesc": "Change AI vision models, endpoints, or keys",
+  "geminiInfoTitle": "Get Gemini API Key",
+  "geminiInfoDesc": "The AI Meal Scanner securely connects to Google's Gemini models to estimate calories and portion weights from your food photos.",
+  "geminiStep1": "1. Visit Google AI Studio at: https://aistudio.google.com/api-keys",
+  "geminiStep2": "2. Sign in with your standard Google account.",
+  "geminiStep3": "3. Click the 'Create API Key' button.",
+  "geminiStep4": "4. Copy the generated key and paste it here.",
+  "copyLink": "Copy Link",
+  "linkCopied": "Link copied to clipboard!"
 }
 

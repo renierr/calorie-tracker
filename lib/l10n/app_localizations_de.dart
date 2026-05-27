@@ -756,4 +756,33 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get configureAiProviderDesc =>
       'Ändern Sie KI-Modelle, Endpunkte oder Schlüssel';
+
+  @override
+  String get geminiInfoTitle => 'Gemini API-Schlüssel erhalten';
+
+  @override
+  String get geminiInfoDesc =>
+      'Der KI-Mahlzeiten-Scanner verbindet sich sicher mit den Gemini-Modellen von Google, um Kalorien und Portionsgewichte aus Ihren Essensfotos zu schätzen.';
+
+  @override
+  String get geminiStep1 =>
+      '1. Öffnen Sie Google AI Studio unter: https://aistudio.google.com/api-keys';
+
+  @override
+  String get geminiStep2 =>
+      '2. Melden Sie sich mit Ihrem standardmäßigen Google-Konto an.';
+
+  @override
+  String get geminiStep3 =>
+      '3. Klicken Sie auf die Schaltfläche \"Create API Key\".';
+
+  @override
+  String get geminiStep4 =>
+      '4. Kopieren Sie den generierten Schlüssel und fügen Sie ihn hier ein.';
+
+  @override
+  String get copyLink => 'Link kopieren';
+
+  @override
+  String get linkCopied => 'Link in die Zwischenablage kopiert!';
 }

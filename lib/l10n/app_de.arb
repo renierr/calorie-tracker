@@ -382,6 +382,14 @@
   "enterApiKey": "Geben Sie Ihren API-Schlüssel ein",
   "apiKeyLabel": "API-Autorisierungsschlüssel",
   "configureAiProvider": "KI-Anbieter konfigurieren",
-  "configureAiProviderDesc": "Ändern Sie KI-Modelle, Endpunkte oder Schlüssel"
+  "configureAiProviderDesc": "Ändern Sie KI-Modelle, Endpunkte oder Schlüssel",
+  "geminiInfoTitle": "Gemini API-Schlüssel erhalten",
+  "geminiInfoDesc": "Der KI-Mahlzeiten-Scanner verbindet sich sicher mit den Gemini-Modellen von Google, um Kalorien und Portionsgewichte aus Ihren Essensfotos zu schätzen.",
+  "geminiStep1": "1. Öffnen Sie Google AI Studio unter: https://aistudio.google.com/api-keys",
+  "geminiStep2": "2. Melden Sie sich mit Ihrem standardmäßigen Google-Konto an.",
+  "geminiStep3": "3. Klicken Sie auf die Schaltfläche \"Create API Key\".",
+  "geminiStep4": "4. Kopieren Sie den generierten Schlüssel und fügen Sie ihn hier ein.",
+  "copyLink": "Link kopieren",
+  "linkCopied": "Link in die Zwischenablage kopiert!"
 }
 
