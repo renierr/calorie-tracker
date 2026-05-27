@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:file_selector/file_selector.dart';
@@ -10,7 +13,7 @@ import '../l10n/app_localizations.dart';
 import '../helpers/file_save_helper.dart';
 import 'edit_meal_dialog.dart';
 
-class MealDetailDialog extends StatelessWidget {
+class MealDetailDialog extends StatefulWidget {
   final Meal meal;
   final AppState appState;
 
@@ -19,6 +22,14 @@ class MealDetailDialog extends StatelessWidget {
     required this.meal,
     required this.appState,
   });
+
+  @override
+  State<MealDetailDialog> createState() => _MealDetailDialogState();
+}
+
+class _MealDetailDialogState extends State<MealDetailDialog> {
+  final GlobalKey _boundaryKey = GlobalKey();
+  bool _isExporting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +49,14 @@ class MealDetailDialog extends StatelessWidget {
         builder: (context, currentAppState, child) {
           // Reactively fetch the latest version of the meal from AppState
           var currentMeal = currentAppState.meals.firstWhere(
-            (m) => m.id == meal.id,
-            orElse: () => meal,
+            (m) => m.id == widget.meal.id,
+            orElse: () => widget.meal,
           );
-          if (currentMeal.imageBytes == null && meal.imageBytes != null) {
-            currentMeal = currentMeal.copyWith(imageBytes: meal.imageBytes);
+          if (currentMeal.imageBytes == null &&
+              widget.meal.imageBytes != null) {
+            currentMeal = currentMeal.copyWith(
+              imageBytes: widget.meal.imageBytes,
+            );
           }
 
           final mealDate = DateTime.fromMillisecondsSinceEpoch(
@@ -58,58 +72,306 @@ class MealDetailDialog extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Image/Header with modern close button
+                  // Captured Card Region (Wrapped in RepaintBoundary)
                   Stack(
                     children: [
-                      GestureDetector(
-                        onTap: currentMeal.imageBytes != null
-                            ? () => _showImagePreview(context, currentMeal)
-                            : null,
+                      RepaintBoundary(
+                        key: _boundaryKey,
                         child: Container(
-                          height: 200,
-                          width: double.infinity,
                           decoration: BoxDecoration(
-                            color: colors.surfaceLight,
+                            color: colors.surface,
                             borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(16),
                             ),
                           ),
-                          child: currentMeal.imageBytes != null
-                              ? ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(16),
-                                  ),
-                                  child: Image.memory(
-                                    currentMeal.imageBytes!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              // Image/Header Header
+                              GestureDetector(
+                                onTap: currentMeal.imageBytes != null
+                                    ? () => _showImagePreview(
+                                        context,
+                                        currentMeal,
+                                      )
+                                    : null,
+                                child: Container(
+                                  height: 200,
+                                  width: double.infinity,
                                   decoration: BoxDecoration(
+                                    color: colors.surfaceLight,
                                     borderRadius: const BorderRadius.vertical(
                                       top: Radius.circular(16),
                                     ),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        AppTheme.accentEmerald.withValues(
-                                          alpha: 0.15,
+                                  ),
+                                  child: currentMeal.imageBytes != null
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                                top: Radius.circular(16),
+                                              ),
+                                          child: Image.memory(
+                                            currentMeal.imageBytes!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.vertical(
+                                                  top: Radius.circular(16),
+                                                ),
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                AppTheme.accentEmerald
+                                                    .withValues(alpha: 0.15),
+                                                AppTheme.accentBlue.withValues(
+                                                  alpha: 0.15,
+                                                ),
+                                              ],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            ),
+                                          ),
+                                          child: const Icon(
+                                            Icons.restaurant_menu,
+                                            color: AppTheme.accentEmerald,
+                                            size: 48,
+                                          ),
                                         ),
-                                        AppTheme.accentBlue.withValues(
-                                          alpha: 0.15,
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Metadata Header (Date, Time, ID)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '${dateFormat.format(mealDate)}  •  ${timeFormat.format(mealDate)}',
+                                          style: TextStyle(
+                                            color: colors.textSecondary,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6,
+                                            vertical: 3,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: colors.surfaceLight,
+                                            borderRadius: BorderRadius.circular(
+                                              4,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            currentMeal.shortId,
+                                            style: TextStyle(
+                                              color: colors.textMuted,
+                                              fontSize: 10,
+                                            ),
+                                          ),
                                         ),
                                       ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
                                     ),
-                                  ),
-                                  child: const Icon(
-                                    Icons.restaurant_menu,
-                                    color: AppTheme.accentEmerald,
-                                    size: 48,
-                                  ),
+                                    const SizedBox(height: 12),
+
+                                    // Food Title
+                                    Text(
+                                      currentMeal.foodName,
+                                      style: TextStyle(
+                                        color: colors.textPrimary,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+
+                                    // Macro Grid Layout with premium card badges
+                                    LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        final double gridWidth =
+                                            constraints.maxWidth;
+                                        final double cardWidth =
+                                            (gridWidth - 10) / 2;
+                                        return Wrap(
+                                          spacing: 10,
+                                          runSpacing: 10,
+                                          children: [
+                                            _buildMacroMetricCard(
+                                              context,
+                                              width: cardWidth,
+                                              value:
+                                                  '${currentMeal.calories} kcal',
+                                              label:
+                                                  AppLocalizations.of(
+                                                    context,
+                                                  )!.caloriesKcal.replaceAll(
+                                                    ' (kcal)',
+                                                    '',
+                                                  ),
+                                              color: AppTheme.accentEmerald,
+                                            ),
+                                            _buildMacroMetricCard(
+                                              context,
+                                              width: cardWidth,
+                                              value: '${currentMeal.protein}g',
+                                              label: AppLocalizations.of(
+                                                context,
+                                              )!.protein,
+                                              color: AppTheme.accentBlue,
+                                            ),
+                                            _buildMacroMetricCard(
+                                              context,
+                                              width: cardWidth,
+                                              value: '${currentMeal.carbs}g',
+                                              label: AppLocalizations.of(
+                                                context,
+                                              )!.carbs,
+                                              color: AppTheme.accentAmber,
+                                            ),
+                                            _buildMacroMetricCard(
+                                              context,
+                                              width: cardWidth,
+                                              value: '${currentMeal.fat}g',
+                                              label: AppLocalizations.of(
+                                                context,
+                                              )!.fat,
+                                              color: AppTheme.accentRed,
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    if (currentMeal.weightKg != null) ...[
+                                      const SizedBox(height: 12),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.accentPurple
+                                              .withValues(alpha: 0.08),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          border: Border.all(
+                                            color: AppTheme.accentPurple
+                                                .withValues(alpha: 0.15),
+                                            width: 0.8,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.monitor_weight_outlined,
+                                              color: AppTheme.accentPurple,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .bodyWeightKg
+                                                  .replaceAll(' (kg)', ''),
+                                              style: TextStyle(
+                                                color: colors.textSecondary,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              '${currentMeal.weightKg!.toStringAsFixed(1)} kg',
+                                              style: const TextStyle(
+                                                color: AppTheme.accentPurple,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                    const SizedBox(height: 18),
+
+                                    // Notes section if populated
+                                    if (currentMeal.notes != null &&
+                                        currentMeal.notes!
+                                            .trim()
+                                            .isNotEmpty) ...[
+                                      Text(
+                                        AppLocalizations.of(context)!.notes,
+                                        style: TextStyle(
+                                          color: colors.textSecondary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: colors.surfaceLight.withValues(
+                                            alpha: 0.4,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          currentMeal.notes!,
+                                          style: TextStyle(
+                                            color: colors.textPrimary,
+                                            fontSize: 13,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                    ],
+
+                                    // Subtle Branded Watermark Logo inside RepaintBoundary
+                                    Center(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(
+                                            Icons.spa_outlined,
+                                            color: AppTheme.accentEmerald,
+                                            size: 14,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            "NutriScan Calorie Tracker",
+                                            style: TextStyle(
+                                              color: colors.textMuted,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.5,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+
+                      // Overlay Floating Action Buttons (Close, Favorite, Download)
                       Positioned(
                         top: 12,
                         right: 12,
@@ -138,203 +400,39 @@ class MealDetailDialog extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (currentMeal.imageBytes != null)
-                        Positioned(
-                          top: 12,
-                          left: 12,
-                          child: FloatingActionButton.small(
-                            heroTag: 'download_detail_${currentMeal.id}',
-                            backgroundColor: Colors.black54,
-                            onPressed: () =>
-                                _downloadImage(context, currentMeal),
-                            child: const Icon(
-                              Icons.download,
-                              color: Colors.white,
-                            ),
-                          ),
+                      Positioned(
+                        top: 12,
+                        left: 12,
+                        child: FloatingActionButton.small(
+                          heroTag: 'download_detail_${currentMeal.id}',
+                          backgroundColor: Colors.black54,
+                          onPressed: _isExporting
+                              ? null
+                              : () => _downloadMealCardImage(currentMeal),
+                          child: _isExporting
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.download, color: Colors.white),
                         ),
+                      ),
                     ],
                   ),
 
+                  // Bottom Action Buttons (Outside RepaintBoundary)
                   Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Metadata Header (Date, Time, ID)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${dateFormat.format(mealDate)}  •  ${timeFormat.format(mealDate)}',
-                              style: TextStyle(
-                                color: colors.textSecondary,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: colors.surfaceLight,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                currentMeal.shortId,
-                                style: TextStyle(
-                                  color: colors.textMuted,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 12),
-
-                        // Food Title
-                        Text(
-                          currentMeal.foodName,
-                          style: TextStyle(
-                            color: colors.textPrimary,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Macro Grid Layout with premium card badges
-                        LayoutBuilder(
-                          builder: (context, constraints) {
-                            final double gridWidth = constraints.maxWidth;
-                            final double cardWidth = (gridWidth - 10) / 2;
-                            return Wrap(
-                              spacing: 10,
-                              runSpacing: 10,
-                              children: [
-                                _buildMacroMetricCard(
-                                  context,
-                                  width: cardWidth,
-                                  value: '${currentMeal.calories} kcal',
-                                  label: AppLocalizations.of(
-                                    context,
-                                  )!.caloriesKcal.replaceAll(' (kcal)', ''),
-                                  color: AppTheme.accentEmerald,
-                                ),
-                                _buildMacroMetricCard(
-                                  context,
-                                  width: cardWidth,
-                                  value: '${currentMeal.protein}g',
-                                  label: AppLocalizations.of(context)!.protein,
-                                  color: AppTheme.accentBlue,
-                                ),
-                                _buildMacroMetricCard(
-                                  context,
-                                  width: cardWidth,
-                                  value: '${currentMeal.carbs}g',
-                                  label: AppLocalizations.of(context)!.carbs,
-                                  color: AppTheme.accentAmber,
-                                ),
-                                _buildMacroMetricCard(
-                                  context,
-                                  width: cardWidth,
-                                  value: '${currentMeal.fat}g',
-                                  label: AppLocalizations.of(context)!.fat,
-                                  color: AppTheme.accentRed,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        if (currentMeal.weightKg != null) ...[
-                          const SizedBox(height: 12),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppTheme.accentPurple.withValues(
-                                alpha: 0.08,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: AppTheme.accentPurple.withValues(
-                                  alpha: 0.15,
-                                ),
-                                width: 0.8,
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.monitor_weight_outlined,
-                                  color: AppTheme.accentPurple,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.bodyWeightKg.replaceAll(' (kg)', ''),
-                                  style: TextStyle(
-                                    color: colors.textSecondary,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '${currentMeal.weightKg!.toStringAsFixed(1)} kg',
-                                  style: const TextStyle(
-                                    color: AppTheme.accentPurple,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                        const SizedBox(height: 18),
-
-                        // Notes section if populated
-                        if (currentMeal.notes != null &&
-                            currentMeal.notes!.trim().isNotEmpty) ...[
-                          Text(
-                            AppLocalizations.of(context)!.notes,
-                            style: TextStyle(
-                              color: colors.textSecondary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: colors.surfaceLight.withValues(alpha: 0.4),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              currentMeal.notes!,
-                              style: TextStyle(
-                                color: colors.textPrimary,
-                                fontSize: 13,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 18),
-                        ],
-
                         Divider(color: colors.surfaceLight, height: 1),
                         const SizedBox(height: 12),
-
-                        // Moved action buttons per meal
                         Wrap(
                           spacing: 12,
                           runSpacing: 8,
@@ -509,7 +607,7 @@ class MealDetailDialog extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) =>
-          EditMealDialog(meal: currentMeal, appState: appState),
+          EditMealDialog(meal: currentMeal, appState: widget.appState),
     );
   }
 
@@ -538,7 +636,7 @@ class MealDetailDialog extends StatelessWidget {
                 backgroundColor: AppTheme.accentRed,
               ),
               onPressed: () async {
-                await appState.deleteMeal(currentMeal.id!);
+                await widget.appState.deleteMeal(currentMeal.id!);
                 if (!confirmDialogContext.mounted) return;
                 Navigator.pop(confirmDialogContext); // pop confirmation
                 if (!context.mounted) return;
@@ -557,26 +655,68 @@ class MealDetailDialog extends StatelessWidget {
     );
   }
 
-  Future<void> _downloadImage(BuildContext context, Meal currentMeal) async {
-    if (currentMeal.imageBytes == null) return;
-    final localizations = AppLocalizations.of(context)!;
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
+  Future<void> _downloadMealCardImage(Meal currentMeal) async {
+    if (_isExporting) return;
 
-    await FileSaveHelper.saveFile(
-      context: context,
-      suggestedName: 'meal_${currentMeal.shortId}_$timestamp.jpg',
-      acceptedTypeGroups: <XTypeGroup>[
-        const XTypeGroup(
-          label: 'JPEG Image',
-          extensions: <String>['jpg', 'jpeg'],
-        ),
-        const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
-      ],
-      bytes: currentMeal.imageBytes,
-      successMessageAndroid: localizations.imageSavedDownloads,
-      successMessageGeneralBuilder: (displayPath) =>
-          localizations.imageSavedTo(displayPath),
-      errorMessageBuilder: (e) => localizations.imageSaveFailed(e),
-    );
+    setState(() {
+      _isExporting = true;
+    });
+
+    try {
+      // Small delay to make sure indicator rebuild is rendered
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      final RenderRepaintBoundary? boundary =
+          _boundaryKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary?;
+
+      if (boundary == null) {
+        throw Exception("Could not find RepaintBoundary");
+      }
+
+      final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      final ByteData? byteData = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
+
+      if (byteData == null) {
+        throw Exception("Failed to convert image to bytes");
+      }
+
+      final Uint8List pngBytes = byteData.buffer.asUint8List();
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      if (!mounted) return;
+      final localizations = AppLocalizations.of(context)!;
+
+      await FileSaveHelper.saveFile(
+        context: context,
+        suggestedName: 'meal_card_${currentMeal.shortId}_$timestamp.png',
+        acceptedTypeGroups: <XTypeGroup>[
+          const XTypeGroup(label: 'PNG Image', extensions: <String>['png']),
+        ],
+        bytes: pngBytes,
+        successMessageAndroid: localizations.imageSavedDownloads,
+        successMessageGeneralBuilder: (displayPath) =>
+            localizations.imageSavedTo(displayPath),
+        errorMessageBuilder: (e) => localizations.imageSaveFailed(e),
+      );
+    } catch (e) {
+      debugPrint("Error capturing meal card image: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error: $e"),
+            backgroundColor: AppTheme.accentRed,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isExporting = false;
+        });
+      }
+    }
   }
 }
