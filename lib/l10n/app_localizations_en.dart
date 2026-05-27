@@ -701,4 +701,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get optionalWeight => 'Body Weight (optional kg)';
+
+  @override
+  String get weightShort => 'W';
 }

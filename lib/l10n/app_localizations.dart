@@ -1321,6 +1321,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Body Weight (optional kg)'**
   String get optionalWeight;
+
+  /// No description provided for @weightShort.
+  ///
+  /// In en, this message translates to:
+  /// **'W'**
+  String get weightShort;
 }
 
 class _AppLocalizationsDelegate

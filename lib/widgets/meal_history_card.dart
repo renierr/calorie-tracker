@@ -193,6 +193,15 @@ class MealHistoryCard extends StatelessWidget {
                                   value: '${meal.fat}g',
                                   color: AppTheme.accentRed,
                                 ),
+                                if (meal.weightKg != null)
+                                  MiniMacroChip(
+                                    label: AppLocalizations.of(
+                                      context,
+                                    )!.weightShort,
+                                    value:
+                                        '${meal.weightKg!.toStringAsFixed(1)}kg',
+                                    color: AppTheme.accentPurple,
+                                  ),
                               ],
                             ),
                           ],

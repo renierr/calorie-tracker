@@ -107,7 +107,7 @@ class TrendChartCard extends StatelessWidget {
                       if (hasWeights) ...[
                         const SizedBox(width: 12),
                         _buildLegendItem(
-                          color: AppTheme.accentAmber,
+                          color: AppTheme.accentPurple,
                           label: AppLocalizations.of(context)!.bodyWeightTrend,
                           textColor: colors.textSecondary,
                         ),
@@ -135,7 +135,7 @@ class TrendChartCard extends StatelessWidget {
                 goalLabel: goalLabel,
                 selectedColor: AppTheme.accentEmerald,
                 unselectedColor: AppTheme.accentBlue,
-                weightColor: AppTheme.accentAmber,
+                weightColor: AppTheme.accentPurple,
                 textColor: colors.textMuted,
                 gridColor: Theme.of(context).brightness == Brightness.dark
                     ? Colors.white.withValues(alpha: 0.04)

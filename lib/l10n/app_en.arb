@@ -348,6 +348,7 @@
   },
   "bodyWeightKg": "Body Weight (kg)",
   "bodyWeightTrend": "Body Weight Trend",
-  "optionalWeight": "Body Weight (optional kg)"
+  "optionalWeight": "Body Weight (optional kg)",
+  "weightShort": "W"
 }
 

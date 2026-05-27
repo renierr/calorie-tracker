@@ -24,6 +24,7 @@ class AppTheme {
   static const Color accentBlue = Color(0xFF3B82F6);
   static const Color accentAmber = Color(0xFFF59E0B);
   static const Color accentRed = Color(0xFFEF4444);
+  static const Color accentPurple = Color(0xFF8B5CF6);
 
   // Theme-aware color accessor
   static AppThemeColors of(BuildContext context) {

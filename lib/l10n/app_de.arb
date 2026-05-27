@@ -348,6 +348,7 @@
   },
   "bodyWeightKg": "Körpergewicht (kg)",
   "bodyWeightTrend": "Gewichtstrend",
-  "optionalWeight": "Körpergewicht (optional in kg)"
+  "optionalWeight": "Körpergewicht (optional in kg)",
+  "weightShort": "G"
 }
 
