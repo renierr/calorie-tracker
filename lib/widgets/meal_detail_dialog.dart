@@ -13,6 +13,16 @@ import '../l10n/app_localizations.dart';
 import '../helpers/file_save_helper.dart';
 import 'edit_meal_dialog.dart';
 
+// Structured Sub-Components
+import 'meal_detail/meal_detail_header_image.dart';
+import 'meal_detail/meal_detail_floating_buttons.dart';
+import 'meal_detail/meal_detail_metadata.dart';
+import 'meal_detail/meal_macro_grid.dart';
+import 'meal_detail/meal_weight_card.dart';
+import 'meal_detail/meal_notes_section.dart';
+import 'meal_detail/meal_card_watermark.dart';
+import 'meal_detail/meal_bottom_actions.dart';
+
 class MealDetailDialog extends StatefulWidget {
   final Meal meal;
   final AppState appState;
@@ -88,59 +98,10 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              // Image/Header Header
-                              GestureDetector(
-                                onTap: currentMeal.imageBytes != null
-                                    ? () => _showImagePreview(
-                                        context,
-                                        currentMeal,
-                                      )
-                                    : null,
-                                child: Container(
-                                  height: 200,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: colors.surfaceLight,
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(16),
-                                    ),
-                                  ),
-                                  child: currentMeal.imageBytes != null
-                                      ? ClipRRect(
-                                          borderRadius:
-                                              const BorderRadius.vertical(
-                                                top: Radius.circular(16),
-                                              ),
-                                          child: Image.memory(
-                                            currentMeal.imageBytes!,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.vertical(
-                                                  top: Radius.circular(16),
-                                                ),
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                AppTheme.accentEmerald
-                                                    .withValues(alpha: 0.15),
-                                                AppTheme.accentBlue.withValues(
-                                                  alpha: 0.15,
-                                                ),
-                                              ],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                            ),
-                                          ),
-                                          child: const Icon(
-                                            Icons.restaurant_menu,
-                                            color: AppTheme.accentEmerald,
-                                            size: 48,
-                                          ),
-                                        ),
-                                ),
+                              MealDetailHeaderImage(
+                                currentMeal: currentMeal,
+                                onPreview: () =>
+                                    _showImagePreview(context, currentMeal),
                               ),
 
                               Padding(
@@ -148,39 +109,11 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Metadata Header (Date, Time, ID)
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '${dateFormat.format(mealDate)}  •  ${timeFormat.format(mealDate)}',
-                                          style: TextStyle(
-                                            color: colors.textSecondary,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 6,
-                                            vertical: 3,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: colors.surfaceLight,
-                                            borderRadius: BorderRadius.circular(
-                                              4,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            currentMeal.shortId,
-                                            style: TextStyle(
-                                              color: colors.textMuted,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                    MealDetailMetadata(
+                                      dateFormat: dateFormat,
+                                      timeFormat: timeFormat,
+                                      mealDate: mealDate,
+                                      shortId: currentMeal.shortId,
                                     ),
                                     const SizedBox(height: 12),
 
@@ -195,174 +128,31 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                                     ),
                                     const SizedBox(height: 16),
 
-                                    // Macro Grid Layout with premium card badges
-                                    LayoutBuilder(
-                                      builder: (context, constraints) {
-                                        final double gridWidth =
-                                            constraints.maxWidth;
-                                        final double cardWidth =
-                                            (gridWidth - 10) / 2;
-                                        return Wrap(
-                                          spacing: 10,
-                                          runSpacing: 10,
-                                          children: [
-                                            _buildMacroMetricCard(
-                                              context,
-                                              width: cardWidth,
-                                              value:
-                                                  '${currentMeal.calories} kcal',
-                                              label:
-                                                  AppLocalizations.of(
-                                                    context,
-                                                  )!.caloriesKcal.replaceAll(
-                                                    ' (kcal)',
-                                                    '',
-                                                  ),
-                                              color: AppTheme.accentEmerald,
-                                            ),
-                                            _buildMacroMetricCard(
-                                              context,
-                                              width: cardWidth,
-                                              value: '${currentMeal.protein}g',
-                                              label: AppLocalizations.of(
-                                                context,
-                                              )!.protein,
-                                              color: AppTheme.accentBlue,
-                                            ),
-                                            _buildMacroMetricCard(
-                                              context,
-                                              width: cardWidth,
-                                              value: '${currentMeal.carbs}g',
-                                              label: AppLocalizations.of(
-                                                context,
-                                              )!.carbs,
-                                              color: AppTheme.accentAmber,
-                                            ),
-                                            _buildMacroMetricCard(
-                                              context,
-                                              width: cardWidth,
-                                              value: '${currentMeal.fat}g',
-                                              label: AppLocalizations.of(
-                                                context,
-                                              )!.fat,
-                                              color: AppTheme.accentRed,
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
+                                    // Macro Badges Grid
+                                    MealMacroGrid(currentMeal: currentMeal),
+
+                                    // Optional Body Weight Metric
                                     if (currentMeal.weightKg != null) ...[
                                       const SizedBox(height: 12),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 14,
-                                          vertical: 12,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: AppTheme.accentPurple
-                                              .withValues(alpha: 0.08),
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                          border: Border.all(
-                                            color: AppTheme.accentPurple
-                                                .withValues(alpha: 0.15),
-                                            width: 0.8,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.monitor_weight_outlined,
-                                              color: AppTheme.accentPurple,
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              AppLocalizations.of(context)!
-                                                  .bodyWeightKg
-                                                  .replaceAll(' (kg)', ''),
-                                              style: TextStyle(
-                                                color: colors.textSecondary,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              '${currentMeal.weightKg!.toStringAsFixed(1)} kg',
-                                              style: const TextStyle(
-                                                color: AppTheme.accentPurple,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w800,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                      MealWeightCard(
+                                        weightKg: currentMeal.weightKg!,
                                       ),
                                     ],
                                     const SizedBox(height: 18),
 
-                                    // Notes section if populated
+                                    // Optional User log Notes
                                     if (currentMeal.notes != null &&
                                         currentMeal.notes!
                                             .trim()
                                             .isNotEmpty) ...[
-                                      Text(
-                                        AppLocalizations.of(context)!.notes,
-                                        style: TextStyle(
-                                          color: colors.textSecondary,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.all(12),
-                                        decoration: BoxDecoration(
-                                          color: colors.surfaceLight.withValues(
-                                            alpha: 0.4,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          currentMeal.notes!,
-                                          style: TextStyle(
-                                            color: colors.textPrimary,
-                                            fontSize: 13,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ),
+                                      MealNotesSection(
+                                        notes: currentMeal.notes!,
                                       ),
                                       const SizedBox(height: 16),
                                     ],
 
-                                    // Subtle Branded Watermark Logo inside RepaintBoundary
-                                    Center(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(
-                                            Icons.spa_outlined,
-                                            color: AppTheme.accentEmerald,
-                                            size: 14,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            "NutriScan Calorie Tracker",
-                                            style: TextStyle(
-                                              color: colors.textMuted,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600,
-                                              letterSpacing: 0.5,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    // Brand watermark badge inside capture region
+                                    const MealCardWatermark(),
                                   ],
                                 ),
                               ),
@@ -372,200 +162,47 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                       ),
 
                       // Overlay Floating Action Buttons (Close, Favorite, Download)
-                      Positioned(
-                        top: 12,
-                        right: 12,
-                        child: FloatingActionButton.small(
-                          heroTag: 'close_detail_${currentMeal.id}',
-                          backgroundColor: Colors.black54,
-                          onPressed: () => Navigator.pop(context),
-                          child: const Icon(Icons.close, color: Colors.white),
-                        ),
-                      ),
-                      Positioned(
-                        top: 12,
-                        right: 60,
-                        child: FloatingActionButton.small(
-                          heroTag: 'favorite_detail_${currentMeal.id}',
-                          backgroundColor: Colors.black54,
-                          onPressed: () =>
-                              currentAppState.toggleFavoriteMeal(currentMeal),
-                          child: Icon(
-                            currentMeal.isFavorite == 1
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: currentMeal.isFavorite == 1
-                                ? AppTheme.accentRed
-                                : Colors.white,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 12,
-                        left: 12,
-                        child: FloatingActionButton.small(
-                          heroTag: 'download_detail_${currentMeal.id}',
-                          backgroundColor: Colors.black54,
-                          onPressed: _isExporting
-                              ? null
-                              : () => _downloadMealCardImage(currentMeal),
-                          child: _isExporting
-                              ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Icon(Icons.download, color: Colors.white),
-                        ),
+                      MealDetailFloatingButtons(
+                        currentMeal: currentMeal,
+                        isFavorite: currentMeal.isFavorite == 1,
+                        isExporting: _isExporting,
+                        onClose: () => Navigator.pop(context),
+                        onFavorite: () =>
+                            currentAppState.toggleFavoriteMeal(currentMeal),
+                        onDownload: () => _downloadMealCardImage(currentMeal),
                       ),
                     ],
                   ),
 
-                  // Bottom Action Buttons (Outside RepaintBoundary)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 12),
-                        Divider(color: colors.surfaceLight, height: 1),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 12,
-                          runSpacing: 8,
-                          alignment: WrapAlignment.spaceEvenly,
-                          children: [
-                            // PDF export
-                            TextButton.icon(
-                              icon: const Icon(Icons.picture_as_pdf, size: 16),
-                              label: Text(
-                                AppLocalizations.of(context)!.pdf,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              onPressed: () async {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.generatingMealPdf,
-                                    ),
-                                  ),
-                                );
-                                await PdfService.generateSingleMealPdf(
-                                  context,
-                                  currentMeal,
-                                  currentAppState.calorieGoal,
-                                );
-                              },
-                            ),
-                            // Edit log
-                            TextButton.icon(
-                              icon: const Icon(Icons.edit, size: 16),
-                              label: Text(
-                                AppLocalizations.of(context)!.edit,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              onPressed: () =>
-                                  _showEditMealDialog(context, currentMeal),
-                            ),
-                            // Use as template (New)
-                            TextButton.icon(
-                              icon: const Icon(Icons.add_to_photos, size: 16),
-                              label: Text(
-                                AppLocalizations.of(context)!.templateAsNew,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              onPressed: () {
-                                currentAppState.setTemplateMeal(currentMeal);
-                                Navigator.pop(context);
-                              },
-                            ),
-                            // Delete log
-                            TextButton.icon(
-                              icon: const Icon(
-                                Icons.delete_outline,
-                                size: 16,
-                                color: AppTheme.accentRed,
-                              ),
-                              label: Text(
-                                AppLocalizations.of(context)!.delete,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppTheme.accentRed,
-                                ),
-                              ),
-                              onPressed: () =>
-                                  _confirmDeleteMeal(context, currentMeal),
-                            ),
-                          ],
+                  // Bottom Action Buttons (PDF, Edit, Template, Delete)
+                  MealBottomActions(
+                    currentMeal: currentMeal,
+                    onPdfExport: () async {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            AppLocalizations.of(context)!.generatingMealPdf,
+                          ),
                         ),
-                      ],
-                    ),
+                      );
+                      await PdfService.generateSingleMealPdf(
+                        context,
+                        currentMeal,
+                        currentAppState.calorieGoal,
+                      );
+                    },
+                    onEdit: () => _showEditMealDialog(context, currentMeal),
+                    onTemplate: () {
+                      currentAppState.setTemplateMeal(currentMeal);
+                      Navigator.pop(context);
+                    },
+                    onDelete: () => _confirmDeleteMeal(context, currentMeal),
                   ),
                 ],
               ),
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildMacroMetricCard(
-    BuildContext context, {
-    required double width,
-    required String value,
-    required String label,
-    required Color color,
-  }) {
-    final colors = AppTheme.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      width: width,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: isDark ? 0.08 : 0.05),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: color.withValues(alpha: isDark ? 0.2 : 0.15),
-          width: 0.8,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              value,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w800,
-                fontSize: 15,
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              label,
-              style: TextStyle(
-                color: colors.textSecondary,
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
