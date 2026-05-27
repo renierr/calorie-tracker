@@ -20,6 +20,8 @@ mixin _SettingsState on ChangeNotifier {
     _state._syncUserId = prefs.getString(AppState._keySyncUserId) ?? 'user-1';
     _state._lastSyncedTime = prefs.getInt(AppState._keyLastSyncedTime);
     _state._syncEnabled = prefs.getBool(AppState._keySyncEnabled) ?? false;
+    _state._notificationsEnabled =
+        prefs.getBool(AppState._keyNotificationsEnabled) ?? true;
 
     await _state.loadAISettings();
     notifyListeners();
@@ -76,6 +78,13 @@ mixin _SettingsState on ChangeNotifier {
     await prefs.setString(AppState._keyThemeMode, _themeModeString(mode));
   }
 
+  Future<void> setNotificationsEnabled(bool enabled) async {
+    _state._notificationsEnabled = enabled;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(AppState._keyNotificationsEnabled, enabled);
+  }
+
   ThemeMode _parseThemeMode(String s) {
     switch (s) {
       case 'light':
@@ -127,6 +136,7 @@ mixin _SettingsState on ChangeNotifier {
         'syncServerUrl': _state._syncServerUrl,
         'syncUserId': _state._syncUserId,
         'syncEnabled': _state._syncEnabled,
+        'notificationsEnabled': _state._notificationsEnabled,
         'aiProvider': _state._aiProvider,
         'aiModel': _state._aiModel,
         'aiApiKey': _state._aiApiKey,
@@ -200,6 +210,14 @@ mixin _SettingsState on ChangeNotifier {
       if (settings.containsKey('syncEnabled')) {
         _state._syncEnabled = settings['syncEnabled'] as bool? ?? false;
         await prefs.setBool(AppState._keySyncEnabled, _state._syncEnabled);
+      }
+      if (settings.containsKey('notificationsEnabled')) {
+        _state._notificationsEnabled =
+            settings['notificationsEnabled'] as bool? ?? true;
+        await prefs.setBool(
+          AppState._keyNotificationsEnabled,
+          _state._notificationsEnabled,
+        );
       }
       if (settings.containsKey('aiProvider')) {
         _state._aiProvider = settings['aiProvider'] as String? ?? 'gemini';

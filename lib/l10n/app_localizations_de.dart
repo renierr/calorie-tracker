@@ -785,4 +785,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get linkCopied => 'Link in die Zwischenablage kopiert!';
+
+  @override
+  String get notificationsTitle => 'System-Benachrichtigungen';
+
+  @override
+  String get notificationsDesc =>
+      'Aktivieren oder deaktivieren Sie native System-Benachrichtigungen in der Android-Statusleiste für Downloads.';
+
+  @override
+  String get enableNotifications => 'System-Benachrichtigungen anzeigen';
 }

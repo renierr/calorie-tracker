@@ -390,6 +390,9 @@
   "geminiStep3": "3. Klicken Sie auf die Schaltfläche \"Create API Key\".",
   "geminiStep4": "4. Kopieren Sie den generierten Schlüssel und fügen Sie ihn hier ein.",
   "copyLink": "Link kopieren",
-  "linkCopied": "Link in die Zwischenablage kopiert!"
+  "linkCopied": "Link in die Zwischenablage kopiert!",
+  "notificationsTitle": "System-Benachrichtigungen",
+  "notificationsDesc": "Aktivieren oder deaktivieren Sie native System-Benachrichtigungen in der Android-Statusleiste für Downloads.",
+  "enableNotifications": "System-Benachrichtigungen anzeigen"
 }
 

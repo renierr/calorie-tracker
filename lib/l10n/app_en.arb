@@ -390,6 +390,9 @@
   "geminiStep3": "3. Click the 'Create API Key' button.",
   "geminiStep4": "4. Copy the generated key and paste it here.",
   "copyLink": "Copy Link",
-  "linkCopied": "Link copied to clipboard!"
+  "linkCopied": "Link copied to clipboard!",
+  "notificationsTitle": "System Notifications",
+  "notificationsDesc": "Enable or disable native system notifications in the Android status bar for downloads.",
+  "enableNotifications": "Show system notifications"
 }
 

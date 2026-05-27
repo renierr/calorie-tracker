@@ -8,9 +8,11 @@ import '../widgets/settings/target_goals_card.dart';
 import '../widgets/settings/maintenance_card.dart';
 import '../widgets/settings/language_card.dart';
 import '../widgets/settings/theme_card.dart';
+import '../widgets/settings/notifications_card.dart';
 import '../widgets/settings/export_card.dart';
 import '../widgets/settings/sync_config_card.dart';
 import '../widgets/adaptive/adaptive_card_header.dart';
+import '../widgets/adaptive/responsive_icon_button.dart';
 import '../version.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -139,6 +141,8 @@ class _SettingsPageState extends State<SettingsPage> {
               LanguageCard(appState: appState),
               const SizedBox(height: 20),
               ThemeCard(appState: appState),
+              const SizedBox(height: 20),
+              NotificationsCard(appState: appState),
               const SizedBox(height: 20),
 
               // Panel 2.5: Cloud Sync Configuration
@@ -317,23 +321,15 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 15),
           SizedBox(
             width: double.infinity,
-            height: 44,
-            child: OutlinedButton.icon(
-              icon: const Icon(Icons.tune, size: 18),
-              label: Text(
-                localizations.configureAiProvider,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+            child: ResponsiveIconButton(
+              icon: const Icon(
+                Icons.tune,
+                color: AppTheme.accentEmerald,
+                size: 18,
               ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.accentEmerald,
-                side: const BorderSide(
-                  color: AppTheme.accentEmerald,
-                  width: 1.2,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              label: localizations.configureAiProvider,
+              color: AppTheme.accentEmerald,
+              isOutlined: true,
               onPressed: () {
                 Navigator.push(
                   context,

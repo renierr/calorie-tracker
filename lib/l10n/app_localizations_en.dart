@@ -778,4 +778,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get linkCopied => 'Link copied to clipboard!';
+
+  @override
+  String get notificationsTitle => 'System Notifications';
+
+  @override
+  String get notificationsDesc =>
+      'Enable or disable native system notifications in the Android status bar for downloads.';
+
+  @override
+  String get enableNotifications => 'Show system notifications';
 }

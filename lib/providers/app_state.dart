@@ -32,6 +32,7 @@ class AppState extends ChangeNotifier
   static const String _keySyncUserId = 'sync_user_id';
   static const String _keyLastSyncedTime = 'last_synced_time';
   static const String _keySyncEnabled = 'sync_enabled';
+  static const String _keyNotificationsEnabled = 'notifications_enabled';
 
   static const String _keyAiProvider = 'ai_provider';
   static const String _keyAiModel = 'ai_model';
@@ -51,6 +52,7 @@ class AppState extends ChangeNotifier
   String _historyFilter = 'all';
   String _appLocale = 'en';
   ThemeMode _themeMode = ThemeMode.system;
+  bool _notificationsEnabled = true;
 
   String _syncServerUrl = '';
   String _syncUserId = 'user-1';
@@ -101,6 +103,7 @@ class AppState extends ChangeNotifier
   int? get lastSyncedTime => _lastSyncedTime;
   bool get isSyncing => _isSyncing;
   bool get syncEnabled => _syncEnabled;
+  bool get notificationsEnabled => _notificationsEnabled;
 
   // Optimized lazy-loaded selected date meals
   List<Meal> get mealsForSelectedDate => _selectedDateMeals;

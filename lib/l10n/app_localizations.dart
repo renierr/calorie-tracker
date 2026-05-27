@@ -1459,6 +1459,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Link copied to clipboard!'**
   String get linkCopied;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'System Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable or disable native system notifications in the Android status bar for downloads.'**
+  String get notificationsDesc;
+
+  /// No description provided for @enableNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Show system notifications'**
+  String get enableNotifications;
 }
 
 class _AppLocalizationsDelegate

@@ -26,6 +26,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - **Small Screen Fitting**: Always use responsive layouts (like `Wrap` instead of horizontal `Row` for actions, and scrollable/grid metrics) in dialogs, modals, and cards to prevent overflow on mobile.
 - **Cross-Platform File Saving**: Always check OS before saving files (e.g. SQLite database copies, downloaded images). On Desktop, use `getSaveLocation()`. On Android, implement automatic fallback from public Download (`/storage/emulated/0/Download`) to app-specific directory (`getExternalStorageDirectory()`) to avoid permission/platform crashes.
 - **Prevent Duplicated UI/Dialog Code**: Extract custom dialogs, overlays, notification components, or recurring visual elements to `lib/widgets/` immediately. Never copy-paste presentation logic across views.
+- **Use Existing Custom Widgets**: Always reuse existing custom widgets in `lib/widgets/` (such as `ResponsiveIconButton`, `ResponsiveLayout`, or `AdaptiveCardHeader`) rather than declaring standard material buttons, layout parameters, or headers from scratch. Check the codebase for existing reusable options before writing presentation code.
 
 ---
 

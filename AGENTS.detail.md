@@ -154,3 +154,25 @@ sequenceDiagram
 - Path resolving in MSYS2 environment (backslashes vs front slashes).
 - Dynamic FFI initialization (`sqfliteFfiInit()`) inside `lib/helpers/db_helper.dart`.
 - Local app data directory retrieval via `getApplicationSupportDirectory()`.
+
+---
+
+## 9. Reusable Custom Widgets Guide
+
+To maintain a premium, coherent layout style and prevent duplicate visual implementations, always leverage existing custom widgets from `lib/widgets/`:
+
+### ResponsiveIconButton (`lib/widgets/adaptive/responsive_icon_button.dart`)
+- **Purpose**: A responsive button that wraps text internally using `Flexible`, ensuring no vertical height clipping or overflow when labels wrap (ideal for multi-line translations like German).
+- **Properties**: 
+  - `icon`: The Widget icon leading the label.
+  - `label`: String label content.
+  - `color`: Active color palette matching the button context.
+  - `isOutlined`: Set `true` for a transparent background with colored borders (similar to standard outlined buttons), or `false` for full solid elevated coloring.
+  - `onPressed`: Core trigger handler callback.
+
+### AdaptiveCardHeader (`lib/widgets/adaptive/adaptive_card_header.dart`)
+- **Purpose**: Unified card title header block ensuring uniform margins, font sizes, and consistent typography.
+
+### ResponsiveLayout (`lib/widgets/responsive_layout.dart`)
+- **Purpose**: Root shell routing layout that adapts smoothly between compact mobile viewport layouts and multi-column wide desktop configurations.
+
