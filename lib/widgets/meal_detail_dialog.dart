@@ -131,8 +131,9 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                                     // Macro Badges Grid
                                     MealMacroGrid(currentMeal: currentMeal),
 
-                                    // Optional Body Weight Metric
-                                    if (currentMeal.weightKg != null) ...[
+                                    // Optional Body Weight Metric (hidden during card image export)
+                                    if (currentMeal.weightKg != null &&
+                                        !_isExporting) ...[
                                       const SizedBox(height: 12),
                                       MealWeightCard(
                                         weightKg: currentMeal.weightKg!,
