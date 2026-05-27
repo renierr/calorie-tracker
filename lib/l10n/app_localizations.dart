@@ -1303,6 +1303,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PDF generation failed: {error}'**
   String pdfExportFailed(String error);
+
+  /// No description provided for @bodyWeightKg.
+  ///
+  /// In en, this message translates to:
+  /// **'Body Weight (kg)'**
+  String get bodyWeightKg;
+
+  /// No description provided for @bodyWeightTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Body Weight Trend'**
+  String get bodyWeightTrend;
+
+  /// No description provided for @optionalWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Body Weight (optional kg)'**
+  String get optionalWeight;
 }
 
 class _AppLocalizationsDelegate

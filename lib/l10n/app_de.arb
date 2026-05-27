@@ -345,6 +345,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "bodyWeightKg": "Körpergewicht (kg)",
+  "bodyWeightTrend": "Gewichtstrend",
+  "optionalWeight": "Körpergewicht (optional in kg)"
 }
 

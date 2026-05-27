@@ -692,4 +692,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String pdfExportFailed(String error) {
     return 'PDF generation failed: $error';
   }
+
+  @override
+  String get bodyWeightKg => 'Body Weight (kg)';
+
+  @override
+  String get bodyWeightTrend => 'Body Weight Trend';
+
+  @override
+  String get optionalWeight => 'Body Weight (optional kg)';
 }

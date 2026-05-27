@@ -126,6 +126,7 @@ class SyncService {
             'notes': lRec.notes ?? '',
             'timestamp': lRec.timestamp,
             'updatedAt': lRec.updatedAt,
+            'weightKg': lRec.weightKg,
             'imageBlob': lRec.imageBytes != null
                 ? {
                     '__type': 'blob',
@@ -212,6 +213,7 @@ class SyncService {
           confidence: (data['confidence'] as num?)?.toInt() ?? 100,
           imageBytes: imageBytes,
           notes: data['notes'] as String?,
+          weightKg: (data['weightKg'] as num?)?.toDouble(),
           timestamp:
               data['timestamp'] as int? ??
               DateTime.now().millisecondsSinceEpoch,

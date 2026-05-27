@@ -18,6 +18,7 @@ class Meal {
   final int synced; // 0 = unsynced, 1 = synced
   final int deleted; // 0 = active, 1 = soft-deleted
   final int isFavorite; // 0 = not favorite, 1 = favorite
+  final double? weightKg; // body weight in kg
 
   Meal({
     this.id,
@@ -35,6 +36,7 @@ class Meal {
     this.synced = 0,
     this.deleted = 0,
     this.isFavorite = 0,
+    this.weightKg,
   });
 
   // Convert a Meal into a Map for SQLite insertion
@@ -55,6 +57,7 @@ class Meal {
       'synced': synced,
       'deleted': deleted,
       'isFavorite': isFavorite,
+      'weightKg': weightKg,
     };
   }
 
@@ -78,6 +81,7 @@ class Meal {
       synced: map['synced'] as int? ?? 0,
       deleted: map['deleted'] as int? ?? 0,
       isFavorite: map['isFavorite'] as int? ?? 0,
+      weightKg: (map['weightKg'] as num?)?.toDouble(),
     );
   }
 
@@ -96,6 +100,7 @@ class Meal {
       'updatedAt': updatedAt,
       'image': _bytesToBase64DataUri(imageBytes),
       'isFavorite': isFavorite,
+      'weightKg': weightKg,
     };
   }
 
@@ -120,6 +125,7 @@ class Meal {
       updatedAt:
           json['updatedAt'] as int? ?? DateTime.now().millisecondsSinceEpoch,
       isFavorite: json['isFavorite'] as int? ?? 0,
+      weightKg: (json['weightKg'] as num?)?.toDouble(),
     );
   }
 
@@ -185,6 +191,8 @@ class Meal {
     int? synced,
     int? deleted,
     int? isFavorite,
+    double? weightKg,
+    bool clearWeight = false,
   }) {
     return Meal(
       id: id ?? this.id,
@@ -202,6 +210,7 @@ class Meal {
       synced: synced ?? this.synced,
       deleted: deleted ?? this.deleted,
       isFavorite: isFavorite ?? this.isFavorite,
+      weightKg: clearWeight ? null : (weightKg ?? this.weightKg),
     );
   }
 }

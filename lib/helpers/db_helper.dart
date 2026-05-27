@@ -7,7 +7,7 @@ import '../models/meal_model.dart';
 
 class DbHelper {
   static const String _dbName = 'calorie_tracker.db';
-  static const int _dbVersion = 3;
+  static const int _dbVersion = 4;
   static const String tableMeals = 'meals';
 
   // Private constructor
@@ -60,7 +60,8 @@ class DbHelper {
         updatedAt INTEGER NOT NULL,
         synced INTEGER NOT NULL DEFAULT 0,
         deleted INTEGER NOT NULL DEFAULT 0,
-        isFavorite INTEGER NOT NULL DEFAULT 0
+        isFavorite INTEGER NOT NULL DEFAULT 0,
+        weightKg REAL
       )
     ''');
   }
@@ -78,6 +79,9 @@ class DbHelper {
       await db.execute(
         'ALTER TABLE $tableMeals ADD COLUMN isFavorite INTEGER NOT NULL DEFAULT 0',
       );
+    }
+    if (oldVersion < 4) {
+      await db.execute('ALTER TABLE $tableMeals ADD COLUMN weightKg REAL');
     }
   }
 
@@ -110,6 +114,7 @@ class DbHelper {
       'synced',
       'deleted',
       'isFavorite',
+      'weightKg',
       if (includeImages) 'imageBytes',
     ];
 
@@ -278,6 +283,7 @@ class DbHelper {
       'synced',
       'deleted',
       'isFavorite',
+      'weightKg',
       if (includeImages) 'imageBytes',
     ];
 
@@ -368,6 +374,7 @@ class DbHelper {
       'synced',
       'deleted',
       'isFavorite',
+      'weightKg',
       if (includeImages) 'imageBytes',
     ];
 
@@ -474,6 +481,7 @@ class DbHelper {
       'synced',
       'deleted',
       'isFavorite',
+      'weightKg',
       if (includeImages) 'imageBytes',
     ];
     final List<Map<String, dynamic>> maps = await db.query(

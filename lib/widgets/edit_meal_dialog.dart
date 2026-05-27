@@ -22,6 +22,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
   late final TextEditingController _carbsController;
   late final TextEditingController _fatController;
   late final TextEditingController _notesController;
+  late final TextEditingController _weightController;
 
   @override
   void initState() {
@@ -38,6 +39,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
     );
     _fatController = TextEditingController(text: widget.meal.fat.toString());
     _notesController = TextEditingController(text: widget.meal.notes ?? '');
+    _weightController = TextEditingController(
+      text: widget.meal.weightKg?.toString() ?? '',
+    );
   }
 
   @override
@@ -48,6 +52,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
     _carbsController.dispose();
     _fatController.dispose();
     _notesController.dispose();
+    _weightController.dispose();
     super.dispose();
   }
 
@@ -196,6 +201,24 @@ class _EditMealDialogState extends State<EditMealDialog> {
             ),
             const SizedBox(height: 14),
             Text(
+              AppLocalizations.of(context)!.bodyWeightKg,
+              style: TextStyle(color: colors.textSecondary, fontSize: 11),
+            ),
+            const SizedBox(height: 6),
+            TextField(
+              controller: _weightController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+              ],
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.optionalWeight,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(
               AppLocalizations.of(context)!.notes,
               style: TextStyle(color: colors.textSecondary, fontSize: 11),
             ),
@@ -214,6 +237,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
         ),
         ElevatedButton(
           onPressed: () async {
+            final double? weight = double.tryParse(
+              _weightController.text.trim(),
+            );
             final updatedMeal = widget.meal.copyWith(
               foodName: _nameController.text.trim(),
               calories: int.tryParse(_caloriesController.text) ?? 0,
@@ -221,6 +247,8 @@ class _EditMealDialogState extends State<EditMealDialog> {
               carbs: int.tryParse(_carbsController.text) ?? 0,
               fat: int.tryParse(_fatController.text) ?? 0,
               notes: _notesController.text.trim(),
+              weightKg: weight,
+              clearWeight: weight == null,
               updatedAt: DateTime.now().millisecondsSinceEpoch,
             );
             await widget.appState.updateMeal(updatedMeal);

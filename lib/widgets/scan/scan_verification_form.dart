@@ -39,6 +39,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   late final TextEditingController _carbsController;
   late final TextEditingController _fatController;
   late final TextEditingController _notesController;
+  late final TextEditingController _weightController;
 
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     _notesController = TextEditingController(
       text: widget.scanResult?.notes ?? '',
     );
+    _weightController = TextEditingController(text: '');
   }
 
   @override
@@ -71,6 +73,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     _carbsController.dispose();
     _fatController.dispose();
     _notesController.dispose();
+    _weightController.dispose();
     super.dispose();
   }
 
@@ -149,6 +152,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     final int carbs = int.tryParse(_carbsController.text) ?? 0;
     final int fat = int.tryParse(_fatController.text) ?? 0;
     final String notes = _notesController.text.trim();
+    final double? weight = double.tryParse(_weightController.text.trim());
 
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -168,6 +172,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
       confidence: widget.scanResult?.confidence ?? 100,
       imageBytes: widget.imageBytes,
       notes: notes,
+      weightKg: weight,
       timestamp: _mealDate.millisecondsSinceEpoch,
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
@@ -380,6 +385,23 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            AppLocalizations.of(context)!.bodyWeightKg,
+            style: TextStyle(color: colors.textSecondary, fontSize: 12),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _weightController,
+            enabled: !_isReEvaluating,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+            ],
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.optionalWeight,
+            ),
           ),
           const SizedBox(height: 16),
 
