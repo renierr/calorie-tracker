@@ -14,13 +14,8 @@ import '../helpers/file_save_helper.dart';
 import 'edit_meal_dialog.dart';
 
 // Structured Sub-Components
-import 'meal_detail/meal_detail_header_image.dart';
+import 'meal_detail/meal_detail_card_view.dart';
 import 'meal_detail/meal_detail_floating_buttons.dart';
-import 'meal_detail/meal_detail_metadata.dart';
-import 'meal_detail/meal_macro_grid.dart';
-import 'meal_detail/meal_weight_card.dart';
-import 'meal_detail/meal_notes_section.dart';
-import 'meal_detail/meal_card_watermark.dart';
 import 'meal_detail/meal_bottom_actions.dart';
 
 class MealDetailDialog extends StatefulWidget {
@@ -82,82 +77,35 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Captured Card Region (Wrapped in RepaintBoundary)
                   Stack(
                     children: [
-                      RepaintBoundary(
-                        key: _boundaryKey,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: colors.surface,
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(16),
+                      // 1. On-Screen Card View (Responsive, shows weight, cropped photo)
+                      MealDetailCardView(
+                        currentMeal: currentMeal,
+                        hideWeight: false,
+                        isExport: false,
+                        dateFormat: dateFormat,
+                        timeFormat: timeFormat,
+                        mealDate: mealDate,
+                        onPreview: () =>
+                            _showImagePreview(context, currentMeal),
+                      ),
+
+                      // 2. Off-Screen Card View (Unified 480px width, hides weight, uncropped photo)
+                      Positioned(
+                        left: -9999, // Way off-screen
+                        child: RepaintBoundary(
+                          key: _boundaryKey,
+                          child: SizedBox(
+                            width: 480.0,
+                            child: MealDetailCardView(
+                              currentMeal: currentMeal,
+                              hideWeight: true,
+                              isExport: true,
+                              dateFormat: dateFormat,
+                              timeFormat: timeFormat,
+                              mealDate: mealDate,
                             ),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              MealDetailHeaderImage(
-                                currentMeal: currentMeal,
-                                onPreview: () =>
-                                    _showImagePreview(context, currentMeal),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    MealDetailMetadata(
-                                      dateFormat: dateFormat,
-                                      timeFormat: timeFormat,
-                                      mealDate: mealDate,
-                                      shortId: currentMeal.shortId,
-                                    ),
-                                    const SizedBox(height: 12),
-
-                                    // Food Title
-                                    Text(
-                                      currentMeal.foodName,
-                                      style: TextStyle(
-                                        color: colors.textPrimary,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-
-                                    // Macro Badges Grid
-                                    MealMacroGrid(currentMeal: currentMeal),
-
-                                    // Optional Body Weight Metric (hidden during card image export)
-                                    if (currentMeal.weightKg != null &&
-                                        !_isExporting) ...[
-                                      const SizedBox(height: 12),
-                                      MealWeightCard(
-                                        weightKg: currentMeal.weightKg!,
-                                      ),
-                                    ],
-                                    const SizedBox(height: 18),
-
-                                    // Optional User log Notes
-                                    if (currentMeal.notes != null &&
-                                        currentMeal.notes!
-                                            .trim()
-                                            .isNotEmpty) ...[
-                                      MealNotesSection(
-                                        notes: currentMeal.notes!,
-                                      ),
-                                      const SizedBox(height: 16),
-                                    ],
-
-                                    // Brand watermark badge inside capture region
-                                    const MealCardWatermark(),
-                                  ],
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                       ),

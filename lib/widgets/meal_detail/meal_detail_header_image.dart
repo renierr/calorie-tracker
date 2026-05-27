@@ -5,11 +5,13 @@ import '../../theme/theme.dart';
 class MealDetailHeaderImage extends StatelessWidget {
   final Meal currentMeal;
   final VoidCallback? onPreview;
+  final bool isExport;
 
   const MealDetailHeaderImage({
     super.key,
     required this.currentMeal,
     this.onPreview,
+    this.isExport = false,
   });
 
   @override
@@ -19,7 +21,7 @@ class MealDetailHeaderImage extends StatelessWidget {
     return GestureDetector(
       onTap: currentMeal.imageBytes != null ? onPreview : null,
       child: Container(
-        height: 200,
+        height: isExport ? null : 200,
         width: double.infinity,
         decoration: BoxDecoration(
           color: colors.surfaceLight,
@@ -30,7 +32,10 @@ class MealDetailHeaderImage extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(16),
                 ),
-                child: Image.memory(currentMeal.imageBytes!, fit: BoxFit.cover),
+                child: Image.memory(
+                  currentMeal.imageBytes!,
+                  fit: isExport ? BoxFit.fitWidth : BoxFit.cover,
+                ),
               )
             : Container(
                 decoration: BoxDecoration(
