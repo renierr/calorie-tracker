@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
-import '../widgets/dashboard/gamification_dialogs.dart';
-import '../widgets/dashboard/confetti_widget.dart';
+import '../widgets/gamification/gamification_dialogs.dart';
+import '../widgets/gamification/confetti_widget.dart';
+import '../widgets/gamification/admin_button.dart';
 import '../widgets/adaptive/adaptive_card_header.dart';
 
 class GamificationSettingsPage extends StatelessWidget {
@@ -153,26 +154,26 @@ class GamificationSettingsPage extends StatelessWidget {
                                 : (constraints.maxWidth - 10) / 2;
 
                             final buttons = [
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerConfetti,
                                 icon: Icons.celebration,
                                 color: AppTheme.accentEmerald,
                                 onPressed: appState.triggerAdminConfetti,
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerLevelUp,
                                 icon: Icons.upgrade,
                                 color: Colors.amber,
                                 onPressed: appState.triggerAdminLevelUp,
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerBadgeZund,
                                 icon: Icons.flash_on,
                                 color: AppTheme.accentAmber,
                                 onPressed: () =>
                                     appState.triggerAdminBadge('zundfunke'),
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerBadgeThree,
                                 icon: Icons.local_fire_department,
                                 color: AppTheme.accentRed,
@@ -180,32 +181,32 @@ class GamificationSettingsPage extends StatelessWidget {
                                   'dreifache_disziplin',
                                 ),
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerBadgeWeek,
                                 icon: Icons.emoji_events,
                                 color: Colors.yellow.shade700,
                                 onPressed: () =>
                                     appState.triggerAdminBadge('wochen_koenig'),
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerShieldEarn,
                                 icon: Icons.shield,
                                 color: AppTheme.accentBlue,
                                 onPressed: appState.triggerAdminShieldEarned,
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerShieldCons,
                                 icon: Icons.shield_outlined,
                                 color: AppTheme.accentAmber,
                                 onPressed: appState.triggerAdminShieldConsumed,
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerStreakReset,
                                 icon: Icons.explore_off,
                                 color: colors.textSecondary,
                                 onPressed: appState.triggerAdminStreakReset,
                               ),
-                              _AdminButton(
+                              AdminButton(
                                 label: l10n.btnTriggerPrestige,
                                 icon: Icons.star,
                                 color: Colors.purple,
@@ -245,55 +246,6 @@ class GamificationSettingsPage extends StatelessWidget {
                 ),
               ),
             ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AdminButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onPressed;
-
-  const _AdminButton({
-    required this.label,
-    required this.icon,
-    required this.color,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppTheme.of(context);
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: color,
-        side: BorderSide(color: color.withValues(alpha: 0.5)),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 18, color: color),
-          const SizedBox(height: 4),
-          Flexible(
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: colors.textPrimary,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
         ],
       ),
     );

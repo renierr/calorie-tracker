@@ -8,9 +8,9 @@ import '../widgets/dashboard/calorie_ring_card.dart';
 import '../widgets/dashboard/macros_progress_card.dart';
 import '../widgets/dashboard/trend_chart_card.dart';
 import '../widgets/dashboard/day_quick_logs_card.dart';
-import '../widgets/dashboard/gamification_card.dart';
-import '../widgets/dashboard/gamification_dialogs.dart';
-import '../widgets/dashboard/confetti_widget.dart';
+import '../widgets/gamification/gamification_card.dart';
+import '../widgets/gamification/gamification_dialogs.dart';
+import '../widgets/gamification/confetti_widget.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
