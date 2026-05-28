@@ -9,28 +9,48 @@ Designed for both daily mobility and desktop efficiency, NutriScan lets you trac
 ## The NutriScan Experience
 
 ### 📸 Intelligent Visual Scanning
-Instantly log your meals just by taking a picture. Backed by advanced multi-provider visual AI models, NutriScan looks at your food photo, estimates portion weights, and breaks down the meal's exact calories, protein, carbohydrates, and healthy fats. You can even add custom text hints (e.g. *"about 150g white rice"*) to guide the estimation, then verify and adjust the details in an elegant review screen before saving.
+Instantly log your meals just by taking a picture. 
+
+Backed by advanced multi-provider visual AI models, NutriScan looks at your food photo, estimates portion weights, and breaks down the meal's exact calories, protein, carbohydrates, and healthy fats. 
+
+You can even add custom text hints (e.g. *"about 150g white rice"*) to guide the estimation, then verify and adjust the details in an elegant review screen before saving.
 
 > [!NOTE]
 > **API Key & Manual Logging**: To use the visual scanner, you must provide your own API key for your chosen provider (Google Gemini, OpenAI, or Anthropic) in the Settings page. However, **manual meal logging is always fully supported** at all times, even without an API key or active internet connection.
 
 ### 🔒 Privacy-First & Offline-First
-Your health data belongs to you. NutriScan stores all of your records, nutritional breakdowns, and food photos directly on your device in a secure, high-performance local database. No cloud account is required to start tracking, keeping your data private, safe, and available even when you are completely offline.
+Your health data belongs to you. 
 
-### 🎨 Elite Visual Aesthetics
-Immerse yourself in a luxurious slate-dark environment engineered to be easy on the eyes. Featuring vibrant emerald green progress rings, cobalt blue protein highlights, warm amber carbohydrate indicators, and crimson red fat trackers. Subtle micro-interactions, responsive hover states, and smooth layouts make keeping logs a delightful part of your day.
+NutriScan stores all of your records, nutritional breakdowns, and food photos directly on your device in a secure, local database. 
+
+No cloud account is required to start tracking, keeping your data private, safe, and available even when you are completely offline.
 
 ### ⚖️ Comprehensive Weight Tracking
-Log your body weight alongside your meals. NutriScan charts your weight trends in relation to your daily intake, letting you see the direct correlation between your nutrition goals and your weight progress on a unified dashboard.
+Log your body weight alongside your meals. 
+
+NutriScan charts your weight trends in relation to your daily intake, letting you see the direct correlation 
+between your nutrition goals and your weight progress on a unified dashboard.
 
 ### 📂 Favorites & Easy Filtering
-Quickly look back at your history or search for your favorite meals. With custom tags and favorites tracking, you can instantly find and repeat high-protein breakfasts, low-carb snacks, or balanced dinners with a single tap.
+Quickly look back at your history or search for your favorite meals. 
+
+With custom tags and favorites tracking, you can instantly find and repeat high-protein breakfasts, low-carb snacks, or balanced dinners with a single tap.
 
 ### 📄 Elegant PDF Summary Reports
-Create high-end, professional PDF reports of your nutritional logs. Generate single-meal summary sheets containing personal notes and photos, or comprehensive multi-day summaries featuring full macro tables, budget achievements, and a stylized food photo album gallery to share with your nutritionist or trainer.
+Create high-end, professional PDF reports of your nutritional logs. 
 
-### 🌐 Seamless Multi-Platform Navigation
-Whether you are on your Android phone or your Windows Desktop, NutriScan adapts beautifully. Enjoy a clean bottom navigation bar on mobile viewports, or switch to a full-screen, multi-column dashboard with a professional left-hand sidebar on desktop.
+Generate single-meal summary sheets containing personal notes and photos, 
+or comprehensive multi-day summaries featuring full macro tables, budget achievements, and share with your nutritionist or trainer.
+
+### 🎮 Premium Gamification & Streak Loop
+Keep your healthy eating habits consistent with an interactive, beautifully designed reward system.
+
+Earn Experience Points (XP) for tracking actions, level up across 10 distinct habit milestones, 
+maintain daily streaks of calorie budget success, and protect your hard-earned streaks with consumable Streak Shields. 
+Unlock gorgeous, high-end achievement badges (like the *Spark*, *Threefold Discipline*, or *Week King*) to visually celebrate your dedication.
+
+Fully optional and togglable off inside the Settings menu.
+
 
 ---
 
@@ -71,7 +91,12 @@ Overview of key files and directories under the `lib/` directory:
 4. **Analytical Dashboard**:
    - Calorie ring progress indicator, sliding calendar date selector, and a vertical bar chart displaying calorie history over the last 7 days.
 
-5. **Bidirectional Cloud Sync**:
+5. **Gamification System**:
+   - Fully persistent, offline SQLite habit state (`gamification_stats` table).
+   - Fast retroactive $O(N)$ chronological in-memory re-evaluations via a single database query.
+   - High-fidelity visual feedback including dynamic dialog transitions, levels, stars, shields, and custom-rendered confetti particles.
+
+6. **Bidirectional Cloud Sync**:
    - Optional sync with a Bun-based HTTP cloud server using metadata handshakes and sync/deleted state flags.
 
 ---
