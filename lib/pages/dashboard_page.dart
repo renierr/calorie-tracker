@@ -54,6 +54,12 @@ class DashboardPage extends StatelessWidget {
         GamificationDialogs.showShieldEarned(context, appState);
       });
     }
+    if (appState.showPrestigeNotification) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        appState.dismissPrestigeNotification();
+        GamificationDialogs.showPrestigeStarEarned(context, appState);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(

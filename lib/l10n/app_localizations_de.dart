@@ -815,6 +815,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String xpToNextStar(int xp) {
+    return '$xp XP zum nächsten Stern';
+  }
+
+  @override
   String currentStreakLabel(int days) {
     return 'Serie: $days Tage';
   }
@@ -964,4 +969,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get streakProtection => 'Serien-Schutz';
+
+  @override
+  String get prestigeTitle => 'Prestige-Stern verdient!';
+
+  @override
+  String get prestigeDesc =>
+      'Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Du erhältst +1 Serien-Schutzschild!';
+
+  @override
+  String get btnTriggerPrestige => 'Prestige auslösen';
 }

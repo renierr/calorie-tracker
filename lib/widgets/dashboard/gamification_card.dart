@@ -24,9 +24,9 @@ class GamificationCard extends StatelessWidget {
     int xpNeededForNext = 0;
 
     if (currentLevel >= 10) {
-      progress = 1.0;
-      xpInLevel = currentXp - baseXp;
-      xpNeededForNext = 0;
+      xpInLevel = stats.prestigeXpProgress;
+      xpNeededForNext = 1000;
+      progress = (xpInLevel / 1000.0).clamp(0.0, 1.0);
     } else {
       final int range = nextXp - baseXp;
       xpInLevel = currentXp - baseXp;
@@ -87,7 +87,9 @@ class GamificationCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      appState.getLevelTitle(currentLevel, context),
+                      stats.prestigeStars > 0
+                          ? '${appState.getLevelTitle(currentLevel, context)} (⭐ x${stats.prestigeStars})'
+                          : appState.getLevelTitle(currentLevel, context),
                       style: TextStyle(
                         color: colors.textPrimary,
                         fontSize: 16,
@@ -174,9 +176,11 @@ class GamificationCard extends StatelessWidget {
                       ),
                     )
                   else
-                    const Text(
-                      'MAX LEVEL',
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.xpToNextStar(xpNeededForNext - xpInLevel),
+                      style: const TextStyle(
                         color: AppTheme.accentAmber,
                         fontSize: 11,
                         fontWeight: FontWeight.bold,

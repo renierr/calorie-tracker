@@ -7,6 +7,21 @@ class GamificationStats {
   final List<String> unlockedBadges;
   final String? lastProcessedDate;
 
+  int get prestigeStars {
+    if (xp < 5400) return 0;
+    return (xp - 5400) ~/ 1000;
+  }
+
+  int get nextPrestigeThreshold {
+    if (xp < 5400) return 5400;
+    return 5400 + (prestigeStars + 1) * 1000;
+  }
+
+  int get prestigeXpProgress {
+    if (xp < 5400) return 0;
+    return (xp - 5400) % 1000;
+  }
+
   GamificationStats({
     required this.xp,
     required this.level,

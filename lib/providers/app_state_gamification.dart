@@ -11,6 +11,7 @@ mixin _GamificationState on ChangeNotifier {
   bool _showStreakResetNotification = false;
   bool _showShieldEarnedNotification = false;
   bool _showLevelUpNotification = false;
+  bool _showPrestigeNotification = false;
   int _oldLevel = 1;
 
   // Getters
@@ -22,6 +23,7 @@ mixin _GamificationState on ChangeNotifier {
   bool get showStreakResetNotification => _showStreakResetNotification;
   bool get showShieldEarnedNotification => _showShieldEarnedNotification;
   bool get showLevelUpNotification => _showLevelUpNotification;
+  bool get showPrestigeNotification => _showPrestigeNotification;
   int get oldLevel => _oldLevel;
 
   Future<void> loadGamification() async {
@@ -74,22 +76,49 @@ mixin _GamificationState on ChangeNotifier {
     notifyListeners();
   }
 
+  void triggerAdminPrestige() {
+    _showPrestigeNotification = true;
+    _showConfetti = true;
+    notifyListeners();
+  }
+
   // Award XP and handle level up
   Future<void> awardXp(int amount) async {
-    final int newXp = (_gamificationStats.xp + amount).clamp(0, 9999999);
+    final int oldXp = _gamificationStats.xp;
+    final int newXp = (oldXp + amount).clamp(0, 9999999);
     final int currentLevel = _gamificationStats.level;
     final int newLevel = calculateLevel(newXp);
 
+    bool showPrestige = false;
+    int shieldsAwarded = 0;
+
+    // Handle standard level up
     if (newLevel > currentLevel) {
       _oldLevel = currentLevel;
       _showLevelUpNotification = true;
       _showConfetti = true;
     }
 
+    // Handle Prestige Stars (+1 Shield for every additional 1000 XP beyond level 10 threshold of 5400 XP)
+    if (newXp >= 5400) {
+      final int oldStars = oldXp < 5400 ? 0 : (oldXp - 5400) ~/ 1000;
+      final int newStars = (newXp - 5400) ~/ 1000;
+      if (newStars > oldStars) {
+        showPrestige = true;
+        shieldsAwarded = newStars - oldStars;
+      }
+    }
+
     _gamificationStats = _gamificationStats.copyWith(
       xp: newXp,
       level: newLevel,
+      shields: _gamificationStats.shields + shieldsAwarded,
     );
+
+    if (showPrestige) {
+      _showPrestigeNotification = true;
+      _showConfetti = true;
+    }
 
     await _state._dbHelper.updateGamificationStats(_gamificationStats);
     notifyListeners();
@@ -381,6 +410,11 @@ mixin _GamificationState on ChangeNotifier {
 
   void dismissShieldEarnedNotification() {
     _showShieldEarnedNotification = false;
+    notifyListeners();
+  }
+
+  void dismissPrestigeNotification() {
+    _showPrestigeNotification = false;
     notifyListeners();
   }
 

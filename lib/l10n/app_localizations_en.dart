@@ -808,6 +808,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String xpToNextStar(int xp) {
+    return '$xp XP to next Star';
+  }
+
+  @override
   String currentStreakLabel(int days) {
     return 'Streak: $days Days';
   }
@@ -957,4 +962,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get streakProtection => 'Streak Protection';
+
+  @override
+  String get prestigeTitle => 'Prestige Star Earned!';
+
+  @override
+  String get prestigeDesc =>
+      'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!';
+
+  @override
+  String get btnTriggerPrestige => 'Trigger Prestige';
 }

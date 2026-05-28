@@ -419,6 +419,14 @@
       }
     }
   },
+  "xpToNextStar": "{xp} XP zum nächsten Stern",
+  "@xpToNextStar": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
   "currentStreakLabel": "Serie: {days} Tage",
   "@currentStreakLabel": {
     "placeholders": {
@@ -496,6 +504,9 @@
   "btnTriggerShieldCons": "Schild verbraucht Dialog",
   "btnTriggerStreakReset": "Serie zurückgesetzt Dialog",
   "toggleGamification": "Gamification-System aktivieren",
-  "streakProtection": "Serien-Schutz"
+  "streakProtection": "Serien-Schutz",
+  "prestigeTitle": "Prestige-Stern verdient!",
+  "prestigeDesc": "Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Du erhältst +1 Serien-Schutzschild!",
+  "btnTriggerPrestige": "Prestige auslösen"
 }
 

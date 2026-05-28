@@ -419,6 +419,14 @@
       }
     }
   },
+  "xpToNextStar": "{xp} XP to next Star",
+  "@xpToNextStar": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
   "currentStreakLabel": "Streak: {days} Days",
   "@currentStreakLabel": {
     "placeholders": {
@@ -496,6 +504,9 @@
   "btnTriggerShieldCons": "Use Shield Dialog",
   "btnTriggerStreakReset": "Reset Streak Dialog",
   "toggleGamification": "Enable Gamification Mechanics",
-  "streakProtection": "Streak Protection"
+  "streakProtection": "Streak Protection",
+  "prestigeTitle": "Prestige Star Earned!",
+  "prestigeDesc": "Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!",
+  "btnTriggerPrestige": "Trigger Prestige"
 }
 

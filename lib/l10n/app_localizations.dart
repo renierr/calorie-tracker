@@ -1502,6 +1502,12 @@ abstract class AppLocalizations {
   /// **'{xp} XP to next level'**
   String xpToNextLevel(int xp);
 
+  /// No description provided for @xpToNextStar.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP to next Star'**
+  String xpToNextStar(int xp);
+
   /// No description provided for @currentStreakLabel.
   ///
   /// In en, this message translates to:
@@ -1771,6 +1777,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Streak Protection'**
   String get streakProtection;
+
+  /// No description provided for @prestigeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prestige Star Earned!'**
+  String get prestigeTitle;
+
+  /// No description provided for @prestigeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!'**
+  String get prestigeDesc;
+
+  /// No description provided for @btnTriggerPrestige.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger Prestige'**
+  String get btnTriggerPrestige;
 }
 
 class _AppLocalizationsDelegate

@@ -49,6 +49,12 @@ class GamificationSettingsPage extends StatelessWidget {
         GamificationDialogs.showShieldEarned(context, appState);
       });
     }
+    if (appState.showPrestigeNotification) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        appState.dismissPrestigeNotification();
+        GamificationDialogs.showPrestigeStarEarned(context, appState);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.gamificationSettingsTitle)),
@@ -198,6 +204,12 @@ class GamificationSettingsPage extends StatelessWidget {
                                 icon: Icons.explore_off,
                                 color: colors.textSecondary,
                                 onPressed: appState.triggerAdminStreakReset,
+                              ),
+                              _AdminButton(
+                                label: l10n.btnTriggerPrestige,
+                                icon: Icons.star,
+                                color: Colors.purple,
+                                onPressed: appState.triggerAdminPrestige,
                               ),
                             ];
 
