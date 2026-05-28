@@ -31,8 +31,6 @@ class _SettingsPageState extends State<SettingsPage> {
   late TextEditingController _proteinController;
   late TextEditingController _carbsController;
   late TextEditingController _fatController;
-  late TextEditingController _syncServerUrlController;
-  late TextEditingController _syncUserIdController;
 
   @override
   void initState() {
@@ -49,10 +47,6 @@ class _SettingsPageState extends State<SettingsPage> {
       text: _appState.carbsGoal.toString(),
     );
     _fatController = TextEditingController(text: _appState.fatGoal.toString());
-    _syncServerUrlController = TextEditingController(
-      text: _appState.syncServerUrl,
-    );
-    _syncUserIdController = TextEditingController(text: _appState.syncUserId);
 
     _appState.addListener(_onStateChanged);
   }
@@ -64,8 +58,6 @@ class _SettingsPageState extends State<SettingsPage> {
     _proteinController.dispose();
     _carbsController.dispose();
     _fatController.dispose();
-    _syncServerUrlController.dispose();
-    _syncUserIdController.dispose();
     super.dispose();
   }
 
@@ -84,12 +76,6 @@ class _SettingsPageState extends State<SettingsPage> {
     if (_fatController.text != appState.fatGoal.toString()) {
       _fatController.text = appState.fatGoal.toString();
     }
-    if (_syncServerUrlController.text != appState.syncServerUrl) {
-      _syncServerUrlController.text = appState.syncServerUrl;
-    }
-    if (_syncUserIdController.text != appState.syncUserId) {
-      _syncUserIdController.text = appState.syncUserId;
-    }
   }
 
   // Trigger Settings Save Helper
@@ -104,12 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
       protein: protein,
       carbs: carbs,
       fat: fat,
-    );
-
-    // Save sync settings
-    await appState.saveSyncSettings(
-      serverUrl: _syncServerUrlController.text.trim(),
-      userId: _syncUserIdController.text.trim(),
     );
 
     if (!mounted) return;
@@ -150,11 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 20),
 
               // Panel 2.5: Cloud Sync Configuration
-              SyncConfigCard(
-                serverUrlController: _syncServerUrlController,
-                userIdController: _syncUserIdController,
-                appState: appState,
-              ),
+              SyncConfigCard(appState: appState),
               const SizedBox(height: 20),
 
               // Panel 3: Calorie & Macro Target configuration

@@ -68,7 +68,9 @@ class CalorieRingCard extends StatelessWidget {
                       ? Colors.white.withValues(alpha: 0.05)
                       : Colors.black.withValues(alpha: 0.05),
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    consumed > goal ? AppTheme.accentRed : AppTheme.accentEmerald,
+                    consumed > goal
+                        ? AppTheme.accentRed
+                        : AppTheme.accentEmerald,
                   ),
                 ),
               ),
