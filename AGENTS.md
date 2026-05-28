@@ -40,6 +40,9 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - Log errors with clear service or page context prefixes to make debugging easy.
 - Extract dialogs, detailed cards, or list items to `lib/widgets/` to promote modular codebase structure.
 - Extract repetitive visual components to shared reusable widgets to maintain consistency.
+- **Private Widgets over Helpers**: Prefer declaring private `StatelessWidget` classes instead of helper methods returning `Widget` to optimize element tree lifecycles and rebuilds.
+- **Const Constructors**: Prefer using `const` constructors for widgets and in `build()` methods where possible to reduce rebuilds.
+- **Lazy Lists**: Prefer `ListView.builder` or slivers for dynamic, long, or performance-sensitive lists.
 
 ---
 
