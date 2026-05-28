@@ -127,6 +127,7 @@ class SyncService {
             'timestamp': lRec.timestamp,
             'updatedAt': lRec.updatedAt,
             'weightKg': lRec.weightKg,
+            'isFavorite': lRec.isFavorite,
             'imageBlob': lRec.imageBytes != null
                 ? {
                     '__type': 'blob',
@@ -220,7 +221,8 @@ class SyncService {
           updatedAt: serverUpdatedAt,
           synced: 1, // Marked as synced in SQLite immediately
           deleted: 0,
-          isFavorite: lRec?.isFavorite ?? 0,
+          isFavorite:
+              (data['isFavorite'] as num?)?.toInt() ?? lRec?.isFavorite ?? 0,
         );
 
         if (lRec != null) {
