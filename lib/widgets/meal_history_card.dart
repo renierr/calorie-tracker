@@ -112,6 +112,14 @@ class MealHistoryCard extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (meal.isFavorite == 1) ...[
+                        const SizedBox(width: 6),
+                        const Icon(
+                          Icons.favorite,
+                          color: AppTheme.accentRed,
+                          size: 14,
+                        ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 12),

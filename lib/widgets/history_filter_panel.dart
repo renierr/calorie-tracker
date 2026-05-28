@@ -61,6 +61,10 @@ class HistoryFilterPanel extends StatelessWidget {
                     child: Text(AppLocalizations.of(context)!.last7Days),
                   ),
                   DropdownMenuItem(
+                    value: 'favorites',
+                    child: Text(AppLocalizations.of(context)!.favoriteMeals),
+                  ),
+                  DropdownMenuItem(
                     value: 'custom',
                     child: Text(AppLocalizations.of(context)!.customRange),
                   ),

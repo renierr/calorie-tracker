@@ -6,6 +6,7 @@ The application leverages the **Google Gemini API** to visually scan food photos
 
 ---
 
+
 ## Key Features
 
 1. **AI Visual Food Scanner**:

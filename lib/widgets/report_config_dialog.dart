@@ -148,6 +148,8 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
               );
             } else if (widget.filterType == 'week') {
               rangeText = AppLocalizations.of(context)!.pdfRange7Days;
+            } else if (widget.filterType == 'favorites') {
+              rangeText = AppLocalizations.of(context)!.favoriteMeals;
             } else if (widget.filterType == 'custom' &&
                 widget.customStartDate != null &&
                 widget.customEndDate != null) {

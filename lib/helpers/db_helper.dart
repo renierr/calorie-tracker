@@ -316,6 +316,8 @@ class DbHelper {
       final start = sevenDaysAgo.millisecondsSinceEpoch;
       whereClauses.add('timestamp >= ?');
       whereArgs.add(start);
+    } else if (filterType == 'favorites') {
+      whereClauses.add('isFavorite = 1');
     } else if (filterType == 'custom' &&
         customStart != null &&
         customEnd != null) {
@@ -419,6 +421,8 @@ class DbHelper {
       final start = sevenDaysAgo.millisecondsSinceEpoch;
       whereClauses.add('timestamp >= ?');
       whereArgs.add(start);
+    } else if (filterType == 'favorites') {
+      whereClauses.add('isFavorite = 1');
     } else if (filterType == 'custom' &&
         customStart != null &&
         customEnd != null) {
