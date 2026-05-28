@@ -36,7 +36,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
   @override
   void initState() {
     super.initState();
-    _appState = Provider.of<AppState>(context, listen: false);
+    _appState = context.read<AppState>();
 
     _selectedProvider = _appState.aiProvider;
     _selectedModel = _appState.aiModel;

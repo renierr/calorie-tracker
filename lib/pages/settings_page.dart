@@ -36,7 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     // Pre-populate fields from active State
-    _appState = Provider.of<AppState>(context, listen: false);
+    _appState = context.read<AppState>();
     _caloriesController = TextEditingController(
       text: _appState.calorieGoal.toString(),
     );
@@ -103,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
+    final appState = context.watch<AppState>();
 
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.settingsTitle)),

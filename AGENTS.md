@@ -36,7 +36,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - Use English for code, comments, and docs.
 - Use explicit return types for methods.
 - Avoid custom hex codes. Reference variables from `AppTheme` in `lib/theme/theme.dart`.
-- Bind UI screens to state using `Consumer<AppState>` or `Provider.of<AppState>(context)`. Use `listen: false` in button callbacks.
+- Bind UI screens to state using `Consumer<AppState>`, `context.watch<AppState>()`, or `context.read<AppState>()`. Prefer `context.watch<T>()` over `Provider.of<T>(context)` and `context.read<T>()` over `Provider.of<T>(context, listen: false)` for cleaner, modern 2026 syntax. Use `context.read<T>()` in button callbacks and lifecycle methods.
 - Log errors with clear service or page context prefixes to make debugging easy.
 - Extract dialogs, detailed cards, or list items to `lib/widgets/` to promote modular codebase structure.
 - Extract repetitive visual components to shared reusable widgets to maintain consistency.

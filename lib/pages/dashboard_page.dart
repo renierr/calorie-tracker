@@ -17,7 +17,7 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
+    final appState = context.watch<AppState>();
     final double width = MediaQuery.of(context).size.width;
     final bool isWide = AppBreakpoints.isDesktopWidth(width);
 

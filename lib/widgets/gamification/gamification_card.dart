@@ -9,7 +9,7 @@ class GamificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
+    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     final stats = appState.gamificationStats;
 

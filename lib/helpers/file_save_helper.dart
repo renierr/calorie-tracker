@@ -27,7 +27,7 @@ class FileSaveHelper {
     String Function(String error)? errorMessageBuilder,
   }) async {
     try {
-      final appState = Provider.of<AppState>(context, listen: false);
+      final appState = context.read<AppState>();
       final notificationsEnabled = appState.notificationsEnabled;
       String? destPath;
       final mimeType = _mimeTypeFromName(suggestedName);

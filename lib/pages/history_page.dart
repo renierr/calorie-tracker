@@ -28,7 +28,7 @@ class _HistoryPageState extends State<HistoryPage> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final appState = Provider.of<AppState>(context, listen: false);
+      final appState = context.read<AppState>();
       appState.loadFirstPageHistory(showLoading: false);
     });
   }
@@ -43,7 +43,7 @@ class _HistoryPageState extends State<HistoryPage> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      Provider.of<AppState>(context, listen: false).fetchNextPageHistory();
+      context.read<AppState>().fetchNextPageHistory();
     }
   }
 
@@ -96,7 +96,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
+    final appState = context.watch<AppState>();
     final List<Meal> filteredMeals = appState.paginatedMeals;
     final colors = AppTheme.of(context);
 

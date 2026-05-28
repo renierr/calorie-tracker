@@ -29,7 +29,7 @@ class _CloudSettingsPageState extends State<CloudSettingsPage> {
   @override
   void initState() {
     super.initState();
-    _appState = Provider.of<AppState>(context, listen: false);
+    _appState = context.read<AppState>();
     _serverUrlController = TextEditingController(text: _appState.syncServerUrl);
     _userIdController = TextEditingController(text: _appState.syncUserId);
   }
@@ -136,7 +136,7 @@ class _CloudSettingsPageState extends State<CloudSettingsPage> {
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final appState = Provider.of<AppState>(context);
+    final appState = context.watch<AppState>();
     final bool syncing = appState.isSyncing || _isSyncingLocal;
     final bool enabled = appState.syncEnabled;
 

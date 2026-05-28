@@ -25,7 +25,7 @@ class _ScanPageState extends State<ScanPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final appState = Provider.of<AppState>(context, listen: false);
+      final appState = context.read<AppState>();
       _hintController.text = appState.scanUserHint;
       _hintController.addListener(() {
         appState.updateScanUserHint(_hintController.text);
@@ -51,7 +51,7 @@ class _ScanPageState extends State<ScanPage> {
       if (image != null) {
         final bytes = await image.readAsBytes();
         if (!mounted) return;
-        final appState = Provider.of<AppState>(context, listen: false);
+        final appState = context.read<AppState>();
         appState.setScanImage(bytes, image.mimeType ?? 'image/jpeg');
       }
     } catch (e) {
@@ -68,7 +68,7 @@ class _ScanPageState extends State<ScanPage> {
 
   // Clear image helper
   void _clearImage() {
-    final appState = Provider.of<AppState>(context, listen: false);
+    final appState = context.read<AppState>();
     if (appState.scanShowForm) {
       appState.clearScanImage();
     } else {
@@ -123,7 +123,7 @@ class _ScanPageState extends State<ScanPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
+    final appState = context.watch<AppState>();
     final String apiKey = appState.aiApiKey;
     final bool hasApiKey =
         appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;

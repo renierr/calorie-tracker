@@ -13,7 +13,7 @@ class GamificationSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
+    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
