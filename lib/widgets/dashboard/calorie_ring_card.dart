@@ -67,32 +67,21 @@ class CalorieRingCard extends StatelessWidget {
                       Theme.of(context).brightness == Brightness.dark
                       ? Colors.white.withValues(alpha: 0.05)
                       : Colors.black.withValues(alpha: 0.05),
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    AppTheme.accentEmerald,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    consumed > goal ? AppTheme.accentRed : AppTheme.accentEmerald,
                   ),
                 ),
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (hasActiveStreak)
-                        const Icon(
-                          Icons.local_fire_department,
-                          color: AppTheme.accentAmber,
-                          size: 22,
-                        ),
-                      Text(
-                        '$consumed',
-                        style: TextStyle(
-                          color: colors.textPrimary,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    '$consumed',
+                    style: TextStyle(
+                      color: colors.textPrimary,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     AppLocalizations.of(context)!.ofKcal(goal),
