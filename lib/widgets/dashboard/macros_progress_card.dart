@@ -73,7 +73,7 @@ class MacrosProgressCard extends StatelessWidget {
     required Color textColor,
   }) {
     final double fraction = goal > 0 ? (consumed / goal).clamp(0.0, 1.0) : 0.0;
-    final int percent = (fraction * 100).toInt();
+    final int percent = goal > 0 ? ((consumed / goal) * 100).toInt() : 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
