@@ -13,7 +13,7 @@ class MacrosProgressCard extends StatelessWidget {
     final colors = AppTheme.of(context);
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
       decoration: AppTheme.premiumCardDecoration(context: context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +26,7 @@ class MacrosProgressCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
           // Protein bar
           _buildMacroSlider(
@@ -37,7 +37,7 @@ class MacrosProgressCard extends StatelessWidget {
             color: AppTheme.accentBlue,
             textColor: colors.textPrimary,
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 20),
 
           // Carbs bar
           _buildMacroSlider(
@@ -48,7 +48,7 @@ class MacrosProgressCard extends StatelessWidget {
             color: AppTheme.accentAmber,
             textColor: colors.textPrimary,
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 20),
 
           // Fat bar
           _buildMacroSlider(

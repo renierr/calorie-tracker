@@ -18,7 +18,7 @@ class CalorieRingCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       decoration: AppTheme.premiumCardDecoration(
         context: context,
         showGlow: percent >= 1.0,
@@ -33,18 +33,18 @@ class CalorieRingCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Visual circular progress indicator
           Stack(
             alignment: Alignment.center,
             children: [
               SizedBox(
-                width: 170,
-                height: 170,
+                width: 130,
+                height: 130,
                 child: CircularProgressIndicator(
                   value: percent,
-                  strokeWidth: 14,
+                  strokeWidth: 12,
                   backgroundColor:
                       Theme.of(context).brightness == Brightness.dark
                       ? Colors.white.withValues(alpha: 0.05)
@@ -61,19 +61,19 @@ class CalorieRingCard extends StatelessWidget {
                     '$consumed',
                     style: TextStyle(
                       color: colors.textPrimary,
-                      fontSize: 36,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context)!.ofKcal(goal),
-                    style: TextStyle(color: colors.textMuted, fontSize: 13),
+                    style: TextStyle(color: colors.textMuted, fontSize: 12),
                   ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Sub-Label listing remaining allowance
           Row(
