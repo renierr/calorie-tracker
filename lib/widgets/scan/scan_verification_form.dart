@@ -80,9 +80,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   Future<void> _reEvaluateMeal() async {
     if (widget.imageBytes == null) return;
 
-    final apiKey = widget.appState.aiApiKey.isNotEmpty
-        ? widget.appState.aiApiKey
-        : widget.appState.geminiApiKey;
+    final apiKey = widget.appState.aiApiKey;
     final hasApiKey =
         widget.appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
     if (!hasApiKey) {

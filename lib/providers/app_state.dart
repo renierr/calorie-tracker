@@ -40,7 +40,6 @@ class AppState extends ChangeNotifier
   static const String _keyAiCustomUrl = 'ai_custom_url';
 
   // State variables
-  String _geminiApiKey = '';
   String _aiProvider = AIServiceConfig.defaultProvider;
   String _aiModel = AIServiceConfig.defaultModel;
   String _aiApiKey = '';
@@ -83,7 +82,6 @@ class AppState extends ChangeNotifier
   DateTime? _historyCustomEndDate;
 
   // Getters
-  String get geminiApiKey => _geminiApiKey;
   int get calorieGoal => _calorieGoal;
   int get proteinGoal => _proteinGoal;
   int get carbsGoal => _carbsGoal;

@@ -26,8 +26,12 @@ mixin _AiState on ChangeNotifier {
     _state._aiCustomUrl = prefs.getString(AppState._keyAiCustomUrl) ?? '';
 
     // Fallback/Migration for legacy Gemini key
-    if (_state._aiApiKey.isEmpty && _state._geminiApiKey.isNotEmpty) {
-      _state._aiApiKey = _state._geminiApiKey;
+    final legacyGeminiKey = prefs.getString(AppState._keyGeminiApiKey);
+    if (_state._aiApiKey.isEmpty &&
+        legacyGeminiKey != null &&
+        legacyGeminiKey.isNotEmpty) {
+      _state._aiApiKey = legacyGeminiKey;
+      await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
     }
     notifyListeners();
   }
@@ -49,12 +53,6 @@ mixin _AiState on ChangeNotifier {
     await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
     await prefs.setString(AppState._keyAiCustomUrl, _state._aiCustomUrl);
 
-    // Mirror to legacy gemini key to avoid breaking other legacy components
-    if (_state._aiProvider == 'gemini') {
-      _state._geminiApiKey = _state._aiApiKey;
-      await prefs.setString(AppState._keyGeminiApiKey, _state._geminiApiKey);
-    }
-
     notifyListeners();
   }
 
@@ -65,10 +63,7 @@ mixin _AiState on ChangeNotifier {
   }) async {
     final provider = _state._aiProvider;
     final model = _state._aiModel;
-    String apiKey = _state._aiApiKey.trim();
-    if (apiKey.isEmpty && provider == 'gemini') {
-      apiKey = _state._geminiApiKey.trim();
-    }
+    final apiKey = _state._aiApiKey.trim();
 
     final service = AIServiceFactory.getService(provider);
     return await service.performAIAnalysis(

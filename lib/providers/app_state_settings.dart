@@ -5,7 +5,6 @@ mixin _SettingsState on ChangeNotifier {
 
   Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    _state._geminiApiKey = prefs.getString(AppState._keyGeminiApiKey) ?? '';
     _state._calorieGoal = prefs.getInt(AppState._keyCalorieGoal) ?? 2000;
     _state._proteinGoal = prefs.getInt(AppState._keyProteinGoal) ?? 130;
     _state._carbsGoal = prefs.getInt(AppState._keyCarbsGoal) ?? 220;
@@ -28,20 +27,17 @@ mixin _SettingsState on ChangeNotifier {
   }
 
   Future<void> saveSettings({
-    required String apiKey,
     required int calories,
     required int protein,
     required int carbs,
     required int fat,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    _state._geminiApiKey = apiKey.trim();
     _state._calorieGoal = calories;
     _state._proteinGoal = protein;
     _state._carbsGoal = carbs;
     _state._fatGoal = fat;
 
-    await prefs.setString(AppState._keyGeminiApiKey, _state._geminiApiKey);
     await prefs.setInt(AppState._keyCalorieGoal, _state._calorieGoal);
     await prefs.setInt(AppState._keyProteinGoal, _state._proteinGoal);
     await prefs.setInt(AppState._keyCarbsGoal, _state._carbsGoal);
@@ -125,7 +121,6 @@ mixin _SettingsState on ChangeNotifier {
       'version': '1.0.0',
       'exportedAt': DateTime.now().toUtc().toIso8601String(),
       'settings': {
-        'geminiApiKey': _state._geminiApiKey,
         'calorieGoal': _state._calorieGoal,
         'proteinGoal': _state._proteinGoal,
         'carbsGoal': _state._carbsGoal,
@@ -160,10 +155,6 @@ mixin _SettingsState on ChangeNotifier {
       final settings = decoded['settings'] as Map<String, dynamic>;
       final prefs = await SharedPreferences.getInstance();
 
-      if (settings.containsKey('geminiApiKey')) {
-        _state._geminiApiKey = settings['geminiApiKey'] as String? ?? '';
-        await prefs.setString(AppState._keyGeminiApiKey, _state._geminiApiKey);
-      }
       if (settings.containsKey('calorieGoal')) {
         _state._calorieGoal = settings['calorieGoal'] as int? ?? 2000;
         await prefs.setInt(AppState._keyCalorieGoal, _state._calorieGoal);
@@ -233,6 +224,12 @@ mixin _SettingsState on ChangeNotifier {
       }
       if (settings.containsKey('aiApiKey')) {
         _state._aiApiKey = settings['aiApiKey'] as String? ?? '';
+        if (_state._aiApiKey.isEmpty && settings.containsKey('geminiApiKey')) {
+          _state._aiApiKey = settings['geminiApiKey'] as String? ?? '';
+        }
+        await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
+      } else if (settings.containsKey('geminiApiKey')) {
+        _state._aiApiKey = settings['geminiApiKey'] as String? ?? '';
         await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
       }
       if (settings.containsKey('aiCustomUrl')) {

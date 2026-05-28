@@ -133,9 +133,7 @@ class _ScanPageState extends State<ScanPage> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
-    final String apiKey = appState.aiApiKey.isNotEmpty
-        ? appState.aiApiKey
-        : appState.geminiApiKey;
+    final String apiKey = appState.aiApiKey;
     final bool hasApiKey =
         appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
     final colors = AppTheme.of(context);

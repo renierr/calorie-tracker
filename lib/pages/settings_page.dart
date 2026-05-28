@@ -99,7 +99,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final int fat = int.tryParse(_fatController.text) ?? 70;
 
     await appState.saveSettings(
-      apiKey: appState.geminiApiKey,
       calories: calories,
       protein: protein,
       carbs: carbs,
