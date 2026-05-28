@@ -352,7 +352,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildGamificationConfigTile(BuildContext context, AppState appState) {
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
-    final statusText = appState.gamificationEnabled ? "ENABLED" : "DISABLED";
+    final statusText = appState.gamificationEnabled
+        ? localizations.enabledLabel
+        : localizations.disabledLabel;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -394,7 +396,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    "Status: $statusText",
+                    localizations.statusLabel(statusText),
                     style: TextStyle(
                       color: colors.textPrimary,
                       fontSize: 12,

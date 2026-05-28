@@ -507,6 +507,16 @@
   "streakProtection": "Streak Protection",
   "prestigeTitle": "Prestige Star Earned!",
   "prestigeDesc": "Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!",
-  "btnTriggerPrestige": "Trigger Prestige"
+  "btnTriggerPrestige": "Trigger Prestige",
+  "statusLabel": "Status: {status}",
+  "@statusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "enabledLabel": "Enabled",
+  "disabledLabel": "Disabled"
 }
 

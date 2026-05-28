@@ -89,12 +89,6 @@ class DashboardPage extends StatelessWidget {
                   DateNavigationStrip(appState: appState),
                   const SizedBox(height: 20),
 
-                  // Gamification Level and Streak status
-                  if (appState.gamificationEnabled) ...[
-                    const GamificationCard(),
-                    const SizedBox(height: 25),
-                  ],
-
                   if (isWide) ...[
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,6 +101,10 @@ class DashboardPage extends StatelessWidget {
                     const SizedBox(height: 20),
                     TrendChartCard(appState: appState),
                     const SizedBox(height: 20),
+                    if (appState.gamificationEnabled) ...[
+                      const GamificationCard(),
+                      const SizedBox(height: 20),
+                    ],
                     DayQuickLogsCard(appState: appState),
                   ] else ...[
                     // Calorie Ring Indicator
@@ -118,6 +116,10 @@ class DashboardPage extends StatelessWidget {
                     // 7 Day Calorie Trend
                     TrendChartCard(appState: appState),
                     const SizedBox(height: 20),
+                    if (appState.gamificationEnabled) ...[
+                      const GamificationCard(),
+                      const SizedBox(height: 20),
+                    ],
                     // Today's Logs Quick List
                     DayQuickLogsCard(appState: appState),
                   ],

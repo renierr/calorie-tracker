@@ -13,11 +13,14 @@ The system reinforces daily tracking consistency using game design mechanics:
 - **Streak Protection (Shields)**: Consumable items that safeguard active streaks from breaking due to overeating or missing a day.
 - **Accomplishment Badges**: One-time trophy milestones for core achievements.
 
-### What happens when Max Level is reached?
+### What happens when Max Level is reached? (Prestige Stars)
 - The maximum level is capped at **Level 10 ("Calorie Ninja")** requiring `5400 XP`.
-- Once Level 10 is reached, the user's level remains capped at 10.
-- Accumulated XP continues to grow past `5400 XP` in the database, allowing continuous tracking.
-- The `GamificationCard` progress bar locks at `1.0` (100% full) and the sub-label changes to display a bold, gold **MAX LEVEL** indicator, marking complete mastery.
+- Once Level 10 is reached, the user enters the **Prestige Star System**:
+  - Every additional **1000 XP** earned beyond `5400 XP` automatically awards **+1 Prestige Star** and **+1 Streak Shield**.
+  - Prestige Stars are displayed next to the title (e.g., `Level 10 Calorie Ninja (⭐ x2)`).
+  - The progress bar in the `GamificationCard` dynamically tracks progress towards the next 1000 XP Prestige Star (e.g., `400 XP to next Star`).
+  - Crossing a prestige threshold triggers an elegant celebratory Indigo/Purple dialog popup with confetti and a +1 Shield reward notification.
+
 
 ---
 
@@ -37,8 +40,9 @@ These actions process instantly when user modifies records:
 
 ### Retroactive Historical Checks (Retroactive Entries)
 - **Problem**: Users can log or edit meals retroactively for past days in the calendar.
-- **Solution**: Whenever historical logs are modified, added, or deleted, the app automatically executes a retroactive database re-evaluation (`recalculateAllGamification()`).
-- **Process**: The system traverses the entire history from the oldest logged meal up to yesterday, evaluating success parameters, adjusting streaks, applying shield counts, and recalculating total XP. This guarantees 100% data consistency even if the user logs historical data out of order!
+- **Solution**: Whenever historical logs are modified, added, or deleted, the app automatically executes an extremely fast retroactive database re-evaluation (`recalculateAllGamification()`).
+- **Optimization**: To avoid making slow sequential daily database queries over years of calendar records ($O(N)$ DB roundtrips), the re-evaluation uses exactly **one grouped SQL query** via `getDailyCalorieSummaries()` to fetch all daily calorie totals and meal counts.
+- **Process**: The system maps the query results into a local date-lookup cache and performs chronological date-traversal and streak checks **entirely in-memory** in $O(N)$ with $O(1)$ database latency. This guarantees instantaneous UI updates and 100% data consistency even if the user logs historical data out of order!
 
 ### Daily Transition Check (Startup & Refresh)
 Runs once on app startup or database reload when the current date advances past `last_processed_date`. It processes all missing days sequentially:
@@ -144,7 +148,7 @@ The gamification experience is fully optional.
 - **Toggle Setting**: A custom toggle card inside `SettingsPage` navigates the user to a dedicated `GamificationSettingsPage`.
 - **State Switch**: Users can toggle `Enable Gamification Mechanics` to shut off XP gains, hide the `GamificationCard` from the dashboard, and deactivate burning flame animations inside the `CalorieRingCard`.
 - **Material Ink Splash Compliance**: When placing `SwitchListTile` inside card decors, always wrap it in a transparent `Material` widget (`color: Colors.transparent`) to provide the necessary canvas for rendering ink splash indicators without throwing Flutter framework assertion exceptions.
-- **Administrative Testing Tools**: Developers can use the custom button grid in the admin panel to trigger each individual dialog, shield status notifications, and confetti particle emitters immediately in real-time on the page, verifying correct rendering instantly.
+- **Administrative Testing Tools**: Developers can use the custom button grid in the admin panel to trigger each individual dialog (including standard levels, badges, shields, and prestige stars) alongside confetti particle emitters immediately in real-time, verifying correct rendering instantly.
 
 ### Adding New Badges
 To add a new badge (e.g. *Water Intake Hero*):

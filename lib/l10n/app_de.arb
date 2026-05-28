@@ -507,6 +507,16 @@
   "streakProtection": "Serien-Schutz",
   "prestigeTitle": "Prestige-Stern verdient!",
   "prestigeDesc": "Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Du erhältst +1 Serien-Schutzschild!",
-  "btnTriggerPrestige": "Prestige auslösen"
+  "btnTriggerPrestige": "Prestige auslösen",
+  "statusLabel": "Status: {status}",
+  "@statusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "enabledLabel": "Aktiviert",
+  "disabledLabel": "Deaktiviert"
 }
 

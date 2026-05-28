@@ -979,4 +979,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get btnTriggerPrestige => 'Prestige auslösen';
+
+  @override
+  String statusLabel(String status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String get enabledLabel => 'Aktiviert';
+
+  @override
+  String get disabledLabel => 'Deaktiviert';
 }
