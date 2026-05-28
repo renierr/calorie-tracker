@@ -52,6 +52,12 @@ Images are serialized as standard **RFC 2397 Data URIs** inside the JSON `image`
 - **Format**: `data:[<mediatype>][;base64],<data>`
 - **Supported types**: `image/jpeg`, `image/png`, `image/webp`.
 
+### Schema Fields & Metadata
+Each exported/imported meal JSON object supports standard parameters and extensions:
+- Standard nutritional fields: `foodName`, `calories`, `protein`, `carbs`, `fat`, `confidence`, `notes`, `timestamp`, `updatedAt`, and `image` (Data URI).
+- `isFavorite`: Integer (`0` or `1`) representing favorite meal state.
+- `weightKg`: Decimal (or null) representing body weight logged at mealtime.
+
 ### Unique Identifiers & Deduplication
 - **Stable ID**: The `shortId` field serves as the stable identifier for deduplication (e.g. `MEAL-K9J8H7G6F`).
 - **Auto-Generation**: If a meal lacks a `shortId` on import, one is dynamically generated matching `^MEAL-[A-Z0-9]{9}$`.

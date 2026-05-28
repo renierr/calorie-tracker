@@ -20,7 +20,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - **Git Write Consent**: Never run git write operations (`git add`, `git commit`, `git push`) without fresh explicit approval for each write command.
 - Never mention AI agents, co-authorship, or AI generation in commit messages or code.
 - **Resilience to Rejected Commands**: If a user rejects or stops a command execution, continue the task and provide the alternative results or plan. A rejected command must not abort the overall execution.
-- **State Management & Data Flow**: Always channel database operations, macro targets, and date navigations through `AppState` in `lib/providers/app_state.dart`. Never update local state variables in views for persistent data.
+- **State Management & Data Flow**: Always channel database operations, macro targets, date navigations, body weight logging (`weightKg`), and history filters through `AppState` in `lib/providers/app_state.dart`. Never update local state variables in views for persistent data.
 - **SQLite Constraints**: Database operations are strictly asynchronous. Return `Future<T>` and handle inside `AppState`. Store images as `Uint8List? imageBytes` (`BLOB` in SQL). Never use native local file paths for persistence.
 - **PDF Class Overlaps**: Import PDF framework as `pw` (`import 'package:pdf/widgets.dart' as pw;`) to prevent collisions with standard Material widgets.
 - **Small Screen Fitting**: Always use responsive layouts (like `Wrap` instead of horizontal `Row` for actions, and scrollable/grid metrics) in dialogs, modals, and cards to prevent overflow on mobile.
@@ -53,9 +53,9 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - Standard: `sqflite` + dynamic `sqflite_common_ffi` (Desktop).
 - Images must persist exclusively as SQLite `BLOB` bytes, never raw OS absolute file paths.
 
-### 3. Gemini AI Scanning
-- Service: Default Gemini model (configured in `AIServiceConfig`) with native structured JSON matching `AIAnalysisResult`.
-- Ensure schema fields are updated in `GenerativeModel` config if rules/prompts change.
+### 3. Multi-Provider AI Scanning
+- Service: Supports multiple AI models (Gemini, OpenAI, Anthropic, Custom AI) selected dynamically in settings and routed via `AIServiceConfig` and `AIServiceFactory`.
+- Schema: Strict structured JSON matching `AIAnalysisResult` for exact calorie and macro estimations.
 
 ### 4. Styling & Layouts
 - Theme variables from `AppTheme`: `background`, `surface`, `accentEmerald`, `accentBlue`, `accentAmber`, `accentRed`.
