@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
-import '../services/ai_service.dart';
 import '../widgets/scan/scan_image_selector.dart';
 import '../widgets/scan/scan_verification_form.dart';
 import '../widgets/scan/scan_favorites_list.dart';
@@ -20,16 +18,20 @@ class ScanPage extends StatefulWidget {
 
 class _ScanPageState extends State<ScanPage> {
   final ImagePicker _picker = ImagePicker();
-
-  // State variables for intake
-  XFile? _selectedImage;
-  Uint8List? _imageBytes;
   final TextEditingController _hintController = TextEditingController();
 
-  // State variables for verified form
-  bool _showForm = false;
-  bool _isScanning = false;
-  AIAnalysisResult? _scanResult;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final appState = Provider.of<AppState>(context, listen: false);
+      _hintController.text = appState.scanUserHint;
+      _hintController.addListener(() {
+        appState.updateScanUserHint(_hintController.text);
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -48,10 +50,9 @@ class _ScanPageState extends State<ScanPage> {
       );
       if (image != null) {
         final bytes = await image.readAsBytes();
-        setState(() {
-          _selectedImage = image;
-          _imageBytes = bytes;
-        });
+        if (!mounted) return;
+        final appState = Provider.of<AppState>(context, listen: false);
+        appState.setScanImage(bytes, image.mimeType ?? 'image/jpeg');
       }
     } catch (e) {
       if (!mounted) return;
@@ -67,42 +68,28 @@ class _ScanPageState extends State<ScanPage> {
 
   // Clear image helper
   void _clearImage() {
-    setState(() {
-      _selectedImage = null;
-      _imageBytes = null;
-      if (_scanResult != null) {
-        _showForm = false;
-        _scanResult = null;
-      }
-    });
+    final appState = Provider.of<AppState>(context, listen: false);
+    appState.clearScanState();
+    _hintController.clear();
   }
 
   // Trigger AI scanning
   Future<void> _scanMeal(AppState appState) async {
     final colors = AppTheme.of(context);
-    if (_imageBytes == null || _selectedImage == null) return;
+    if (appState.scanImageBytes == null) return;
 
-    setState(() {
-      _isScanning = true;
-      _showForm = false;
-    });
+    appState.setScanIsScanning(true);
 
     try {
       final result = await appState.performAIAnalysis(
-        imageBytes: _imageBytes!,
-        mimeType: _selectedImage!.mimeType ?? 'image/jpeg',
+        imageBytes: appState.scanImageBytes!,
+        mimeType: appState.scanMimeType,
         userHint: _hintController.text,
       );
 
-      setState(() {
-        _scanResult = result;
-        _isScanning = false;
-        _showForm = true;
-      });
+      appState.setScanResult(result);
     } catch (e) {
-      setState(() {
-        _isScanning = false;
-      });
+      appState.setScanIsScanning(false);
       if (!mounted) return;
       showDialog(
         context: context,
@@ -142,20 +129,7 @@ class _ScanPageState extends State<ScanPage> {
       final template = appState.templateMeal!;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        setState(() {
-          _imageBytes = template.imageBytes;
-          _selectedImage = null;
-          _showForm = true;
-          _scanResult = AIAnalysisResult(
-            foodName: template.foodName,
-            calories: template.calories,
-            protein: template.protein,
-            carbs: template.carbs,
-            fat: template.fat,
-            confidence: template.confidence,
-            notes: template.notes ?? '',
-          );
-        });
+        appState.setScanStateFromTemplate(template);
         appState.clearTemplateMeal();
       });
     }
@@ -172,28 +146,26 @@ class _ScanPageState extends State<ScanPage> {
                 children: [
                   // Phase A: Image Intake
                   ScanImageSelector(
-                    imageBytes: _imageBytes,
+                    imageBytes: appState.scanImageBytes,
                     onPickGallery: () => _pickImage(ImageSource.gallery),
                     onPickCamera: () => _pickImage(ImageSource.camera),
                     onClear: _clearImage,
                     onLogManually: () {
-                      setState(() {
-                        _showForm = true;
-                        _imageBytes = null;
-                        _selectedImage = null;
-                        _scanResult = null;
-                      });
+                      appState.logManuallyWithoutPhoto();
                     },
-                    showForm: _showForm,
+                    showForm: appState.scanShowForm,
                   ),
                   const SizedBox(height: 20),
 
-                  if (_imageBytes == null && !_showForm) ...[
+                  if (appState.scanImageBytes == null &&
+                      !appState.scanShowForm) ...[
                     ScanFavoritesList(appState: appState),
                     const SizedBox(height: 20),
                   ],
 
-                  if (_imageBytes != null && !_showForm && !_isScanning) ...[
+                  if (appState.scanImageBytes != null &&
+                      !appState.scanShowForm &&
+                      !appState.scanIsScanning) ...[
                     // User context clue input
                     _buildHintField(),
                     const SizedBox(height: 25),
@@ -204,22 +176,20 @@ class _ScanPageState extends State<ScanPage> {
                   ],
 
                   // Phase B: Form verification
-                  if (_showForm)
+                  if (appState.scanShowForm)
                     ScanVerificationForm(
                       appState: appState,
-                      scanResult: _scanResult,
-                      imageBytes: _imageBytes,
+                      scanResult: appState.scanResult,
+                      imageBytes: appState.scanImageBytes,
                       onDiscard: () {
-                        setState(() {
-                          _showForm = false;
-                          _scanResult = null;
-                          if (_selectedImage == null) {
-                            _imageBytes = null;
-                          }
-                        });
+                        appState.discardForm();
+                        if (!appState.scanShowForm &&
+                            appState.scanImageBytes == null) {
+                          _hintController.clear();
+                        }
                       },
                       onSaveSuccess: () {
-                        _clearImage();
+                        appState.clearScanState();
                         _hintController.clear();
                       },
                     ),
@@ -229,7 +199,7 @@ class _ScanPageState extends State<ScanPage> {
           ),
 
           // Scanning full-screen loading spinner
-          if (_isScanning)
+          if (appState.scanIsScanning)
             Container(
               color: Colors.black.withValues(alpha: 0.8),
               child: Center(
@@ -369,7 +339,7 @@ class _ScanPageState extends State<ScanPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: _openManualFormWithPhoto,
+              onPressed: () => _openManualFormWithPhoto(appState),
             ),
           ),
         ],
@@ -411,17 +381,14 @@ class _ScanPageState extends State<ScanPage> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            onPressed: _openManualFormWithPhoto,
+            onPressed: () => _openManualFormWithPhoto(appState),
           ),
         ),
       ],
     );
   }
 
-  void _openManualFormWithPhoto() {
-    setState(() {
-      _showForm = true;
-      _scanResult = null;
-    });
+  void _openManualFormWithPhoto(AppState appState) {
+    appState.openManualFormWithPhoto();
   }
 }

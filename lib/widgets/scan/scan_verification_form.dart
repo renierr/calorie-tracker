@@ -44,29 +44,48 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(
-      text: widget.scanResult?.foodName ?? 'New Meal',
+    final appState = widget.appState;
+    _mealDate = appState.scanMealDate;
+
+    _nameController = TextEditingController(text: appState.scanFoodName);
+    _caloriesController = TextEditingController(text: appState.scanCalories);
+    _proteinController = TextEditingController(text: appState.scanProtein);
+    _carbsController = TextEditingController(text: appState.scanCarbs);
+    _fatController = TextEditingController(text: appState.scanFat);
+    _notesController = TextEditingController(text: appState.scanNotes);
+    _weightController = TextEditingController(text: appState.scanWeight);
+
+    _nameController.addListener(_updateDraft);
+    _caloriesController.addListener(_updateDraft);
+    _proteinController.addListener(_updateDraft);
+    _carbsController.addListener(_updateDraft);
+    _fatController.addListener(_updateDraft);
+    _notesController.addListener(_updateDraft);
+    _weightController.addListener(_updateDraft);
+  }
+
+  void _updateDraft() {
+    widget.appState.updateScanDraftFields(
+      foodName: _nameController.text,
+      calories: _caloriesController.text,
+      protein: _proteinController.text,
+      carbs: _carbsController.text,
+      fat: _fatController.text,
+      notes: _notesController.text,
+      weight: _weightController.text,
     );
-    _caloriesController = TextEditingController(
-      text: widget.scanResult?.calories.toString() ?? '0',
-    );
-    _proteinController = TextEditingController(
-      text: widget.scanResult?.protein.toString() ?? '0',
-    );
-    _carbsController = TextEditingController(
-      text: widget.scanResult?.carbs.toString() ?? '0',
-    );
-    _fatController = TextEditingController(
-      text: widget.scanResult?.fat.toString() ?? '0',
-    );
-    _notesController = TextEditingController(
-      text: widget.scanResult?.notes ?? '',
-    );
-    _weightController = TextEditingController(text: '');
   }
 
   @override
   void dispose() {
+    _nameController.removeListener(_updateDraft);
+    _caloriesController.removeListener(_updateDraft);
+    _proteinController.removeListener(_updateDraft);
+    _carbsController.removeListener(_updateDraft);
+    _fatController.removeListener(_updateDraft);
+    _notesController.removeListener(_updateDraft);
+    _weightController.removeListener(_updateDraft);
+
     _nameController.dispose();
     _caloriesController.dispose();
     _proteinController.dispose();
@@ -434,6 +453,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                     );
                     if (picked != null) {
                       setState(() => _mealDate = picked);
+                      widget.appState.updateScanDraftFields(mealDate: picked);
                     }
                   },
             child: Container(

@@ -72,6 +72,25 @@ class AppState extends ChangeNotifier
   // Template meal for manual entry
   Meal? _templateMeal;
 
+  // Scan page state variables
+  Uint8List? _scanImageBytes;
+  String _scanMimeType = 'image/jpeg';
+  String _scanUserHint = '';
+  bool _scanShowForm = false;
+  bool _scanIsScanning = false;
+  AIAnalysisResult? _scanResult;
+  bool _scanIsPickedImage = false;
+
+  // Scan Verification Form Draft Values
+  String _scanFoodName = '';
+  String _scanCalories = '';
+  String _scanProtein = '';
+  String _scanCarbs = '';
+  String _scanFat = '';
+  String _scanNotes = '';
+  String _scanWeight = '';
+  DateTime _scanMealDate = DateTime.now();
+
   // Lazy loading & Pagination states
   List<Meal> _selectedDateMeals = [];
   List<Meal> _paginatedMeals = [];
