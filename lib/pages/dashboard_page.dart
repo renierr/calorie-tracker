@@ -44,51 +44,32 @@ class DashboardPage extends StatelessWidget {
               DateNavigationStrip(appState: appState),
               const SizedBox(height: 25),
 
-              // Layout Grid - Responsive for Mobile vs Desktop
-              isWide
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Left Column: Progress Circle and Macros
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              CalorieRingCard(appState: appState),
-                              const SizedBox(height: 20),
-                              MacrosProgressCard(appState: appState),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        // Right Column: Trend Chart and Today's Meal Quick Logs
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              TrendChartCard(appState: appState),
-                              const SizedBox(height: 20),
-                              DayQuickLogsCard(appState: appState),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        // Calorie Ring Indicator
-                        CalorieRingCard(appState: appState),
-                        const SizedBox(height: 20),
-                        // Macros Progress Slider
-                        MacrosProgressCard(appState: appState),
-                        const SizedBox(height: 20),
-                        // 7 Day Calorie Trend
-                        TrendChartCard(appState: appState),
-                        const SizedBox(height: 20),
-                        // Today's Logs Quick List
-                        DayQuickLogsCard(appState: appState),
-                      ],
-                    ),
+              if (isWide) ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: CalorieRingCard(appState: appState)),
+                    const SizedBox(width: 20),
+                    Expanded(child: MacrosProgressCard(appState: appState)),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                TrendChartCard(appState: appState),
+                const SizedBox(height: 20),
+                DayQuickLogsCard(appState: appState),
+              ] else ...[
+                // Calorie Ring Indicator
+                CalorieRingCard(appState: appState),
+                const SizedBox(height: 20),
+                // Macros Progress Slider
+                MacrosProgressCard(appState: appState),
+                const SizedBox(height: 20),
+                // 7 Day Calorie Trend
+                TrendChartCard(appState: appState),
+                const SizedBox(height: 20),
+                // Today's Logs Quick List
+                DayQuickLogsCard(appState: appState),
+              ],
               const SizedBox(height: 20),
             ],
           ),
