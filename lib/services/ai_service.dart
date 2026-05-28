@@ -8,6 +8,31 @@ part 'openai_service.dart';
 part 'anthropic_service.dart';
 part 'custom_ai_service.dart';
 
+class AIServiceConfig {
+  static const Map<String, List<String>> providerModels = {
+    'gemini': [
+      'gemini-3.5-flash',
+      'gemini-3.1-flash-lite',
+      'gemini-2.5-flash',
+      'gemini-2.5-flash-lite',
+      'gemini-2.5-pro',
+    ],
+    'openai': ['gpt-4o-mini', 'gpt-4o'],
+    'anthropic': ['claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest'],
+  };
+
+  static const String defaultProvider = 'gemini';
+  static String get defaultModel => providerModels[defaultProvider]!.first;
+
+  static String getDefaultModelForProvider(String provider) {
+    final models = providerModels[provider.toLowerCase()];
+    if (models != null && models.isNotEmpty) {
+      return models.first;
+    }
+    return '';
+  }
+}
+
 class AIAnalysisResult {
   final String foodName;
   final int calories;

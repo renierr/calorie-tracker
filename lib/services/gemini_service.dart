@@ -56,7 +56,7 @@ class GeminiService implements AIService {
     );
 
     final generativeModel = GenerativeModel(
-      model: model.isNotEmpty ? model : 'gemini-2.5-flash',
+      model: model.isNotEmpty ? model : AIServiceConfig.defaultModel,
       apiKey: apiKey,
       systemInstruction: Content.system(systemInstruction),
       generationConfig: GenerationConfig(
@@ -88,7 +88,7 @@ class GeminiService implements AIService {
       throw Exception('API Key is empty.');
     }
     final generativeModel = GenerativeModel(
-      model: model.isNotEmpty ? model : 'gemini-2.5-flash',
+      model: model.isNotEmpty ? model : AIServiceConfig.defaultModel,
       apiKey: apiKey,
     );
     // Execute a cheap operation like counting tokens to verify key

@@ -5,6 +5,7 @@ import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/adaptive/adaptive_card_header.dart';
 import '../widgets/settings/gemini_info_dialog.dart';
+import '../services/ai_service.dart';
 
 class AISettingsPage extends StatefulWidget {
   const AISettingsPage({super.key});
@@ -29,11 +30,8 @@ class _AISettingsPageState extends State<AISettingsPage> {
   final _formKey = GlobalKey<FormState>();
 
   // Available models mappings
-  final Map<String, List<String>> _providerModels = {
-    'gemini': ['gemini-2.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash'],
-    'openai': ['gpt-4o-mini', 'gpt-4o'],
-    'anthropic': ['claude-3-5-sonnet-latest', 'claude-3-haiku-20240307'],
-  };
+  Map<String, List<String>> get _providerModels =>
+      AIServiceConfig.providerModels;
 
   @override
   void initState() {

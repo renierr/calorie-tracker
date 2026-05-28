@@ -11,9 +11,17 @@ mixin _AiState on ChangeNotifier {
 
   Future<void> loadAISettings() async {
     final prefs = await SharedPreferences.getInstance();
-    _state._aiProvider = prefs.getString(AppState._keyAiProvider) ?? 'gemini';
-    _state._aiModel =
-        prefs.getString(AppState._keyAiModel) ?? 'gemini-2.5-flash';
+    _state._aiProvider =
+        prefs.getString(AppState._keyAiProvider) ??
+        AIServiceConfig.defaultProvider;
+    final savedModel = prefs.getString(AppState._keyAiModel);
+    if (savedModel != null && savedModel.isNotEmpty) {
+      _state._aiModel = savedModel;
+    } else {
+      _state._aiModel = AIServiceConfig.getDefaultModelForProvider(
+        _state._aiProvider,
+      );
+    }
     _state._aiApiKey = prefs.getString(AppState._keyAiApiKey) ?? '';
     _state._aiCustomUrl = prefs.getString(AppState._keyAiCustomUrl) ?? '';
 

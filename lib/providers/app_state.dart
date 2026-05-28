@@ -41,8 +41,8 @@ class AppState extends ChangeNotifier
 
   // State variables
   String _geminiApiKey = '';
-  String _aiProvider = 'gemini';
-  String _aiModel = 'gemini-2.5-flash';
+  String _aiProvider = AIServiceConfig.defaultProvider;
+  String _aiModel = AIServiceConfig.defaultModel;
   String _aiApiKey = '';
   String _aiCustomUrl = '';
   int _calorieGoal = 2000;

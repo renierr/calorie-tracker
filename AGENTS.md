@@ -54,7 +54,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - Images must persist exclusively as SQLite `BLOB` bytes, never raw OS absolute file paths.
 
 ### 3. Gemini AI Scanning
-- Service: `gemini-2.5-flash` with native structured JSON matching `AIAnalysisResult`.
+- Service: Default Gemini model (configured in `AIServiceConfig`) with native structured JSON matching `AIAnalysisResult`.
 - Ensure schema fields are updated in `GenerativeModel` config if rules/prompts change.
 
 ### 4. Styling & Layouts

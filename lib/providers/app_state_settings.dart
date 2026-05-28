@@ -220,11 +220,15 @@ mixin _SettingsState on ChangeNotifier {
         );
       }
       if (settings.containsKey('aiProvider')) {
-        _state._aiProvider = settings['aiProvider'] as String? ?? 'gemini';
+        _state._aiProvider =
+            settings['aiProvider'] as String? ??
+            AIServiceConfig.defaultProvider;
         await prefs.setString(AppState._keyAiProvider, _state._aiProvider);
       }
       if (settings.containsKey('aiModel')) {
-        _state._aiModel = settings['aiModel'] as String? ?? 'gemini-2.5-flash';
+        _state._aiModel =
+            settings['aiModel'] as String? ??
+            AIServiceConfig.getDefaultModelForProvider(_state._aiProvider);
         await prefs.setString(AppState._keyAiModel, _state._aiModel);
       }
       if (settings.containsKey('aiApiKey')) {
