@@ -7,11 +7,21 @@ Welcome to the **NutriScan Gamification & Habit Loop** framework. This document 
 ## 1. System Overview
 
 The system reinforces daily tracking consistency using game design mechanics:
-- **Experience Points (XP)**: Continuous granular rewards for tracking actions.
-- **Levels (1-10)**: Progress milestones based on total accumulated XP.
-- **Daily Streak**: Track consecutive days stayed under the calorie budget.
-- **Streak Protection (Shields)**: Consumable items that safeguard active streaks from breaking due to overeating or missing a day.
-- **Accomplishment Badges**: One-time trophy milestones for core achievements.
+
+### 🏆 XP vs. Accomplishment Badges (Awards)
+*   **Experience Points (XP)**: Continuous, cumulative granular rewards. Earning XP pushes the user closer to leveling up.
+    *   `+10 XP` for logging a meal (immediate).
+    *   `+100 XP` for finishing a day within the calorie budget (evaluated after the day ends).
+*   **Accomplishment Badges (Awards)**: Unique, one-time trophies awarded for reaching specific milestones (e.g., first day tracked, 3-day streak, 7-day streak). Badges do not affect levels directly; they serve as milestones.
+
+### 🔥 Streak Continuity & Shields
+*   **Streak Definition**: The number of consecutive days that the user stays within their calorie budget, with at least one meal logged.
+*   **Strict Continuity (No Gaps)**: Streaks require daily, consecutive tracking. Any gap resets the streak to `0`:
+    *   **Skipped Days (0 meals)**: Reset the streak to `0`. Shields **cannot** protect empty tracking days.
+    *   **Overeating Days (Calories exceeded)**: Reset the streak to `0` **unless** a Streak Shield is consumed.
+*   **Streak Protection (Shields)**:
+    *   Earned immediately when leveling up, gaining a Prestige Star, or hitting the 7-day streak milestone.
+    *   Automatically consumed when calorie budget is exceeded on an active streak day, preserving the streak.
 
 ### What happens when Max Level is reached? (Prestige Stars)
 - The maximum level is capped at **Level 10 ("Calorie Ninja")** requiring `5400 XP`.
@@ -28,6 +38,11 @@ The system reinforces daily tracking consistency using game design mechanics:
 
 Gamification rules are divided into **Immediate Triggers**, **Daily Transition Processes**, and **Retroactive Historical Re-evaluations**.
 
+### ⏱️ The Timing Principle: Today vs. Completed Days
+To maintain gamification authenticity, **today (the current active day) is never evaluated for daily success or badges (like the "Spark" badge)** in real-time.
+*   *Why?* A user logging their first meal of the day (e.g., breakfast) will always be far below their calorie limit. Triggering a success badge at that moment is cheap and unearned.
+*   *Rule*: A tracking day is only deemed "successful" when it is **fully completed** (i.e. the date changes to tomorrow) or when it is evaluated retroactively after the day has passed.
+
 ### Immediate Triggers (Real-time Actions)
 These actions process instantly when user modifies records:
 
@@ -35,8 +50,11 @@ These actions process instantly when user modifies records:
 |---|---|---|---|
 | **Add Meal** | User logs any meal. | `+10 XP` | Updates progress bar instantly. |
 | **Delete Meal** | User deletes a logged meal. | `-10 XP` | Recalculates remaining allowance. |
-| **First-day Target** | Today's total kcal $\le$ goal (on first logged meal). | `+100 XP` | Confetti animation + "Spark" badge unlocked dialog. |
 | **Exceed Budget** | Total kcal exceeds goal on active streak day. | Auto-consumes `1 Shield` (if $>0$). Otherwise resets streak to `0`. | Dialog notification alerting the user of active shield consumption or streak reset. |
+
+> [!NOTE]
+> **Spark Badge (Zündfunke) Timing**:
+> Earned on the **first successful tracking day** where the user finishes at or below budget. Because the active day is not yet completed, this is evaluated and awarded during the **Daily Transition Check** (when yesterday is closed out) or during a **Retroactive Historical Check** if past days are logged out of order.
 
 ### Retroactive Historical Checks (Retroactive Entries)
 - **Problem**: Users can log or edit meals retroactively for past days in the calendar.
@@ -57,7 +75,7 @@ Runs once on app startup or database reload when the current date advances past 
                  |       +---> YES: [Daily Success]
                  |       |            - Streak increments (+1)
                  |       |            - Award +100 XP
-                 |       |            - Check & unlock Day 3 or Day 7 badges
+                 |                    - Check & unlock Day 1 (Spark), Day 3, or Day 7 badges
                  |       |
                  |       +---> NO: [Daily Overeating]
                  |            - Shields > 0?

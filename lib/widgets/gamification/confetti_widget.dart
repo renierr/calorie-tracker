@@ -21,7 +21,7 @@ class _ConfettiWidgetState extends State<ConfettiWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(milliseconds: 2500),
     );
 
     _controller.addStatusListener((status) {
@@ -30,7 +30,7 @@ class _ConfettiWidgetState extends State<ConfettiWidget>
       }
     });
 
-    // Create 60 colorful confetti particles with varied angles, shapes, and speeds
+    // Create 70 colorful confetti particles with varied angles, shapes, and speeds
     final List<Color> colors = [
       const Color(0xFF10B981), // Emerald
       const Color(0xFF3B82F6), // Blue
@@ -44,12 +44,12 @@ class _ConfettiWidgetState extends State<ConfettiWidget>
     for (int i = 0; i < 70; i++) {
       _particles.add(
         _ConfettiParticle(
-          x: _random.nextDouble(), // 0.0 to 1.0 (percent of screen width)
-          y: -0.1 - _random.nextDouble() * 0.4, // start above the screen
+          x: _random.nextDouble(),
+          y: -0.2 + _random.nextDouble() * 1.0,
           size: 6.0 + _random.nextDouble() * 10.0,
           color: colors[_random.nextInt(colors.length)],
-          speedY: 0.15 + _random.nextDouble() * 0.35,
-          speedX: -0.15 + _random.nextDouble() * 0.3,
+          speedY: 0.35 + _random.nextDouble() * 0.55,
+          speedX: -0.25 + _random.nextDouble() * 0.5,
           rotation: _random.nextDouble() * 2 * math.pi,
           rotationSpeed: -2.0 + _random.nextDouble() * 4.0,
           isCircle: _random.nextBool(),
@@ -115,6 +115,12 @@ class _ConfettiPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (progress >= 1.0) return;
+
+    final double opacity = progress > 0.8
+        ? (1.0 - (progress - 0.8) / 0.2).clamp(0.0, 1.0)
+        : 1.0;
+
     for (final particle in particles) {
       // Calculate current coordinates based on animation progress
       final double currentX =
@@ -128,7 +134,7 @@ class _ConfettiPainter extends CustomPainter {
       // Draw only if on screen
       if (currentY >= 0 && currentY <= size.height) {
         final paint = Paint()
-          ..color = particle.color
+          ..color = particle.color.withValues(alpha: opacity)
           ..style = PaintingStyle.fill;
 
         canvas.save();

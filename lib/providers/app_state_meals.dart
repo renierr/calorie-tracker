@@ -101,7 +101,6 @@ mixin _MealState on ChangeNotifier {
     await _state._dbHelper.updateMeal(unsyncedMeal);
     await loadMeals();
     await _state.checkTodayBudgetExceeded();
-    await _state.checkImmediateAchievements();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }

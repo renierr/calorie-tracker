@@ -154,39 +154,11 @@ mixin _GamificationState on ChangeNotifier {
   // Award XP for logged meals (10 XP per log)
   Future<void> onMealAdded() async {
     await awardXp(10);
-    await checkImmediateAchievements();
   }
 
   // Deduct XP on deleting meal to prevent exploits
   Future<void> onMealDeleted() async {
     await awardXp(-10);
-  }
-
-  // Immediate rewards on first day completion
-  Future<void> checkImmediateAchievements() async {
-    final now = DateTime.now();
-    final todayMeals = await _state._dbHelper.getMealsForDate(
-      now,
-      includeImages: false,
-    );
-    final totalCalories = todayMeals.fold(0, (sum, m) => sum + m.calories);
-
-    if (todayMeals.isNotEmpty && totalCalories <= _state.calorieGoal) {
-      final stats = _gamificationStats;
-      if (!stats.unlockedBadges.contains('zundfunke')) {
-        final List<String> badges = List.from(stats.unlockedBadges)
-          ..add('zundfunke');
-
-        _gamificationStats = stats.copyWith(unlockedBadges: badges);
-
-        await _state._dbHelper.updateGamificationStats(_gamificationStats);
-        _recentUnlockedBadge = 'zundfunke';
-        _showConfetti = true;
-        notifyListeners();
-
-        await awardXp(100); // 100 XP for first day success
-      }
-    }
   }
 
   // Daily transition logic processing past days consecutively
