@@ -393,6 +393,109 @@
   "linkCopied": "Link in die Zwischenablage kopiert!",
   "notificationsTitle": "System-Benachrichtigungen",
   "notificationsDesc": "Aktivieren oder deaktivieren Sie native System-Benachrichtigungen in der Android-Statusleiste für Downloads.",
-  "enableNotifications": "System-Benachrichtigungen anzeigen"
+  "enableNotifications": "System-Benachrichtigungen anzeigen",
+  "gamificationTitle": "Erfolge & Levels",
+  "levelLabel": "Level {lvl}",
+  "@levelLabel": {
+    "placeholders": {
+      "lvl": {
+        "type": "int"
+      }
+    }
+  },
+  "xpLabel": "{xp} XP",
+  "@xpLabel": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "xpToNextLevel": "{xp} XP zum nächsten Level",
+  "@xpToNextLevel": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "currentStreakLabel": "Serie: {days} Tage",
+  "@currentStreakLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "highestStreakLabel": "Bestwert: {days} Tage",
+  "@highestStreakLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "shieldsLabel": "Schilde: {count}",
+  "@shieldsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "badgesTitle": "Freigeschaltete Abzeichen",
+  "badgeUnlockedPopup": "Abzeichen freigeschaltet!",
+  "levelUpPopup": "Level aufgestiegen!",
+  "levelUpDesc": "Herzlichen Glückwunsch! Du hast Level {lvl} - {title} erreicht!",
+  "@levelUpDesc": {
+    "placeholders": {
+      "lvl": {
+        "type": "int"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "streakShieldEarnedTitle": "Schutzschild verdient!",
+  "streakShieldEarnedDesc": "Großartige Arbeit! Du hast dir ein Streak-Schutzschild für eine perfekte 7-Tage-Serie verdient!",
+  "streakShieldConsumedTitle": "Schild aktiv!",
+  "streakShieldConsumedDesc": "Deine Serie wurde durch ein Streak-Schutzschild gerettet, da du heute dein Kalorienlimit überschritten hast!",
+  "streakResetTitle": "Serie unterbrochen!",
+  "streakResetDesc": "Deine Serie wurde zurückgesetzt. Bleib dran, Kontinuität ist der Schlüssel!",
+  
+  "badgeZundfunkeTitle": "Zündfunke",
+  "badgeZundfunkeDesc": "Tag 1 unter dem Kalorienlimit beendet. Die Reise beginnt!",
+  "badgeDreifacheDisziplinTitle": "Dreifache Disziplin",
+  "badgeDreifacheDisziplinDesc": "3 Tage in Folge Mahlzeiten eingetragen und unter dem Limit geblieben.",
+  "badgeWochenKoenigTitle": "Wochen-König",
+  "badgeWochenKoenigDesc": "Die perfekte Woche! 7 Tage in Folge diszipliniert geblieben.",
+  
+  "lvlCouchPotato": "Couch-Potato",
+  "lvlMotivatedBeginner": "Motivierter Einsteiger",
+  "lvlHabitHero": "Gewohnheits-Held",
+  "lvlMetabolismMaster": "Stoffwechsel-Meister",
+  "lvlFitnessApprentice": "Fitness-Lehrling",
+  "lvlDisciplineAthlete": "Disziplin-Athlet",
+  "lvlEnduranceChampion": "Ausdauer-Champion",
+  "lvlNutritionGuru": "Ernährungs-Guru",
+  "lvlVitalityLegend": "Vitalitäts-Legende",
+  "lvlCalorieNinja": "Kalorien-Ninja",
+  "xpHint": "+10 XP pro Mahlzeit • +100 XP pro erfolgreichem Tag",
+  "gamificationSettingsTitle": "Gamification-Einstellungen",
+  "gamificationSettingsDesc": "Verwalte deine Erfolge, Erfahrungswerte, Schutzschilde und Aktivitätsserien.",
+  "gamificationConfigureBtn": "Erfolge konfigurieren",
+  "adminTriggersTitle": "Entwickler- / Admin-Steuerung",
+  "adminTriggersDesc": "Führe temporär Animationen und Erfolgsdialoge aus, um die visuelle Darstellung direkt zu überprüfen.",
+  "btnTriggerConfetti": "Konfetti auslösen",
+  "btnTriggerLevelUp": "Level-Up auslösen",
+  "btnTriggerBadgeZund": "Zündfunke freischalten",
+  "btnTriggerBadgeThree": "Serie 3 freischalten",
+  "btnTriggerBadgeWeek": "Wochen-König freischalten",
+  "btnTriggerShieldEarn": "Schild verdient Dialog",
+  "btnTriggerShieldCons": "Schild verbraucht Dialog",
+  "btnTriggerStreakReset": "Serie zurückgesetzt Dialog",
+  "toggleGamification": "Gamification-System aktivieren",
+  "streakProtection": "Serien-Schutz"
 }
 

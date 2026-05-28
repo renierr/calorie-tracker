@@ -393,6 +393,109 @@
   "linkCopied": "Link copied to clipboard!",
   "notificationsTitle": "System Notifications",
   "notificationsDesc": "Enable or disable native system notifications in the Android status bar for downloads.",
-  "enableNotifications": "Show system notifications"
+  "enableNotifications": "Show system notifications",
+  "gamificationTitle": "Achievements & Levels",
+  "levelLabel": "Level {lvl}",
+  "@levelLabel": {
+    "placeholders": {
+      "lvl": {
+        "type": "int"
+      }
+    }
+  },
+  "xpLabel": "{xp} XP",
+  "@xpLabel": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "xpToNextLevel": "{xp} XP to next level",
+  "@xpToNextLevel": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "currentStreakLabel": "Streak: {days} Days",
+  "@currentStreakLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "highestStreakLabel": "Best: {days} Days",
+  "@highestStreakLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "shieldsLabel": "Shields: {count}",
+  "@shieldsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "badgesTitle": "Unlocked Badges",
+  "badgeUnlockedPopup": "Badge Unlocked!",
+  "levelUpPopup": "Level Up!",
+  "levelUpDesc": "Congratulations! You reached level {lvl} - {title}!",
+  "@levelUpDesc": {
+    "placeholders": {
+      "lvl": {
+        "type": "int"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "streakShieldEarnedTitle": "Shield Earned!",
+  "streakShieldEarnedDesc": "Amazing job! You earned a Streak Protection Shield for a 7-day streak!",
+  "streakShieldConsumedTitle": "Shield Active!",
+  "streakShieldConsumedDesc": "Your streak was saved by a Streak Protection Shield because you exceeded your calorie limit today!",
+  "streakResetTitle": "Streak Broken!",
+  "streakResetDesc": "Your streak has reset. Keep going, consistency is key!",
+  
+  "badgeZundfunkeTitle": "Spark",
+  "badgeZundfunkeDesc": "Completed day 1 under calorie limit. The journey begins!",
+  "badgeDreifacheDisziplinTitle": "Threefold Discipline",
+  "badgeDreifacheDisziplinDesc": "Logged foods and stayed under limit for 3 consecutive days.",
+  "badgeWochenKoenigTitle": "Week King",
+  "badgeWochenKoenigDesc": "The perfect week! Stayed on track 7 consecutive days.",
+  
+  "lvlCouchPotato": "Couch-Potato",
+  "lvlMotivatedBeginner": "Motivated Beginner",
+  "lvlHabitHero": "Habit Hero",
+  "lvlMetabolismMaster": "Metabolism Master",
+  "lvlFitnessApprentice": "Fitness Apprentice",
+  "lvlDisciplineAthlete": "Discipline Athlete",
+  "lvlEnduranceChampion": "Endurance Champion",
+  "lvlNutritionGuru": "Nutrition Guru",
+  "lvlVitalityLegend": "Vitality Legend",
+  "lvlCalorieNinja": "Calorie Ninja",
+  "xpHint": "+10 XP per Meal Logged • +100 XP per Day Complete",
+  "gamificationSettingsTitle": "Gamification Loop Settings",
+  "gamificationSettingsDesc": "Manage your streaks, experience levels, protection shields, and achievement badges.",
+  "gamificationConfigureBtn": "Configure Achievements",
+  "adminTriggersTitle": "Developer Achievement Controls",
+  "adminTriggersDesc": "Use these tools to temporarily trigger local notification events and animations to test correct visual rendering.",
+  "btnTriggerConfetti": "Trigger Confetti",
+  "btnTriggerLevelUp": "Trigger Level Up",
+  "btnTriggerBadgeZund": "Unlock Spark Badge",
+  "btnTriggerBadgeThree": "Unlock 3-Day Badge",
+  "btnTriggerBadgeWeek": "Unlock Week King",
+  "btnTriggerShieldEarn": "Earn Shield Dialog",
+  "btnTriggerShieldCons": "Use Shield Dialog",
+  "btnTriggerStreakReset": "Reset Streak Dialog",
+  "toggleGamification": "Enable Gamification Mechanics",
+  "streakProtection": "Streak Protection"
 }
 

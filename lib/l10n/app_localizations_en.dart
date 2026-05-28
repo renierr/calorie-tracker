@@ -788,4 +788,173 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enableNotifications => 'Show system notifications';
+
+  @override
+  String get gamificationTitle => 'Achievements & Levels';
+
+  @override
+  String levelLabel(int lvl) {
+    return 'Level $lvl';
+  }
+
+  @override
+  String xpLabel(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String xpToNextLevel(int xp) {
+    return '$xp XP to next level';
+  }
+
+  @override
+  String currentStreakLabel(int days) {
+    return 'Streak: $days Days';
+  }
+
+  @override
+  String highestStreakLabel(int days) {
+    return 'Best: $days Days';
+  }
+
+  @override
+  String shieldsLabel(int count) {
+    return 'Shields: $count';
+  }
+
+  @override
+  String get badgesTitle => 'Unlocked Badges';
+
+  @override
+  String get badgeUnlockedPopup => 'Badge Unlocked!';
+
+  @override
+  String get levelUpPopup => 'Level Up!';
+
+  @override
+  String levelUpDesc(int lvl, String title) {
+    return 'Congratulations! You reached level $lvl - $title!';
+  }
+
+  @override
+  String get streakShieldEarnedTitle => 'Shield Earned!';
+
+  @override
+  String get streakShieldEarnedDesc =>
+      'Amazing job! You earned a Streak Protection Shield for a 7-day streak!';
+
+  @override
+  String get streakShieldConsumedTitle => 'Shield Active!';
+
+  @override
+  String get streakShieldConsumedDesc =>
+      'Your streak was saved by a Streak Protection Shield because you exceeded your calorie limit today!';
+
+  @override
+  String get streakResetTitle => 'Streak Broken!';
+
+  @override
+  String get streakResetDesc =>
+      'Your streak has reset. Keep going, consistency is key!';
+
+  @override
+  String get badgeZundfunkeTitle => 'Spark';
+
+  @override
+  String get badgeZundfunkeDesc =>
+      'Completed day 1 under calorie limit. The journey begins!';
+
+  @override
+  String get badgeDreifacheDisziplinTitle => 'Threefold Discipline';
+
+  @override
+  String get badgeDreifacheDisziplinDesc =>
+      'Logged foods and stayed under limit for 3 consecutive days.';
+
+  @override
+  String get badgeWochenKoenigTitle => 'Week King';
+
+  @override
+  String get badgeWochenKoenigDesc =>
+      'The perfect week! Stayed on track 7 consecutive days.';
+
+  @override
+  String get lvlCouchPotato => 'Couch-Potato';
+
+  @override
+  String get lvlMotivatedBeginner => 'Motivated Beginner';
+
+  @override
+  String get lvlHabitHero => 'Habit Hero';
+
+  @override
+  String get lvlMetabolismMaster => 'Metabolism Master';
+
+  @override
+  String get lvlFitnessApprentice => 'Fitness Apprentice';
+
+  @override
+  String get lvlDisciplineAthlete => 'Discipline Athlete';
+
+  @override
+  String get lvlEnduranceChampion => 'Endurance Champion';
+
+  @override
+  String get lvlNutritionGuru => 'Nutrition Guru';
+
+  @override
+  String get lvlVitalityLegend => 'Vitality Legend';
+
+  @override
+  String get lvlCalorieNinja => 'Calorie Ninja';
+
+  @override
+  String get xpHint => '+10 XP per Meal Logged • +100 XP per Day Complete';
+
+  @override
+  String get gamificationSettingsTitle => 'Gamification Loop Settings';
+
+  @override
+  String get gamificationSettingsDesc =>
+      'Manage your streaks, experience levels, protection shields, and achievement badges.';
+
+  @override
+  String get gamificationConfigureBtn => 'Configure Achievements';
+
+  @override
+  String get adminTriggersTitle => 'Developer Achievement Controls';
+
+  @override
+  String get adminTriggersDesc =>
+      'Use these tools to temporarily trigger local notification events and animations to test correct visual rendering.';
+
+  @override
+  String get btnTriggerConfetti => 'Trigger Confetti';
+
+  @override
+  String get btnTriggerLevelUp => 'Trigger Level Up';
+
+  @override
+  String get btnTriggerBadgeZund => 'Unlock Spark Badge';
+
+  @override
+  String get btnTriggerBadgeThree => 'Unlock 3-Day Badge';
+
+  @override
+  String get btnTriggerBadgeWeek => 'Unlock Week King';
+
+  @override
+  String get btnTriggerShieldEarn => 'Earn Shield Dialog';
+
+  @override
+  String get btnTriggerShieldCons => 'Use Shield Dialog';
+
+  @override
+  String get btnTriggerStreakReset => 'Reset Streak Dialog';
+
+  @override
+  String get toggleGamification => 'Enable Gamification Mechanics';
+
+  @override
+  String get streakProtection => 'Streak Protection';
 }

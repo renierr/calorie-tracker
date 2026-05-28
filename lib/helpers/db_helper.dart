@@ -4,10 +4,11 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import '../models/meal_model.dart';
+import '../models/gamification_model.dart';
 
 class DbHelper {
   static const String _dbName = 'calorie_tracker.db';
-  static const int _dbVersion = 4;
+  static const int _dbVersion = 5;
   static const String tableMeals = 'meals';
 
   // Private constructor
@@ -64,6 +65,24 @@ class DbHelper {
         weightKg REAL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE gamification_stats (
+        id INTEGER PRIMARY KEY,
+        xp INTEGER NOT NULL DEFAULT 0,
+        level INTEGER NOT NULL DEFAULT 1,
+        shields INTEGER NOT NULL DEFAULT 0,
+        current_streak INTEGER NOT NULL DEFAULT 0,
+        highest_streak INTEGER NOT NULL DEFAULT 0,
+        unlocked_badges TEXT NOT NULL DEFAULT '',
+        last_processed_date TEXT
+      )
+    ''');
+
+    await db.execute('''
+      INSERT INTO gamification_stats (id, xp, level, shields, current_streak, highest_streak, unlocked_badges, last_processed_date)
+      VALUES (1, 0, 1, 0, 0, 0, '', NULL)
+    ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -82,6 +101,24 @@ class DbHelper {
     }
     if (oldVersion < 4) {
       await db.execute('ALTER TABLE $tableMeals ADD COLUMN weightKg REAL');
+    }
+    if (oldVersion < 5) {
+      await db.execute('''
+        CREATE TABLE gamification_stats (
+          id INTEGER PRIMARY KEY,
+          xp INTEGER NOT NULL DEFAULT 0,
+          level INTEGER NOT NULL DEFAULT 1,
+          shields INTEGER NOT NULL DEFAULT 0,
+          current_streak INTEGER NOT NULL DEFAULT 0,
+          highest_streak INTEGER NOT NULL DEFAULT 0,
+          unlocked_badges TEXT NOT NULL DEFAULT '',
+          last_processed_date TEXT
+        )
+      ''');
+      await db.execute('''
+        INSERT OR IGNORE INTO gamification_stats (id, xp, level, shields, current_streak, highest_streak, unlocked_badges, last_processed_date)
+        VALUES (1, 0, 1, 0, 0, 0, '', NULL)
+      ''');
     }
   }
 
@@ -495,5 +532,41 @@ class DbHelper {
       orderBy: 'timestamp DESC',
     );
     return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
+  }
+
+  // Gamification operations
+  Future<GamificationStats> getGamificationStats() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'gamification_stats',
+      where: 'id = 1',
+    );
+    if (maps.isNotEmpty) {
+      return GamificationStats.fromMap(maps.first);
+    }
+    return GamificationStats.initial();
+  }
+
+  Future<int> updateGamificationStats(GamificationStats stats) async {
+    final Database db = await database;
+    return await db.update(
+      'gamification_stats',
+      stats.toMap(),
+      where: 'id = 1',
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getDailyCalorieSummaries() async {
+    final Database db = await database;
+    return await db.rawQuery('''
+      SELECT 
+        date(timestamp / 1000, 'unixepoch', 'localtime') as log_date,
+        SUM(calories) as total_calories,
+        COUNT(*) as meal_count
+      FROM $tableMeals
+      WHERE deleted = 0
+      GROUP BY log_date
+      ORDER BY log_date ASC
+    ''');
   }
 }

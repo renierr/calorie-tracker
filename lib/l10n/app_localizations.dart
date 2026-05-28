@@ -1477,6 +1477,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show system notifications'**
   String get enableNotifications;
+
+  /// No description provided for @gamificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements & Levels'**
+  String get gamificationTitle;
+
+  /// No description provided for @levelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {lvl}'**
+  String levelLabel(int lvl);
+
+  /// No description provided for @xpLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP'**
+  String xpLabel(int xp);
+
+  /// No description provided for @xpToNextLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP to next level'**
+  String xpToNextLevel(int xp);
+
+  /// No description provided for @currentStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak: {days} Days'**
+  String currentStreakLabel(int days);
+
+  /// No description provided for @highestStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Best: {days} Days'**
+  String highestStreakLabel(int days);
+
+  /// No description provided for @shieldsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shields: {count}'**
+  String shieldsLabel(int count);
+
+  /// No description provided for @badgesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked Badges'**
+  String get badgesTitle;
+
+  /// No description provided for @badgeUnlockedPopup.
+  ///
+  /// In en, this message translates to:
+  /// **'Badge Unlocked!'**
+  String get badgeUnlockedPopup;
+
+  /// No description provided for @levelUpPopup.
+  ///
+  /// In en, this message translates to:
+  /// **'Level Up!'**
+  String get levelUpPopup;
+
+  /// No description provided for @levelUpDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You reached level {lvl} - {title}!'**
+  String levelUpDesc(int lvl, String title);
+
+  /// No description provided for @streakShieldEarnedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield Earned!'**
+  String get streakShieldEarnedTitle;
+
+  /// No description provided for @streakShieldEarnedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Amazing job! You earned a Streak Protection Shield for a 7-day streak!'**
+  String get streakShieldEarnedDesc;
+
+  /// No description provided for @streakShieldConsumedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield Active!'**
+  String get streakShieldConsumedTitle;
+
+  /// No description provided for @streakShieldConsumedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your streak was saved by a Streak Protection Shield because you exceeded your calorie limit today!'**
+  String get streakShieldConsumedDesc;
+
+  /// No description provided for @streakResetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak Broken!'**
+  String get streakResetTitle;
+
+  /// No description provided for @streakResetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your streak has reset. Keep going, consistency is key!'**
+  String get streakResetDesc;
+
+  /// No description provided for @badgeZundfunkeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Spark'**
+  String get badgeZundfunkeTitle;
+
+  /// No description provided for @badgeZundfunkeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed day 1 under calorie limit. The journey begins!'**
+  String get badgeZundfunkeDesc;
+
+  /// No description provided for @badgeDreifacheDisziplinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Threefold Discipline'**
+  String get badgeDreifacheDisziplinTitle;
+
+  /// No description provided for @badgeDreifacheDisziplinDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged foods and stayed under limit for 3 consecutive days.'**
+  String get badgeDreifacheDisziplinDesc;
+
+  /// No description provided for @badgeWochenKoenigTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Week King'**
+  String get badgeWochenKoenigTitle;
+
+  /// No description provided for @badgeWochenKoenigDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The perfect week! Stayed on track 7 consecutive days.'**
+  String get badgeWochenKoenigDesc;
+
+  /// No description provided for @lvlCouchPotato.
+  ///
+  /// In en, this message translates to:
+  /// **'Couch-Potato'**
+  String get lvlCouchPotato;
+
+  /// No description provided for @lvlMotivatedBeginner.
+  ///
+  /// In en, this message translates to:
+  /// **'Motivated Beginner'**
+  String get lvlMotivatedBeginner;
+
+  /// No description provided for @lvlHabitHero.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit Hero'**
+  String get lvlHabitHero;
+
+  /// No description provided for @lvlMetabolismMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Metabolism Master'**
+  String get lvlMetabolismMaster;
+
+  /// No description provided for @lvlFitnessApprentice.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness Apprentice'**
+  String get lvlFitnessApprentice;
+
+  /// No description provided for @lvlDisciplineAthlete.
+  ///
+  /// In en, this message translates to:
+  /// **'Discipline Athlete'**
+  String get lvlDisciplineAthlete;
+
+  /// No description provided for @lvlEnduranceChampion.
+  ///
+  /// In en, this message translates to:
+  /// **'Endurance Champion'**
+  String get lvlEnduranceChampion;
+
+  /// No description provided for @lvlNutritionGuru.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition Guru'**
+  String get lvlNutritionGuru;
+
+  /// No description provided for @lvlVitalityLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitality Legend'**
+  String get lvlVitalityLegend;
+
+  /// No description provided for @lvlCalorieNinja.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie Ninja'**
+  String get lvlCalorieNinja;
+
+  /// No description provided for @xpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+10 XP per Meal Logged • +100 XP per Day Complete'**
+  String get xpHint;
+
+  /// No description provided for @gamificationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gamification Loop Settings'**
+  String get gamificationSettingsTitle;
+
+  /// No description provided for @gamificationSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your streaks, experience levels, protection shields, and achievement badges.'**
+  String get gamificationSettingsDesc;
+
+  /// No description provided for @gamificationConfigureBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure Achievements'**
+  String get gamificationConfigureBtn;
+
+  /// No description provided for @adminTriggersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer Achievement Controls'**
+  String get adminTriggersTitle;
+
+  /// No description provided for @adminTriggersDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use these tools to temporarily trigger local notification events and animations to test correct visual rendering.'**
+  String get adminTriggersDesc;
+
+  /// No description provided for @btnTriggerConfetti.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger Confetti'**
+  String get btnTriggerConfetti;
+
+  /// No description provided for @btnTriggerLevelUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger Level Up'**
+  String get btnTriggerLevelUp;
+
+  /// No description provided for @btnTriggerBadgeZund.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Spark Badge'**
+  String get btnTriggerBadgeZund;
+
+  /// No description provided for @btnTriggerBadgeThree.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock 3-Day Badge'**
+  String get btnTriggerBadgeThree;
+
+  /// No description provided for @btnTriggerBadgeWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Week King'**
+  String get btnTriggerBadgeWeek;
+
+  /// No description provided for @btnTriggerShieldEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn Shield Dialog'**
+  String get btnTriggerShieldEarn;
+
+  /// No description provided for @btnTriggerShieldCons.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Shield Dialog'**
+  String get btnTriggerShieldCons;
+
+  /// No description provided for @btnTriggerStreakReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Streak Dialog'**
+  String get btnTriggerStreakReset;
+
+  /// No description provided for @toggleGamification.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Gamification Mechanics'**
+  String get toggleGamification;
+
+  /// No description provided for @streakProtection.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak Protection'**
+  String get streakProtection;
 }
 
 class _AppLocalizationsDelegate

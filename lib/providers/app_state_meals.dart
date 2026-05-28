@@ -10,6 +10,7 @@ mixin _MealState on ChangeNotifier {
     );
     await _state.loadSelectedDateMeals();
     await _state.loadFirstPageHistory(showLoading: false);
+    await _state.recalculateAllGamification();
     notifyListeners();
   }
 
@@ -89,6 +90,7 @@ mixin _MealState on ChangeNotifier {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _state._dbHelper.insertMeal(unsyncedMeal);
     await loadMeals();
+    await _state.onMealAdded();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
@@ -98,6 +100,8 @@ mixin _MealState on ChangeNotifier {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _state._dbHelper.updateMeal(unsyncedMeal);
     await loadMeals();
+    await _state.checkTodayBudgetExceeded();
+    await _state.checkImmediateAchievements();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
@@ -106,6 +110,7 @@ mixin _MealState on ChangeNotifier {
   Future<void> deleteMeal(int id) async {
     await _state._dbHelper.deleteMeal(id);
     await loadMeals();
+    await _state.onMealDeleted();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }

@@ -15,23 +15,41 @@ class CalorieRingCard extends StatelessWidget {
     final double percent = goal > 0 ? (consumed / goal).clamp(0.0, 1.0) : 0.0;
     final int remaining = goal - consumed;
     final colors = AppTheme.of(context);
+    final bool hasActiveStreak =
+        appState.gamificationEnabled &&
+        appState.gamificationStats.currentStreak >= 3;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       decoration: AppTheme.premiumCardDecoration(
         context: context,
-        showGlow: percent >= 1.0,
+        showGlow: percent >= 1.0 || hasActiveStreak,
+        glowColor: hasActiveStreak
+            ? AppTheme.accentAmber
+            : (percent >= 1.0 ? AppTheme.accentRed : AppTheme.accentEmerald),
       ),
       child: Column(
         children: [
-          Text(
-            AppLocalizations.of(context)!.calorieConsumption,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (hasActiveStreak)
+                const Icon(
+                  Icons.local_fire_department,
+                  color: AppTheme.accentAmber,
+                  size: 20,
+                ),
+              if (hasActiveStreak) const SizedBox(width: 6),
+              Text(
+                AppLocalizations.of(context)!.calorieConsumption,
+                style: TextStyle(
+                  color: colors.textSecondary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
 
@@ -57,13 +75,24 @@ class CalorieRingCard extends StatelessWidget {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    '$consumed',
-                    style: TextStyle(
-                      color: colors.textPrimary,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (hasActiveStreak)
+                        const Icon(
+                          Icons.local_fire_department,
+                          color: AppTheme.accentAmber,
+                          size: 22,
+                        ),
+                      Text(
+                        '$consumed',
+                        style: TextStyle(
+                          color: colors.textPrimary,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                   Text(
                     AppLocalizations.of(context)!.ofKcal(goal),

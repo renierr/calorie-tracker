@@ -795,4 +795,173 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get enableNotifications => 'System-Benachrichtigungen anzeigen';
+
+  @override
+  String get gamificationTitle => 'Erfolge & Levels';
+
+  @override
+  String levelLabel(int lvl) {
+    return 'Level $lvl';
+  }
+
+  @override
+  String xpLabel(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String xpToNextLevel(int xp) {
+    return '$xp XP zum nächsten Level';
+  }
+
+  @override
+  String currentStreakLabel(int days) {
+    return 'Serie: $days Tage';
+  }
+
+  @override
+  String highestStreakLabel(int days) {
+    return 'Bestwert: $days Tage';
+  }
+
+  @override
+  String shieldsLabel(int count) {
+    return 'Schilde: $count';
+  }
+
+  @override
+  String get badgesTitle => 'Freigeschaltete Abzeichen';
+
+  @override
+  String get badgeUnlockedPopup => 'Abzeichen freigeschaltet!';
+
+  @override
+  String get levelUpPopup => 'Level aufgestiegen!';
+
+  @override
+  String levelUpDesc(int lvl, String title) {
+    return 'Herzlichen Glückwunsch! Du hast Level $lvl - $title erreicht!';
+  }
+
+  @override
+  String get streakShieldEarnedTitle => 'Schutzschild verdient!';
+
+  @override
+  String get streakShieldEarnedDesc =>
+      'Großartige Arbeit! Du hast dir ein Streak-Schutzschild für eine perfekte 7-Tage-Serie verdient!';
+
+  @override
+  String get streakShieldConsumedTitle => 'Schild aktiv!';
+
+  @override
+  String get streakShieldConsumedDesc =>
+      'Deine Serie wurde durch ein Streak-Schutzschild gerettet, da du heute dein Kalorienlimit überschritten hast!';
+
+  @override
+  String get streakResetTitle => 'Serie unterbrochen!';
+
+  @override
+  String get streakResetDesc =>
+      'Deine Serie wurde zurückgesetzt. Bleib dran, Kontinuität ist der Schlüssel!';
+
+  @override
+  String get badgeZundfunkeTitle => 'Zündfunke';
+
+  @override
+  String get badgeZundfunkeDesc =>
+      'Tag 1 unter dem Kalorienlimit beendet. Die Reise beginnt!';
+
+  @override
+  String get badgeDreifacheDisziplinTitle => 'Dreifache Disziplin';
+
+  @override
+  String get badgeDreifacheDisziplinDesc =>
+      '3 Tage in Folge Mahlzeiten eingetragen und unter dem Limit geblieben.';
+
+  @override
+  String get badgeWochenKoenigTitle => 'Wochen-König';
+
+  @override
+  String get badgeWochenKoenigDesc =>
+      'Die perfekte Woche! 7 Tage in Folge diszipliniert geblieben.';
+
+  @override
+  String get lvlCouchPotato => 'Couch-Potato';
+
+  @override
+  String get lvlMotivatedBeginner => 'Motivierter Einsteiger';
+
+  @override
+  String get lvlHabitHero => 'Gewohnheits-Held';
+
+  @override
+  String get lvlMetabolismMaster => 'Stoffwechsel-Meister';
+
+  @override
+  String get lvlFitnessApprentice => 'Fitness-Lehrling';
+
+  @override
+  String get lvlDisciplineAthlete => 'Disziplin-Athlet';
+
+  @override
+  String get lvlEnduranceChampion => 'Ausdauer-Champion';
+
+  @override
+  String get lvlNutritionGuru => 'Ernährungs-Guru';
+
+  @override
+  String get lvlVitalityLegend => 'Vitalitäts-Legende';
+
+  @override
+  String get lvlCalorieNinja => 'Kalorien-Ninja';
+
+  @override
+  String get xpHint => '+10 XP pro Mahlzeit • +100 XP pro erfolgreichem Tag';
+
+  @override
+  String get gamificationSettingsTitle => 'Gamification-Einstellungen';
+
+  @override
+  String get gamificationSettingsDesc =>
+      'Verwalte deine Erfolge, Erfahrungswerte, Schutzschilde und Aktivitätsserien.';
+
+  @override
+  String get gamificationConfigureBtn => 'Erfolge konfigurieren';
+
+  @override
+  String get adminTriggersTitle => 'Entwickler- / Admin-Steuerung';
+
+  @override
+  String get adminTriggersDesc =>
+      'Führe temporär Animationen und Erfolgsdialoge aus, um die visuelle Darstellung direkt zu überprüfen.';
+
+  @override
+  String get btnTriggerConfetti => 'Konfetti auslösen';
+
+  @override
+  String get btnTriggerLevelUp => 'Level-Up auslösen';
+
+  @override
+  String get btnTriggerBadgeZund => 'Zündfunke freischalten';
+
+  @override
+  String get btnTriggerBadgeThree => 'Serie 3 freischalten';
+
+  @override
+  String get btnTriggerBadgeWeek => 'Wochen-König freischalten';
+
+  @override
+  String get btnTriggerShieldEarn => 'Schild verdient Dialog';
+
+  @override
+  String get btnTriggerShieldCons => 'Schild verbraucht Dialog';
+
+  @override
+  String get btnTriggerStreakReset => 'Serie zurückgesetzt Dialog';
+
+  @override
+  String get toggleGamification => 'Gamification-System aktivieren';
+
+  @override
+  String get streakProtection => 'Serien-Schutz';
 }

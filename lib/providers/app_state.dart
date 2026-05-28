@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/db_helper.dart';
 import '../models/meal_model.dart';
+import '../models/gamification_model.dart';
+import '../l10n/app_localizations.dart';
 import '../services/sync_service.dart';
 import '../services/ai_service.dart';
 
@@ -13,9 +15,16 @@ part 'app_state_settings.dart';
 part 'app_state_sync.dart';
 part 'app_state_navigation.dart';
 part 'app_state_ai.dart';
+part 'app_state_gamification.dart';
 
 class AppState extends ChangeNotifier
-    with _MealState, _SettingsState, _SyncState, _NavigationState, _AiState {
+    with
+        _MealState,
+        _SettingsState,
+        _SyncState,
+        _NavigationState,
+        _AiState,
+        _GamificationState {
   // SQLite instance
   final DbHelper _dbHelper = DbHelper.instance;
 
@@ -151,6 +160,7 @@ class AppState extends ChangeNotifier
 
     await loadSettings();
     await loadMeals();
+    await loadGamification();
 
     _isLoading = false;
     notifyListeners();
