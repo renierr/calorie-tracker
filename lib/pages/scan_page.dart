@@ -69,8 +69,12 @@ class _ScanPageState extends State<ScanPage> {
   // Clear image helper
   void _clearImage() {
     final appState = Provider.of<AppState>(context, listen: false);
-    appState.clearScanState();
-    _hintController.clear();
+    if (appState.scanShowForm) {
+      appState.clearScanImage();
+    } else {
+      appState.clearScanState();
+      _hintController.clear();
+    }
   }
 
   // Trigger AI scanning

@@ -80,6 +80,7 @@ class AppState extends ChangeNotifier
   bool _scanIsScanning = false;
   AIAnalysisResult? _scanResult;
   bool _scanIsPickedImage = false;
+  bool _scanIsAiFlow = false;
 
   // Scan Verification Form Draft Values
   String _scanFoodName = '';

@@ -142,6 +142,7 @@ mixin _AiState on ChangeNotifier {
       _state._scanFat = result.fat.toString();
       _state._scanNotes = result.notes;
     }
+    _state._scanIsAiFlow = true;
     _state._scanShowForm = true;
     _state._scanIsScanning = false;
     notifyListeners();
@@ -171,6 +172,7 @@ mixin _AiState on ChangeNotifier {
     _state._scanImageBytes = template.imageBytes;
     _state._scanMimeType = 'image/jpeg';
     _state._scanIsPickedImage = false;
+    _state._scanIsAiFlow = false;
     _state._scanResult = AIAnalysisResult(
       foodName: template.foodName,
       calories: template.calories,
@@ -195,6 +197,7 @@ mixin _AiState on ChangeNotifier {
 
   void openManualFormWithPhoto() {
     _state._scanShowForm = true;
+    _state._scanIsAiFlow = false;
     _state._scanResult = null;
     _state._scanFoodName = 'New Meal';
     _state._scanCalories = '0';
@@ -211,6 +214,7 @@ mixin _AiState on ChangeNotifier {
     _state._scanShowForm = true;
     _state._scanImageBytes = null;
     _state._scanIsPickedImage = false;
+    _state._scanIsAiFlow = false;
     _state._scanResult = null;
     _state._scanFoodName = 'New Meal';
     _state._scanCalories = '0';
@@ -225,10 +229,16 @@ mixin _AiState on ChangeNotifier {
 
   void discardForm() {
     _state._scanShowForm = false;
-    _state._scanResult = null;
-    if (!_state._scanIsPickedImage) {
+    if (_state._scanIsAiFlow) {
+      if (!_state._scanIsPickedImage) {
+        _state._scanImageBytes = null;
+      }
+    } else {
       _state._scanImageBytes = null;
+      _state._scanIsPickedImage = false;
     }
+    _state._scanResult = null;
+    _state._scanIsAiFlow = false;
     _state._scanFoodName = '';
     _state._scanCalories = '';
     _state._scanProtein = '';
@@ -240,6 +250,12 @@ mixin _AiState on ChangeNotifier {
     notifyListeners();
   }
 
+  void clearScanImage() {
+    _state._scanImageBytes = null;
+    _state._scanIsPickedImage = false;
+    notifyListeners();
+  }
+
   void clearScanState() {
     _state._scanImageBytes = null;
     _state._scanMimeType = 'image/jpeg';
@@ -247,6 +263,7 @@ mixin _AiState on ChangeNotifier {
     _state._scanShowForm = false;
     _state._scanIsScanning = false;
     _state._scanIsPickedImage = false;
+    _state._scanIsAiFlow = false;
     _state._scanResult = null;
     _state._scanFoodName = '';
     _state._scanCalories = '';
