@@ -47,9 +47,6 @@ android {
                 storeFile = signingConfigs.getByName("debug").storeFile
                 storePassword = signingConfigs.getByName("debug").storePassword
             }
-            isV1SigningEnabled = true
-            isV2SigningEnabled = true
-            isV3SigningEnabled = true
         }
     }
 
@@ -62,21 +59,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-        }
-    }
-
-    applicationVariants.all {
-        val variant = this
-        outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }.forEach { output ->
-            val abiName = output.filters.find { it.filterType == "ABI" }?.identifier
-            val buildType = variant.buildType.name
-            val baseName = "NutriScan-Calorie-Tracker"
-
-            if (abiName != null) {
-                output.outputFileName = "$baseName-$abiName-$buildType.apk"
-            } else {
-                output.outputFileName = "$baseName-$buildType.apk"
-            }
         }
     }
 }
