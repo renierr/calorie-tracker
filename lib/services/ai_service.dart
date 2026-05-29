@@ -20,7 +20,7 @@ class AIServiceConfig {
     ],
     'openai': ['gpt-4o-mini', 'gpt-4o'],
     'anthropic': ['claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest'],
-    'grok': ['grok-2-vision-1212', 'grok-vision-beta', 'grok-beta'],
+    'grok': ['grok-4.3','grok-2-vision'],
   };
 
   static const String defaultProvider = 'gemini';
