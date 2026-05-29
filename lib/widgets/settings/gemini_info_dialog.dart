@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
+import 'gemini_step_item.dart';
 
 class GeminiInfoDialog extends StatelessWidget {
   const GeminiInfoDialog({super.key});
 
   static const String _geminiUrl = 'https://aistudio.google.com/api-keys';
-
-  void _copyToClipboard(BuildContext context) {
-    Clipboard.setData(const ClipboardData(text: _geminiUrl));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)!.linkCopied),
-        backgroundColor: AppTheme.accentEmerald,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,29 +83,29 @@ class GeminiInfoDialog extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     // Steps List
-                    _buildStepItem(
-                      context,
-                      localizations.geminiStep1,
+                    GeminiStepItem(
+                      text: localizations.geminiStep1,
                       showCopy: true,
                       colors: colors,
+                      geminiUrl: _geminiUrl,
                     ),
                     const SizedBox(height: 12),
-                    _buildStepItem(
-                      context,
-                      localizations.geminiStep2,
+                    GeminiStepItem(
+                      text: localizations.geminiStep2,
                       colors: colors,
+                      geminiUrl: _geminiUrl,
                     ),
                     const SizedBox(height: 12),
-                    _buildStepItem(
-                      context,
-                      localizations.geminiStep3,
+                    GeminiStepItem(
+                      text: localizations.geminiStep3,
                       colors: colors,
+                      geminiUrl: _geminiUrl,
                     ),
                     const SizedBox(height: 12),
-                    _buildStepItem(
-                      context,
-                      localizations.geminiStep4,
+                    GeminiStepItem(
+                      text: localizations.geminiStep4,
                       colors: colors,
+                      geminiUrl: _geminiUrl,
                     ),
 
                     const SizedBox(height: 24),
@@ -143,91 +133,6 @@ class GeminiInfoDialog extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildStepItem(
-    BuildContext context,
-    String text, {
-    bool showCopy = false,
-    required AppThemeColors colors,
-  }) {
-    // If it's the step with the URL, let's render the URL nicely and have a copy button
-    if (showCopy) {
-      final parts = text.split(' at: ');
-      final title = parts.isNotEmpty ? parts[0] : text;
-
-      return Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: colors.surfaceLight.withValues(alpha: 0.4),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: colors.surfaceLight, width: 1),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '$title:',
-              style: TextStyle(
-                color: colors.textPrimary,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: colors.surface,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      _geminiUrl,
-                      style: const TextStyle(
-                        color: AppTheme.accentBlue,
-                        fontSize: 12,
-                        decoration: TextDecoration.underline,
-                        fontFamily: 'monospace',
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(
-                    Icons.copy,
-                    size: 18,
-                    color: AppTheme.accentEmerald,
-                  ),
-                  tooltip: AppLocalizations.of(context)!.copyLink,
-                  onPressed: () => _copyToClipboard(context),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 13,
-              height: 1.4,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

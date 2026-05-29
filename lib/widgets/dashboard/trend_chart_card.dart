@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
+import 'trend_chart_legend_item.dart';
 
 class TrendChartCard extends StatelessWidget {
   final AppState appState;
@@ -99,14 +100,14 @@ class TrendChartCard extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildLegendItem(
+                      TrendChartLegendItem(
                         color: AppTheme.accentEmerald,
                         label: AppLocalizations.of(context)!.caloriesKcal,
                         textColor: colors.textSecondary,
                       ),
                       if (hasWeights) ...[
                         const SizedBox(width: 12),
-                        _buildLegendItem(
+                        TrendChartLegendItem(
                           color: AppTheme.accentPurple,
                           label: AppLocalizations.of(context)!.bodyWeightTrend,
                           textColor: colors.textSecondary,
@@ -177,32 +178,6 @@ class TrendChartCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildLegendItem({
-    required Color color,
-    required String label,
-    required Color textColor,
-  }) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-        ),
-        const SizedBox(width: 5),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            color: textColor,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }

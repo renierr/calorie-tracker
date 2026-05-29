@@ -6,6 +6,7 @@ import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import 'meal_detail_dialog.dart';
 import 'mini_macro_chip.dart';
+import 'history_selection_indicator.dart';
 
 class MealHistoryCard extends StatelessWidget {
   final Meal meal;
@@ -72,7 +73,7 @@ class MealHistoryCard extends StatelessWidget {
             if (isSelectionMode)
               Padding(
                 padding: const EdgeInsets.only(top: 2, right: 12),
-                child: _buildSelectionIndicator(context, isSelected),
+                child: HistorySelectionIndicator(isSelected: isSelected),
               ),
             Expanded(
               child: Column(
@@ -237,29 +238,6 @@ class MealHistoryCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSelectionIndicator(BuildContext context, bool isSelected) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 150),
-      width: 24,
-      height: 24,
-      decoration: BoxDecoration(
-        color: isSelected ? AppTheme.accentEmerald : Colors.transparent,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: isSelected
-              ? AppTheme.accentEmerald
-              : (Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white30
-                    : Colors.black26),
-          width: 2,
-        ),
-      ),
-      child: isSelected
-          ? const Icon(Icons.check, size: 14, color: Colors.white)
-          : null,
     );
   }
 
