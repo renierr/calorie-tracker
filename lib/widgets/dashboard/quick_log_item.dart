@@ -80,38 +80,45 @@ class QuickLogItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 4,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      MiniMacroChip(
-                        label: pLabel,
-                        value: '${meal.protein}g',
-                        color: AppTheme.accentBlue,
+                      Flexible(
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 4,
+                          children: [
+                            MiniMacroChip(
+                              label: pLabel,
+                              value: '${meal.protein}g',
+                              color: AppTheme.accentBlue,
+                            ),
+                            MiniMacroChip(
+                              label: cLabel,
+                              value: '${meal.carbs}g',
+                              color: AppTheme.accentAmber,
+                            ),
+                            MiniMacroChip(
+                              label: fLabel,
+                              value: '${meal.fat}g',
+                              color: AppTheme.accentRed,
+                            ),
+                          ],
+                        ),
                       ),
-                      MiniMacroChip(
-                        label: cLabel,
-                        value: '${meal.carbs}g',
-                        color: AppTheme.accentAmber,
-                      ),
-                      MiniMacroChip(
-                        label: fLabel,
-                        value: '${meal.fat}g',
-                        color: AppTheme.accentRed,
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.kcalLabel(meal.calories),
+                        style: const TextStyle(
+                          color: AppTheme.accentEmerald,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
                 ],
-              ),
-            ),
-
-            // Calorie Count Indicator
-            Text(
-              AppLocalizations.of(context)!.kcalLabel(meal.calories),
-              style: const TextStyle(
-                color: AppTheme.accentEmerald,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ],
