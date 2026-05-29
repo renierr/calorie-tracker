@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
@@ -85,6 +86,10 @@ class _ScanPageState extends State<ScanPage> {
     appState.setScanIsScanning(true);
 
     try {
+      await WakelockPlus.enable();
+    } catch (_) {}
+
+    try {
       final result = await appState.performAIAnalysis(
         imageBytes: appState.scanImageBytes!,
         mimeType: appState.scanMimeType,
@@ -118,6 +123,10 @@ class _ScanPageState extends State<ScanPage> {
           ],
         ),
       );
+    } finally {
+      try {
+        await WakelockPlus.disable();
+      } catch (_) {}
     }
   }
 
