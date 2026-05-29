@@ -5,8 +5,7 @@ import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/settings/target_goals_card.dart';
 import '../widgets/settings/maintenance_card.dart';
-import '../widgets/settings/language_card.dart';
-import '../widgets/settings/theme_card.dart';
+import '../widgets/settings/language_theme_card.dart';
 import '../widgets/settings/notifications_card.dart';
 import '../widgets/settings/export_card.dart';
 import '../widgets/settings/sync_config_card.dart';
@@ -111,23 +110,23 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Panel 1: AI Provider Configuration navigation tile
-              AiProviderConfigTile(appState: appState),
+              // Panel 1: Language & Theme Selection (Combined)
+              LanguageThemeCard(appState: appState),
               const SizedBox(height: 20),
 
-              // Panel 2: Language Selection
-              LanguageCard(appState: appState),
-              const SizedBox(height: 20),
-              ThemeCard(appState: appState),
-              const SizedBox(height: 20),
+              // Panel 2: System Notifications
               NotificationsCard(appState: appState),
               const SizedBox(height: 20),
 
-              // Panel 2.2: Gamification Configuration
+              // Panel 3: AI Provider Configuration navigation tile
+              AiProviderConfigTile(appState: appState),
+              const SizedBox(height: 20),
+
+              // Panel 4: Gamification Configuration
               GamificationConfigTile(appState: appState),
               const SizedBox(height: 20),
 
-              // Panel 2.5: Cloud Sync Configuration
+              // Panel 5: Cloud Sync Configuration
               SyncConfigCard(appState: appState),
               const SizedBox(height: 20),
 
