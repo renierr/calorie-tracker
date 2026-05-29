@@ -517,6 +517,20 @@
     }
   },
   "enabledLabel": "Enabled",
-  "disabledLabel": "Disabled"
+  "disabledLabel": "Disabled",
+  "aboutTitle": "About NutriScan",
+  "aboutSubtitle": "Your AI-Powered Nutrition Partner",
+  "aboutDescription": "NutriScan is a modern, privacy-first calorie and macronutrient tracker designed to help you reach your goals with minimal friction. Using advanced AI model integrations, it makes food logging as simple as taking a photo.",
+  "aboutFeatureAiTitle": "AI Meal Scanner",
+  "aboutFeatureAiDesc": "Take photos of your food to instantly analyze calories and macronutrients.",
+  "aboutFeatureMultiAiTitle": "Multi-Provider AI",
+  "aboutFeatureMultiAiDesc": "Integrate with Gemini, OpenAI, Anthropic, or Grok.",
+  "aboutFeatureGamificationTitle": "Interactive Streaks",
+  "aboutFeatureGamificationDesc": "Build habits, unlock levels, and protect your streaks with shields.",
+  "aboutFeatureOfflineTitle": "Local & Offline-First",
+  "aboutFeatureOfflineDesc": "Your data is stored securely in an offline SQLite database on your device.",
+  "aboutFeaturePdfTitle": "PDF Summary Reports",
+  "aboutFeaturePdfDesc": "Compile your nutritional history into beautiful, printable PDF summaries.",
+  "aboutOpenSource": "Dedicated to healthy living, privacy, and active developer ownership."
 }
 

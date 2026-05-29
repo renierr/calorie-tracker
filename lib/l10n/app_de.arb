@@ -2,7 +2,7 @@
   "@@locale": "de",
   "@@last_modified": "2026-05-24",
 
-  "appTitle": "NutriScan KalorienTracker",
+  "appTitle": "NutriScan Kalorien Tracker",
 
   "dashboardTitle": "NutriScan Dashboard",
   "reloadDatabase": "Datenbank neu laden",
@@ -517,6 +517,20 @@
     }
   },
   "enabledLabel": "Aktiviert",
-  "disabledLabel": "Deaktiviert"
+  "disabledLabel": "Deaktiviert",
+  "aboutTitle": "Über NutriScan",
+  "aboutSubtitle": "Dein KI-gestützter Ernährungs-Partner",
+  "aboutDescription": "NutriScan ist ein moderner, datenschutzfreundlicher Kalorien- und Makronährstoff-Tracker, der entwickelt wurde, um dir mit minimalem Aufwand beim Erreichen deiner Ziele zu helfen. Durch fortschrittliche KI-Modellintegrationen wird das Eintragen von Mahlzeiten so einfach wie das Aufnehmen eines Fotos.",
+  "aboutFeatureAiTitle": "KI-Mahlzeiten-Scanner",
+  "aboutFeatureAiDesc": "Fotografiere deine Mahlzeiten für eine sekundenschnelle Analyse von Kalorien und Makronährstoffen.",
+  "aboutFeatureMultiAiTitle": "Multi-Anbieter-KI",
+  "aboutFeatureMultiAiDesc": "Integration mit Gemini, OpenAI, Anthropic oder Grok.",
+  "aboutFeatureGamificationTitle": "Interaktive Serien",
+  "aboutFeatureGamificationDesc": "Baue Gewohnheiten auf, schalte Level frei und schütze deine Serie mit Schutzschilden.",
+  "aboutFeatureOfflineTitle": "Lokal & Offline-First",
+  "aboutFeatureOfflineDesc": "Deine Daten werden sicher offline in einer SQLite-Datenbank auf deinem Gerät gespeichert.",
+  "aboutFeaturePdfTitle": "PDF-Berichte",
+  "aboutFeaturePdfDesc": "Fasse deinen Ernährungsverlauf in druckfertigen PDF-Berichten zusammen.",
+  "aboutOpenSource": "Gewidmet einem gesunden Lebensstil, Privatsphäre und aktiver Entwicklerverantwortung."
 }
 

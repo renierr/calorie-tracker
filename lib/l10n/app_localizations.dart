@@ -1813,6 +1813,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disabled'**
   String get disabledLabel;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About NutriScan'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI-Powered Nutrition Partner'**
+  String get aboutSubtitle;
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'NutriScan is a modern, privacy-first calorie and macronutrient tracker designed to help you reach your goals with minimal friction. Using advanced AI model integrations, it makes food logging as simple as taking a photo.'**
+  String get aboutDescription;
+
+  /// No description provided for @aboutFeatureAiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Meal Scanner'**
+  String get aboutFeatureAiTitle;
+
+  /// No description provided for @aboutFeatureAiDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photos of your food to instantly analyze calories and macronutrients.'**
+  String get aboutFeatureAiDesc;
+
+  /// No description provided for @aboutFeatureMultiAiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-Provider AI'**
+  String get aboutFeatureMultiAiTitle;
+
+  /// No description provided for @aboutFeatureMultiAiDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Integrate with Gemini, OpenAI, Anthropic, or Grok.'**
+  String get aboutFeatureMultiAiDesc;
+
+  /// No description provided for @aboutFeatureGamificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive Streaks'**
+  String get aboutFeatureGamificationTitle;
+
+  /// No description provided for @aboutFeatureGamificationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Build habits, unlock levels, and protect your streaks with shields.'**
+  String get aboutFeatureGamificationDesc;
+
+  /// No description provided for @aboutFeatureOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Local & Offline-First'**
+  String get aboutFeatureOfflineTitle;
+
+  /// No description provided for @aboutFeatureOfflineDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is stored securely in an offline SQLite database on your device.'**
+  String get aboutFeatureOfflineDesc;
+
+  /// No description provided for @aboutFeaturePdfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Summary Reports'**
+  String get aboutFeaturePdfTitle;
+
+  /// No description provided for @aboutFeaturePdfDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Compile your nutritional history into beautiful, printable PDF summaries.'**
+  String get aboutFeaturePdfDesc;
+
+  /// No description provided for @aboutOpenSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Dedicated to healthy living, privacy, and active developer ownership.'**
+  String get aboutOpenSource;
 }
 
 class _AppLocalizationsDelegate

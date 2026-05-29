@@ -983,4 +983,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disabledLabel => 'Disabled';
+
+  @override
+  String get aboutTitle => 'About NutriScan';
+
+  @override
+  String get aboutSubtitle => 'Your AI-Powered Nutrition Partner';
+
+  @override
+  String get aboutDescription =>
+      'NutriScan is a modern, privacy-first calorie and macronutrient tracker designed to help you reach your goals with minimal friction. Using advanced AI model integrations, it makes food logging as simple as taking a photo.';
+
+  @override
+  String get aboutFeatureAiTitle => 'AI Meal Scanner';
+
+  @override
+  String get aboutFeatureAiDesc =>
+      'Take photos of your food to instantly analyze calories and macronutrients.';
+
+  @override
+  String get aboutFeatureMultiAiTitle => 'Multi-Provider AI';
+
+  @override
+  String get aboutFeatureMultiAiDesc =>
+      'Integrate with Gemini, OpenAI, Anthropic, or Grok.';
+
+  @override
+  String get aboutFeatureGamificationTitle => 'Interactive Streaks';
+
+  @override
+  String get aboutFeatureGamificationDesc =>
+      'Build habits, unlock levels, and protect your streaks with shields.';
+
+  @override
+  String get aboutFeatureOfflineTitle => 'Local & Offline-First';
+
+  @override
+  String get aboutFeatureOfflineDesc =>
+      'Your data is stored securely in an offline SQLite database on your device.';
+
+  @override
+  String get aboutFeaturePdfTitle => 'PDF Summary Reports';
+
+  @override
+  String get aboutFeaturePdfDesc =>
+      'Compile your nutritional history into beautiful, printable PDF summaries.';
+
+  @override
+  String get aboutOpenSource =>
+      'Dedicated to healthy living, privacy, and active developer ownership.';
 }

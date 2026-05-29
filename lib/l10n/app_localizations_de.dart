@@ -9,7 +9,7 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
-  String get appTitle => 'NutriScan KalorienTracker';
+  String get appTitle => 'NutriScan Kalorien Tracker';
 
   @override
   String get dashboardTitle => 'NutriScan Dashboard';
@@ -990,4 +990,53 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get disabledLabel => 'Deaktiviert';
+
+  @override
+  String get aboutTitle => 'Über NutriScan';
+
+  @override
+  String get aboutSubtitle => 'Dein KI-gestützter Ernährungs-Partner';
+
+  @override
+  String get aboutDescription =>
+      'NutriScan ist ein moderner, datenschutzfreundlicher Kalorien- und Makronährstoff-Tracker, der entwickelt wurde, um dir mit minimalem Aufwand beim Erreichen deiner Ziele zu helfen. Durch fortschrittliche KI-Modellintegrationen wird das Eintragen von Mahlzeiten so einfach wie das Aufnehmen eines Fotos.';
+
+  @override
+  String get aboutFeatureAiTitle => 'KI-Mahlzeiten-Scanner';
+
+  @override
+  String get aboutFeatureAiDesc =>
+      'Fotografiere deine Mahlzeiten für eine sekundenschnelle Analyse von Kalorien und Makronährstoffen.';
+
+  @override
+  String get aboutFeatureMultiAiTitle => 'Multi-Anbieter-KI';
+
+  @override
+  String get aboutFeatureMultiAiDesc =>
+      'Integration mit Gemini, OpenAI, Anthropic oder Grok.';
+
+  @override
+  String get aboutFeatureGamificationTitle => 'Interaktive Serien';
+
+  @override
+  String get aboutFeatureGamificationDesc =>
+      'Baue Gewohnheiten auf, schalte Level frei und schütze deine Serie mit Schutzschilden.';
+
+  @override
+  String get aboutFeatureOfflineTitle => 'Lokal & Offline-First';
+
+  @override
+  String get aboutFeatureOfflineDesc =>
+      'Deine Daten werden sicher offline in einer SQLite-Datenbank auf deinem Gerät gespeichert.';
+
+  @override
+  String get aboutFeaturePdfTitle => 'PDF-Berichte';
+
+  @override
+  String get aboutFeaturePdfDesc =>
+      'Fasse deinen Ernährungsverlauf in druckfertigen PDF-Berichten zusammen.';
+
+  @override
+  String get aboutOpenSource =>
+      'Gewidmet einem gesunden Lebensstil, Privatsphäre und aktiver Entwicklerverantwortung.';
 }
