@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:path_provider/path_provider.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
@@ -35,6 +37,8 @@ class MealDetailDialog extends StatefulWidget {
 class _MealDetailDialogState extends State<MealDetailDialog> {
   final GlobalKey _boundaryKey = GlobalKey();
   bool _isExporting = false;
+  bool _isSharing = false;
+  final List<File> _tempFilesToDelete = [];
 
   @override
   Widget build(BuildContext context) {
@@ -110,15 +114,17 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                         ),
                       ),
 
-                      // Overlay Floating Action Buttons (Close, Favorite, Download)
+                      // Overlay Floating Action Buttons (Close, Favorite, Download, Share)
                       MealDetailFloatingButtons(
                         currentMeal: currentMeal,
                         isFavorite: currentMeal.isFavorite == 1,
                         isExporting: _isExporting,
+                        isSharing: _isSharing,
                         onClose: () => Navigator.pop(context),
                         onFavorite: () =>
                             currentAppState.toggleFavoriteMeal(currentMeal),
                         onDownload: () => _downloadMealCardImage(currentMeal),
+                        onShare: () => _shareMealCardImage(currentMeal),
                       ),
                     ],
                   ),
@@ -241,6 +247,30 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
     );
   }
 
+  Future<Uint8List> _captureCardBytes() async {
+    // Small delay to make sure indicator rebuild is rendered
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    final RenderRepaintBoundary? boundary =
+        _boundaryKey.currentContext?.findRenderObject()
+            as RenderRepaintBoundary?;
+
+    if (boundary == null) {
+      throw Exception("Could not find RepaintBoundary");
+    }
+
+    final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    final ByteData? byteData = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+
+    if (byteData == null) {
+      throw Exception("Failed to convert image to bytes");
+    }
+
+    return byteData.buffer.asUint8List();
+  }
+
   Future<void> _downloadMealCardImage(Meal currentMeal) async {
     if (_isExporting) return;
 
@@ -249,27 +279,7 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
     });
 
     try {
-      // Small delay to make sure indicator rebuild is rendered
-      await Future.delayed(const Duration(milliseconds: 100));
-
-      final RenderRepaintBoundary? boundary =
-          _boundaryKey.currentContext?.findRenderObject()
-              as RenderRepaintBoundary?;
-
-      if (boundary == null) {
-        throw Exception("Could not find RepaintBoundary");
-      }
-
-      final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      final ByteData? byteData = await image.toByteData(
-        format: ui.ImageByteFormat.png,
-      );
-
-      if (byteData == null) {
-        throw Exception("Failed to convert image to bytes");
-      }
-
-      final Uint8List pngBytes = byteData.buffer.asUint8List();
+      final Uint8List pngBytes = await _captureCardBytes();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
 
       if (!mounted) return;
@@ -304,5 +314,57 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
         });
       }
     }
+  }
+
+  Future<void> _shareMealCardImage(Meal currentMeal) async {
+    if (_isSharing || _isExporting) return;
+
+    setState(() {
+      _isSharing = true;
+    });
+
+    try {
+      final Uint8List pngBytes = await _captureCardBytes();
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      final Directory tempDir = await getTemporaryDirectory();
+      final String tempPath =
+          '${tempDir.path}/meal_card_${currentMeal.shortId}_$timestamp.png';
+      final File tempFile = File(tempPath);
+      await tempFile.writeAsBytes(pngBytes);
+      _tempFilesToDelete.add(tempFile);
+
+      await FileSaveHelper.shareFile(tempPath, 'image/png');
+    } catch (e) {
+      debugPrint("Error sharing meal card image: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error: $e"),
+            backgroundColor: AppTheme.accentRed,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSharing = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final file in _tempFilesToDelete) {
+      try {
+        if (file.existsSync()) {
+          file.deleteSync();
+        }
+      } catch (e) {
+        debugPrint("Error deleting temp file: $e");
+      }
+    }
+    super.dispose();
   }
 }
