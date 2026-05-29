@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
-import 'ai_settings_page.dart';
-import 'gamification_settings_page.dart';
 import '../widgets/settings/target_goals_card.dart';
 import '../widgets/settings/maintenance_card.dart';
 import '../widgets/settings/language_card.dart';
@@ -12,9 +10,9 @@ import '../widgets/settings/theme_card.dart';
 import '../widgets/settings/notifications_card.dart';
 import '../widgets/settings/export_card.dart';
 import '../widgets/settings/sync_config_card.dart';
-import '../widgets/adaptive/adaptive_card_header.dart';
-import '../widgets/adaptive/responsive_icon_button.dart';
-import '../version.dart';
+import '../widgets/settings/version_card.dart';
+import '../widgets/settings/ai_provider_config_tile.dart';
+import '../widgets/settings/gamification_config_tile.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -114,7 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Panel 1: AI Provider Configuration navigation tile
-              _buildAiProviderConfigTile(context, appState),
+              AiProviderConfigTile(appState: appState),
               const SizedBox(height: 20),
 
               // Panel 2: Language Selection
@@ -126,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 20),
 
               // Panel 2.2: Gamification Configuration
-              _buildGamificationConfigTile(context, appState),
+              GamificationConfigTile(appState: appState),
               const SizedBox(height: 20),
 
               // Panel 2.5: Cloud Sync Configuration
@@ -163,249 +161,11 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 30),
 
               // Panel 6: App Version Info
-              _buildVersionCard(context),
+              const VersionCard(),
               const SizedBox(height: 20),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildVersionCard(BuildContext context) {
-    final colors = AppTheme.of(context);
-    final localizations = AppLocalizations.of(context)!;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-      decoration: AppTheme.premiumCardDecoration(
-        context: context,
-        color: colors.surface,
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.info_outline,
-                color: AppTheme.accentEmerald,
-                size: 16,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                localizations.appTitle,
-                style: TextStyle(
-                  color: colors.textPrimary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.2,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 12,
-            runSpacing: 4,
-            children: [
-              Text(
-                localizations.appVersion(AppVersion.version),
-                style: TextStyle(color: colors.textSecondary, fontSize: 12),
-              ),
-              Text(
-                '•',
-                style: TextStyle(color: colors.textMuted, fontSize: 12),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.commit, color: colors.textMuted, size: 14),
-                  const SizedBox(width: 4),
-                  Text(
-                    localizations.gitHash(AppVersion.commitHash),
-                    style: TextStyle(
-                      color: colors.textSecondary,
-                      fontSize: 12,
-                      fontFamily: 'monospace',
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAiProviderConfigTile(BuildContext context, AppState appState) {
-    final colors = AppTheme.of(context);
-    final localizations = AppLocalizations.of(context)!;
-
-    final providerName = appState.aiProvider.toUpperCase();
-    final modelName = appState.aiModel;
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(
-        context: context,
-        color: colors.surface,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AdaptiveCardHeader(
-            icon: Icons.key,
-            iconColor: AppTheme.accentEmerald,
-            title: localizations.configureAiProvider,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            localizations.configureAiProviderDesc,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 12,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            decoration: BoxDecoration(
-              color: colors.surfaceLight.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.insights,
-                  color: AppTheme.accentEmerald,
-                  size: 16,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    localizations.activeAiConfig(providerName, modelName),
-                    style: TextStyle(
-                      color: colors.textPrimary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 15),
-          SizedBox(
-            width: double.infinity,
-            child: ResponsiveIconButton(
-              icon: const Icon(
-                Icons.tune,
-                color: AppTheme.accentEmerald,
-                size: 18,
-              ),
-              label: localizations.configureAiProvider,
-              color: AppTheme.accentEmerald,
-              isOutlined: true,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AISettingsPage(),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGamificationConfigTile(BuildContext context, AppState appState) {
-    final colors = AppTheme.of(context);
-    final localizations = AppLocalizations.of(context)!;
-    final statusText = appState.gamificationEnabled
-        ? localizations.enabledLabel
-        : localizations.disabledLabel;
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.premiumCardDecoration(
-        context: context,
-        color: colors.surface,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AdaptiveCardHeader(
-            icon: Icons.emoji_events,
-            iconColor: AppTheme.accentAmber,
-            title: localizations.gamificationSettingsTitle,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            localizations.gamificationSettingsDesc,
-            style: TextStyle(
-              color: colors.textSecondary,
-              fontSize: 12,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            decoration: BoxDecoration(
-              color: colors.surfaceLight.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.sports_esports,
-                  color: AppTheme.accentAmber,
-                  size: 16,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    localizations.statusLabel(statusText),
-                    style: TextStyle(
-                      color: colors.textPrimary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 15),
-          SizedBox(
-            width: double.infinity,
-            child: ResponsiveIconButton(
-              icon: const Icon(
-                Icons.settings,
-                color: AppTheme.accentAmber,
-                size: 18,
-              ),
-              label: localizations.gamificationConfigureBtn,
-              color: AppTheme.accentAmber,
-              isOutlined: true,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GamificationSettingsPage(),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

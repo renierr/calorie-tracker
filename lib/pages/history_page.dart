@@ -6,10 +6,12 @@ import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
 import '../l10n/app_localizations.dart';
-import '../widgets/adaptive/adaptive_action_group.dart';
 import '../widgets/report_config_dialog.dart';
 import '../widgets/history_filter_panel.dart';
 import '../widgets/meal_history_card.dart';
+import '../widgets/history/history_data_actions_card.dart';
+import '../widgets/history/history_report_action_card.dart';
+import '../widgets/history/history_empty_state.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -155,7 +157,16 @@ class _HistoryPageState extends State<HistoryPage> {
                 children: [
                   // Import/Export Action Card
                   const SizedBox(height: 10),
-                  _buildDataActionsCard(context, appState, filteredMeals),
+                  HistoryDataActionsCard(
+                    onImportPressed: () => _handleImport(context, appState),
+                    onExportPressed: () =>
+                        _handleExport(context, appState, filteredMeals),
+                    onReportPressed: () => _showReportConfigDialog(
+                      context,
+                      appState,
+                      filteredMeals,
+                    ),
+                  ),
                   const SizedBox(height: 15),
 
                   // Filter Toolbar Box
@@ -183,7 +194,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
                   // Top action button card if meals are loaded
                   if (filteredMeals.isNotEmpty) ...[
-                    _buildReportActionCard(context, appState, filteredMeals),
+                    HistoryReportActionCard(
+                      totalCount: appState.historyTotalCount,
+                    ),
                     const SizedBox(height: 15),
                   ],
                 ],
@@ -194,7 +207,7 @@ class _HistoryPageState extends State<HistoryPage> {
             if (filteredMeals.isEmpty)
               SliverFillRemaining(
                 hasScrollBody: false,
-                child: _buildEmptyState(),
+                child: const HistoryEmptyState(),
               )
             else
               SliverList(
@@ -246,90 +259,6 @@ class _HistoryPageState extends State<HistoryPage> {
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDataActionsCard(
-    BuildContext context,
-    AppState appState,
-    List<Meal> filteredMeals,
-  ) {
-    final colors = AppTheme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: AppTheme.premiumCardDecoration(
-        context: context,
-        color: colors.surface,
-      ),
-      child: AdaptiveActionGroup(
-        spacing: 10,
-        actions: [
-          OutlinedButton.icon(
-            icon: const Icon(
-              Icons.upload,
-              size: 18,
-              color: AppTheme.accentEmerald,
-            ),
-            label: Text(
-              AppLocalizations.of(context)!.importLabel,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppTheme.accentEmerald,
-                fontSize: 13,
-              ),
-            ),
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size.fromHeight(44),
-              side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () => _handleImport(context, appState),
-          ),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.download, size: 18),
-            label: Text(
-              AppLocalizations.of(context)!.exportLabel,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13),
-            ),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(44),
-              backgroundColor: AppTheme.accentEmerald,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () => _handleExport(context, appState, filteredMeals),
-          ),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.summarize, size: 18),
-            label: Text(
-              AppLocalizations.of(context)!.reportPdf,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13),
-            ),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(44),
-              backgroundColor: AppTheme.accentEmerald,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () =>
-                _showReportConfigDialog(context, appState, filteredMeals),
-          ),
-        ],
       ),
     );
   }
@@ -444,66 +373,5 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       );
     }
-  }
-
-  Widget _buildReportActionCard(
-    BuildContext context,
-    AppState appState,
-    List<Meal> filteredMeals,
-  ) {
-    final colors = AppTheme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: AppTheme.premiumCardDecoration(
-        context: context,
-        color: colors.surfaceLight.withValues(alpha: 0.4),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            AppLocalizations.of(
-              context,
-            )!.logsInFilter(appState.historyTotalCount),
-            style: TextStyle(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.bold,
-              fontSize: 13,
-            ),
-          ),
-          Icon(Icons.filter_list, size: 16, color: colors.textSecondary),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    final colors = AppTheme.of(context);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.calendar_today,
-            color: colors.textMuted.withValues(alpha: 0.5),
-            size: 48,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            AppLocalizations.of(context)!.noHistory,
-            style: TextStyle(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            AppLocalizations.of(context)!.noHistoryDesc,
-            style: TextStyle(color: colors.textMuted, fontSize: 13),
-          ),
-        ],
-      ),
-    );
   }
 }

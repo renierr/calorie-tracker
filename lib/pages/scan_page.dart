@@ -8,7 +8,8 @@ import '../providers/app_state.dart';
 import '../widgets/scan/scan_image_selector.dart';
 import '../widgets/scan/scan_verification_form.dart';
 import '../widgets/scan/scan_favorites_list.dart';
-import '../widgets/adaptive/adaptive_card_header.dart';
+import '../widgets/scan/scan_hint_field.dart';
+import '../widgets/scan/scan_trigger_actions.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -180,11 +181,16 @@ class _ScanPageState extends State<ScanPage> {
                       !appState.scanShowForm &&
                       !appState.scanIsScanning) ...[
                     // User context clue input
-                    _buildHintField(),
+                    ScanHintField(hintController: _hintController),
                     const SizedBox(height: 25),
 
                     // AI Trigger Button
-                    _buildTriggerButton(hasApiKey, appState),
+                    ScanTriggerActions(
+                      hasApiKey: hasApiKey,
+                      onScanPressed: () => _scanMeal(appState),
+                      onManualLogPressed: () =>
+                          appState.openManualFormWithPhoto(),
+                    ),
                     const SizedBox(height: 20),
                   ],
 
@@ -252,156 +258,5 @@ class _ScanPageState extends State<ScanPage> {
         ],
       ),
     );
-  }
-
-  // Layout: Optional hint field
-  Widget _buildHintField() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: AppTheme.premiumCardDecoration(context: context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AdaptiveCardHeader(
-            icon: Icons.lightbulb_outline,
-            iconColor: AppTheme.accentEmerald,
-            title: AppLocalizations.of(context)!.contextClue,
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _hintController,
-            maxLines: 2,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.contextHint,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Layout: Scan trigger action
-  Widget _buildTriggerButton(bool hasApiKey, AppState appState) {
-    final colors = AppTheme.of(context);
-    if (!hasApiKey) {
-      return Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: AppTheme.premiumCardDecoration(
-              context: context,
-              glowColor: AppTheme.accentRed,
-            ),
-            child: Column(
-              children: [
-                const Icon(
-                  Icons.warning_amber_rounded,
-                  color: AppTheme.accentRed,
-                  size: 32,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  AppLocalizations.of(context)!.apiKeyMissing,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  AppLocalizations.of(context)!.apiKeyMissingDesc,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: colors.textSecondary, fontSize: 12),
-                ),
-                const SizedBox(height: 12),
-                TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          AppLocalizations.of(context)!.navigateToSettings,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(AppLocalizations.of(context)!.configureApiKey),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
-              label: Text(
-                AppLocalizations.of(context)!.logWithPhoto,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: AppTheme.accentEmerald),
-              ),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 52),
-                side: const BorderSide(
-                  color: AppTheme.accentEmerald,
-                  width: 1.2,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: () => _openManualFormWithPhoto(appState),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.auto_awesome),
-            label: Text(
-              AppLocalizations.of(context)!.scanAndEstimate,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-            ),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 52),
-            ),
-            onPressed: () => _scanMeal(appState),
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton.icon(
-            icon: const Icon(Icons.edit_note, color: AppTheme.accentEmerald),
-            label: Text(
-              AppLocalizations.of(context)!.logWithPhoto,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AppTheme.accentEmerald),
-            ),
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 52),
-              side: const BorderSide(color: AppTheme.accentEmerald, width: 1.2),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            onPressed: () => _openManualFormWithPhoto(appState),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _openManualFormWithPhoto(AppState appState) {
-    appState.openManualFormWithPhoto();
   }
 }
