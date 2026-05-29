@@ -1,6 +1,10 @@
 part of 'ai_service.dart';
 
-class GeminiService implements AIService {
+class GeminiService extends BaseAIService {
+  @override
+  String get defaultModel =>
+      AIServiceConfig.getDefaultModelForProvider('gemini');
+
   @override
   Future<AIAnalysisResult> performAIAnalysis({
     required String apiKey,
@@ -11,17 +15,15 @@ class GeminiService implements AIService {
     required String model,
     String? customUrl,
   }) async {
-    final String targetLanguage = languageCode == 'de' ? 'German' : 'English';
+    final String targetLanguage = getTargetLanguage(languageCode);
 
-    final systemInstruction =
-        'You are an advanced clinical nutritionist AI. You specialize in visually scanning dishes, estimating portion weights, and breaking down total nutritional content into precise calorie and macronutrient (protein, carbohydrates, lipid fat) totals. '
-        'You MUST write all food description names and explanation notes in $targetLanguage.';
+    final systemInstruction = getSystemPrompt(targetLanguage: targetLanguage);
 
-    final prompt =
-        'Analyze this food meal photo and estimate its total nutritional content. '
-        '${userHint.trim().isNotEmpty ? 'Context clue provided by user: "$userHint". ' : ''}'
-        'Provide logical, accurate calories, protein, carbs, and fat estimations. '
-        'You MUST provide the response text fields (foodName and notes) in $targetLanguage.';
+    final prompt = getUserPrompt(
+      targetLanguage: targetLanguage,
+      userHint: userHint,
+      includeGeminiLanguageFieldsInstruction: true,
+    );
 
     final responseSchema = Schema.object(
       properties: {
@@ -56,7 +58,7 @@ class GeminiService implements AIService {
     );
 
     final generativeModel = GenerativeModel(
-      model: model.isNotEmpty ? model : AIServiceConfig.defaultModel,
+      model: getActiveModel(model),
       apiKey: apiKey,
       systemInstruction: Content.system(systemInstruction),
       generationConfig: GenerationConfig(
@@ -88,7 +90,7 @@ class GeminiService implements AIService {
       throw Exception('API Key is empty.');
     }
     final generativeModel = GenerativeModel(
-      model: model.isNotEmpty ? model : AIServiceConfig.defaultModel,
+      model: getActiveModel(model),
       apiKey: apiKey,
     );
     // Execute a cheap operation like counting tokens to verify key

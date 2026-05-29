@@ -7,6 +7,7 @@ part 'gemini_service.dart';
 part 'openai_service.dart';
 part 'anthropic_service.dart';
 part 'custom_ai_service.dart';
+part 'grok_service.dart';
 
 class AIServiceConfig {
   static const Map<String, List<String>> providerModels = {
@@ -19,6 +20,7 @@ class AIServiceConfig {
     ],
     'openai': ['gpt-4o-mini', 'gpt-4o'],
     'anthropic': ['claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest'],
+    'grok': ['grok-2-vision-1212', 'grok-vision-beta', 'grok-beta'],
   };
 
   static const String defaultProvider = 'gemini';
@@ -83,6 +85,64 @@ abstract class AIService {
   });
 }
 
+abstract class BaseAIService implements AIService {
+  String get defaultModel;
+
+  String getActiveModel(String model) =>
+      model.trim().isNotEmpty ? model.trim() : defaultModel;
+
+  String getTargetLanguage(String languageCode) =>
+      languageCode == 'de' ? 'German' : 'English';
+
+  String getSystemPrompt({
+    required String targetLanguage,
+    bool includeJsonFormatInstruction = false,
+    bool includeAnthropicRawBlockInstruction = false,
+  }) {
+    final base =
+        'You are an advanced clinical nutritionist AI. You specialize in visually scanning dishes, estimating portion weights, and breaking down total nutritional content into precise calorie and macronutrient (protein, carbohydrates, lipid fat) totals. '
+        'You MUST write all food description names and explanation notes in $targetLanguage.';
+    if (!includeJsonFormatInstruction) {
+      return base;
+    }
+
+    var instruction =
+        "$base You MUST return a JSON object with the exact keys: "
+        "'foodName' (string, brief description in $targetLanguage), "
+        "'calories' (integer, estimated kcal), "
+        "'protein' (integer, grams), "
+        "'carbs' (integer, grams), "
+        "'fat' (integer, grams), "
+        "'confidence' (integer, 1-100), and "
+        "'notes' (string, breakdown explanation in $targetLanguage).";
+    if (includeAnthropicRawBlockInstruction) {
+      instruction +=
+          ' Respond ONLY with valid JSON inside a raw JSON block, do not include any other markdown formatting outside the JSON object.';
+    }
+    return instruction;
+  }
+
+  String getUserPrompt({
+    required String targetLanguage,
+    required String userHint,
+    bool includeOnlyJsonInstruction = false,
+    bool includeGeminiLanguageFieldsInstruction = false,
+  }) {
+    var prompt =
+        'Analyze this food meal photo and estimate its total nutritional content. '
+        '${userHint.trim().isNotEmpty ? 'Context clue provided by user: "$userHint". ' : ''}'
+        'Provide logical, accurate calories, protein, carbs, and fat estimations.';
+    if (includeOnlyJsonInstruction) {
+      prompt += ' Respond with ONLY the requested JSON object.';
+    }
+    if (includeGeminiLanguageFieldsInstruction) {
+      prompt +=
+          ' You MUST provide the response text fields (foodName and notes) in $targetLanguage.';
+    }
+    return prompt;
+  }
+}
+
 class AIServiceFactory {
   static AIService getService(String provider) {
     switch (provider.toLowerCase()) {
@@ -90,6 +150,8 @@ class AIServiceFactory {
         return OpenAIService();
       case 'anthropic':
         return AnthropicService();
+      case 'grok':
+        return GrokService();
       case 'custom':
         return CustomAIService();
       case 'gemini':

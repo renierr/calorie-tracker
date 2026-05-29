@@ -1,9 +1,8 @@
 part of 'ai_service.dart';
 
-class AnthropicService extends BaseAIService {
+class GrokService extends BaseAIService {
   @override
-  String get defaultModel =>
-      AIServiceConfig.getDefaultModelForProvider('anthropic');
+  String get defaultModel => AIServiceConfig.getDefaultModelForProvider('grok');
 
   @override
   Future<AIAnalysisResult> performAIAnalysis({
@@ -23,7 +22,6 @@ class AnthropicService extends BaseAIService {
     final systemPrompt = getSystemPrompt(
       targetLanguage: targetLanguage,
       includeJsonFormatInstruction: true,
-      includeAnthropicRawBlockInstruction: true,
     );
 
     final userPrompt = getUserPrompt(
@@ -33,29 +31,24 @@ class AnthropicService extends BaseAIService {
     );
 
     final response = await http.post(
-      Uri.parse('https://api.anthropic.com/v1/messages'),
+      Uri.parse('https://api.x.ai/v1/chat/completions'),
       headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode({
         'model': activeModel,
-        'max_tokens': 1500,
-        'system': systemPrompt,
+        'response_format': {'type': 'json_object'},
         'messages': [
+          {'role': 'system', 'content': systemPrompt},
           {
             'role': 'user',
             'content': [
-              {
-                'type': 'image',
-                'source': {
-                  'type': 'base64',
-                  'media_type': mimeType,
-                  'data': base64Image,
-                },
-              },
               {'type': 'text', 'text': userPrompt},
+              {
+                'type': 'image_url',
+                'image_url': {'url': 'data:$mimeType;base64,$base64Image'},
+              },
             ],
           },
         ],
@@ -64,32 +57,22 @@ class AnthropicService extends BaseAIService {
 
     if (response.statusCode != 200) {
       throw Exception(
-        'Anthropic API Error: status code ${response.statusCode}, body: ${response.body}',
+        'Grok API Error: status code ${response.statusCode}, body: ${response.body}',
       );
     }
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
-    final content = data['content'] as List<dynamic>;
-    if (content.isEmpty) {
-      throw Exception('Empty content returned from Anthropic API.');
+    final choices = data['choices'] as List<dynamic>;
+    if (choices.isEmpty) {
+      throw Exception('Empty choices returned from Grok API.');
     }
 
-    final messageText = content[0]['text'] as String?;
-    if (messageText == null || messageText.trim().isEmpty) {
-      throw Exception('Received empty text content from Anthropic.');
+    final messageContent = choices[0]['message']['content'] as String?;
+    if (messageContent == null || messageContent.trim().isEmpty) {
+      throw Exception('Received empty message content from Grok.');
     }
 
-    // Attempt to extract JSON if Claude wraps it in backticks
-    String jsonString = messageText.trim();
-    if (jsonString.startsWith('```json')) {
-      jsonString = jsonString.substring(7);
-    }
-    if (jsonString.endsWith('```')) {
-      jsonString = jsonString.substring(0, jsonString.length - 3);
-    }
-    jsonString = jsonString.trim();
-
-    final decoded = jsonDecode(jsonString) as Map<String, dynamic>;
+    final decoded = jsonDecode(messageContent) as Map<String, dynamic>;
     return AIAnalysisResult.fromJson(decoded);
   }
 
@@ -104,23 +87,22 @@ class AnthropicService extends BaseAIService {
     }
     final activeModel = getActiveModel(model);
     final response = await http.post(
-      Uri.parse('https://api.anthropic.com/v1/messages'),
+      Uri.parse('https://api.x.ai/v1/chat/completions'),
       headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode({
         'model': activeModel,
-        'max_tokens': 1,
         'messages': [
           {'role': 'user', 'content': 'Ping'},
         ],
+        'max_tokens': 1,
       }),
     );
     if (response.statusCode != 200) {
       throw Exception(
-        'Anthropic API Validation Failed: status code ${response.statusCode}, body: ${response.body}',
+        'Grok API Validation Failed: status code ${response.statusCode}, body: ${response.body}',
       );
     }
   }

@@ -1,6 +1,10 @@
 part of 'ai_service.dart';
 
-class OpenAIService implements AIService {
+class OpenAIService extends BaseAIService {
+  @override
+  String get defaultModel =>
+      AIServiceConfig.getDefaultModelForProvider('openai');
+
   @override
   Future<AIAnalysisResult> performAIAnalysis({
     required String apiKey,
@@ -11,20 +15,21 @@ class OpenAIService implements AIService {
     required String model,
     String? customUrl,
   }) async {
-    final String targetLanguage = languageCode == 'de' ? 'German' : 'English';
+    final String targetLanguage = getTargetLanguage(languageCode);
     final String base64Image = base64Encode(imageBytes);
 
-    final String activeModel = model.isNotEmpty ? model : 'gpt-4o-mini';
+    final String activeModel = getActiveModel(model);
 
-    final systemPrompt =
-        'You are an advanced clinical nutritionist AI. You specialize in visually scanning dishes, estimating portion weights, and breaking down total nutritional content into precise calorie and macronutrient (protein, carbohydrates, lipid fat) totals. '
-        'You MUST return a JSON object with the exact keys: \'foodName\' (string, brief description in $targetLanguage), \'calories\' (integer, estimated kcal), \'protein\' (integer, grams), \'carbs\' (integer, grams), \'fat\' (integer, grams), \'confidence\' (integer, 1-100), and \'notes\' (string, breakdown explanation in $targetLanguage). '
-        'You MUST write all food description names and explanation notes in $targetLanguage.';
+    final systemPrompt = getSystemPrompt(
+      targetLanguage: targetLanguage,
+      includeJsonFormatInstruction: true,
+    );
 
-    final userPrompt =
-        'Analyze this food meal photo and estimate its total nutritional content. '
-        '${userHint.trim().isNotEmpty ? 'Context clue provided by user: "$userHint". ' : ''}'
-        'Provide logical, accurate calories, protein, carbs, and fat estimations. Respond with ONLY the requested JSON object.';
+    final userPrompt = getUserPrompt(
+      targetLanguage: targetLanguage,
+      userHint: userHint,
+      includeOnlyJsonInstruction: true,
+    );
 
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
@@ -81,7 +86,7 @@ class OpenAIService implements AIService {
     if (apiKey.trim().isEmpty) {
       throw Exception('API Key is empty.');
     }
-    final activeModel = model.isNotEmpty ? model : 'gpt-4o-mini';
+    final activeModel = getActiveModel(model);
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {

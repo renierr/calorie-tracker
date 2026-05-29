@@ -1,6 +1,9 @@
 part of 'ai_service.dart';
 
-class CustomAIService implements AIService {
+class CustomAIService extends BaseAIService {
+  @override
+  String get defaultModel => 'custom-vision-model';
+
   @override
   Future<AIAnalysisResult> performAIAnalysis({
     required String apiKey,
@@ -11,10 +14,10 @@ class CustomAIService implements AIService {
     required String model,
     String? customUrl,
   }) async {
-    final String targetLanguage = languageCode == 'de' ? 'German' : 'English';
+    final String targetLanguage = getTargetLanguage(languageCode);
     final String base64Image = base64Encode(imageBytes);
 
-    final String activeModel = model.isNotEmpty ? model : 'custom-vision-model';
+    final String activeModel = getActiveModel(model);
 
     // Parse the endpoint URL robustly
     String url = (customUrl ?? '').trim();
@@ -32,15 +35,16 @@ class CustomAIService implements AIService {
       }
     }
 
-    final systemPrompt =
-        'You are an advanced clinical nutritionist AI. You specialize in visually scanning dishes, estimating portion weights, and breaking down total nutritional content into precise calorie and macronutrient (protein, carbohydrates, lipid fat) totals. '
-        'You MUST return a JSON object with the exact keys: \'foodName\' (string, brief description in $targetLanguage), \'calories\' (integer, estimated kcal), \'protein\' (integer, grams), \'carbs\' (integer, grams), \'fat\' (integer, grams), \'confidence\' (integer, 1-100), and \'notes\' (string, breakdown explanation in $targetLanguage). '
-        'You MUST write all food description names and explanation notes in $targetLanguage.';
+    final systemPrompt = getSystemPrompt(
+      targetLanguage: targetLanguage,
+      includeJsonFormatInstruction: true,
+    );
 
-    final userPrompt =
-        'Analyze this food meal photo and estimate its total nutritional content. '
-        '${userHint.trim().isNotEmpty ? 'Context clue provided by user: "$userHint". ' : ''}'
-        'Provide logical, accurate calories, protein, carbs, and fat estimations. Respond with ONLY the requested JSON object.';
+    final userPrompt = getUserPrompt(
+      targetLanguage: targetLanguage,
+      userHint: userHint,
+      includeOnlyJsonInstruction: true,
+    );
 
     final Map<String, String> headers = {'Content-Type': 'application/json'};
     if (apiKey.trim().isNotEmpty) {
@@ -123,7 +127,7 @@ class CustomAIService implements AIService {
       }
     }
 
-    final activeModel = model.isNotEmpty ? model : 'custom-vision-model';
+    final activeModel = getActiveModel(model);
 
     final Map<String, String> headers = {'Content-Type': 'application/json'};
     if (apiKey.trim().isNotEmpty) {

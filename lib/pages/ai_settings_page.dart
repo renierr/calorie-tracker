@@ -253,6 +253,10 @@ class _AISettingsPageState extends State<AISettingsPage> {
                             child: Text('Anthropic Claude'),
                           ),
                           DropdownMenuItem(
+                            value: 'grok',
+                            child: Text('xAI Grok'),
+                          ),
+                          DropdownMenuItem(
                             value: 'custom',
                             child: Text('Custom Endpoint'),
                           ),
