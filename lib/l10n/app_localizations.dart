@@ -257,7 +257,7 @@ abstract class AppLocalizations {
   /// No description provided for @scanAndEstimate.
   ///
   /// In en, this message translates to:
-  /// **'Scan & Estimate with Gemini'**
+  /// **'Scan & Estimate with AI'**
   String get scanAndEstimate;
 
   /// No description provided for @logWithPhoto.
@@ -269,13 +269,13 @@ abstract class AppLocalizations {
   /// No description provided for @apiKeyMissing.
   ///
   /// In en, this message translates to:
-  /// **'Gemini API Key Missing'**
+  /// **'API Key Missing'**
   String get apiKeyMissing;
 
   /// No description provided for @apiKeyMissingDesc.
   ///
   /// In en, this message translates to:
-  /// **'A valid API key is required to scan photos. Please go to settings and add your Gemini API Key.'**
+  /// **'A valid API key is required to scan photos. Please go to settings and add your API Key.'**
   String get apiKeyMissingDesc;
 
   /// No description provided for @navigateToSettings.
@@ -401,7 +401,7 @@ abstract class AppLocalizations {
   /// No description provided for @scanningTitle.
   ///
   /// In en, this message translates to:
-  /// **'Analyzing Food with Gemini AI...'**
+  /// **'Analyzing Food with AI...'**
   String get scanningTitle;
 
   /// No description provided for @scanningDesc.
@@ -419,7 +419,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiErrorDesc.
   ///
   /// In en, this message translates to:
-  /// **'Failed to analyze image. Please ensure your Gemini API Key is valid and internet connection is active.\n\nError details: {error}'**
+  /// **'Failed to analyze image. Please ensure your API Key is valid and internet connection is active.\n\nError details: {error}'**
   String aiErrorDesc(Object error);
 
   /// No description provided for @ok.
@@ -641,13 +641,13 @@ abstract class AppLocalizations {
   /// No description provided for @apiCredentials.
   ///
   /// In en, this message translates to:
-  /// **'Gemini AI API Credentials'**
+  /// **'AI API Credentials'**
   String get apiCredentials;
 
   /// No description provided for @apiCredentialsDesc.
   ///
   /// In en, this message translates to:
-  /// **'The AI Meal Scanner requires a Google Gemini API Key. Your key is saved locally in private app settings.'**
+  /// **'The AI Meal Scanner requires a API Key. Your key is saved locally in private app settings.'**
   String get apiCredentialsDesc;
 
   /// No description provided for @enterApiKey.

@@ -102,17 +102,17 @@ class AppLocalizationsDe extends AppLocalizations {
       'z.B. „Zwei Scheiben Sauerteigbrot, eine ganze Avocado und zwei mittlere Spiegeleier.“';
 
   @override
-  String get scanAndEstimate => 'Scannen & mit Gemini analysieren';
+  String get scanAndEstimate => 'Scannen & mit KI analysieren';
 
   @override
   String get logWithPhoto => 'Mit Foto manuell erfassen';
 
   @override
-  String get apiKeyMissing => 'Gemini API-Schlüssel fehlt';
+  String get apiKeyMissing => 'API-Schlüssel fehlt';
 
   @override
   String get apiKeyMissingDesc =>
-      'Für die Fotoanalyse wird ein gültiger Gemini API-Schlüssel benötigt. Bitte in den Einstellungen hinterlegen.';
+      'Für die Fotoanalyse wird ein gültiger API-Schlüssel benötigt. Bitte in den Einstellungen hinterlegen.';
 
   @override
   String get navigateToSettings => 'Bitte zu den Einstellungen navigieren.';
@@ -179,7 +179,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mealLogged => 'Mahlzeit erfolgreich erfasst!';
 
   @override
-  String get scanningTitle => 'Analyse mit Gemini KI...';
+  String get scanningTitle => 'Analyse mit KI...';
 
   @override
   String get scanningDesc =>
@@ -190,7 +190,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String aiErrorDesc(Object error) {
-    return 'Bildanalyse fehlgeschlagen. Bitte stelle sicher, dass dein Gemini API-Schlüssel gültig ist und eine Internetverbindung besteht.\n\nFehlerdetails: $error';
+    return 'Bildanalyse fehlgeschlagen. Bitte stelle sicher, dass dein API-Schlüssel gültig ist und eine Internetverbindung besteht.\n\nFehlerdetails: $error';
   }
 
   @override
@@ -310,11 +310,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsTitle => 'Ziele & API-Einstellungen';
 
   @override
-  String get apiCredentials => 'Gemini KI API-Zugangsdaten';
+  String get apiCredentials => 'KI API-Zugangsdaten';
 
   @override
   String get apiCredentialsDesc =>
-      'Der KI-Scanner benötigt einen Google Gemini API-Schlüssel. Dein Schlüssel wird lokal in den App-Einstellungen gespeichert.';
+      'Der KI-Scanner benötigt einen API-Schlüssel. Dein Schlüssel wird lokal in den App-Einstellungen gespeichert.';
 
   @override
   String get enterApiKey => 'Geben Sie Ihren API-Schlüssel ein';

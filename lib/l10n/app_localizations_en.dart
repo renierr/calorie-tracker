@@ -102,17 +102,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'e.g. \"Two slices of sourdough bread, a whole avocado, and two medium fried eggs.\"';
 
   @override
-  String get scanAndEstimate => 'Scan & Estimate with Gemini';
+  String get scanAndEstimate => 'Scan & Estimate with AI';
 
   @override
   String get logWithPhoto => 'Log Manually with this Photo';
 
   @override
-  String get apiKeyMissing => 'Gemini API Key Missing';
+  String get apiKeyMissing => 'API Key Missing';
 
   @override
   String get apiKeyMissingDesc =>
-      'A valid API key is required to scan photos. Please go to settings and add your Gemini API Key.';
+      'A valid API key is required to scan photos. Please go to settings and add your API Key.';
 
   @override
   String get navigateToSettings => 'Please navigate to settings panel.';
@@ -179,7 +179,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealLogged => 'Meal logged successfully!';
 
   @override
-  String get scanningTitle => 'Analyzing Food with Gemini AI...';
+  String get scanningTitle => 'Analyzing Food with AI...';
 
   @override
   String get scanningDesc =>
@@ -190,7 +190,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiErrorDesc(Object error) {
-    return 'Failed to analyze image. Please ensure your Gemini API Key is valid and internet connection is active.\n\nError details: $error';
+    return 'Failed to analyze image. Please ensure your API Key is valid and internet connection is active.\n\nError details: $error';
   }
 
   @override
@@ -309,11 +309,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTitle => 'Goal & API Settings';
 
   @override
-  String get apiCredentials => 'Gemini AI API Credentials';
+  String get apiCredentials => 'AI API Credentials';
 
   @override
   String get apiCredentialsDesc =>
-      'The AI Meal Scanner requires a Google Gemini API Key. Your key is saved locally in private app settings.';
+      'The AI Meal Scanner requires a API Key. Your key is saved locally in private app settings.';
 
   @override
   String get enterApiKey => 'Enter your API credential key';
