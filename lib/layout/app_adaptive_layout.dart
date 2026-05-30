@@ -24,8 +24,15 @@ class AppAdaptiveLayout extends StatelessWidget {
         final int currentIndex = appState.selectedTabIndex;
         final colors = AppTheme.of(context);
 
+        final bool isToday = DateUtils.isSameDay(
+          appState.selectedDate,
+          DateTime.now(),
+        );
+
+        final Widget mainContent;
+
         if (isDesktop) {
-          return Scaffold(
+          mainContent = Scaffold(
             body: Row(
               children: [
                 Container(
@@ -169,24 +176,8 @@ class AppAdaptiveLayout extends StatelessWidget {
               ],
             ),
           );
-        }
-
-        final bool isToday = DateUtils.isSameDay(
-          appState.selectedDate,
-          DateTime.now(),
-        );
-
-        return PopScope(
-          canPop: currentIndex == 0 && isToday,
-          onPopInvokedWithResult: (bool didPop, Object? result) {
-            if (didPop) return;
-            if (currentIndex != 0) {
-              appState.selectTab(0);
-            } else if (!isToday) {
-              appState.selectDate(DateTime.now());
-            }
-          },
-          child: Scaffold(
+        } else {
+          mainContent = Scaffold(
             body: _buildPage(currentIndex),
             bottomNavigationBar: NavigationBar(
               selectedIndex: currentIndex,
@@ -216,7 +207,20 @@ class AppAdaptiveLayout extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          );
+        }
+
+        return PopScope(
+          canPop: currentIndex == 0 && isToday,
+          onPopInvokedWithResult: (bool didPop, Object? result) {
+            if (didPop) return;
+            if (currentIndex != 0) {
+              appState.selectTab(0);
+            } else if (!isToday) {
+              appState.selectDate(DateTime.now());
+            }
+          },
+          child: mainContent,
         );
       },
     );
