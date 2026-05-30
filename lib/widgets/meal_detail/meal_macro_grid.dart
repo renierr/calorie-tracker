@@ -18,7 +18,7 @@ class MealMacroGrid extends StatelessWidget {
           return _MacroMetricCard(
             width: gridWidth,
             value: '-${currentMeal.calories} kcal',
-            label: 'Calories Burned',
+            label: AppLocalizations.of(context)!.caloriesBurned,
             color: AppTheme.accentAmber,
           );
         }

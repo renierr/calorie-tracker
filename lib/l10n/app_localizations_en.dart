@@ -197,7 +197,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ok => 'OK';
 
   @override
-  String get historyTitle => 'Meal History Logs';
+  String get historyTitle => 'History Logs';
 
   @override
   String get filterTimeframe => 'Filter Timeframe:';
@@ -466,7 +466,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sidebarScan => 'Track Activity';
 
   @override
-  String get sidebarHistory => 'Meal History';
+  String get sidebarHistory => 'History';
 
   @override
   String get sidebarSettings => 'Goal Settings';
@@ -1101,4 +1101,77 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutOpenSource =>
       'Dedicated to healthy living, privacy, and active developer ownership.';
+
+  @override
+  String get editActivityDetails => 'Edit Activity Details';
+
+  @override
+  String get activityName => 'Activity / Exercise Name';
+
+  @override
+  String get caloriesBurnedKcal => 'Calories Burned (kcal)';
+
+  @override
+  String get caloriesBurned => 'Calories Burned';
+
+  @override
+  String get activityUpdated => 'Activity updated successfully';
+
+  @override
+  String get verifyActivityDetails => 'Verify Activity Details';
+
+  @override
+  String get activityHint => 'Running, Swimming, Cycling...';
+
+  @override
+  String get activityLogged => 'Activity logged successfully';
+
+  @override
+  String get activitiesLogged => 'Activities Logged';
+
+  @override
+  String get intakeCalories => 'Intake Calories';
+
+  @override
+  String get mealsLogged => 'Meals Logged';
+
+  @override
+  String get netCalories => 'Net Calories';
+
+  @override
+  String get burned => 'Burned';
+
+  @override
+  String get logsCount => 'Logs Count';
+
+  @override
+  String get allLogs => 'All Logs';
+
+  @override
+  String get mealsOnly => 'Meals Only';
+
+  @override
+  String get activitiesOnly => 'Activities Only';
+
+  @override
+  String get logTypeFilter => 'Log Type Filter';
+
+  @override
+  String get burnExercise => 'Burn / Exercise';
+
+  @override
+  String get logActivity => 'Log Activity';
+
+  @override
+  String get includeInPdfReport => 'Include in PDF Report';
+
+  @override
+  String intakeLabel(int calories) {
+    return 'Intake: $calories kcal';
+  }
+
+  @override
+  String burnedLabel(int calories) {
+    return 'Burned: $calories kcal';
+  }
 }

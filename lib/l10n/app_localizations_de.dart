@@ -197,7 +197,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ok => 'OK';
 
   @override
-  String get historyTitle => 'Mahlzeitenverlauf';
+  String get historyTitle => 'Verlauf';
 
   @override
   String get filterTimeframe => 'Zeitraum filtern:';
@@ -1110,4 +1110,77 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get aboutOpenSource =>
       'Gewidmet einem gesunden Lebensstil, Privatsphäre und aktiver Entwicklerverantwortung.';
+
+  @override
+  String get editActivityDetails => 'Aktivitätsdetails bearbeiten';
+
+  @override
+  String get activityName => 'Aktivität / Übungsname';
+
+  @override
+  String get caloriesBurnedKcal => 'Verbrannte Kalorien (kcal)';
+
+  @override
+  String get caloriesBurned => 'Verbrannte Kalorien';
+
+  @override
+  String get activityUpdated => 'Aktivität erfolgreich aktualisiert';
+
+  @override
+  String get verifyActivityDetails => 'Aktivitätsdetails überprüfen';
+
+  @override
+  String get activityHint => 'Laufen, Schwimmen, Radfahren...';
+
+  @override
+  String get activityLogged => 'Aktivität erfolgreich protokolliert';
+
+  @override
+  String get activitiesLogged => 'Protokollierte Aktivitäten';
+
+  @override
+  String get intakeCalories => 'Aufgenommene Kalorien';
+
+  @override
+  String get mealsLogged => 'Protokollierte Mahlzeiten';
+
+  @override
+  String get netCalories => 'Netto-Kalorien';
+
+  @override
+  String get burned => 'Verbrannt';
+
+  @override
+  String get logsCount => 'Anzahl Protokolle';
+
+  @override
+  String get allLogs => 'Alle Protokolle';
+
+  @override
+  String get mealsOnly => 'Nur Mahlzeiten';
+
+  @override
+  String get activitiesOnly => 'Nur Aktivitäten';
+
+  @override
+  String get logTypeFilter => 'Protokolltyp-Filter';
+
+  @override
+  String get burnExercise => 'Verbrennung / Training';
+
+  @override
+  String get logActivity => 'Aktivität protokollieren';
+
+  @override
+  String get includeInPdfReport => 'In PDF-Bericht aufnehmen';
+
+  @override
+  String intakeLabel(int calories) {
+    return 'Aufnahme: $calories kcal';
+  }
+
+  @override
+  String burnedLabel(int calories) {
+    return 'Verbrannt: $calories kcal';
+  }
 }

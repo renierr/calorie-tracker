@@ -117,7 +117,9 @@ class CalorieRingCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Intake: ${appState.totalCaloriesIntake} kcal',
+                        AppLocalizations.of(
+                          context,
+                        )!.intakeLabel(appState.totalCaloriesIntake),
                         style: const TextStyle(
                           color: AppTheme.accentEmerald,
                           fontSize: 12,
@@ -146,7 +148,9 @@ class CalorieRingCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Burned: ${appState.totalCaloriesBurned} kcal',
+                        AppLocalizations.of(
+                          context,
+                        )!.burnedLabel(appState.totalCaloriesBurned),
                         style: const TextStyle(
                           color: AppTheme.accentAmber,
                           fontSize: 12,

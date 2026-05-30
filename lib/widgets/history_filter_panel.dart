@@ -222,12 +222,18 @@ class HistoryFilterPanel extends StatelessWidget {
                 dropdownColor: colors.surface,
                 iconEnabledColor: colors.textPrimary,
                 underline: const SizedBox(),
-                items: const [
-                  DropdownMenuItem(value: 'all', child: Text('All Logs')),
-                  DropdownMenuItem(value: 'meals', child: Text('Meals Only')),
+                items: [
+                  DropdownMenuItem(
+                    value: 'all',
+                    child: Text(AppLocalizations.of(context)!.allLogs),
+                  ),
+                  DropdownMenuItem(
+                    value: 'meals',
+                    child: Text(AppLocalizations.of(context)!.mealsOnly),
+                  ),
                   DropdownMenuItem(
                     value: 'activities',
-                    child: Text('Activities Only'),
+                    child: Text(AppLocalizations.of(context)!.activitiesOnly),
                   ),
                 ],
                 onChanged: (val) {
@@ -249,7 +255,7 @@ class HistoryFilterPanel extends StatelessWidget {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            'Log Type Filter',
+                            AppLocalizations.of(context)!.logTypeFilter,
                             style: TextStyle(
                               color: colors.textPrimary,
                               fontWeight: FontWeight.bold,
@@ -274,7 +280,7 @@ class HistoryFilterPanel extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Log Type Filter',
+                    AppLocalizations.of(context)!.logTypeFilter,
                     style: TextStyle(
                       color: colors.textPrimary,
                       fontWeight: FontWeight.bold,

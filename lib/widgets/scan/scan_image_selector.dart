@@ -99,9 +99,9 @@ class ScanImageSelector extends StatelessWidget {
                       Icons.fitness_center,
                       color: AppTheme.accentAmber,
                     ),
-                    label: const Text(
-                      'Log Activity',
-                      style: TextStyle(color: AppTheme.accentAmber),
+                    label: Text(
+                      AppLocalizations.of(context)!.logActivity,
+                      style: const TextStyle(color: AppTheme.accentAmber),
                     ),
                     onPressed: onLogActivity,
                   ),

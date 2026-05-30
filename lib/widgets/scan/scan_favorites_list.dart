@@ -70,7 +70,9 @@ class ScanFavoritesList extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: AppTheme.premiumCardDecoration(
                     context: context,
-                    glowColor: AppTheme.accentEmerald,
+                    glowColor: meal.isActivity
+                        ? AppTheme.accentAmber
+                        : AppTheme.accentEmerald,
                   ).copyWith(color: colors.surfaceLight.withValues(alpha: 0.5)),
                   child: Row(
                     children: [
@@ -94,21 +96,34 @@ class ScanFavoritesList extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   gradient: LinearGradient(
-                                    colors: [
-                                      AppTheme.accentEmerald.withValues(
-                                        alpha: 0.15,
-                                      ),
-                                      AppTheme.accentBlue.withValues(
-                                        alpha: 0.15,
-                                      ),
-                                    ],
+                                    colors: meal.isActivity
+                                        ? [
+                                            AppTheme.accentAmber.withValues(
+                                              alpha: 0.15,
+                                            ),
+                                            AppTheme.accentRed.withValues(
+                                              alpha: 0.15,
+                                            ),
+                                          ]
+                                        : [
+                                            AppTheme.accentEmerald.withValues(
+                                              alpha: 0.15,
+                                            ),
+                                            AppTheme.accentBlue.withValues(
+                                              alpha: 0.15,
+                                            ),
+                                          ],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                   ),
                                 ),
-                                child: const Icon(
-                                  Icons.restaurant_menu,
-                                  color: AppTheme.accentEmerald,
+                                child: Icon(
+                                  meal.isActivity
+                                      ? Icons.directions_run
+                                      : Icons.fastfood,
+                                  color: meal.isActivity
+                                      ? AppTheme.accentAmber
+                                      : AppTheme.accentEmerald,
                                   size: 24,
                                 ),
                               ),
@@ -132,21 +147,36 @@ class ScanFavoritesList extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '${meal.calories} kcal',
-                              style: const TextStyle(
-                                color: AppTheme.accentEmerald,
+                              meal.isActivity
+                                  ? '-${meal.calories} kcal'
+                                  : '${meal.calories} kcal',
+                              style: TextStyle(
+                                color: meal.isActivity
+                                    ? AppTheme.accentAmber
+                                    : AppTheme.accentEmerald,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              'P: ${meal.protein}g • C: ${meal.carbs}g • F: ${meal.fat}g',
-                              style: TextStyle(
-                                color: colors.textMuted,
-                                fontSize: 10,
+                            if (!meal.isActivity) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                'P: ${meal.protein}g • C: ${meal.carbs}g • F: ${meal.fat}g',
+                                style: TextStyle(
+                                  color: colors.textMuted,
+                                  fontSize: 10,
+                                ),
                               ),
-                            ),
+                            ] else ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                AppLocalizations.of(context)!.burnExercise,
+                                style: TextStyle(
+                                  color: colors.textMuted,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),

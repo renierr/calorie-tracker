@@ -204,7 +204,7 @@ class PdfMealCardHelper {
                           ),
                         ] else ...[
                           _buildCompactTag(
-                            label: 'Calories Burned',
+                            label: localizations.caloriesBurned,
                             value: '-${meal.calories} kcal',
                             color: pdfAmber,
                           ),

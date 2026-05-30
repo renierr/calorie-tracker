@@ -296,7 +296,7 @@ class PdfService {
                 children: [
                   pw.Expanded(
                     child: PdfMealCardHelper.buildSummaryStatCard(
-                      label: 'Calories Burned',
+                      label: localizations.caloriesBurned,
                       value: '$totalBurned kcal',
                       accentColor: pdfAmber,
                     ),
@@ -304,7 +304,7 @@ class PdfService {
                   pw.SizedBox(width: 8),
                   pw.Expanded(
                     child: PdfMealCardHelper.buildSummaryStatCard(
-                      label: 'Activities Logged',
+                      label: localizations.activitiesLogged,
                       value: '${meals.length}',
                       accentColor: pdfGrey,
                     ),
@@ -316,7 +316,7 @@ class PdfService {
                 children: [
                   pw.Expanded(
                     child: PdfMealCardHelper.buildSummaryStatCard(
-                      label: 'Intake Calories',
+                      label: localizations.intakeCalories,
                       value: '$totalIntake kcal',
                       accentColor: pdfEmerald,
                     ),
@@ -348,7 +348,7 @@ class PdfService {
                   pw.SizedBox(width: 8),
                   pw.Expanded(
                     child: PdfMealCardHelper.buildSummaryStatCard(
-                      label: 'Meals Logged',
+                      label: localizations.mealsLogged,
                       value: '${meals.length}',
                       accentColor: pdfGrey,
                     ),
@@ -360,7 +360,7 @@ class PdfService {
                 children: [
                   pw.Expanded(
                     child: PdfMealCardHelper.buildSummaryStatCard(
-                      label: 'Net Calories',
+                      label: localizations.netCalories,
                       value: '$netCalories kcal',
                       accentColor: pdfEmerald,
                     ),
@@ -369,7 +369,7 @@ class PdfService {
                     pw.SizedBox(width: 8),
                     pw.Expanded(
                       child: PdfMealCardHelper.buildSummaryStatCard(
-                        label: 'Burned',
+                        label: localizations.burned,
                         value: '$totalBurned kcal',
                         accentColor: pdfAmber,
                       ),
@@ -402,7 +402,7 @@ class PdfService {
                   pw.SizedBox(width: 8),
                   pw.Expanded(
                     child: PdfMealCardHelper.buildSummaryStatCard(
-                      label: 'Logs Count',
+                      label: localizations.logsCount,
                       value: '${meals.length}',
                       accentColor: pdfGrey,
                     ),

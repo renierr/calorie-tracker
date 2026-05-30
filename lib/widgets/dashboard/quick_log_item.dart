@@ -111,9 +111,9 @@ class QuickLogItem extends StatelessWidget {
                           ),
                         )
                       else
-                        const Text(
-                          'Burn / Exercise',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.burnExercise,
+                          style: const TextStyle(
                             color: AppTheme.accentAmber,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,

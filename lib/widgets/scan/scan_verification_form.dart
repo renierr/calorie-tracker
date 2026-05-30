@@ -208,7 +208,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
       SnackBar(
         content: Text(
           isAct
-              ? 'Activity logged successfully'
+              ? AppLocalizations.of(context)!.activityLogged
               : AppLocalizations.of(context)!.mealLogged,
         ),
         backgroundColor: AppTheme.accentEmerald,
@@ -245,7 +245,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                     width: isNarrow ? constraints.maxWidth : null,
                     child: Text(
                       widget.appState.scanIsActivity
-                          ? 'Verify Activity Details'
+                          ? AppLocalizations.of(context)!.verifyActivityDetails
                           : AppLocalizations.of(context)!.verifyEstimates,
                       style: TextStyle(
                         color: colors.textPrimary,
@@ -284,7 +284,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
           // Food Name
           Text(
             widget.appState.scanIsActivity
-                ? 'Activity / Exercise Name'
+                ? AppLocalizations.of(context)!.activityName
                 : AppLocalizations.of(context)!.mealDescription,
             style: TextStyle(color: colors.textSecondary, fontSize: 12),
           ),
@@ -294,7 +294,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             enabled: !_isReEvaluating,
             decoration: InputDecoration(
               hintText: widget.appState.scanIsActivity
-                  ? 'Running, Swimming, Cycling...'
+                  ? AppLocalizations.of(context)!.activityHint
                   : AppLocalizations.of(context)!.avocadoHint,
             ),
           ),
@@ -309,7 +309,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   children: [
                     Text(
                       widget.appState.scanIsActivity
-                          ? 'Calories Burned (kcal)'
+                          ? AppLocalizations.of(context)!.caloriesBurnedKcal
                           : AppLocalizations.of(context)!.caloriesKcal,
                       style: TextStyle(
                         color: colors.textSecondary,

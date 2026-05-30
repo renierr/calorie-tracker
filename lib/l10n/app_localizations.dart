@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @historyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Meal History Logs'**
+  /// **'History Logs'**
   String get historyTitle;
 
   /// No description provided for @filterTimeframe.
@@ -935,7 +935,7 @@ abstract class AppLocalizations {
   /// No description provided for @sidebarHistory.
   ///
   /// In en, this message translates to:
-  /// **'Meal History'**
+  /// **'History'**
   String get sidebarHistory;
 
   /// No description provided for @sidebarSettings.
@@ -2023,6 +2023,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dedicated to healthy living, privacy, and active developer ownership.'**
   String get aboutOpenSource;
+
+  /// No description provided for @editActivityDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Activity Details'**
+  String get editActivityDetails;
+
+  /// No description provided for @activityName.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity / Exercise Name'**
+  String get activityName;
+
+  /// No description provided for @caloriesBurnedKcal.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories Burned (kcal)'**
+  String get caloriesBurnedKcal;
+
+  /// No description provided for @caloriesBurned.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories Burned'**
+  String get caloriesBurned;
+
+  /// No description provided for @activityUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity updated successfully'**
+  String get activityUpdated;
+
+  /// No description provided for @verifyActivityDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Activity Details'**
+  String get verifyActivityDetails;
+
+  /// No description provided for @activityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Running, Swimming, Cycling...'**
+  String get activityHint;
+
+  /// No description provided for @activityLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity logged successfully'**
+  String get activityLogged;
+
+  /// No description provided for @activitiesLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities Logged'**
+  String get activitiesLogged;
+
+  /// No description provided for @intakeCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Intake Calories'**
+  String get intakeCalories;
+
+  /// No description provided for @mealsLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals Logged'**
+  String get mealsLogged;
+
+  /// No description provided for @netCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Calories'**
+  String get netCalories;
+
+  /// No description provided for @burned.
+  ///
+  /// In en, this message translates to:
+  /// **'Burned'**
+  String get burned;
+
+  /// No description provided for @logsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs Count'**
+  String get logsCount;
+
+  /// No description provided for @allLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'All Logs'**
+  String get allLogs;
+
+  /// No description provided for @mealsOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals Only'**
+  String get mealsOnly;
+
+  /// No description provided for @activitiesOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities Only'**
+  String get activitiesOnly;
+
+  /// No description provided for @logTypeFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Type Filter'**
+  String get logTypeFilter;
+
+  /// No description provided for @burnExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Burn / Exercise'**
+  String get burnExercise;
+
+  /// No description provided for @logActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Activity'**
+  String get logActivity;
+
+  /// No description provided for @includeInPdfReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Include in PDF Report'**
+  String get includeInPdfReport;
+
+  /// No description provided for @intakeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Intake: {calories} kcal'**
+  String intakeLabel(int calories);
+
+  /// No description provided for @burnedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Burned: {calories} kcal'**
+  String burnedLabel(int calories);
 }
 
 class _AppLocalizationsDelegate

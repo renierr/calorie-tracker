@@ -43,17 +43,26 @@ class MealDetailHeaderImage extends StatelessWidget {
                     top: Radius.circular(16),
                   ),
                   gradient: LinearGradient(
-                    colors: [
-                      AppTheme.accentEmerald.withValues(alpha: 0.15),
-                      AppTheme.accentBlue.withValues(alpha: 0.15),
-                    ],
+                    colors: currentMeal.isActivity
+                        ? [
+                            AppTheme.accentAmber.withValues(alpha: 0.15),
+                            AppTheme.accentRed.withValues(alpha: 0.15),
+                          ]
+                        : [
+                            AppTheme.accentEmerald.withValues(alpha: 0.15),
+                            AppTheme.accentBlue.withValues(alpha: 0.15),
+                          ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: const Icon(
-                  Icons.restaurant_menu,
-                  color: AppTheme.accentEmerald,
+                child: Icon(
+                  currentMeal.isActivity
+                      ? Icons.directions_run
+                      : Icons.fastfood,
+                  color: currentMeal.isActivity
+                      ? AppTheme.accentAmber
+                      : AppTheme.accentEmerald,
                   size: 48,
                 ),
               ),

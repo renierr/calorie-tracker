@@ -104,7 +104,7 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
             ),
             const SizedBox(height: 14),
             Text(
-              'Include in PDF Report',
+              AppLocalizations.of(context)!.includeInPdfReport,
               style: TextStyle(color: colors.textSecondary, fontSize: 11),
             ),
             const SizedBox(height: 6),
@@ -118,12 +118,18 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
                   vertical: 8,
                 ),
               ),
-              items: const [
-                DropdownMenuItem(value: 'all', child: Text('All Logs')),
-                DropdownMenuItem(value: 'meals', child: Text('Meals Only')),
+              items: [
+                DropdownMenuItem(
+                  value: 'all',
+                  child: Text(AppLocalizations.of(context)!.allLogs),
+                ),
+                DropdownMenuItem(
+                  value: 'meals',
+                  child: Text(AppLocalizations.of(context)!.mealsOnly),
+                ),
                 DropdownMenuItem(
                   value: 'activities',
-                  child: Text('Activities Only'),
+                  child: Text(AppLocalizations.of(context)!.activitiesOnly),
                 ),
               ],
               onChanged: (val) {

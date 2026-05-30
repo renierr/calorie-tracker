@@ -152,9 +152,13 @@ class MealHistoryCard extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                               )
-                            : const Icon(
-                                Icons.restaurant,
-                                color: AppTheme.accentEmerald,
+                            : Icon(
+                                meal.isActivity
+                                    ? Icons.directions_run
+                                    : Icons.fastfood,
+                                color: meal.isActivity
+                                    ? AppTheme.accentAmber
+                                    : AppTheme.accentEmerald,
                                 size: 24,
                               ),
                       ),
@@ -181,27 +185,35 @@ class MealHistoryCard extends StatelessWidget {
                               runSpacing: 4,
                               children: [
                                 MiniMacroChip(
-                                  label: AppLocalizations.of(
-                                    context,
-                                  )!.caloriesKcal.replaceAll(' (kcal)', ''),
-                                  value: '${meal.calories}',
-                                  color: AppTheme.accentEmerald,
+                                  label: meal.isActivity
+                                      ? AppLocalizations.of(context)!.burned
+                                      : AppLocalizations.of(context)!
+                                            .caloriesKcal
+                                            .replaceAll(' (kcal)', ''),
+                                  value: meal.isActivity
+                                      ? '-${meal.calories}'
+                                      : '${meal.calories}',
+                                  color: meal.isActivity
+                                      ? AppTheme.accentAmber
+                                      : AppTheme.accentEmerald,
                                 ),
-                                MiniMacroChip(
-                                  label: pLabel,
-                                  value: '${meal.protein}g',
-                                  color: AppTheme.accentBlue,
-                                ),
-                                MiniMacroChip(
-                                  label: cLabel,
-                                  value: '${meal.carbs}g',
-                                  color: AppTheme.accentAmber,
-                                ),
-                                MiniMacroChip(
-                                  label: fLabel,
-                                  value: '${meal.fat}g',
-                                  color: AppTheme.accentRed,
-                                ),
+                                if (!meal.isActivity) ...[
+                                  MiniMacroChip(
+                                    label: pLabel,
+                                    value: '${meal.protein}g',
+                                    color: AppTheme.accentBlue,
+                                  ),
+                                  MiniMacroChip(
+                                    label: cLabel,
+                                    value: '${meal.carbs}g',
+                                    color: AppTheme.accentAmber,
+                                  ),
+                                  MiniMacroChip(
+                                    label: fLabel,
+                                    value: '${meal.fat}g',
+                                    color: AppTheme.accentRed,
+                                  ),
+                                ],
                                 if (meal.weightKg != null)
                                   MiniMacroChip(
                                     label: AppLocalizations.of(

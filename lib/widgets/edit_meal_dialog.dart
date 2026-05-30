@@ -197,7 +197,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
               // Title
               Text(
                 widget.meal.isActivity
-                    ? 'Edit Activity Details'
+                    ? AppLocalizations.of(context)!.editActivityDetails
                     : AppLocalizations.of(context)!.editMeal,
                 style: TextStyle(
                   color: colors.textPrimary,
@@ -216,7 +216,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                     children: [
                       Text(
                         widget.meal.isActivity
-                            ? 'Activity / Exercise Name'
+                            ? AppLocalizations.of(context)!.activityName
                             : AppLocalizations.of(context)!.mealDescription,
                         style: TextStyle(
                           color: colors.textSecondary,
@@ -237,7 +237,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
                               children: [
                                 Text(
                                   widget.meal.isActivity
-                                      ? 'Calories Burned (kcal)'
+                                      ? AppLocalizations.of(
+                                          context,
+                                        )!.caloriesBurnedKcal
                                       : AppLocalizations.of(
                                           context,
                                         )!.caloriesKcal,
@@ -542,7 +544,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
                               SnackBar(
                                 content: Text(
                                   isAct
-                                      ? 'Activity updated successfully'
+                                      ? AppLocalizations.of(
+                                          context,
+                                        )!.activityUpdated
                                       : AppLocalizations.of(
                                           context,
                                         )!.mealUpdated,

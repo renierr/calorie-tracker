@@ -60,7 +60,7 @@
   "aiErrorDesc": "Bildanalyse fehlgeschlagen. Bitte stelle sicher, dass dein API-Schlüssel gültig ist und eine Internetverbindung besteht.\n\nFehlerdetails: {error}",
   "ok": "OK",
 
-  "historyTitle": "Mahlzeitenverlauf",
+  "historyTitle": "Verlauf",
   "filterTimeframe": "Zeitraum filtern:",
   "allTime": "Alle Einträge",
   "today": "Heute",
@@ -552,6 +552,43 @@
   "aboutFeatureOfflineDesc": "Deine Daten werden sicher offline in einer SQLite-Datenbank auf deinem Gerät gespeichert.",
   "aboutFeaturePdfTitle": "PDF-Berichte",
   "aboutFeaturePdfDesc": "Fasse deinen Ernährungsverlauf in druckfertigen PDF-Berichten zusammen.",
-  "aboutOpenSource": "Gewidmet einem gesunden Lebensstil, Privatsphäre und aktiver Entwicklerverantwortung."
+  "aboutOpenSource": "Gewidmet einem gesunden Lebensstil, Privatsphäre und aktiver Entwicklerverantwortung.",
+  "editActivityDetails": "Aktivitätsdetails bearbeiten",
+  "activityName": "Aktivität / Übungsname",
+  "caloriesBurnedKcal": "Verbrannte Kalorien (kcal)",
+  "caloriesBurned": "Verbrannte Kalorien",
+  "activityUpdated": "Aktivität erfolgreich aktualisiert",
+  "verifyActivityDetails": "Aktivitätsdetails überprüfen",
+  "activityHint": "Laufen, Schwimmen, Radfahren...",
+  "activityLogged": "Aktivität erfolgreich protokolliert",
+  "activitiesLogged": "Protokollierte Aktivitäten",
+  "intakeCalories": "Aufgenommene Kalorien",
+  "mealsLogged": "Protokollierte Mahlzeiten",
+  "netCalories": "Netto-Kalorien",
+  "burned": "Verbrannt",
+  "logsCount": "Anzahl Protokolle",
+  "allLogs": "Alle Protokolle",
+  "mealsOnly": "Nur Mahlzeiten",
+  "activitiesOnly": "Nur Aktivitäten",
+  "logTypeFilter": "Protokolltyp-Filter",
+  "burnExercise": "Verbrennung / Training",
+  "logActivity": "Aktivität protokollieren",
+  "includeInPdfReport": "In PDF-Bericht aufnehmen",
+  "intakeLabel": "Aufnahme: {calories} kcal",
+  "@intakeLabel": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "burnedLabel": "Verbrannt: {calories} kcal",
+  "@burnedLabel": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  }
 }
 
