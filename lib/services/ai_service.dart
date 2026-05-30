@@ -119,10 +119,9 @@ abstract class BaseAIService implements AIService {
         'carbs' (integer, total grams), 
         'fat' (integer, total grams), 
         'confidence' (integer, 1-100 based on image visibility), and 
-        'notes' (string, structured breakdown in $targetLanguage detailing: 
-          1. Identified ingredients with estimated weights in grams, 
-          2. Assumptions made regarding hidden oils/sauces, 
-          3. Brief nutritional takeaway).""";
+        'notes' (string, concise line-by-line breakdown in $targetLanguage 
+          listing: 1. identified ingredients/weights, 2. assumptions for hidden oils, and 
+          3. a 1-sentence takeaway, with each point on a new line without numbers""";
 
     if (includeAnthropicRawBlockInstruction) {
       instruction +=
@@ -139,8 +138,7 @@ abstract class BaseAIService implements AIService {
   }) {
     var prompt =
         '''Analyze this food meal photo. Identify the components, estimate their portions, 
-        and provide logical, mathematically consistent calorie, protein, carbs, and fat estimations. 
-        Ensure the macro totals represent the sum of the individual ingredients listed in your notes. ''';
+        and provide logical, mathematically consistent calorie, protein, carbs, and fat estimations.''';
 
     if (userHint.trim().isNotEmpty) {
       prompt += '\n\n<user_hint>${userHint.trim()}</user_hint>';
