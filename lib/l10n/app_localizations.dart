@@ -1370,6 +1370,30 @@ abstract class AppLocalizations {
   /// **'e.g. llama3.2-vision'**
   String get customModelHint;
 
+  /// No description provided for @customModelOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom model...'**
+  String get customModelOption;
+
+  /// No description provided for @customModelRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please specify a custom model name'**
+  String get customModelRequired;
+
+  /// No description provided for @customUrlRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom base endpoint URL is required'**
+  String get customUrlRequired;
+
+  /// No description provided for @apiKeyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'API Authorization Key is required'**
+  String get apiKeyRequired;
+
   /// No description provided for @validateConnection.
   ///
   /// In en, this message translates to:

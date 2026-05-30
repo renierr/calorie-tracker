@@ -728,6 +728,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customModelHint => 'e.g. llama3.2-vision';
 
   @override
+  String get customModelOption => 'Custom model...';
+
+  @override
+  String get customModelRequired => 'Please specify a custom model name';
+
+  @override
+  String get customUrlRequired => 'Custom base endpoint URL is required';
+
+  @override
+  String get apiKeyRequired => 'API Authorization Key is required';
+
+  @override
   String get validateConnection => 'Validate Connection';
 
   @override

@@ -63,6 +63,15 @@ class _AISettingsPageState extends State<AISettingsPage> {
     return _providerModels[provider]!.contains(model);
   }
 
+  bool get _showCustomModelField {
+    final isCustom = _selectedProvider == 'custom';
+    final bool isModelStandard = _isStandardModel(
+      _selectedProvider,
+      _selectedModel,
+    );
+    return isCustom || _selectedModel == 'custom' || !isModelStandard;
+  }
+
   // Update selected provider and reset model choice to default recommended
   void _onProviderChanged(String? newProvider) {
     if (newProvider == null) return;
@@ -83,7 +92,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
       _isValidating = true;
     });
 
-    final String finalModel = _selectedProvider == 'custom'
+    final String finalModel = _showCustomModelField
         ? _customModelController.text.trim()
         : _selectedModel;
 
@@ -146,7 +155,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
       _isSaving = true;
     });
 
-    final String finalModel = _selectedProvider == 'custom'
+    final String finalModel = _showCustomModelField
         ? _customModelController.text.trim()
         : _selectedModel;
 
@@ -174,6 +183,12 @@ class _AISettingsPageState extends State<AISettingsPage> {
     final localizations = AppLocalizations.of(context)!;
 
     final isCustom = _selectedProvider == 'custom';
+    final bool isModelStandard = _isStandardModel(
+      _selectedProvider,
+      _selectedModel,
+    );
+    final String dropdownValue = isModelStandard ? _selectedModel : 'custom';
+    final bool showCustomModelField = _showCustomModelField;
 
     return Scaffold(
       appBar: AppBar(title: Text(localizations.aiSettingsTitle)),
@@ -266,23 +281,21 @@ class _AISettingsPageState extends State<AISettingsPage> {
                       const SizedBox(height: 20),
 
                       // Model Dropdown or Textfield
-                      if (!isCustom)
+                      if (!isCustom) ...[
                         DropdownButtonFormField<String>(
-                          initialValue:
-                              _providerModels[_selectedProvider]!.contains(
-                                _selectedModel,
-                              )
-                              ? _selectedModel
-                              : _providerModels[_selectedProvider]!.first,
+                          initialValue: dropdownValue,
                           decoration: InputDecoration(
                             labelText: localizations.aiModelLabel,
                           ),
-                          items: _providerModels[_selectedProvider]!
-                              .map(
-                                (m) =>
-                                    DropdownMenuItem(value: m, child: Text(m)),
-                              )
-                              .toList(),
+                          items: [
+                            ..._providerModels[_selectedProvider]!.map(
+                              (m) => DropdownMenuItem(value: m, child: Text(m)),
+                            ),
+                            DropdownMenuItem(
+                              value: 'custom',
+                              child: Text(localizations.customModelOption),
+                            ),
+                          ],
                           onChanged: (v) {
                             if (v != null) {
                               setState(() {
@@ -290,21 +303,27 @@ class _AISettingsPageState extends State<AISettingsPage> {
                               });
                             }
                           },
-                        )
-                      else
+                        ),
+                      ],
+                      if (showCustomModelField) ...[
+                        const SizedBox(height: 20),
                         TextFormField(
                           controller: _customModelController,
                           decoration: InputDecoration(
-                            labelText: localizations.aiModelLabel,
+                            labelText: isCustom
+                                ? localizations.aiModelLabel
+                                : '${localizations.aiModelLabel} (${localizations.customModelOption})',
                             hintText: localizations.customModelHint,
                           ),
                           validator: (v) {
-                            if (isCustom && (v == null || v.trim().isEmpty)) {
-                              return 'Please specify a custom model name';
+                            if (showCustomModelField &&
+                                (v == null || v.trim().isEmpty)) {
+                              return localizations.customModelRequired;
                             }
                             return null;
                           },
                         ),
+                      ],
                       const SizedBox(height: 20),
 
                       // Custom endpoint base URL
@@ -317,7 +336,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
                           ),
                           validator: (v) {
                             if (isCustom && (v == null || v.trim().isEmpty)) {
-                              return 'Custom base endpoint URL is required';
+                              return localizations.customUrlRequired;
                             }
                             return null;
                           },
@@ -349,7 +368,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
                         validator: (v) {
                           // Allow empty api key if custom provider (as local services like Ollama often don't need it)
                           if (!isCustom && (v == null || v.trim().isEmpty)) {
-                            return 'API Authorization Key is required';
+                            return localizations.apiKeyRequired;
                           }
                           return null;
                         },
