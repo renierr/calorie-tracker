@@ -80,8 +80,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
     showDialog(
       context: context,
-      builder: (context) => ReportConfigDialog(
+      builder: (dialogCtx) => ReportConfigDialog(
         appState: appState,
+        parentContext: context,
         filteredMeals: mealsToReport,
         filterType: appState.historyFilter,
         customStartDate: appState.historyCustomStartDate,

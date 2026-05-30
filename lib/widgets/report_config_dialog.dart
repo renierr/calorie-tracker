@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 
 class ReportConfigDialog extends StatefulWidget {
   final AppState appState;
+  final BuildContext? parentContext;
   final List<Meal> filteredMeals;
   final String filterType;
   final DateTime? customStartDate;
@@ -17,6 +18,7 @@ class ReportConfigDialog extends StatefulWidget {
   const ReportConfigDialog({
     super.key,
     required this.appState,
+    this.parentContext,
     required this.filteredMeals,
     required this.filterType,
     this.customStartDate,
@@ -168,7 +170,7 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
           icon: const Icon(Icons.picture_as_pdf),
           label: Text(AppLocalizations.of(context)!.generatePdfBtn),
           onPressed: () async {
-            Navigator.pop(context);
+            final navigator = Navigator.of(context);
 
             String rangeText = AppLocalizations.of(context)!.pdfActiveFilter;
             final locale = Localizations.localeOf(context).toLanguageTag();
@@ -206,13 +208,6 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
               rangeText = AppLocalizations.of(context)!.pdfAllTime;
             }
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(AppLocalizations.of(context)!.generatingPdf),
-                duration: const Duration(seconds: 2),
-              ),
-            );
-
             List<Meal> mealsToInclude = List.from(widget.filteredMeals);
             if (_pdfTypeFilter == 'meals') {
               mealsToInclude = mealsToInclude.where((m) => m.isMeal).toList();
@@ -222,19 +217,76 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
                   .toList();
             }
 
-            await PdfService.generateSummaryReport(
+            // Show a non-dismissible loading overlay dialog
+            showDialog(
               context: context,
-              meals: mealsToInclude,
-              title: _titleController.text.trim(),
-              timeframeStr: rangeText,
-              userNotes: _notesController.text.trim(),
-              includeImages: _includeImages,
-              calorieGoal: widget.appState.calorieGoal,
-              proteinGoal: widget.appState.proteinGoal,
-              carbsGoal: widget.appState.carbsGoal,
-              fatGoal: widget.appState.fatGoal,
-              pdfTypeFilter: _pdfTypeFilter,
+              barrierDismissible: false,
+              builder: (dialogCtx) => PopScope(
+                canPop: false,
+                child: Center(
+                  child: Card(
+                    color: colors.surface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 20,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(
+                              AppTheme.accentEmerald,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            AppLocalizations.of(context)!.generatingPdf,
+                            style: TextStyle(
+                              color: colors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             );
+
+            bool hasPopped = false;
+            void safePopAll() {
+              if (!hasPopped) {
+                hasPopped = true;
+                navigator.pop(); // pops loading overlay
+                navigator.pop(); // pops ReportConfigDialog
+              }
+            }
+
+            try {
+              await PdfService.generateSummaryReport(
+                context: widget.parentContext ?? context,
+                meals: mealsToInclude,
+                title: _titleController.text.trim(),
+                timeframeStr: rangeText,
+                userNotes: _notesController.text.trim(),
+                includeImages: _includeImages,
+                calorieGoal: widget.appState.calorieGoal,
+                proteinGoal: widget.appState.proteinGoal,
+                carbsGoal: widget.appState.carbsGoal,
+                fatGoal: widget.appState.fatGoal,
+                pdfTypeFilter: _pdfTypeFilter,
+                onGenerated: () {
+                  safePopAll();
+                },
+              );
+            } finally {
+              safePopAll();
+            }
 
             if (widget.onReportGenerated != null) {
               widget.onReportGenerated!();

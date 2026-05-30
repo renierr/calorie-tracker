@@ -190,6 +190,7 @@ class PdfService {
     required int carbsGoal,
     required int fatGoal,
     String pdfTypeFilter = 'all',
+    VoidCallback? onGenerated,
   }) async {
     final pdf = pw.Document();
 
@@ -479,6 +480,9 @@ class PdfService {
     );
 
     final bytes = await pdf.save();
+    if (onGenerated != null) {
+      onGenerated();
+    }
     if (!context.mounted) return;
     await FileSaveHelper.saveFile(
       context: context,
