@@ -5,6 +5,7 @@ import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/adaptive/adaptive_card_header.dart';
 import '../widgets/settings/gemini_info_dialog.dart';
+import '../widgets/settings/api_disclaimer_dialog.dart';
 import '../services/ai_service.dart';
 
 class AISettingsPage extends StatefulWidget {
@@ -373,44 +374,86 @@ class _AISettingsPageState extends State<AISettingsPage> {
                           return null;
                         },
                       ),
-                      if (_selectedProvider == 'gemini') ...[
-                        const SizedBox(height: 10),
-                        InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => const GeminiInfoDialog(),
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(4),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 6,
-                              horizontal: 4,
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 16,
+                        runSpacing: 8,
+                        children: [
+                          if (_selectedProvider == 'gemini')
+                            InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const GeminiInfoDialog(),
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(4),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 6,
+                                  horizontal: 4,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.help_outline,
+                                      size: 14,
+                                      color: AppTheme.accentEmerald,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      localizations.geminiInfoTitle,
+                                      style: const TextStyle(
+                                        color: AppTheme.accentEmerald,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.help_outline,
-                                  size: 14,
-                                  color: AppTheme.accentEmerald,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  localizations.geminiInfoTitle,
-                                  style: const TextStyle(
-                                    color: AppTheme.accentEmerald,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const ApiDisclaimerDialog(),
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(4),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 6,
+                                horizontal: 4,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.gavel,
+                                    size: 14,
+                                    color: AppTheme.accentAmber,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    localizations.apiDisclaimerLink,
+                                    style: const TextStyle(
+                                      color: AppTheme.accentAmber,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ],
                   ),
                 ),

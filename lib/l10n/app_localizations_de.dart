@@ -801,6 +801,40 @@ class AppLocalizationsDe extends AppLocalizations {
   String get linkCopied => 'Link in die Zwischenablage kopiert!';
 
   @override
+  String get apiDisclaimerTitle => 'API- & Kosten-Disclaimer';
+
+  @override
+  String get apiDisclaimerLink => 'API-Nutzung & Kosten-Disclaimer';
+
+  @override
+  String get apiDisclaimerDesc =>
+      'Bitte lesen Sie diesen wichtigen Hinweis zur Verwendung Ihrer eigenen API-Schlüssel und Verbindungen in dieser Anwendung:';
+
+  @override
+  String get apiDisclaimerPoint1Title => 'Kosten der Cloud-Anbieter';
+
+  @override
+  String get apiDisclaimerPoint1Desc =>
+      'Die Nutzung von Cloud-Anbietern (wie Google Gemini, OpenAI, Anthropic oder Grok) verursacht Kosten basierend auf Ihrer Token-Nutzung. Selbst wenn Sie mit einem kostenlosen Kontingent starten, können je nach Ihren Kontoeinstellungen Nutzungslimits oder automatische Abrechnungsübergänge gelten.';
+
+  @override
+  String get apiDisclaimerPoint2Title => 'Verantwortung des Nutzers';
+
+  @override
+  String get apiDisclaimerPoint2Desc =>
+      'Sie sind allein verantwortlich für die Verwaltung Ihrer API-Schlüssel, die Überwachung der Nutzung und alle Gebühren oder Abrechnungen, die durch Ihre Cloud-Anbieter-Konten entstehen. Wir empfehlen dringend, Budget-Warnungen und Nutzungslimits in Ihrer Entwicklerkonsole einzurichten.';
+
+  @override
+  String get apiDisclaimerPoint3Title => 'Keine Haftung des App-Erstellers';
+
+  @override
+  String get apiDisclaimerPoint3Desc =>
+      'Als Ersteller dieser App bin ich nicht verantwortlich für direkte, indirekte oder zufällige Kosten, Abrechnungsüberraschungen, API-Missbrauch, Dienstunterbrechungen oder Fehler, die bei der Nutzung von KI-Modellen von Drittanbietern auftreten können.';
+
+  @override
+  String get apiDisclaimerButton => 'Ich verstehe';
+
+  @override
   String get notificationsTitle => 'System-Benachrichtigungen';
 
   @override
