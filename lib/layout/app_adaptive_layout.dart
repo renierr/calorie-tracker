@@ -171,11 +171,20 @@ class AppAdaptiveLayout extends StatelessWidget {
           );
         }
 
+        final bool isToday = DateUtils.isSameDay(
+          appState.selectedDate,
+          DateTime.now(),
+        );
+
         return PopScope(
-          canPop: currentIndex == 0,
+          canPop: currentIndex == 0 && isToday,
           onPopInvokedWithResult: (bool didPop, Object? result) {
             if (didPop) return;
-            appState.selectTab(0);
+            if (currentIndex != 0) {
+              appState.selectTab(0);
+            } else if (!isToday) {
+              appState.selectDate(DateTime.now());
+            }
           },
           child: Scaffold(
             body: _buildPage(currentIndex),

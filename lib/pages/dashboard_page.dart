@@ -12,8 +12,15 @@ import '../widgets/gamification/gamification_card.dart';
 import '../widgets/gamification/gamification_dialogs.dart';
 import '../widgets/gamification/confetti_widget.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  double? _dragStartX;
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +88,30 @@ class DashboardPage extends StatelessWidget {
         children: [
           GestureDetector(
             behavior: HitTestBehavior.opaque,
+            onHorizontalDragStart: (details) {
+              _dragStartX = details.globalPosition.dx;
+            },
             onHorizontalDragEnd: (details) {
+              if (_dragStartX == null) return;
+
+              final double screenWidth = MediaQuery.of(context).size.width;
+              const double edgeMargin = 40.0;
+
+              // Ignore drag starting near the left or right edges to avoid clashing with back gesture
+              if (_dragStartX! < edgeMargin ||
+                  _dragStartX! > screenWidth - edgeMargin) {
+                _dragStartX = null;
+                return;
+              }
+
               if (details.primaryVelocity == null) return;
               if (details.primaryVelocity! > 100) {
                 appState.previousDay();
               } else if (details.primaryVelocity! < -100) {
                 appState.nextDay();
               }
+
+              _dragStartX = null;
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
