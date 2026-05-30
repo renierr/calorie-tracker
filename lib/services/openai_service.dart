@@ -17,7 +17,9 @@ class OpenAIService extends BaseAIService {
     String? customUrl,
   }) async {
     final String targetLanguage = getTargetLanguage(languageCode);
-    final String base64Image = base64Encode(imageBytes);
+    final String base64Image = imageBytes.isNotEmpty
+        ? base64Encode(imageBytes)
+        : '';
 
     final String activeModel = getActiveModel(model);
 
@@ -41,10 +43,11 @@ class OpenAIService extends BaseAIService {
           'role': 'user',
           'content': [
             {'type': 'text', 'text': userPrompt},
-            {
-              'type': 'image_url',
-              'image_url': {'url': 'data:$mimeType;base64,$base64Image'},
-            },
+            if (imageBytes.isNotEmpty)
+              {
+                'type': 'image_url',
+                'image_url': {'url': 'data:$mimeType;base64,$base64Image'},
+              },
           ],
         },
       ],

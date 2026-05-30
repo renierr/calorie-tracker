@@ -205,4 +205,8 @@ mixin _MealState on ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<Uint8List?> getMealImageBytes(int id) async {
+    return await _state._dbHelper.getMealImageBytes(id);
+  }
 }

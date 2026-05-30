@@ -240,6 +240,8 @@
     }
   },
   "reEvaluationSuccess": "Mahlzeit erfolgreich neu bewertet!",
+  "reEvaluateInstruction": "Korrektur-Eingabe (z.B. 'Ich habe nur die Hälfte gegessen')",
+  "reEvaluateInstructionHint": "Geben Sie Anpassungen ein oder was Sie tatsächlich verzehrt haben...",
   "syncSettings": "Cloud-Synchronisation",
   "syncSettingsDesc": "Konfigurieren Sie Ihre Serververbindung, um Ihre Mahlzeiten-Datenbank auf mehreren Geräten zu sichern und zu synchronisieren.",
   "syncServerUrl": "Server-URL",

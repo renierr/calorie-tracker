@@ -594,6 +594,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reEvaluationSuccess => 'Mahlzeit erfolgreich neu bewertet!';
 
   @override
+  String get reEvaluateInstruction =>
+      'Korrektur-Eingabe (z.B. \'Ich habe nur die Hälfte gegessen\')';
+
+  @override
+  String get reEvaluateInstructionHint =>
+      'Geben Sie Anpassungen ein oder was Sie tatsächlich verzehrt haben...';
+
+  @override
   String get syncSettings => 'Cloud-Synchronisation';
 
   @override

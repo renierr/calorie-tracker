@@ -592,6 +592,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reEvaluationSuccess => 'Meal re-evaluated successfully!';
 
   @override
+  String get reEvaluateInstruction =>
+      'Correction Prompt (e.g. \'I only ate half\')';
+
+  @override
+  String get reEvaluateInstructionHint =>
+      'Enter adjustments or what you actually consumed...';
+
+  @override
   String get syncSettings => 'Cloud Sync Settings';
 
   @override

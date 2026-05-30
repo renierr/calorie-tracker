@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
@@ -23,6 +24,11 @@ class _EditMealDialogState extends State<EditMealDialog> {
   late final TextEditingController _fatController;
   late final TextEditingController _notesController;
   late final TextEditingController _weightController;
+  late final TextEditingController _reEvalPromptController;
+
+  Uint8List? _imageBytes;
+  bool _isLoadingImage = false;
+  bool _isReEvaluating = false;
 
   @override
   void initState() {
@@ -42,6 +48,21 @@ class _EditMealDialogState extends State<EditMealDialog> {
     _weightController = TextEditingController(
       text: widget.meal.weightKg?.toString() ?? '',
     );
+    _reEvalPromptController = TextEditingController();
+
+    // Asynchronously load the meal image from the database if not present in memory
+    _imageBytes = widget.meal.imageBytes;
+    if (_imageBytes == null && widget.meal.id != null) {
+      _isLoadingImage = true;
+      widget.appState.getMealImageBytes(widget.meal.id!).then((bytes) {
+        if (mounted) {
+          setState(() {
+            _imageBytes = bytes;
+            _isLoadingImage = false;
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -53,12 +74,112 @@ class _EditMealDialogState extends State<EditMealDialog> {
     _fatController.dispose();
     _notesController.dispose();
     _weightController.dispose();
+    _reEvalPromptController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleReEvaluation() async {
+    final prompt = _reEvalPromptController.text.trim();
+    if (prompt.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.reEvaluateInstructionHint,
+          ),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+      return;
+    }
+
+    final apiKey = widget.appState.aiApiKey;
+    final hasApiKey =
+        widget.appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
+    if (!hasApiKey) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.apiKeyMissing),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isReEvaluating = true;
+    });
+
+    try {
+      await WakelockPlus.enable();
+    } catch (_) {}
+
+    try {
+      // Build visual scale context with baseline meal details
+      final String originalDetails =
+          'Original Meal: "${widget.meal.foodName}", '
+          'Calories: ${widget.meal.calories} kcal, '
+          'Protein: ${widget.meal.protein}g, '
+          'Carbs: ${widget.meal.carbs}g, '
+          'Fat: ${widget.meal.fat}g, '
+          'Notes: "${widget.meal.notes ?? ''}".';
+
+      final String customPrompt =
+          '$originalDetails '
+          'User eaten adjustment/correction instruction: "$prompt". '
+          'Please re-evaluate portions and visual changes to compute new nutritional values.';
+
+      final result = await widget.appState.performAIAnalysis(
+        imageBytes: _imageBytes ?? Uint8List(0),
+        mimeType: 'image/jpeg',
+        userHint: customPrompt,
+      );
+
+      if (mounted) {
+        setState(() {
+          _nameController.text = result.foodName;
+          _caloriesController.text = result.calories.toString();
+          _proteinController.text = result.protein.toString();
+          _carbsController.text = result.carbs.toString();
+          _fatController.text = result.fat.toString();
+          _notesController.text = result.notes;
+          _reEvalPromptController.clear();
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.reEvaluationSuccess),
+            backgroundColor: AppTheme.accentEmerald,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.reEvaluationError(e.toString()),
+            ),
+            backgroundColor: AppTheme.accentRed,
+          ),
+        );
+      }
+    } finally {
+      try {
+        await WakelockPlus.disable();
+      } catch (_) {}
+      if (mounted) {
+        setState(() {
+          _isReEvaluating = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
+    final isEnabled = !_isReEvaluating;
+
     return AlertDialog(
       backgroundColor: colors.surface,
       title: Text(
@@ -78,7 +199,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
               style: TextStyle(color: colors.textSecondary, fontSize: 11),
             ),
             const SizedBox(height: 6),
-            TextField(controller: _nameController),
+            TextField(controller: _nameController, enabled: isEnabled),
             const SizedBox(height: 14),
             Row(
               children: [
@@ -96,6 +217,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                       const SizedBox(height: 6),
                       TextField(
                         controller: _caloriesController,
+                        enabled: isEnabled,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -124,6 +246,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                       const SizedBox(height: 6),
                       TextField(
                         controller: _proteinController,
+                        enabled: isEnabled,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -156,6 +279,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                       const SizedBox(height: 6),
                       TextField(
                         controller: _carbsController,
+                        enabled: isEnabled,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -184,6 +308,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                       const SizedBox(height: 6),
                       TextField(
                         controller: _fatController,
+                        enabled: isEnabled,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -207,6 +332,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
             const SizedBox(height: 6),
             TextField(
               controller: _weightController,
+              enabled: isEnabled,
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
               ),
@@ -223,44 +349,125 @@ class _EditMealDialogState extends State<EditMealDialog> {
               style: TextStyle(color: colors.textSecondary, fontSize: 11),
             ),
             const SizedBox(height: 6),
-            TextField(controller: _notesController, maxLines: 2),
+            TextField(
+              controller: _notesController,
+              enabled: isEnabled,
+              maxLines: 2,
+            ),
+
+            // Premium AI Re-evaluation Section
+            const SizedBox(height: 8),
+            const Divider(height: 24),
+            Row(
+              children: [
+                const Icon(
+                  Icons.auto_awesome,
+                  color: AppTheme.accentEmerald,
+                  size: 16,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  AppLocalizations.of(context)!.reEvaluate,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _reEvalPromptController,
+              enabled: isEnabled && !_isLoadingImage,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.reEvaluateInstruction,
+                hintText: AppLocalizations.of(
+                  context,
+                )!.reEvaluateInstructionHint,
+                labelStyle: TextStyle(
+                  color: colors.textSecondary,
+                  fontSize: 11,
+                ),
+                hintStyle: TextStyle(
+                  color: colors.textSecondary.withValues(alpha: 0.6),
+                  fontSize: 11,
+                ),
+                alignLabelWithHint: true,
+              ),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: _isReEvaluating
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppTheme.accentEmerald,
+                          ),
+                        ),
+                      ),
+                    )
+                  : ElevatedButton.icon(
+                      icon: const Icon(Icons.auto_awesome, size: 16),
+                      label: Text(AppLocalizations.of(context)!.reEvaluate),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.accentEmerald,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      onPressed: (isEnabled && !_isLoadingImage)
+                          ? _handleReEvaluation
+                          : null,
+                    ),
+            ),
           ],
         ),
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: _isReEvaluating ? null : () => Navigator.pop(context),
           child: Text(
             AppLocalizations.of(context)!.cancel,
             style: TextStyle(color: colors.textSecondary),
           ),
         ),
         ElevatedButton(
-          onPressed: () async {
-            final double? weight = double.tryParse(
-              _weightController.text.trim(),
-            );
-            final updatedMeal = widget.meal.copyWith(
-              foodName: _nameController.text.trim(),
-              calories: int.tryParse(_caloriesController.text) ?? 0,
-              protein: int.tryParse(_proteinController.text) ?? 0,
-              carbs: int.tryParse(_carbsController.text) ?? 0,
-              fat: int.tryParse(_fatController.text) ?? 0,
-              notes: _notesController.text.trim(),
-              weightKg: weight,
-              clearWeight: weight == null,
-              updatedAt: DateTime.now().millisecondsSinceEpoch,
-            );
-            await widget.appState.updateMeal(updatedMeal);
-            if (!context.mounted) return;
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(AppLocalizations.of(context)!.mealUpdated),
-                backgroundColor: AppTheme.accentEmerald,
-              ),
-            );
-          },
+          onPressed: _isReEvaluating
+              ? null
+              : () async {
+                  final double? weight = double.tryParse(
+                    _weightController.text.trim(),
+                  );
+                  final updatedMeal = widget.meal.copyWith(
+                    foodName: _nameController.text.trim(),
+                    calories: int.tryParse(_caloriesController.text) ?? 0,
+                    protein: int.tryParse(_proteinController.text) ?? 0,
+                    carbs: int.tryParse(_carbsController.text) ?? 0,
+                    fat: int.tryParse(_fatController.text) ?? 0,
+                    notes: _notesController.text.trim(),
+                    weightKg: weight,
+                    clearWeight: weight == null,
+                    updatedAt: DateTime.now().millisecondsSinceEpoch,
+                  );
+                  await widget.appState.updateMeal(updatedMeal);
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.mealUpdated),
+                      backgroundColor: AppTheme.accentEmerald,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
           child: Text(AppLocalizations.of(context)!.saveChanges),
         ),
       ],

@@ -240,6 +240,8 @@
     }
   },
   "reEvaluationSuccess": "Meal re-evaluated successfully!",
+  "reEvaluateInstruction": "Correction Prompt (e.g. 'I only ate half')",
+  "reEvaluateInstructionHint": "Enter adjustments or what you actually consumed...",
   "syncSettings": "Cloud Sync Settings",
   "syncSettingsDesc": "Configure your backend server connection to backup and synchronize your meal database across multiple devices.",
   "syncServerUrl": "Sync Server URL",

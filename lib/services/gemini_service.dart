@@ -69,7 +69,10 @@ class GeminiService extends BaseAIService {
     );
 
     final response = await generativeModel.generateContent([
-      Content.multi([TextPart(prompt), DataPart(mimeType, imageBytes)]),
+      if (imageBytes.isNotEmpty)
+        Content.multi([TextPart(prompt), DataPart(mimeType, imageBytes)])
+      else
+        Content.text(prompt),
     ]);
 
     final responseText = response.text;

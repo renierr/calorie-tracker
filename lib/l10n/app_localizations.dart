@@ -1148,6 +1148,18 @@ abstract class AppLocalizations {
   /// **'Meal re-evaluated successfully!'**
   String get reEvaluationSuccess;
 
+  /// No description provided for @reEvaluateInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Correction Prompt (e.g. \'I only ate half\')'**
+  String get reEvaluateInstruction;
+
+  /// No description provided for @reEvaluateInstructionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter adjustments or what you actually consumed...'**
+  String get reEvaluateInstructionHint;
+
   /// No description provided for @syncSettings.
   ///
   /// In en, this message translates to:

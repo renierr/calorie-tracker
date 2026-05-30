@@ -17,7 +17,9 @@ class AnthropicService extends BaseAIService {
     String? customUrl,
   }) async {
     final String targetLanguage = getTargetLanguage(languageCode);
-    final String base64Image = base64Encode(imageBytes);
+    final String base64Image = imageBytes.isNotEmpty
+        ? base64Encode(imageBytes)
+        : '';
 
     final String activeModel = getActiveModel(model);
 
@@ -59,14 +61,15 @@ class AnthropicService extends BaseAIService {
         {
           'role': 'user',
           'content': [
-            {
-              'type': 'image',
-              'source': {
-                'type': 'base64',
-                'media_type': mimeType,
-                'data': base64Image,
+            if (imageBytes.isNotEmpty)
+              {
+                'type': 'image',
+                'source': {
+                  'type': 'base64',
+                  'media_type': mimeType,
+                  'data': base64Image,
+                },
               },
-            },
             {'type': 'text', 'text': userPrompt},
           ],
         },
