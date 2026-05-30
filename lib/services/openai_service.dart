@@ -13,6 +13,7 @@ class OpenAIService extends BaseAIService {
     required String userHint,
     required String languageCode,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     final String targetLanguage = getTargetLanguage(languageCode);
@@ -31,29 +32,37 @@ class OpenAIService extends BaseAIService {
       includeOnlyJsonInstruction: true,
     );
 
+    final Map<String, dynamic> requestPayload = {
+      'model': activeModel,
+      'response_format': {'type': 'json_object'},
+      'messages': [
+        {'role': 'system', 'content': systemPrompt},
+        {
+          'role': 'user',
+          'content': [
+            {'type': 'text', 'text': userPrompt},
+            {
+              'type': 'image_url',
+              'image_url': {'url': 'data:$mimeType;base64,$base64Image'},
+            },
+          ],
+        },
+      ],
+    };
+
+    if (reasoningEffort != 'none' && reasoningEffort != 'default') {
+      if (activeModel.startsWith('o1') || activeModel.startsWith('o3')) {
+        requestPayload['reasoning_effort'] = reasoningEffort;
+      }
+    }
+
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $apiKey',
       },
-      body: jsonEncode({
-        'model': activeModel,
-        'response_format': {'type': 'json_object'},
-        'messages': [
-          {'role': 'system', 'content': systemPrompt},
-          {
-            'role': 'user',
-            'content': [
-              {'type': 'text', 'text': userPrompt},
-              {
-                'type': 'image_url',
-                'image_url': {'url': 'data:$mimeType;base64,$base64Image'},
-              },
-            ],
-          },
-        ],
-      }),
+      body: jsonEncode(requestPayload),
     );
 
     if (response.statusCode != 200) {
@@ -81,6 +90,7 @@ class OpenAIService extends BaseAIService {
   Future<void> validateCredentials({
     required String apiKey,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     if (apiKey.trim().isEmpty) {

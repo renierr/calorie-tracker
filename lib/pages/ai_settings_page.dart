@@ -20,6 +20,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
 
   late String _selectedProvider;
   late String _selectedModel;
+  late String _selectedReasoningEffort;
   late TextEditingController _customModelController;
   late TextEditingController _apiKeyController;
   late TextEditingController _customUrlController;
@@ -41,6 +42,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
 
     _selectedProvider = _appState.aiProvider;
     _selectedModel = _appState.aiModel;
+    _selectedReasoningEffort = _appState.aiReasoningEffort;
 
     _customModelController = TextEditingController(
       text: _isStandardModel(_selectedProvider, _selectedModel)
@@ -103,6 +105,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
         model: finalModel,
         apiKey: _apiKeyController.text.trim(),
         customUrl: _customUrlController.text.trim(),
+        reasoningEffort: _selectedReasoningEffort,
       );
 
       if (!mounted) return;
@@ -165,6 +168,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
       model: finalModel,
       apiKey: _apiKeyController.text.trim(),
       customUrl: _customUrlController.text.trim(),
+      reasoningEffort: _selectedReasoningEffort,
     );
 
     if (!mounted) return;
@@ -344,6 +348,44 @@ class _AISettingsPageState extends State<AISettingsPage> {
                         ),
                         const SizedBox(height: 20),
                       ],
+
+                      // Reasoning Effort Selector
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedReasoningEffort,
+                        decoration: InputDecoration(
+                          labelText: localizations.aiReasoningEffortLabel,
+                        ),
+                        items: [
+                          DropdownMenuItem(
+                            value: 'none',
+                            child: Text(localizations.reasoningNone),
+                          ),
+                          DropdownMenuItem(
+                            value: 'default',
+                            child: Text(localizations.reasoningDefault),
+                          ),
+                          DropdownMenuItem(
+                            value: 'low',
+                            child: Text(localizations.reasoningLow),
+                          ),
+                          DropdownMenuItem(
+                            value: 'medium',
+                            child: Text(localizations.reasoningMedium),
+                          ),
+                          DropdownMenuItem(
+                            value: 'high',
+                            child: Text(localizations.reasoningHigh),
+                          ),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() {
+                              _selectedReasoningEffort = val;
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
 
                       // Credentials Authorization Key field
                       TextFormField(

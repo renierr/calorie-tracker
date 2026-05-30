@@ -13,6 +13,7 @@ class AnthropicService extends BaseAIService {
     required String userHint,
     required String languageCode,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     final String targetLanguage = getTargetLanguage(languageCode);
@@ -32,6 +33,46 @@ class AnthropicService extends BaseAIService {
       includeOnlyJsonInstruction: true,
     );
 
+    int maxTokens = 1500;
+    Map<String, dynamic>? thinkingBlock;
+
+    if (reasoningEffort != 'none' && reasoningEffort != 'default') {
+      int budgetTokens = 2048; // default to medium
+      if (reasoningEffort == 'low') {
+        budgetTokens = 1024;
+      } else if (reasoningEffort == 'high') {
+        budgetTokens = 4096;
+      }
+      thinkingBlock = {'type': 'enabled', 'budget_tokens': budgetTokens};
+      maxTokens = budgetTokens + 1500;
+    }
+
+    final Map<String, dynamic> requestPayload = {
+      'model': activeModel,
+      'max_tokens': maxTokens,
+      'system': systemPrompt,
+      'messages': [
+        {
+          'role': 'user',
+          'content': [
+            {
+              'type': 'image',
+              'source': {
+                'type': 'base64',
+                'media_type': mimeType,
+                'data': base64Image,
+              },
+            },
+            {'type': 'text', 'text': userPrompt},
+          ],
+        },
+      ],
+    };
+
+    if (thinkingBlock != null) {
+      requestPayload['thinking'] = thinkingBlock;
+    }
+
     final response = await http.post(
       Uri.parse('https://api.anthropic.com/v1/messages'),
       headers: {
@@ -39,27 +80,7 @@ class AnthropicService extends BaseAIService {
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json',
       },
-      body: jsonEncode({
-        'model': activeModel,
-        'max_tokens': 1500,
-        'system': systemPrompt,
-        'messages': [
-          {
-            'role': 'user',
-            'content': [
-              {
-                'type': 'image',
-                'source': {
-                  'type': 'base64',
-                  'media_type': mimeType,
-                  'data': base64Image,
-                },
-              },
-              {'type': 'text', 'text': userPrompt},
-            ],
-          },
-        ],
-      }),
+      body: jsonEncode(requestPayload),
     );
 
     if (response.statusCode != 200) {
@@ -74,7 +95,15 @@ class AnthropicService extends BaseAIService {
       throw Exception('Empty content returned from Anthropic API.');
     }
 
-    final messageText = content[0]['text'] as String?;
+    // Find the text block since Claude might return a thinking block before the text block
+    String? messageText;
+    for (final block in content) {
+      if (block is Map<String, dynamic> && block['type'] == 'text') {
+        messageText = block['text'] as String?;
+        break;
+      }
+    }
+
     if (messageText == null || messageText.trim().isEmpty) {
       throw Exception('Received empty text content from Anthropic.');
     }
@@ -97,6 +126,7 @@ class AnthropicService extends BaseAIService {
   Future<void> validateCredentials({
     required String apiKey,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     if (apiKey.trim().isEmpty) {

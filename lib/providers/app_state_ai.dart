@@ -8,6 +8,7 @@ mixin _AiState on ChangeNotifier {
   String get aiModel => _state._aiModel;
   String get aiApiKey => _state._aiApiKey;
   String get aiCustomUrl => _state._aiCustomUrl;
+  String get aiReasoningEffort => _state._aiReasoningEffort;
 
   Future<void> loadAISettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -24,6 +25,8 @@ mixin _AiState on ChangeNotifier {
     }
     _state._aiApiKey = prefs.getString(AppState._keyAiApiKey) ?? '';
     _state._aiCustomUrl = prefs.getString(AppState._keyAiCustomUrl) ?? '';
+    _state._aiReasoningEffort =
+        prefs.getString(AppState._keyAiReasoningEffort) ?? 'none';
 
     // Fallback/Migration for legacy Gemini key
     final legacyGeminiKey = prefs.getString(AppState._keyGeminiApiKey);
@@ -41,17 +44,23 @@ mixin _AiState on ChangeNotifier {
     required String model,
     required String apiKey,
     required String customUrl,
+    required String reasoningEffort,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     _state._aiProvider = provider.trim();
     _state._aiModel = model.trim();
     _state._aiApiKey = apiKey.trim();
     _state._aiCustomUrl = customUrl.trim();
+    _state._aiReasoningEffort = reasoningEffort.trim();
 
     await prefs.setString(AppState._keyAiProvider, _state._aiProvider);
     await prefs.setString(AppState._keyAiModel, _state._aiModel);
     await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
     await prefs.setString(AppState._keyAiCustomUrl, _state._aiCustomUrl);
+    await prefs.setString(
+      AppState._keyAiReasoningEffort,
+      _state._aiReasoningEffort,
+    );
 
     notifyListeners();
   }
@@ -74,6 +83,7 @@ mixin _AiState on ChangeNotifier {
       languageCode: _state._appLocale,
       model: model,
       customUrl: _state._aiCustomUrl,
+      reasoningEffort: _state._aiReasoningEffort,
     );
   }
 
@@ -82,12 +92,14 @@ mixin _AiState on ChangeNotifier {
     required String model,
     required String apiKey,
     required String customUrl,
+    required String reasoningEffort,
   }) async {
     final service = AIServiceFactory.getService(provider);
     await service.validateCredentials(
       apiKey: apiKey.trim(),
       model: model.trim(),
       customUrl: customUrl.trim(),
+      reasoningEffort: reasoningEffort.trim(),
     );
   }
 

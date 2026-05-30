@@ -383,6 +383,12 @@
       }
     }
   },
+  "aiReasoningEffortLabel": "Denkaufwand",
+  "reasoningDefault": "Server-Standard",
+  "reasoningNone": "Explizit deaktiviert",
+  "reasoningLow": "Niedrig",
+  "reasoningMedium": "Mittel",
+  "reasoningHigh": "Hoch",
   "enterApiKey": "Geben Sie Ihren API-Schlüssel ein",
   "apiKeyLabel": "API-Autorisierungsschlüssel",
   "configureAiProvider": "KI-Anbieter konfigurieren",

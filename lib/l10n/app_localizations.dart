@@ -1424,6 +1424,42 @@ abstract class AppLocalizations {
   /// **'Active: {provider} ({model})'**
   String activeAiConfig(String provider, String model);
 
+  /// No description provided for @aiReasoningEffortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reasoning Effort'**
+  String get aiReasoningEffortLabel;
+
+  /// No description provided for @reasoningDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Server Default'**
+  String get reasoningDefault;
+
+  /// No description provided for @reasoningNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Explicitly Disabled'**
+  String get reasoningNone;
+
+  /// No description provided for @reasoningLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get reasoningLow;
+
+  /// No description provided for @reasoningMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get reasoningMedium;
+
+  /// No description provided for @reasoningHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get reasoningHigh;
+
   /// No description provided for @configureAiProvider.
   ///
   /// In en, this message translates to:

@@ -12,6 +12,7 @@ class CustomAIService extends BaseAIService {
     required String userHint,
     required String languageCode,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     final String targetLanguage = getTargetLanguage(languageCode);
@@ -51,26 +52,32 @@ class CustomAIService extends BaseAIService {
       headers['Authorization'] = 'Bearer $apiKey';
     }
 
+    final Map<String, dynamic> requestPayload = {
+      'model': activeModel,
+      'response_format': {'type': 'json_object'},
+      'messages': [
+        {'role': 'system', 'content': systemPrompt},
+        {
+          'role': 'user',
+          'content': [
+            {'type': 'text', 'text': userPrompt},
+            {
+              'type': 'image_url',
+              'image_url': {'url': 'data:$mimeType;base64,$base64Image'},
+            },
+          ],
+        },
+      ],
+    };
+
+    if (reasoningEffort != 'none' && reasoningEffort != 'default') {
+      requestPayload['reasoning_effort'] = reasoningEffort;
+    }
+
     final response = await http.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode({
-        'model': activeModel,
-        'response_format': {'type': 'json_object'},
-        'messages': [
-          {'role': 'system', 'content': systemPrompt},
-          {
-            'role': 'user',
-            'content': [
-              {'type': 'text', 'text': userPrompt},
-              {
-                'type': 'image_url',
-                'image_url': {'url': 'data:$mimeType;base64,$base64Image'},
-              },
-            ],
-          },
-        ],
-      }),
+      body: jsonEncode(requestPayload),
     );
 
     if (response.statusCode != 200) {
@@ -110,6 +117,7 @@ class CustomAIService extends BaseAIService {
   Future<void> validateCredentials({
     required String apiKey,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     String url = (customUrl ?? '').trim();

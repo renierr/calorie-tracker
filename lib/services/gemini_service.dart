@@ -13,6 +13,7 @@ class GeminiService extends BaseAIService {
     required String userHint,
     required String languageCode,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     final String targetLanguage = getTargetLanguage(languageCode);
@@ -84,6 +85,7 @@ class GeminiService extends BaseAIService {
   Future<void> validateCredentials({
     required String apiKey,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   }) async {
     if (apiKey.trim().isEmpty) {

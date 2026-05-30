@@ -136,6 +136,7 @@ mixin _SettingsState on ChangeNotifier {
         'aiModel': _state._aiModel,
         'aiApiKey': _state._aiApiKey,
         'aiCustomUrl': _state._aiCustomUrl,
+        'aiReasoningEffort': _state._aiReasoningEffort,
       },
     };
     return const JsonEncoder.withIndent('  ').convert(exportMap);
@@ -235,6 +236,14 @@ mixin _SettingsState on ChangeNotifier {
       if (settings.containsKey('aiCustomUrl')) {
         _state._aiCustomUrl = settings['aiCustomUrl'] as String? ?? '';
         await prefs.setString(AppState._keyAiCustomUrl, _state._aiCustomUrl);
+      }
+      if (settings.containsKey('aiReasoningEffort')) {
+        _state._aiReasoningEffort =
+            settings['aiReasoningEffort'] as String? ?? 'none';
+        await prefs.setString(
+          AppState._keyAiReasoningEffort,
+          _state._aiReasoningEffort,
+        );
       }
 
       notifyListeners();

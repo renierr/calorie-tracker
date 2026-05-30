@@ -759,6 +759,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get aiReasoningEffortLabel => 'Reasoning Effort';
+
+  @override
+  String get reasoningDefault => 'Server Default';
+
+  @override
+  String get reasoningNone => 'Explicitly Disabled';
+
+  @override
+  String get reasoningLow => 'Low';
+
+  @override
+  String get reasoningMedium => 'Medium';
+
+  @override
+  String get reasoningHigh => 'High';
+
+  @override
   String get configureAiProvider => 'Configure AI Provider';
 
   @override

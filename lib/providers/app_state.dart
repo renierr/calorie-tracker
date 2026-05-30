@@ -47,12 +47,14 @@ class AppState extends ChangeNotifier
   static const String _keyAiModel = 'ai_model';
   static const String _keyAiApiKey = 'ai_api_key';
   static const String _keyAiCustomUrl = 'ai_custom_url';
+  static const String _keyAiReasoningEffort = 'ai_reasoning_effort';
 
   // State variables
   String _aiProvider = AIServiceConfig.defaultProvider;
   String _aiModel = AIServiceConfig.defaultModel;
   String _aiApiKey = '';
   String _aiCustomUrl = '';
+  String _aiReasoningEffort = 'none';
   int _calorieGoal = 2000;
   int _proteinGoal = 130;
   int _carbsGoal = 220;

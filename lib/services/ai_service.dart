@@ -75,12 +75,14 @@ abstract class AIService {
     required String userHint,
     required String languageCode,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   });
 
   Future<void> validateCredentials({
     required String apiKey,
     required String model,
+    required String reasoningEffort,
     String? customUrl,
   });
 }
