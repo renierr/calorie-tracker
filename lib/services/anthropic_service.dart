@@ -36,7 +36,11 @@ class AnthropicService extends BaseAIService {
     int maxTokens = 1500;
     Map<String, dynamic>? thinkingBlock;
 
-    if (reasoningEffort != 'none' && reasoningEffort != 'default') {
+    final bool isThinkingModel =
+        activeModel.contains('3-7') ||
+        !AIServiceConfig.providerModels['anthropic']!.contains(activeModel);
+
+    if (isThinkingModel && reasoningEffort != 'none') {
       int budgetTokens = 2048; // default to medium
       if (reasoningEffort == 'low') {
         budgetTokens = 1024;

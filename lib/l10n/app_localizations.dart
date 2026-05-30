@@ -1430,16 +1430,10 @@ abstract class AppLocalizations {
   /// **'Reasoning Effort'**
   String get aiReasoningEffortLabel;
 
-  /// No description provided for @reasoningDefault.
-  ///
-  /// In en, this message translates to:
-  /// **'Server Default'**
-  String get reasoningDefault;
-
   /// No description provided for @reasoningNone.
   ///
   /// In en, this message translates to:
-  /// **'Explicitly Disabled'**
+  /// **'None / Default'**
   String get reasoningNone;
 
   /// No description provided for @reasoningLow.

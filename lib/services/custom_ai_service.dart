@@ -70,7 +70,7 @@ class CustomAIService extends BaseAIService {
       ],
     };
 
-    if (reasoningEffort != 'none' && reasoningEffort != 'default') {
+    if (reasoningEffort != 'none') {
       requestPayload['reasoning_effort'] = reasoningEffort;
     }
 

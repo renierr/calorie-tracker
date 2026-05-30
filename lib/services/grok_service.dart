@@ -49,7 +49,12 @@ class GrokService extends BaseAIService {
       ],
     };
 
-    if (reasoningEffort != 'none' && reasoningEffort != 'default') {
+    final bool isReasoningModel =
+        activeModel.contains('beta') ||
+        activeModel.contains('3') ||
+        !AIServiceConfig.providerModels['grok']!.contains(activeModel);
+
+    if (isReasoningModel && reasoningEffort != 'none') {
       requestPayload['reasoning_effort'] = reasoningEffort;
     }
 

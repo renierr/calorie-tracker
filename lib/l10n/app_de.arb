@@ -384,8 +384,7 @@
     }
   },
   "aiReasoningEffortLabel": "Denkaufwand",
-  "reasoningDefault": "Server-Standard",
-  "reasoningNone": "Explizit deaktiviert",
+  "reasoningNone": "Keine / Standard",
   "reasoningLow": "Niedrig",
   "reasoningMedium": "Mittel",
   "reasoningHigh": "Hoch",

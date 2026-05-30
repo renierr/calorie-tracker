@@ -50,7 +50,7 @@ class OpenAIService extends BaseAIService {
       ],
     };
 
-    if (reasoningEffort != 'none' && reasoningEffort != 'default') {
+    if (reasoningEffort != 'none') {
       if (activeModel.startsWith('o1') || activeModel.startsWith('o3')) {
         requestPayload['reasoning_effort'] = reasoningEffort;
       }

@@ -18,7 +18,7 @@ class AIServiceConfig {
       'gemini-2.5-flash-lite',
       'gemini-2.5-pro',
     ],
-    'openai': ['gpt-4o-mini', 'gpt-4o'],
+    'openai': ['gpt-4o-mini', 'gpt-4o', 'o1'],
     'anthropic': ['claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest'],
     'grok': ['grok-4.3-latest', 'grok-4.3', 'grok-4-1-fast-non-reasoning'],
   };

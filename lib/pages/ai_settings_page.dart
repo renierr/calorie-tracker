@@ -361,10 +361,6 @@ class _AISettingsPageState extends State<AISettingsPage> {
                             child: Text(localizations.reasoningNone),
                           ),
                           DropdownMenuItem(
-                            value: 'default',
-                            child: Text(localizations.reasoningDefault),
-                          ),
-                          DropdownMenuItem(
                             value: 'low',
                             child: Text(localizations.reasoningLow),
                           ),

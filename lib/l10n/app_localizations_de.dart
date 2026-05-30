@@ -768,10 +768,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get aiReasoningEffortLabel => 'Denkaufwand';
 
   @override
-  String get reasoningDefault => 'Server-Standard';
-
-  @override
-  String get reasoningNone => 'Explizit deaktiviert';
+  String get reasoningNone => 'Keine / Standard';
 
   @override
   String get reasoningLow => 'Niedrig';

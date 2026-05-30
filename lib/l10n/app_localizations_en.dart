@@ -762,10 +762,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiReasoningEffortLabel => 'Reasoning Effort';
 
   @override
-  String get reasoningDefault => 'Server Default';
-
-  @override
-  String get reasoningNone => 'Explicitly Disabled';
+  String get reasoningNone => 'None / Default';
 
   @override
   String get reasoningLow => 'Low';
