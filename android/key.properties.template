@@ -1,4 +1,4 @@
 storePassword=example_keystore_password
 keyPassword=example_key_password
-keyAlias=example_key_alias
+keyAlias=upload
 storeFile=example-keystore.jks
