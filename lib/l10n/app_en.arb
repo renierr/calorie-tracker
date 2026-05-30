@@ -22,7 +22,7 @@
   "perGram": "P: {protein}g  C: {carbs}g  F: {fat}g",
   "kcalLabel": "+{calories} kcal",
 
-  "scanTitle": "AI Meal Scanner",
+  "scanTitle": "Track Activity",
   "noPhotoSelected": "No Meal Photo Selected",
   "scanPrompt": "Scan a photo to calculate nutrients instantly",
   "gallery": "Gallery",
@@ -160,11 +160,11 @@
   "themeDark": "Dark",
 
   "sidebarDashboard": "Dashboard",
-  "sidebarScan": "AI Food Scan",
+  "sidebarScan": "Track Activity",
   "sidebarHistory": "Meal History",
   "sidebarSettings": "Goal Settings",
   "navDashboard": "Dashboard",
-  "navScan": "Scan",
+  "navScan": "Track",
   "navHistory": "History",
   "navSettings": "Settings",
   "navSettingsCompact": "Prefs",

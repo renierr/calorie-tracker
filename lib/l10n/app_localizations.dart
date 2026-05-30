@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// No description provided for @scanTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI Meal Scanner'**
+  /// **'Track Activity'**
   String get scanTitle;
 
   /// No description provided for @noPhotoSelected.
@@ -929,7 +929,7 @@ abstract class AppLocalizations {
   /// No description provided for @sidebarScan.
   ///
   /// In en, this message translates to:
-  /// **'AI Food Scan'**
+  /// **'Track Activity'**
   String get sidebarScan;
 
   /// No description provided for @sidebarHistory.
@@ -953,7 +953,7 @@ abstract class AppLocalizations {
   /// No description provided for @navScan.
   ///
   /// In en, this message translates to:
-  /// **'Scan'**
+  /// **'Track'**
   String get navScan;
 
   /// No description provided for @navHistory.

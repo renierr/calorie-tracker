@@ -77,7 +77,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get scanTitle => 'KI Lebensmittelscanner';
+  String get scanTitle => 'Aktivität erfassen';
 
   @override
   String get noPhotoSelected => 'Kein Foto ausgewählt';
@@ -465,7 +465,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get sidebarDashboard => 'Dashboard';
 
   @override
-  String get sidebarScan => 'KI Scan';
+  String get sidebarScan => 'Aktivität erfassen';
 
   @override
   String get sidebarHistory => 'Verlauf';
@@ -477,7 +477,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get navDashboard => 'Dashboard';
 
   @override
-  String get navScan => 'Scannen';
+  String get navScan => 'Erfassen';
 
   @override
   String get navHistory => 'Verlauf';

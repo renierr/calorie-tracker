@@ -22,7 +22,7 @@
   "perGram": "E: {protein}g  K: {carbs}g  F: {fat}g",
   "kcalLabel": "+{calories} kcal",
 
-  "scanTitle": "KI Lebensmittelscanner",
+  "scanTitle": "Aktivität erfassen",
   "noPhotoSelected": "Kein Foto ausgewählt",
   "scanPrompt": "Foto scannen für sofortige Nährwertanalyse",
   "gallery": "Galerie",
@@ -160,11 +160,11 @@
   "themeDark": "Dunkel",
 
   "sidebarDashboard": "Dashboard",
-  "sidebarScan": "KI Scan",
+  "sidebarScan": "Aktivität erfassen",
   "sidebarHistory": "Verlauf",
   "sidebarSettings": "Einstellungen",
   "navDashboard": "Dashboard",
-  "navScan": "Scannen",
+  "navScan": "Erfassen",
   "navHistory": "Verlauf",
   "navSettings": "Einstellungen",
   "navSettingsCompact": "Einst.",

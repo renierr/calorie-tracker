@@ -77,7 +77,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get scanTitle => 'AI Meal Scanner';
+  String get scanTitle => 'Track Activity';
 
   @override
   String get noPhotoSelected => 'No Meal Photo Selected';
@@ -463,7 +463,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sidebarDashboard => 'Dashboard';
 
   @override
-  String get sidebarScan => 'AI Food Scan';
+  String get sidebarScan => 'Track Activity';
 
   @override
   String get sidebarHistory => 'Meal History';
@@ -475,7 +475,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navDashboard => 'Dashboard';
 
   @override
-  String get navScan => 'Scan';
+  String get navScan => 'Track';
 
   @override
   String get navHistory => 'History';
