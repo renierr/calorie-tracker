@@ -1,0 +1,4 @@
+storePassword=example_keystore_password
+keyPassword=example_key_password
+keyAlias=example_key_alias
+storeFile=example-keystore.jks
