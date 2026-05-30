@@ -55,6 +55,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 ### 2. Database & Assets
 - Standard: `sqflite` + dynamic `sqflite_common_ffi` (Desktop).
 - Images must persist exclusively as SQLite `BLOB` bytes, never raw OS absolute file paths.
+- **Activity Tracking**: Unified `meals` table stores both food and physical activities. Differentiated solely by `shortId` prefix: `MEAL-` for foods, and `ACT-` for physical exercises.
 
 ### 3. Multi-Provider AI Scanning
 - Service: Supports multiple AI models (Gemini, OpenAI, Anthropic, Custom AI) selected dynamically in settings and routed via `AIServiceConfig` and `AIServiceFactory`.

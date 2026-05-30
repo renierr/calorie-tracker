@@ -8,15 +8,20 @@ Designed for both daily mobility and desktop efficiency, NutriScan lets you trac
 
 ## The NutriScan Experience
 
-### 📸 Intelligent Visual Scanning
+### 📸 Intelligent Visual Scanning & AI Re-Evaluation
 Instantly log your meals just by taking a picture. 
 
 Backed by advanced multi-provider visual AI models, NutriScan looks at your food photo, estimates portion weights, and breaks down the meal's exact calories, protein, carbohydrates, and healthy fats. 
 
-You can even add custom text hints (e.g. *"about 150g white rice"*) to guide the estimation, then verify and adjust the details in an elegant review screen before saving.
+Need adjustments? Simply enter an interactive **Correction Prompt** (e.g., *"I only ate half"* or *"add 50g chicken breast"*) during verification or from the edit dialog, and the AI will re-evaluate your macros instantly.
 
 > [!NOTE]
 > **API Key & Manual Logging**: To use the visual scanner, you must provide your own API key for your chosen provider (Google Gemini, OpenAI, or Anthropic) in the Settings page. However, **manual meal logging is always fully supported** at all times, even without an API key or active internet connection.
+
+### 🏃‍♀️ Dynamic Activity Tracking
+Track workouts, exercises, and physical activities (like running, swimming, and cycling) alongside your meals. 
+
+NutriScan automatically calculates your **daily net calorie balance** as `Intake (meals) - Burned (activities)`, giving you a flexible, interactive breakdown of your daily energy expenditure. Activities are visually integrated into your dashboard, history cards, and custom-generated PDF reports.
 
 ### 🔒 Privacy-First & Offline-First
 Your health data belongs to you. 
@@ -40,7 +45,7 @@ With custom tags and favorites tracking, you can instantly find and repeat high-
 Create high-end, professional PDF reports of your nutritional logs. 
 
 Generate single-meal summary sheets containing personal notes and photos, 
-or comprehensive multi-day summaries featuring full macro tables, budget achievements, and share with your nutritionist or trainer.
+or comprehensive multi-day summaries featuring full macro tables, activity lists, budget achievements, and share with your nutritionist or trainer.
 
 ### 🎮 Premium Gamification & Streak Loop
 Keep your healthy eating habits consistent with an interactive, beautifully designed reward system.
@@ -76,27 +81,32 @@ Overview of key files and directories under the `lib/` directory:
 
 ### Key Technical Systems
 
-1. **Multi-Provider AI Scanning**:
+1. **Multi-Provider AI Scanning & Re-Evaluation**:
    - Analyzes photos using Gemini, OpenAI, Anthropic, or Custom AI endpoints with strict structured JSON schemas to guarantee exact calorie and macro totals.
+   - Supports live dynamic re-evaluation using correction prompts, merging historical image bytes and new prompt instructions.
    - Interactive Verification Form allows users to review and adjust values before saving.
 
-2. **Offline-First SQLite Storage**:
+2. **Dynamic Activity Tracking System**:
+   - Tracks exercises using the unified SQLite `meals` table, differentiated by the `shortId` prefix (`ACT-` for exercise, `MEAL-` for food).
+   - Computes daily net calories dynamically (`Intake - Burned`) and displays customized layouts and stats on the dashboard.
+
+3. **Offline-First SQLite Storage**:
    - Highly performant database schema storing meal descriptions, macro grams (Protein, Carbohydrates, Lipid Fats), total calories, body weight in kg, AI confidence ratings, notes, dates, and raw photo bytes (BLOB).
    - Utilizes `sqflite` on Android and FFI bindings on Windows Desktop.
 
-3. **Multi-Platform Responsiveness**:
+4. **Multi-Platform Responsiveness**:
    - Mobile Layout (bottom bar) vs. Desktop Layout (left sidebar).
    - Handled dynamically via `ResponsiveLayout`.
 
-4. **Analytical Dashboard**:
-   - Calorie ring progress indicator, sliding calendar date selector, and a vertical bar chart displaying calorie history over the last 7 days.
+5. **Analytical Dashboard**:
+   - Calorie ring progress indicator (incorporating exercise balance), sliding calendar date selector, and a vertical bar chart displaying calorie history over the last 7 days.
 
-5. **Gamification System**:
+6. **Gamification System**:
    - Fully persistent, offline SQLite habit state (`gamification_stats` table).
    - Fast retroactive $O(N)$ chronological in-memory re-evaluations via a single database query.
    - High-fidelity visual feedback including dynamic dialog transitions, levels, stars, shields, and custom-rendered confetti particles.
 
-6. **Bidirectional Cloud Sync**:
+7. **Bidirectional Cloud Sync**:
    - Optional sync with a Bun-based HTTP cloud server using metadata handshakes and sync/deleted state flags.
 
 ---

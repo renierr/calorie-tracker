@@ -182,3 +182,35 @@ To maintain a premium, coherent layout style and prevent duplicate visual implem
 ### ResponsiveLayout (`lib/widgets/responsive_layout.dart`)
 - **Purpose**: Root shell routing layout that adapts smoothly between compact mobile viewport layouts and multi-column wide desktop configurations.
 
+---
+
+## 10. Activity Tracking & Meal vs. Activity Distinction
+
+### Stable ID Separation
+To track both nutritional logs and physical exercises without adding a redundant second table, the application routes both types through a unified `meals` SQLite database table. They are cleanly separated using a strict naming convention in their alphanumeric `shortId` unique identifier:
+- **Food / Meal Logs**: The `shortId` prefix is set to `MEAL-` (e.g. `MEAL-ABC123XYZ`).
+- **Physical Activity Logs**: The `shortId` prefix is set to `ACT-` (e.g. `ACT-RUN987FIT`).
+
+### Model Accessors (`lib/models/meal_model.dart`)
+The `Meal` class determines the log type dynamically:
+- `bool get isActivity => shortId.startsWith('ACT-');`
+- `bool get isMeal => !isActivity;`
+
+### Database Schema Storage & Net Calculations
+1. **Calorie Representation**: For exercises, the `calories` database column stores energy burned as a positive integer.
+2. **Macronutrients**: Exercise logs ignore protein, carbs, and lipid fat fields (they default to 0 or are excluded in calculations).
+3. **Daily Net Budget Calculations** (`lib/providers/app_state.dart`):
+   - `totalCaloriesIntake`: Sums up calories of all entries for the selected day where `isMeal` is true.
+   - `totalCaloriesBurned`: Sums up calories of all entries for the selected day where `isActivity` is true.
+   - `totalCaloriesConsumed` (net consumption) is computed dynamically as:
+     $$\text{totalCaloriesConsumed} = \text{totalCaloriesIntake} - \text{totalCaloriesBurned}$$
+   - Remaining daily calorie budget is calculated as:
+     $$\text{remaining} = \text{calorieGoal} - \text{totalCaloriesConsumed}$$
+   - This means logged physical activity actively reduces the net daily calorie count and increases the remaining calorie allowance.
+
+### UI & Core Workflows
+- **Dashboard Ring Progress**: If `totalCaloriesBurned > 0`, the circular calorie ring displays the net consumed value inside, and appends a premium dynamic breakdown badge below the ring indicating the separate intake and burned totals.
+- **Analytical Charts**: Dashboard trend charts and PDF reports subtract `totalCaloriesBurned` from daily counts to represent the correct net caloric balances.
+- **Filtering Logs**: The History page supports three-way filtering using `_historyTypeFilter` (values: `'all'`, `'meals'`, `'activities'`) allowing the local SQLite database query to retrieve tailored logs.
+- **Log Indicators**: Quick logs on the dashboard and history list render specific workout icons (e.g. `Icons.directions_run` vs `Icons.fastfood`) depending on `isActivity`.
+
