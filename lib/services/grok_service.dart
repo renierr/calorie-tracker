@@ -57,8 +57,11 @@ class GrokService extends BaseAIService {
         activeModel.contains('3') ||
         !AIServiceConfig.providerModels['grok']!.contains(activeModel);
 
-    if (isReasoningModel && reasoningEffort != 'none') {
-      requestPayload['reasoning_effort'] = reasoningEffort;
+    if (isReasoningModel) {
+      final bool isMultiagent = activeModel.contains('multiagent');
+      if (!(isMultiagent && reasoningEffort == 'none')) {
+        requestPayload['reasoning_effort'] = reasoningEffort;
+      }
     }
 
     final response = await http.post(

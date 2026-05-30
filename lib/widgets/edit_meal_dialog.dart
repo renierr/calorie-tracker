@@ -176,298 +176,360 @@ class _EditMealDialogState extends State<EditMealDialog> {
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
     final isEnabled = !_isReEvaluating;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double horizontalPadding = screenWidth < 600 ? 12.0 : 40.0;
 
-    return AlertDialog(
+    return Dialog(
       backgroundColor: colors.surface,
-      title: Text(
-        AppLocalizations.of(context)!.editMeal,
-        style: TextStyle(
-          color: colors.textPrimary,
-          fontWeight: FontWeight.bold,
-        ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: 24.0,
       ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.mealDescription,
-              style: TextStyle(color: colors.textSecondary, fontSize: 11),
-            ),
-            const SizedBox(height: 6),
-            TextField(controller: _nameController, enabled: isEnabled),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.caloriesKcal,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _caloriesController,
-                        enabled: isEnabled,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onTap: () {
-                          if (_caloriesController.text == '0') {
-                            _caloriesController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 480),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Title
+              Text(
+                AppLocalizations.of(context)!.editMeal,
+                style: TextStyle(
+                  color: colors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.proteinG,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _proteinController,
-                        enabled: isEnabled,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onTap: () {
-                          if (_proteinController.text == '0') {
-                            _proteinController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.carbsG,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _carbsController,
-                        enabled: isEnabled,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onTap: () {
-                          if (_carbsController.text == '0') {
-                            _carbsController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.fatG,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _fatController,
-                        enabled: isEnabled,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onTap: () {
-                          if (_fatController.text == '0') {
-                            _fatController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Text(
-              AppLocalizations.of(context)!.bodyWeightKg,
-              style: TextStyle(color: colors.textSecondary, fontSize: 11),
-            ),
-            const SizedBox(height: 6),
-            TextField(
-              controller: _weightController,
-              enabled: isEnabled,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
               ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-              ],
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)!.optionalWeight,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Text(
-              AppLocalizations.of(context)!.notes,
-              style: TextStyle(color: colors.textSecondary, fontSize: 11),
-            ),
-            const SizedBox(height: 6),
-            TextField(
-              controller: _notesController,
-              enabled: isEnabled,
-              maxLines: 2,
-            ),
+              const SizedBox(height: 16),
 
-            // Premium AI Re-evaluation Section
-            const SizedBox(height: 8),
-            const Divider(height: 24),
-            Row(
-              children: [
-                const Icon(
-                  Icons.auto_awesome,
-                  color: AppTheme.accentEmerald,
-                  size: 16,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  AppLocalizations.of(context)!.reEvaluate,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
+              // Scrollable Field Content
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.mealDescription,
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 11,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: _nameController,
+                        enabled: isEnabled,
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.caloriesKcal,
+                                  style: TextStyle(
+                                    color: colors.textSecondary,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                TextField(
+                                  controller: _caloriesController,
+                                  enabled: isEnabled,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  onTap: () {
+                                    if (_caloriesController.text == '0') {
+                                      _caloriesController.clear();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.proteinG,
+                                  style: TextStyle(
+                                    color: colors.textSecondary,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                TextField(
+                                  controller: _proteinController,
+                                  enabled: isEnabled,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  onTap: () {
+                                    if (_proteinController.text == '0') {
+                                      _proteinController.clear();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.carbsG,
+                                  style: TextStyle(
+                                    color: colors.textSecondary,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                TextField(
+                                  controller: _carbsController,
+                                  enabled: isEnabled,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  onTap: () {
+                                    if (_carbsController.text == '0') {
+                                      _carbsController.clear();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.fatG,
+                                  style: TextStyle(
+                                    color: colors.textSecondary,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                TextField(
+                                  controller: _fatController,
+                                  enabled: isEnabled,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  onTap: () {
+                                    if (_fatController.text == '0') {
+                                      _fatController.clear();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Text(
+                        AppLocalizations.of(context)!.bodyWeightKg,
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 11,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: _weightController,
+                        enabled: isEnabled,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d*'),
+                          ),
+                        ],
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(
+                            context,
+                          )!.optionalWeight,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      Text(
+                        AppLocalizations.of(context)!.notes,
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 11,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: _notesController,
+                        enabled: isEnabled,
+                        maxLines: 2,
+                      ),
+
+                      // Premium AI Re-evaluation Section
+                      const SizedBox(height: 8),
+                      const Divider(height: 24),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.auto_awesome,
+                            color: AppTheme.accentBlue,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            AppLocalizations.of(context)!.reEvaluate,
+                            style: TextStyle(
+                              color: colors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _reEvalPromptController,
+                        enabled: isEnabled && !_isLoadingImage,
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(
+                            context,
+                          )!.reEvaluateInstruction,
+                          hintText: AppLocalizations.of(
+                            context,
+                          )!.reEvaluateInstructionHint,
+                          labelStyle: TextStyle(
+                            color: colors.textSecondary,
+                            fontSize: 11,
+                          ),
+                          hintStyle: TextStyle(
+                            color: colors.textSecondary.withValues(alpha: 0.6),
+                            fontSize: 11,
+                          ),
+                          alignLabelWithHint: true,
+                        ),
+                        maxLines: 2,
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: _isReEvaluating
+                            ? const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppTheme.accentBlue,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : ElevatedButton.icon(
+                                icon: const Icon(Icons.auto_awesome, size: 16),
+                                label: Text(
+                                  AppLocalizations.of(context)!.reEvaluate,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.accentBlue,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                                onPressed: (isEnabled && !_isLoadingImage)
+                                    ? _handleReEvaluation
+                                    : null,
+                              ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _reEvalPromptController,
-              enabled: isEnabled && !_isLoadingImage,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.reEvaluateInstruction,
-                hintText: AppLocalizations.of(
-                  context,
-                )!.reEvaluateInstructionHint,
-                labelStyle: TextStyle(
-                  color: colors.textSecondary,
-                  fontSize: 11,
-                ),
-                hintStyle: TextStyle(
-                  color: colors.textSecondary.withValues(alpha: 0.6),
-                  fontSize: 11,
-                ),
-                alignLabelWithHint: true,
               ),
-              maxLines: 2,
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: _isReEvaluating
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppTheme.accentEmerald,
-                          ),
-                        ),
-                      ),
-                    )
-                  : ElevatedButton.icon(
-                      icon: const Icon(Icons.auto_awesome, size: 16),
-                      label: Text(AppLocalizations.of(context)!.reEvaluate),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.accentEmerald,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      onPressed: (isEnabled && !_isLoadingImage)
-                          ? _handleReEvaluation
-                          : null,
+              const SizedBox(height: 16),
+
+              // Responsive Action Buttons (using Wrap to prevent mobile overflow)
+              Wrap(
+                alignment: WrapAlignment.end,
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  TextButton(
+                    onPressed: _isReEvaluating
+                        ? null
+                        : () => Navigator.pop(context),
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(color: colors.textSecondary),
                     ),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: _isReEvaluating ? null : () => Navigator.pop(context),
-          child: Text(
-            AppLocalizations.of(context)!.cancel,
-            style: TextStyle(color: colors.textSecondary),
+                  ),
+                  ElevatedButton(
+                    onPressed: _isReEvaluating
+                        ? null
+                        : () async {
+                            final double? weight = double.tryParse(
+                              _weightController.text.trim(),
+                            );
+                            final updatedMeal = widget.meal.copyWith(
+                              foodName: _nameController.text.trim(),
+                              calories:
+                                  int.tryParse(_caloriesController.text) ?? 0,
+                              protein:
+                                  int.tryParse(_proteinController.text) ?? 0,
+                              carbs: int.tryParse(_carbsController.text) ?? 0,
+                              fat: int.tryParse(_fatController.text) ?? 0,
+                              notes: _notesController.text.trim(),
+                              weightKg: weight,
+                              clearWeight: weight == null,
+                              updatedAt: DateTime.now().millisecondsSinceEpoch,
+                            );
+                            await widget.appState.updateMeal(updatedMeal);
+                            if (!context.mounted) return;
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  AppLocalizations.of(context)!.mealUpdated,
+                                ),
+                                backgroundColor: AppTheme.accentEmerald,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                    child: Text(AppLocalizations.of(context)!.saveChanges),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-        ElevatedButton(
-          onPressed: _isReEvaluating
-              ? null
-              : () async {
-                  final double? weight = double.tryParse(
-                    _weightController.text.trim(),
-                  );
-                  final updatedMeal = widget.meal.copyWith(
-                    foodName: _nameController.text.trim(),
-                    calories: int.tryParse(_caloriesController.text) ?? 0,
-                    protein: int.tryParse(_proteinController.text) ?? 0,
-                    carbs: int.tryParse(_carbsController.text) ?? 0,
-                    fat: int.tryParse(_fatController.text) ?? 0,
-                    notes: _notesController.text.trim(),
-                    weightKg: weight,
-                    clearWeight: weight == null,
-                    updatedAt: DateTime.now().millisecondsSinceEpoch,
-                  );
-                  await widget.appState.updateMeal(updatedMeal);
-                  if (!context.mounted) return;
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.mealUpdated),
-                      backgroundColor: AppTheme.accentEmerald,
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-          child: Text(AppLocalizations.of(context)!.saveChanges),
-        ),
-      ],
+      ),
     );
   }
 }
