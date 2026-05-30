@@ -129,46 +129,6 @@ class AppAdaptiveLayout extends StatelessWidget {
                         label: AppLocalizations.of(context)!.sidebarSettings,
                         onTap: appState.selectTab,
                       ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: AppTheme.accentEmerald
-                                  .withValues(alpha: 0.2),
-                              child: const Text(
-                                'ME',
-                                style: TextStyle(
-                                  color: AppTheme.accentEmerald,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.profileName,
-                                  style: TextStyle(
-                                    color: colors.textPrimary,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!.profileStatus,
-                                  style: TextStyle(
-                                    color: colors.textMuted,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
