@@ -64,7 +64,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get noMealsLogged => 'Keine Mahlzeiten für diesen Tag.';
+  String get noMealsLogged => 'Keine Einträge für diesen Tag.';
 
   @override
   String perGram(Object carbs, Object fat, Object protein) {
@@ -129,7 +129,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get mealDescription => 'Mahlzeitbeschreibung';
+  String get mealDescription => 'Beschreibung';
 
   @override
   String get avocadoHint => 'z.B. Avocado Toast';
@@ -159,7 +159,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get logAndSave => 'Speichern & erfassen';
 
   @override
-  String get mealDate => 'Datum der Mahlzeit:';
+  String get mealDate => 'Datum:';
 
   @override
   String get notes => 'Notizen';
@@ -173,10 +173,10 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get provideName => 'Bitte gib einen gültigen Mahlzeitnamen ein.';
+  String get provideName => 'Bitte gib einen gültigen Namen ein.';
 
   @override
-  String get mealLogged => 'Mahlzeit erfolgreich erfasst!';
+  String get mealLogged => 'Erfolgreich erfasst!';
 
   @override
   String get scanningTitle => 'Analyse mit KI...';
@@ -229,7 +229,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get compilePdf => 'Mahlzeiten in einen PDF-Bericht umwandeln.';
+  String get compilePdf => 'Einträge in einen PDF-Bericht umwandeln.';
 
   @override
   String get reportPdf => 'PDF-Bericht';
@@ -251,7 +251,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get confirmDeleteDesc =>
-      'Bist du sicher, dass du diese Mahlzeit endgültig löschen möchtest? Dies kann nicht rückgängig gemacht werden.';
+      'Bist du sicher, dass du diesen Eintrag endgültig löschen möchtest? Dies kann nicht rückgängig gemacht werden.';
 
   @override
   String get cancel => 'Abbrechen';
@@ -261,13 +261,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noHistoryDesc =>
-      'Filter ändern oder eine Mahlzeit scannen, um zu beginnen!';
+      'Filter ändern oder einen Eintrag erfassen, um zu beginnen!';
 
   @override
-  String get mealUpdated => 'Mahlzeit erfolgreich aktualisiert!';
+  String get mealUpdated => 'Eintrag erfolgreich aktualisiert!';
 
   @override
-  String get editMeal => 'Mahlzeit bearbeiten';
+  String get editMeal => 'Eintrag bearbeiten';
 
   @override
   String get generatePdf => 'PDF-Zusammenfassung erstellen';
@@ -294,7 +294,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generatingMealPdf => 'Einzel-PDF wird erstellt...';
 
   @override
-  String get mealDeleted => 'Mahlzeit gelöscht.';
+  String get mealDeleted => 'Eintrag gelöscht.';
 
   @override
   String caloriesLabel(Object calories) {
@@ -355,7 +355,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get eraseAllDesc =>
-      'Bist du absolut sicher, dass du die SQLite-Datenbank dauerhaft löschen möchtest? Dies löscht alle deine Mahlzeiten, Fotos und Verlaufsdaten. Diese Aktion kann nicht rückgängig gemacht werden.';
+      'Bist du absolut sicher, dass du die SQLite-Datenbank dauerhaft löschen möchtest? Dies löscht alle deine Einträge, Fotos und Verlaufsdaten. Diese Aktion kann nicht rückgängig gemacht werden.';
 
   @override
   String get permanentlyErase => 'Datenbank endgültig löschen';
@@ -418,7 +418,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get confirmRestoreDesc =>
-      'Bist du dir absolut sicher, dass du diese Datenbanksicherung wiederherstellen möchtest? Alle deine aktuellen protokollierten Mahlzeiten und Fotos werden dauerhaft ersetzt. Diese Aktion kann nicht rückgängig gemacht werden.';
+      'Bist du dir absolut sicher, dass du diese Datenbanksicherung wiederherstellen möchtest? Alle deine aktuellen protokollierten Einträge und Fotos werden dauerhaft ersetzt. Diese Aktion kann nicht rückgängig gemacht werden.';
 
   @override
   String get confirmRestoreSettings => 'Einstellungen wiederherstellen?';
@@ -536,7 +536,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pdfCalorieTrend => 'Kalorientrend';
 
   @override
-  String get pdfSingleMealReport => 'Ernährungsbericht der Mahlzeit';
+  String get pdfSingleMealReport => 'Ernährungsbericht des Eintrags';
 
   @override
   String get pdfNotes => 'KI-Analyse & Notizen';
@@ -548,11 +548,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get importLabel => 'Importieren';
 
   @override
-  String get exportLabel => 'Exportieren';
+  String get exportLabel => 'Export';
 
   @override
   String importMealsSuccess(int count) {
-    return '$count Mahlzeiten erfolgreich importiert.';
+    return '$count Einträge erfolgreich importiert.';
   }
 
   @override
@@ -561,7 +561,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get exportMealsSuccess => 'Mahlzeiten erfolgreich exportiert.';
+  String get exportMealsSuccess => 'Einträge erfolgreich exportiert.';
 
   @override
   String exportMealsError(String error) {
@@ -591,7 +591,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get reEvaluationSuccess => 'Mahlzeit erfolgreich neu bewertet!';
+  String get reEvaluationSuccess => 'Eintrag erfolgreich neu bewertet!';
 
   @override
   String get reEvaluateInstruction =>
@@ -606,7 +606,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get syncSettingsDesc =>
-      'Konfigurieren Sie Ihre Serververbindung, um Ihre Mahlzeiten-Datenbank auf mehreren Geräten zu sichern und zu synchronisieren.';
+      'Konfigurieren Sie Ihre Serververbindung, um Ihre Datenbank auf mehreren Geräten zu sichern und zu synchronisieren.';
 
   @override
   String get syncServerUrl => 'Server-URL';
@@ -645,11 +645,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get neverSynced => 'Noch nie synchronisiert';
 
   @override
-  String get favoriteMeals => 'Lieblingsgerichte';
+  String get favoriteMeals => 'Favoriten';
 
   @override
   String get noFavoritesYet =>
-      'Noch keine Lieblingsgerichte. Markiere ein Gericht in den Details als Favorit.';
+      'Noch keine Favoriten. Markiere einen Eintrag in den Details als Favorit.';
 
   @override
   String appVersion(String version) {
@@ -722,7 +722,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aiSettingsDesc =>
-      'Konfigurieren Sie Ihr bevorzugtes KI-Bilderkennungsmodell für das Scannen von Mahlzeiten.';
+      'Konfigurieren Sie Ihr bevorzugtes KI-Bilderkennungsmodell für das Scannen von Fotos.';
 
   @override
   String get aiProviderLabel => 'KI-Anbieter';
@@ -799,7 +799,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get geminiInfoDesc =>
-      'Der KI-Mahlzeiten-Scanner verbindet sich sicher mit den Gemini-Modellen von Google, um Kalorien und Portionsgewichte aus Ihren Essensfotos zu schätzen.';
+      'Der KI-Scanner verbindet sich sicher mit den Gemini-Modellen von Google, um Kalorien und Portionsgewichte aus Ihren Essensfotos zu schätzen.';
 
   @override
   String get geminiStep1 =>
@@ -952,7 +952,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get badgeDreifacheDisziplinDesc =>
-      '3 Tage in Folge Mahlzeiten eingetragen und unter dem Limit geblieben.';
+      '3 Tage in Folge Einträge vorgenommen und unter dem Limit geblieben.';
 
   @override
   String get badgeWochenKoenigTitle => 'Wochen-König';
@@ -992,7 +992,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get lvlCalorieNinja => 'Kalorien-Ninja';
 
   @override
-  String get xpHint => '+10 XP pro Mahlzeit • +100 XP pro erfolgreichem Tag';
+  String get xpHint => '+10 XP pro Eintrag • +100 XP pro erfolgreichem Tag';
 
   @override
   String get gamificationSettingsTitle => 'Gamification-Einstellungen';
@@ -1070,14 +1070,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aboutDescription =>
-      'NutriScan ist ein moderner, datenschutzfreundlicher Kalorien- und Makronährstoff-Tracker, der entwickelt wurde, um dir mit minimalem Aufwand beim Erreichen deiner Ziele zu helfen. Durch fortschrittliche KI-Modellintegrationen wird das Eintragen von Mahlzeiten so einfach wie das Aufnehmen eines Fotos.';
+      'NutriScan ist ein moderner, datenschutzfreundlicher Kalorien- und Makronährstoff-Tracker, der entwickelt wurde, um dir mit minimalem Aufwand beim Erreichen deiner Ziele zu helfen. Durch fortschrittliche KI-Modellintegrationen wird das Erfassen so einfach wie das Aufnehmen eines Fotos.';
 
   @override
-  String get aboutFeatureAiTitle => 'KI-Mahlzeiten-Scanner';
+  String get aboutFeatureAiTitle => 'KI-Scanner';
 
   @override
   String get aboutFeatureAiDesc =>
-      'Fotografiere deine Mahlzeiten für eine sekundenschnelle Analyse von Kalorien und Makronährstoffen.';
+      'Fotografiere deine Mahlzeiten für eine sekundenschnelle Analyse von Kalorien und Nährstoffen.';
 
   @override
   String get aboutFeatureMultiAiTitle => 'Multi-Anbieter-KI';

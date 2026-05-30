@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @noMealsLogged.
   ///
   /// In en, this message translates to:
-  /// **'No meals logged for this day.'**
+  /// **'No logs for this day.'**
   String get noMealsLogged;
 
   /// No description provided for @perGram.
@@ -215,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @noPhotoSelected.
   ///
   /// In en, this message translates to:
-  /// **'No Meal Photo Selected'**
+  /// **'No Photo Selected'**
   String get noPhotoSelected;
 
   /// No description provided for @scanPrompt.
@@ -239,7 +239,7 @@ abstract class AppLocalizations {
   /// No description provided for @logManually.
   ///
   /// In en, this message translates to:
-  /// **'Log Meal Manually'**
+  /// **'Log Manually'**
   String get logManually;
 
   /// No description provided for @contextClue.
@@ -305,7 +305,7 @@ abstract class AppLocalizations {
   /// No description provided for @mealDescription.
   ///
   /// In en, this message translates to:
-  /// **'Meal Description'**
+  /// **'Description'**
   String get mealDescription;
 
   /// No description provided for @avocadoHint.
@@ -359,13 +359,13 @@ abstract class AppLocalizations {
   /// No description provided for @logAndSave.
   ///
   /// In en, this message translates to:
-  /// **'Log & Save Meal'**
+  /// **'Log & Save'**
   String get logAndSave;
 
   /// No description provided for @mealDate.
   ///
   /// In en, this message translates to:
-  /// **'Meal Date:'**
+  /// **'Date:'**
   String get mealDate;
 
   /// No description provided for @notes.
@@ -389,13 +389,13 @@ abstract class AppLocalizations {
   /// No description provided for @provideName.
   ///
   /// In en, this message translates to:
-  /// **'Please provide a valid meal name.'**
+  /// **'Please provide a valid name.'**
   String get provideName;
 
   /// No description provided for @mealLogged.
   ///
   /// In en, this message translates to:
-  /// **'Meal logged successfully!'**
+  /// **'Logged successfully!'**
   String get mealLogged;
 
   /// No description provided for @scanningTitle.
@@ -491,7 +491,7 @@ abstract class AppLocalizations {
   /// No description provided for @compilePdf.
   ///
   /// In en, this message translates to:
-  /// **'Compile meals into a nutritional PDF report.'**
+  /// **'Compile entries into a nutritional PDF report.'**
   String get compilePdf;
 
   /// No description provided for @reportPdf.
@@ -533,7 +533,7 @@ abstract class AppLocalizations {
   /// No description provided for @confirmDeleteDesc.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to permanently delete this logged meal? This cannot be undone.'**
+  /// **'Are you sure you want to permanently delete this logged entry? This cannot be undone.'**
   String get confirmDeleteDesc;
 
   /// No description provided for @cancel.
@@ -551,19 +551,19 @@ abstract class AppLocalizations {
   /// No description provided for @noHistoryDesc.
   ///
   /// In en, this message translates to:
-  /// **'Change filters or scan a meal to start logging!'**
+  /// **'Change filters or log an entry to start!'**
   String get noHistoryDesc;
 
   /// No description provided for @mealUpdated.
   ///
   /// In en, this message translates to:
-  /// **'Meal updated successfully!'**
+  /// **'Entry updated successfully!'**
   String get mealUpdated;
 
   /// No description provided for @editMeal.
   ///
   /// In en, this message translates to:
-  /// **'Edit Logged Meal'**
+  /// **'Edit Logged Entry'**
   String get editMeal;
 
   /// No description provided for @generatePdf.
@@ -611,13 +611,13 @@ abstract class AppLocalizations {
   /// No description provided for @generatingMealPdf.
   ///
   /// In en, this message translates to:
-  /// **'Generating individual meal PDF...'**
+  /// **'Generating individual entry PDF...'**
   String get generatingMealPdf;
 
   /// No description provided for @mealDeleted.
   ///
   /// In en, this message translates to:
-  /// **'Meal deleted.'**
+  /// **'Entry deleted.'**
   String get mealDeleted;
 
   /// No description provided for @caloriesLabel.
@@ -647,7 +647,7 @@ abstract class AppLocalizations {
   /// No description provided for @apiCredentialsDesc.
   ///
   /// In en, this message translates to:
-  /// **'The AI Meal Scanner requires a API Key. Your key is saved locally in private app settings.'**
+  /// **'The AI Vision Scanner requires a API Key. Your key is saved locally in private app settings.'**
   String get apiCredentialsDesc;
 
   /// No description provided for @enterApiKey.
@@ -725,7 +725,7 @@ abstract class AppLocalizations {
   /// No description provided for @eraseAllDesc.
   ///
   /// In en, this message translates to:
-  /// **'Are you absolutely sure you want to permanently clear the SQLite database? This deletes all your logged meal stats, photos, and historical progress. This action cannot be undone.'**
+  /// **'Are you absolutely sure you want to permanently clear the SQLite database? This deletes all your logged stats, photos, and historical progress. This action cannot be undone.'**
   String get eraseAllDesc;
 
   /// No description provided for @permanentlyErase.
@@ -839,7 +839,7 @@ abstract class AppLocalizations {
   /// No description provided for @confirmRestoreDesc.
   ///
   /// In en, this message translates to:
-  /// **'Are you absolutely sure you want to restore this database backup? All your current logged meals and photos will be permanently replaced. This action cannot be undone.'**
+  /// **'Are you absolutely sure you want to restore this database backup? All your current logged entries and photos will be permanently replaced. This action cannot be undone.'**
   String get confirmRestoreDesc;
 
   /// No description provided for @confirmRestoreSettings.
@@ -1055,7 +1055,7 @@ abstract class AppLocalizations {
   /// No description provided for @pdfSingleMealReport.
   ///
   /// In en, this message translates to:
-  /// **'Nutritional Meal Report'**
+  /// **'Nutritional Log Report'**
   String get pdfSingleMealReport;
 
   /// No description provided for @pdfNotes.
@@ -1085,19 +1085,19 @@ abstract class AppLocalizations {
   /// No description provided for @importMealsSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Successfully imported {count} meals.'**
+  /// **'Successfully imported {count} entries.'**
   String importMealsSuccess(int count);
 
   /// No description provided for @importMealsError.
   ///
   /// In en, this message translates to:
-  /// **'Failed to import meals: {error}'**
+  /// **'Failed to import entries: {error}'**
   String importMealsError(String error);
 
   /// No description provided for @exportMealsSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Meals exported successfully.'**
+  /// **'Entries exported successfully.'**
   String get exportMealsSuccess;
 
   /// No description provided for @exportMealsError.
@@ -1145,7 +1145,7 @@ abstract class AppLocalizations {
   /// No description provided for @reEvaluationSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Meal re-evaluated successfully!'**
+  /// **'Entry re-evaluated successfully!'**
   String get reEvaluationSuccess;
 
   /// No description provided for @reEvaluateInstruction.
@@ -1169,7 +1169,7 @@ abstract class AppLocalizations {
   /// No description provided for @syncSettingsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Configure your backend server connection to backup and synchronize your meal database across multiple devices.'**
+  /// **'Configure your backend server connection to backup and synchronize your database across multiple devices.'**
   String get syncSettingsDesc;
 
   /// No description provided for @syncServerUrl.
@@ -1235,13 +1235,13 @@ abstract class AppLocalizations {
   /// No description provided for @favoriteMeals.
   ///
   /// In en, this message translates to:
-  /// **'Favorite Meals'**
+  /// **'Favorite Entries'**
   String get favoriteMeals;
 
   /// No description provided for @noFavoritesYet.
   ///
   /// In en, this message translates to:
-  /// **'No favorite meals yet. Mark a meal as favorite in its details dialog.'**
+  /// **'No favorite entries yet. Mark as favorite in its details dialog.'**
   String get noFavoritesYet;
 
   /// No description provided for @appVersion.
@@ -1349,7 +1349,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSettingsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Configure your preferred AI vision model for meal scanning.'**
+  /// **'Configure your preferred AI vision model for photo scanning.'**
   String get aiSettingsDesc;
 
   /// No description provided for @aiProviderLabel.
@@ -1487,7 +1487,7 @@ abstract class AppLocalizations {
   /// No description provided for @geminiInfoDesc.
   ///
   /// In en, this message translates to:
-  /// **'The AI Meal Scanner securely connects to Google\'s Gemini models to estimate calories and portion weights from your food photos.'**
+  /// **'The AI Vision Scanner securely connects to Google\'s Gemini models to estimate calories and portion weights from your food photos.'**
   String get geminiInfoDesc;
 
   /// No description provided for @geminiStep1.
@@ -1811,7 +1811,7 @@ abstract class AppLocalizations {
   /// No description provided for @xpHint.
   ///
   /// In en, this message translates to:
-  /// **'+10 XP per Meal Logged • +100 XP per Day Complete'**
+  /// **'+10 XP per Entry Logged • +100 XP per Day Complete'**
   String get xpHint;
 
   /// No description provided for @gamificationSettingsTitle.
@@ -1961,7 +1961,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutFeatureAiTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI Meal Scanner'**
+  /// **'AI Vision Scanner'**
   String get aboutFeatureAiTitle;
 
   /// No description provided for @aboutFeatureAiDesc.

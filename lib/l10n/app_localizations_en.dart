@@ -64,7 +64,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get noMealsLogged => 'No meals logged for this day.';
+  String get noMealsLogged => 'No logs for this day.';
 
   @override
   String perGram(Object carbs, Object fat, Object protein) {
@@ -80,7 +80,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scanTitle => 'Track Activity';
 
   @override
-  String get noPhotoSelected => 'No Meal Photo Selected';
+  String get noPhotoSelected => 'No Photo Selected';
 
   @override
   String get scanPrompt => 'Scan a photo to calculate nutrients instantly';
@@ -92,7 +92,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get camera => 'Camera';
 
   @override
-  String get logManually => 'Log Meal Manually';
+  String get logManually => 'Log Manually';
 
   @override
   String get contextClue => 'Add Context Clue (Optional)';
@@ -129,7 +129,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get mealDescription => 'Meal Description';
+  String get mealDescription => 'Description';
 
   @override
   String get avocadoHint => 'e.g. Avocado Toast';
@@ -156,10 +156,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discard => 'Discard';
 
   @override
-  String get logAndSave => 'Log & Save Meal';
+  String get logAndSave => 'Log & Save';
 
   @override
-  String get mealDate => 'Meal Date:';
+  String get mealDate => 'Date:';
 
   @override
   String get notes => 'Notes';
@@ -173,10 +173,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get provideName => 'Please provide a valid meal name.';
+  String get provideName => 'Please provide a valid name.';
 
   @override
-  String get mealLogged => 'Meal logged successfully!';
+  String get mealLogged => 'Logged successfully!';
 
   @override
   String get scanningTitle => 'Analyzing Food with AI...';
@@ -229,7 +229,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get compilePdf => 'Compile meals into a nutritional PDF report.';
+  String get compilePdf => 'Compile entries into a nutritional PDF report.';
 
   @override
   String get reportPdf => 'Report PDF';
@@ -251,7 +251,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmDeleteDesc =>
-      'Are you sure you want to permanently delete this logged meal? This cannot be undone.';
+      'Are you sure you want to permanently delete this logged entry? This cannot be undone.';
 
   @override
   String get cancel => 'Cancel';
@@ -260,13 +260,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noHistory => 'No History Found';
 
   @override
-  String get noHistoryDesc => 'Change filters or scan a meal to start logging!';
+  String get noHistoryDesc => 'Change filters or log an entry to start!';
 
   @override
-  String get mealUpdated => 'Meal updated successfully!';
+  String get mealUpdated => 'Entry updated successfully!';
 
   @override
-  String get editMeal => 'Edit Logged Meal';
+  String get editMeal => 'Edit Logged Entry';
 
   @override
   String get generatePdf => 'Generate PDF Summary Report';
@@ -290,10 +290,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generatingPdf => 'Generating PDF Report...';
 
   @override
-  String get generatingMealPdf => 'Generating individual meal PDF...';
+  String get generatingMealPdf => 'Generating individual entry PDF...';
 
   @override
-  String get mealDeleted => 'Meal deleted.';
+  String get mealDeleted => 'Entry deleted.';
 
   @override
   String caloriesLabel(Object calories) {
@@ -313,7 +313,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get apiCredentialsDesc =>
-      'The AI Meal Scanner requires a API Key. Your key is saved locally in private app settings.';
+      'The AI Vision Scanner requires a API Key. Your key is saved locally in private app settings.';
 
   @override
   String get enterApiKey => 'Enter your API credential key';
@@ -354,7 +354,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eraseAllDesc =>
-      'Are you absolutely sure you want to permanently clear the SQLite database? This deletes all your logged meal stats, photos, and historical progress. This action cannot be undone.';
+      'Are you absolutely sure you want to permanently clear the SQLite database? This deletes all your logged stats, photos, and historical progress. This action cannot be undone.';
 
   @override
   String get permanentlyErase => 'Permanently Erase Database';
@@ -417,7 +417,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmRestoreDesc =>
-      'Are you absolutely sure you want to restore this database backup? All your current logged meals and photos will be permanently replaced. This action cannot be undone.';
+      'Are you absolutely sure you want to restore this database backup? All your current logged entries and photos will be permanently replaced. This action cannot be undone.';
 
   @override
   String get confirmRestoreSettings => 'Restore Settings?';
@@ -534,7 +534,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pdfCalorieTrend => 'Calorie Trend';
 
   @override
-  String get pdfSingleMealReport => 'Nutritional Meal Report';
+  String get pdfSingleMealReport => 'Nutritional Log Report';
 
   @override
   String get pdfNotes => 'AI Analysis & Notes';
@@ -550,16 +550,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String importMealsSuccess(int count) {
-    return 'Successfully imported $count meals.';
+    return 'Successfully imported $count entries.';
   }
 
   @override
   String importMealsError(String error) {
-    return 'Failed to import meals: $error';
+    return 'Failed to import entries: $error';
   }
 
   @override
-  String get exportMealsSuccess => 'Meals exported successfully.';
+  String get exportMealsSuccess => 'Entries exported successfully.';
 
   @override
   String exportMealsError(String error) {
@@ -589,7 +589,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get reEvaluationSuccess => 'Meal re-evaluated successfully!';
+  String get reEvaluationSuccess => 'Entry re-evaluated successfully!';
 
   @override
   String get reEvaluateInstruction =>
@@ -604,7 +604,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncSettingsDesc =>
-      'Configure your backend server connection to backup and synchronize your meal database across multiple devices.';
+      'Configure your backend server connection to backup and synchronize your database across multiple devices.';
 
   @override
   String get syncServerUrl => 'Sync Server URL';
@@ -643,11 +643,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get neverSynced => 'Never Synced';
 
   @override
-  String get favoriteMeals => 'Favorite Meals';
+  String get favoriteMeals => 'Favorite Entries';
 
   @override
   String get noFavoritesYet =>
-      'No favorite meals yet. Mark a meal as favorite in its details dialog.';
+      'No favorite entries yet. Mark as favorite in its details dialog.';
 
   @override
   String appVersion(String version) {
@@ -718,7 +718,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSettingsDesc =>
-      'Configure your preferred AI vision model for meal scanning.';
+      'Configure your preferred AI vision model for photo scanning.';
 
   @override
   String get aiProviderLabel => 'AI Provider';
@@ -793,7 +793,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get geminiInfoDesc =>
-      'The AI Meal Scanner securely connects to Google\'s Gemini models to estimate calories and portion weights from your food photos.';
+      'The AI Vision Scanner securely connects to Google\'s Gemini models to estimate calories and portion weights from your food photos.';
 
   @override
   String get geminiStep1 =>
@@ -983,7 +983,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lvlCalorieNinja => 'Calorie Ninja';
 
   @override
-  String get xpHint => '+10 XP per Meal Logged • +100 XP per Day Complete';
+  String get xpHint => '+10 XP per Entry Logged • +100 XP per Day Complete';
 
   @override
   String get gamificationSettingsTitle => 'Gamification Loop Settings';
@@ -1064,7 +1064,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'NutriScan is a modern, privacy-first calorie and macronutrient tracker designed to help you reach your goals with minimal friction. Using advanced AI model integrations, it makes food logging as simple as taking a photo.';
 
   @override
-  String get aboutFeatureAiTitle => 'AI Meal Scanner';
+  String get aboutFeatureAiTitle => 'AI Vision Scanner';
 
   @override
   String get aboutFeatureAiDesc =>
