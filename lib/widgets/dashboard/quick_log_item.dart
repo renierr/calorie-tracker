@@ -111,12 +111,16 @@ class QuickLogItem extends StatelessWidget {
                           ),
                         )
                       else
-                        Text(
-                          AppLocalizations.of(context)!.burnExercise,
-                          style: const TextStyle(
-                            color: AppTheme.accentAmber,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(context)!.burnExercise,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: AppTheme.accentAmber,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       const SizedBox(width: 8),

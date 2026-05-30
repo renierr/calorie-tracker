@@ -96,8 +96,10 @@ class CalorieRingCard extends StatelessWidget {
           // Dynamic Breakdown Row
           if (appState.totalCaloriesBurned > 0) ...[
             const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              spacing: 12,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -109,6 +111,7 @@ class CalorieRingCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
                         Icons.restaurant,
@@ -129,7 +132,6 @@ class CalorieRingCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 12),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -140,6 +142,7 @@ class CalorieRingCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
                         Icons.fitness_center,
