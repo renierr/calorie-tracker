@@ -154,6 +154,25 @@ abstract class BaseAIService implements AIService {
     }
     return prompt;
   }
+
+  static String buildReEvaluationPrompt({
+    required String originalName,
+    required int originalCalories,
+    required int originalProtein,
+    required int originalCarbs,
+    required int originalFat,
+    required String originalNotes,
+    required String userCorrection,
+  }) {
+    return 'Original Meal: "$originalName", '
+        'Calories: $originalCalories kcal, '
+        'Protein: ${originalProtein}g, '
+        'Carbs: ${originalCarbs}g, '
+        'Fat: ${originalFat}g, '
+        'Notes: "$originalNotes". '
+        'User eaten adjustment/correction instruction: "$userCorrection". '
+        'Please re-evaluate portions and visual changes to compute new nutritional values.';
+  }
 }
 
 class AIServiceFactory {

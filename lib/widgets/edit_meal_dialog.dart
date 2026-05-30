@@ -5,6 +5,7 @@ import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
+import '../services/ai_service.dart';
 
 class EditMealDialog extends StatefulWidget {
   final Meal meal;
@@ -114,19 +115,15 @@ class _EditMealDialogState extends State<EditMealDialog> {
     } catch (_) {}
 
     try {
-      // Build visual scale context with baseline meal details
-      final String originalDetails =
-          'Original Meal: "${widget.meal.foodName}", '
-          'Calories: ${widget.meal.calories} kcal, '
-          'Protein: ${widget.meal.protein}g, '
-          'Carbs: ${widget.meal.carbs}g, '
-          'Fat: ${widget.meal.fat}g, '
-          'Notes: "${widget.meal.notes ?? ''}".';
-
-      final String customPrompt =
-          '$originalDetails '
-          'User eaten adjustment/correction instruction: "$prompt". '
-          'Please re-evaluate portions and visual changes to compute new nutritional values.';
+      final String customPrompt = BaseAIService.buildReEvaluationPrompt(
+        originalName: widget.meal.foodName,
+        originalCalories: widget.meal.calories,
+        originalProtein: widget.meal.protein,
+        originalCarbs: widget.meal.carbs,
+        originalFat: widget.meal.fat,
+        originalNotes: widget.meal.notes ?? '',
+        userCorrection: prompt,
+      );
 
       final result = await widget.appState.performAIAnalysis(
         imageBytes: _imageBytes ?? Uint8List(0),
