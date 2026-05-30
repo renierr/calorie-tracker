@@ -55,8 +55,10 @@ class PdfTrendChartHelper {
       chartLabels.insert(0, '');
     }
 
+    final double minVal = chartValues.reduce((a, b) => a < b ? a : b);
     final double maxVal = chartValues.reduce((a, b) => a > b ? a : b);
-    final double divisor = maxVal == 0 ? 1.0 : maxVal;
+    final double range = maxVal - minVal;
+    final double divisor = range == 0 ? 1.0 : range;
 
     final PdfColor pdfEmerald = PdfColor.fromHex('#10B981');
     final PdfColor gridColor = PdfColor.fromHex('#E5E7EB');
@@ -109,7 +111,7 @@ class PdfTrendChartHelper {
                   canvas.strokePath();
 
                   // Y axis labels inside grid area
-                  final double valAtTick = (maxVal * i) / 3;
+                  final double valAtTick = minVal + (range * i) / 3;
                   canvas.setColor(textMuted);
                   canvas.drawString(
                     helveticaFont,
@@ -123,7 +125,7 @@ class PdfTrendChartHelper {
                 // Plot point coordinates
                 final List<PdfPoint> points = [];
                 for (int i = 0; i < chartValues.length; i++) {
-                  final double factor = chartValues[i] / divisor;
+                  final double factor = (chartValues[i] - minVal) / divisor;
                   final double x = leftMargin + (i * widthBetweenPoints);
                   final double y = bottomMargin + (usableHeight * factor);
                   points.add(PdfPoint(x, y));

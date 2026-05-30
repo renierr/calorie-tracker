@@ -2161,6 +2161,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Burned: {calories} kcal'**
   String burnedLabel(int calories);
+
+  /// No description provided for @activityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'[Activity] {name}'**
+  String activityLabel(String name);
 }
 
 class _AppLocalizationsDelegate

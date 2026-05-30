@@ -1183,4 +1183,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String burnedLabel(int calories) {
     return 'Verbrannt: $calories kcal';
   }
+
+  @override
+  String activityLabel(String name) {
+    return '[Aktivität] $name';
+  }
 }

@@ -589,6 +589,14 @@
         "type": "int"
       }
     }
+  },
+  "activityLabel": "[Aktivität] {name}",
+  "@activityLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }
 

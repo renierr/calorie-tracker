@@ -154,7 +154,7 @@ class PdfMealCardHelper {
                   children: [
                     pw.Text(
                       meal.isActivity
-                          ? '[Activity] ${meal.foodName}'
+                          ? localizations.activityLabel(meal.foodName)
                           : meal.foodName,
                       style: pw.TextStyle(
                         fontWeight: pw.FontWeight.bold,
