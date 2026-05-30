@@ -15,6 +15,9 @@ BUNDLE_SRC="build/app/outputs/bundle/release/app-release.aab"
 # Windows release source folder (where Flutter outputs Windows build)
 WINDOWS_SRC_DIR="build/windows/x64/runner/Release"
 
+# Linux release source folder (where Flutter outputs Linux build)
+LINUX_SRC_DIR="build/linux/x64/release/bundle"
+
 # Target file prefixes/names for dist folder
 APP_NAME="NutriScan"
 
@@ -38,6 +41,7 @@ show_help() {
   echo -e "  \033[1;32mapks\033[0m        - Build Android APKs split per ABI (apk-split also accepted)"
   echo -e "  \033[1;32mbundle\033[0m      - Build Android App Bundle (.aab)"
   echo -e "  \033[1;32mwindows\033[0m     - Build Windows Desktop release"
+  echo -e "  \033[1;32mlinux\033[0m       - Build Linux Desktop release"
   echo -e "  \033[1;32mhelp\033[0m        - Show this help message"
   echo -e ""
   echo -e "\033[1;36m========================================================\033[0m"
@@ -58,6 +62,7 @@ RUN_APK=false
 RUN_APK_SPLIT=false
 RUN_BUNDLE=false
 RUN_WINDOWS=false
+RUN_LINUX=false
 
 # Order of execution for non-clean tasks
 declare -a TASKS=()
@@ -82,6 +87,10 @@ for arg in "$@"; do
     windows)
       RUN_WINDOWS=true
       TASKS+=("windows")
+      ;;
+    linux)
+      RUN_LINUX=true
+      TASKS+=("linux")
       ;;
     -h|--help|help)
       show_help
@@ -210,6 +219,30 @@ for task in "${TASKS[@]}"; do
         fi
       else
         echo -e "\033[1;31mError: Flutter windows build failed. Aborting.\033[0m"
+        exit 1
+      fi
+      ;;
+      
+    linux)
+      echo -e "\033[1;32m>>> Building Linux Release...\033[0m"
+      # Prevent copying older files: delete old linux build folder first
+      rm -rf "$LINUX_SRC_DIR"
+      
+      if flutter build linux --release; then
+        if [ -d "$LINUX_SRC_DIR" ]; then
+          echo -e "\033[1;32m>>> Copying Linux release to $DIST_DIR/${APP_NAME}-linux...\033[0m"
+          rm -rf "$DIST_DIR/${APP_NAME}-linux"
+          mkdir -p "$DIST_DIR/${APP_NAME}-linux"
+          
+          # Copy release folder contents
+          cp -r "$LINUX_SRC_DIR"/* "$DIST_DIR/${APP_NAME}-linux/"
+          echo -e "\033[1;32m>>> Saved Linux build to: $DIST_DIR/${APP_NAME}-linux/\033[0m"
+        else
+          echo -e "\033[1;31mError: Linux build directory not found at $LINUX_SRC_DIR\033[0m"
+          exit 1
+        fi
+      else
+        echo -e "\033[1;31mError: Flutter linux build failed. Aborting.\033[0m"
         exit 1
       fi
       ;;
