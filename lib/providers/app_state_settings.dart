@@ -54,6 +54,12 @@ mixin _SettingsState on ChangeNotifier {
     await prefs.setString(AppState._keyHistoryFilter, filter);
   }
 
+  Future<void> setHistoryTypeFilter(String typeFilter) async {
+    _state._historyTypeFilter = typeFilter;
+    await _state.loadFirstPageHistory();
+    notifyListeners();
+  }
+
   Future<void> setHistoryCustomDates(DateTime? start, DateTime? end) async {
     _state._historyCustomStartDate = start;
     _state._historyCustomEndDate = end;

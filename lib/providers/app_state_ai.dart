@@ -185,6 +185,7 @@ mixin _AiState on ChangeNotifier {
     _state._scanMimeType = 'image/jpeg';
     _state._scanIsPickedImage = false;
     _state._scanIsAiFlow = false;
+    _state._scanIsActivity = template.isActivity;
     _state._scanResult = AIAnalysisResult(
       foodName: template.foodName,
       calories: template.calories,
@@ -210,6 +211,7 @@ mixin _AiState on ChangeNotifier {
   void openManualFormWithPhoto() {
     _state._scanShowForm = true;
     _state._scanIsAiFlow = false;
+    _state._scanIsActivity = false;
     _state._scanResult = null;
     _state._scanFoodName = 'New Meal';
     _state._scanCalories = '0';
@@ -227,8 +229,27 @@ mixin _AiState on ChangeNotifier {
     _state._scanImageBytes = null;
     _state._scanIsPickedImage = false;
     _state._scanIsAiFlow = false;
+    _state._scanIsActivity = false;
     _state._scanResult = null;
     _state._scanFoodName = 'New Meal';
+    _state._scanCalories = '0';
+    _state._scanProtein = '0';
+    _state._scanCarbs = '0';
+    _state._scanFat = '0';
+    _state._scanNotes = '';
+    _state._scanWeight = '';
+    _state._scanMealDate = DateTime.now();
+    notifyListeners();
+  }
+
+  void logActivityManually({bool hasPhoto = false, Uint8List? imageBytes}) {
+    _state._scanShowForm = true;
+    _state._scanImageBytes = imageBytes;
+    _state._scanIsPickedImage = imageBytes != null;
+    _state._scanIsAiFlow = false;
+    _state._scanIsActivity = true;
+    _state._scanResult = null;
+    _state._scanFoodName = 'New Activity';
     _state._scanCalories = '0';
     _state._scanProtein = '0';
     _state._scanCarbs = '0';
@@ -251,6 +272,7 @@ mixin _AiState on ChangeNotifier {
     }
     _state._scanResult = null;
     _state._scanIsAiFlow = false;
+    _state._scanIsActivity = false;
     _state._scanFoodName = '';
     _state._scanCalories = '';
     _state._scanProtein = '';
@@ -276,6 +298,7 @@ mixin _AiState on ChangeNotifier {
     _state._scanIsScanning = false;
     _state._scanIsPickedImage = false;
     _state._scanIsAiFlow = false;
+    _state._scanIsActivity = false;
     _state._scanResult = null;
     _state._scanFoodName = '';
     _state._scanCalories = '';

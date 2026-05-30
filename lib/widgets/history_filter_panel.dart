@@ -6,18 +6,22 @@ import '../l10n/app_localizations.dart';
 
 class HistoryFilterPanel extends StatelessWidget {
   final String filterType;
+  final String historyTypeFilter;
   final DateTime? customStartDate;
   final DateTime? customEndDate;
   final ValueChanged<String> onFilterTypeChanged;
+  final ValueChanged<String> onHistoryTypeFilterChanged;
   final ValueChanged<DateTime?> onStartDateChanged;
   final ValueChanged<DateTime?> onEndDateChanged;
 
   const HistoryFilterPanel({
     super.key,
     required this.filterType,
+    required this.historyTypeFilter,
     required this.customStartDate,
     required this.customEndDate,
     required this.onFilterTypeChanged,
+    required this.onHistoryTypeFilterChanged,
     required this.onStartDateChanged,
     required this.onEndDateChanged,
   });
@@ -206,6 +210,83 @@ class HistoryFilterPanel extends StatelessWidget {
               ],
             ),
           ],
+          const Divider(height: 24),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final bool isNarrow = AppBreakpoints.isNarrowContentWidth(
+                constraints.maxWidth,
+              );
+              final typeDropdown = DropdownButton<String>(
+                isExpanded: isNarrow,
+                value: historyTypeFilter,
+                dropdownColor: colors.surface,
+                iconEnabledColor: colors.textPrimary,
+                underline: const SizedBox(),
+                items: const [
+                  DropdownMenuItem(value: 'all', child: Text('All Logs')),
+                  DropdownMenuItem(value: 'meals', child: Text('Meals Only')),
+                  DropdownMenuItem(
+                    value: 'activities',
+                    child: Text('Activities Only'),
+                  ),
+                ],
+                onChanged: (val) {
+                  onHistoryTypeFilterChanged(val ?? 'all');
+                },
+              );
+
+              if (isNarrow) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.category,
+                          color: AppTheme.accentAmber,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Log Type Filter',
+                            style: TextStyle(
+                              color: colors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    typeDropdown,
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  const Icon(
+                    Icons.category,
+                    color: AppTheme.accentAmber,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Log Type Filter',
+                    style: TextStyle(
+                      color: colors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const Spacer(),
+                  typeDropdown,
+                ],
+              );
+            },
+          ),
         ],
       ),
     );

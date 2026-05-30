@@ -60,6 +60,7 @@ class AppState extends ChangeNotifier
   int _carbsGoal = 220;
   int _fatGoal = 70;
   String _historyFilter = 'all';
+  String _historyTypeFilter = 'all'; // 'all', 'meals', 'activities'
   String _appLocale = 'en';
   ThemeMode _themeMode = ThemeMode.system;
   bool _notificationsEnabled = true;
@@ -92,6 +93,7 @@ class AppState extends ChangeNotifier
   AIAnalysisResult? _scanResult;
   bool _scanIsPickedImage = false;
   bool _scanIsAiFlow = false;
+  bool _scanIsActivity = false;
 
   // Scan Verification Form Draft Values
   String _scanFoodName = '';
@@ -118,6 +120,7 @@ class AppState extends ChangeNotifier
   int get carbsGoal => _carbsGoal;
   int get fatGoal => _fatGoal;
   String get historyFilter => _historyFilter;
+  String get historyTypeFilter => _historyTypeFilter;
   String get appLocale => _appLocale;
   ThemeMode get themeMode => _themeMode;
   Locale get locale => Locale(_appLocale);
@@ -133,6 +136,7 @@ class AppState extends ChangeNotifier
   bool get isSyncing => _isSyncing;
   bool get syncEnabled => _syncEnabled;
   bool get notificationsEnabled => _notificationsEnabled;
+  bool get scanIsActivity => _scanIsActivity;
 
   // Optimized lazy-loaded selected date meals
   List<Meal> get mealsForSelectedDate => _selectedDateMeals;
@@ -146,14 +150,27 @@ class AppState extends ChangeNotifier
   DateTime? get historyCustomEndDate => _historyCustomEndDate;
 
   // Daily totals calculations
-  int get totalCaloriesConsumed =>
-      mealsForSelectedDate.fold(0, (sum, meal) => sum + meal.calories);
-  int get totalProteinConsumed =>
-      mealsForSelectedDate.fold(0, (sum, meal) => sum + meal.protein);
-  int get totalCarbsConsumed =>
-      mealsForSelectedDate.fold(0, (sum, meal) => sum + meal.carbs);
-  int get totalFatConsumed =>
-      mealsForSelectedDate.fold(0, (sum, meal) => sum + meal.fat);
+  int get totalCaloriesIntake => mealsForSelectedDate
+      .where((m) => m.isMeal)
+      .fold(0, (sum, meal) => sum + meal.calories);
+
+  int get totalCaloriesBurned => mealsForSelectedDate
+      .where((m) => m.isActivity)
+      .fold(0, (sum, meal) => sum + meal.calories);
+
+  int get totalCaloriesConsumed => totalCaloriesIntake - totalCaloriesBurned;
+
+  int get totalProteinConsumed => mealsForSelectedDate
+      .where((m) => m.isMeal)
+      .fold(0, (sum, meal) => sum + meal.protein);
+
+  int get totalCarbsConsumed => mealsForSelectedDate
+      .where((m) => m.isMeal)
+      .fold(0, (sum, meal) => sum + meal.carbs);
+
+  int get totalFatConsumed => mealsForSelectedDate
+      .where((m) => m.isMeal)
+      .fold(0, (sum, meal) => sum + meal.fat);
 
   // Initialize and load everything on startup
   Future<void> init() async {

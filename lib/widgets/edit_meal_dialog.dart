@@ -196,7 +196,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
             children: [
               // Title
               Text(
-                AppLocalizations.of(context)!.editMeal,
+                widget.meal.isActivity
+                    ? 'Edit Activity Details'
+                    : AppLocalizations.of(context)!.editMeal,
                 style: TextStyle(
                   color: colors.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -213,7 +215,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.mealDescription,
+                        widget.meal.isActivity
+                            ? 'Activity / Exercise Name'
+                            : AppLocalizations.of(context)!.mealDescription,
                         style: TextStyle(
                           color: colors.textSecondary,
                           fontSize: 11,
@@ -232,7 +236,11 @@ class _EditMealDialogState extends State<EditMealDialog> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  AppLocalizations.of(context)!.caloriesKcal,
+                                  widget.meal.isActivity
+                                      ? 'Calories Burned (kcal)'
+                                      : AppLocalizations.of(
+                                          context,
+                                        )!.caloriesKcal,
                                   style: TextStyle(
                                     color: colors.textSecondary,
                                     fontSize: 11,
@@ -255,100 +263,104 @@ class _EditMealDialogState extends State<EditMealDialog> {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.proteinG,
-                                  style: TextStyle(
-                                    color: colors.textSecondary,
-                                    fontSize: 11,
+                          if (!widget.meal.isActivity) ...[
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.proteinG,
+                                    style: TextStyle(
+                                      color: colors.textSecondary,
+                                      fontSize: 11,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 6),
-                                TextField(
-                                  controller: _proteinController,
-                                  enabled: isEnabled,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  onTap: () {
-                                    if (_proteinController.text == '0') {
-                                      _proteinController.clear();
-                                    }
-                                  },
-                                ),
-                              ],
+                                  const SizedBox(height: 6),
+                                  TextField(
+                                    controller: _proteinController,
+                                    enabled: isEnabled,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    onTap: () {
+                                      if (_proteinController.text == '0') {
+                                        _proteinController.clear();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                       const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.carbsG,
-                                  style: TextStyle(
-                                    color: colors.textSecondary,
-                                    fontSize: 11,
+                      if (!widget.meal.isActivity) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.carbsG,
+                                    style: TextStyle(
+                                      color: colors.textSecondary,
+                                      fontSize: 11,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 6),
-                                TextField(
-                                  controller: _carbsController,
-                                  enabled: isEnabled,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  onTap: () {
-                                    if (_carbsController.text == '0') {
-                                      _carbsController.clear();
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.fatG,
-                                  style: TextStyle(
-                                    color: colors.textSecondary,
-                                    fontSize: 11,
+                                  const SizedBox(height: 6),
+                                  TextField(
+                                    controller: _carbsController,
+                                    enabled: isEnabled,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    onTap: () {
+                                      if (_carbsController.text == '0') {
+                                        _carbsController.clear();
+                                      }
+                                    },
                                   ),
-                                ),
-                                const SizedBox(height: 6),
-                                TextField(
-                                  controller: _fatController,
-                                  enabled: isEnabled,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  onTap: () {
-                                    if (_fatController.text == '0') {
-                                      _fatController.clear();
-                                    }
-                                  },
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 14),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.fatG,
+                                    style: TextStyle(
+                                      color: colors.textSecondary,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  TextField(
+                                    controller: _fatController,
+                                    enabled: isEnabled,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    onTap: () {
+                                      if (_fatController.text == '0') {
+                                        _fatController.clear();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 14),
+                      ],
                       Text(
                         AppLocalizations.of(context)!.bodyWeightKg,
                         style: TextStyle(
@@ -389,85 +401,92 @@ class _EditMealDialogState extends State<EditMealDialog> {
                         maxLines: 2,
                       ),
 
-                      // Premium AI Re-evaluation Section
-                      const SizedBox(height: 8),
-                      const Divider(height: 24),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.auto_awesome,
-                            color: AppTheme.accentBlue,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            AppLocalizations.of(context)!.reEvaluate,
-                            style: TextStyle(
-                              color: colors.textPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
+                      if (!widget.meal.isActivity) ...[
+                        // Premium AI Re-evaluation Section
+                        const SizedBox(height: 8),
+                        const Divider(height: 24),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.auto_awesome,
+                              color: AppTheme.accentBlue,
+                              size: 16,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _reEvalPromptController,
-                        enabled: isEnabled && !_isLoadingImage,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(
-                            context,
-                          )!.reEvaluateInstruction,
-                          hintText: AppLocalizations.of(
-                            context,
-                          )!.reEvaluateInstructionHint,
-                          labelStyle: TextStyle(
-                            color: colors.textSecondary,
-                            fontSize: 11,
-                          ),
-                          hintStyle: TextStyle(
-                            color: colors.textSecondary.withValues(alpha: 0.6),
-                            fontSize: 11,
-                          ),
-                          alignLabelWithHint: true,
+                            const SizedBox(width: 8),
+                            Text(
+                              AppLocalizations.of(context)!.reEvaluate,
+                              style: TextStyle(
+                                color: colors.textPrimary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
                         ),
-                        maxLines: 2,
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: double.infinity,
-                        child: _isReEvaluating
-                            ? const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      AppTheme.accentBlue,
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _reEvalPromptController,
+                          enabled: isEnabled && !_isLoadingImage,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(
+                              context,
+                            )!.reEvaluateInstruction,
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.reEvaluateInstructionHint,
+                            labelStyle: TextStyle(
+                              color: colors.textSecondary,
+                              fontSize: 11,
+                            ),
+                            hintStyle: TextStyle(
+                              color: colors.textSecondary.withValues(
+                                alpha: 0.6,
+                              ),
+                              fontSize: 11,
+                            ),
+                            alignLabelWithHint: true,
+                          ),
+                          maxLines: 2,
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: _isReEvaluating
+                              ? const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppTheme.accentBlue,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : ElevatedButton.icon(
-                                icon: const Icon(Icons.auto_awesome, size: 16),
-                                label: Text(
-                                  AppLocalizations.of(context)!.reEvaluate,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.accentBlue,
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                )
+                              : ElevatedButton.icon(
+                                  icon: const Icon(
+                                    Icons.auto_awesome,
+                                    size: 16,
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12,
+                                  label: Text(
+                                    AppLocalizations.of(context)!.reEvaluate,
                                   ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.accentBlue,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
+                                  ),
+                                  onPressed: (isEnabled && !_isLoadingImage)
+                                      ? _handleReEvaluation
+                                      : null,
                                 ),
-                                onPressed: (isEnabled && !_isLoadingImage)
-                                    ? _handleReEvaluation
-                                    : null,
-                              ),
-                      ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -496,14 +515,21 @@ class _EditMealDialogState extends State<EditMealDialog> {
                             final double? weight = double.tryParse(
                               _weightController.text.trim(),
                             );
+                            final isAct = widget.meal.isActivity;
                             final updatedMeal = widget.meal.copyWith(
                               foodName: _nameController.text.trim(),
                               calories:
                                   int.tryParse(_caloriesController.text) ?? 0,
-                              protein:
-                                  int.tryParse(_proteinController.text) ?? 0,
-                              carbs: int.tryParse(_carbsController.text) ?? 0,
-                              fat: int.tryParse(_fatController.text) ?? 0,
+                              protein: isAct
+                                  ? 0
+                                  : (int.tryParse(_proteinController.text) ??
+                                        0),
+                              carbs: isAct
+                                  ? 0
+                                  : (int.tryParse(_carbsController.text) ?? 0),
+                              fat: isAct
+                                  ? 0
+                                  : (int.tryParse(_fatController.text) ?? 0),
                               notes: _notesController.text.trim(),
                               weightKg: weight,
                               clearWeight: weight == null,
@@ -515,7 +541,11 @@ class _EditMealDialogState extends State<EditMealDialog> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  AppLocalizations.of(context)!.mealUpdated,
+                                  isAct
+                                      ? 'Activity updated successfully'
+                                      : AppLocalizations.of(
+                                          context,
+                                        )!.mealUpdated,
                                 ),
                                 backgroundColor: AppTheme.accentEmerald,
                                 duration: const Duration(seconds: 2),

@@ -167,6 +167,9 @@ class _ScanPageState extends State<ScanPage> {
                     onLogManually: () {
                       appState.logManuallyWithoutPhoto();
                     },
+                    onLogActivity: () {
+                      appState.logActivityManually();
+                    },
                     showForm: appState.scanShowForm,
                   ),
                   const SizedBox(height: 20),

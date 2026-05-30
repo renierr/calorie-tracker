@@ -56,9 +56,11 @@ class QuickLogItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.memory(meal.imageBytes!, fit: BoxFit.cover),
                     )
-                  : const Icon(
-                      Icons.fastfood,
-                      color: AppTheme.accentEmerald,
+                  : Icon(
+                      meal.isActivity ? Icons.directions_run : Icons.fastfood,
+                      color: meal.isActivity
+                          ? AppTheme.accentAmber
+                          : AppTheme.accentEmerald,
                       size: 20,
                     ),
             ),
@@ -84,34 +86,50 @@ class QuickLogItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Flexible(
-                        child: Wrap(
-                          spacing: 6,
-                          runSpacing: 4,
-                          children: [
-                            MiniMacroChip(
-                              label: pLabel,
-                              value: '${meal.protein}g',
-                              color: AppTheme.accentBlue,
-                            ),
-                            MiniMacroChip(
-                              label: cLabel,
-                              value: '${meal.carbs}g',
-                              color: AppTheme.accentAmber,
-                            ),
-                            MiniMacroChip(
-                              label: fLabel,
-                              value: '${meal.fat}g',
-                              color: AppTheme.accentRed,
-                            ),
-                          ],
+                      if (!meal.isActivity)
+                        Flexible(
+                          child: Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            children: [
+                              MiniMacroChip(
+                                label: pLabel,
+                                value: '${meal.protein}g',
+                                color: AppTheme.accentBlue,
+                              ),
+                              MiniMacroChip(
+                                label: cLabel,
+                                value: '${meal.carbs}g',
+                                color: AppTheme.accentAmber,
+                              ),
+                              MiniMacroChip(
+                                label: fLabel,
+                                value: '${meal.fat}g',
+                                color: AppTheme.accentRed,
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        const Text(
+                          'Burn / Exercise',
+                          style: TextStyle(
+                            color: AppTheme.accentAmber,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
                       const SizedBox(width: 8),
                       Text(
-                        AppLocalizations.of(context)!.kcalLabel(meal.calories),
-                        style: const TextStyle(
-                          color: AppTheme.accentEmerald,
+                        meal.isActivity
+                            ? '-${meal.calories} kcal'
+                            : AppLocalizations.of(
+                                context,
+                              )!.kcalLabel(meal.calories),
+                        style: TextStyle(
+                          color: meal.isActivity
+                              ? AppTheme.accentAmber
+                              : AppTheme.accentEmerald,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),

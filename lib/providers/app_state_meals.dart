@@ -26,6 +26,7 @@ mixin _MealState on ChangeNotifier {
     return await _state._dbHelper.getMealsPaginated(
       limit: null,
       filterType: _state._historyFilter,
+      typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
       includeImages: includeImages,
@@ -43,6 +44,7 @@ mixin _MealState on ChangeNotifier {
     _state._paginatedMeals = await _state._dbHelper.getMealsPaginated(
       limit: 20,
       filterType: _state._historyFilter,
+      typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
       includeImages: true,
@@ -52,6 +54,7 @@ mixin _MealState on ChangeNotifier {
 
     _state._historyTotalCount = await _state._dbHelper.getMealsCount(
       filterType: _state._historyFilter,
+      typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
     );
@@ -75,6 +78,7 @@ mixin _MealState on ChangeNotifier {
       limit: 20,
       beforeTimestamp: beforeTimestamp,
       filterType: _state._historyFilter,
+      typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
       includeImages: true,

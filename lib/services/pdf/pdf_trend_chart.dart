@@ -21,7 +21,8 @@ class PdfTrendChartHelper {
     for (final m in sortedMeals) {
       final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
       final key = dayKeyFormat.format(date);
-      dailyCalories[key] = (dailyCalories[key] ?? 0) + m.calories;
+      dailyCalories[key] =
+          (dailyCalories[key] ?? 0) + (m.isActivity ? -m.calories : m.calories);
     }
     final List<String> dates = dailyCalories.keys.toList()..sort();
 
@@ -39,7 +40,7 @@ class PdfTrendChartHelper {
     } else {
       // Show sequential individual meals if single day or minimal entries
       for (final m in sortedMeals) {
-        chartValues.add(m.calories.toDouble());
+        chartValues.add((m.isActivity ? -m.calories : m.calories).toDouble());
         final date = DateTime.fromMillisecondsSinceEpoch(m.timestamp);
         chartLabels.add(DateFormat('HH:mm').format(date));
       }

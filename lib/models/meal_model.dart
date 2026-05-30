@@ -20,6 +20,19 @@ class Meal {
   final int isFavorite; // 0 = not favorite, 1 = favorite
   final double? weightKg; // body weight in kg
 
+  bool get isActivity => shortId.startsWith('ACT-');
+  bool get isMeal => !isActivity;
+
+  static String generateRandomActivityShortId() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final rnd = dart_math.Random();
+    final code = List.generate(
+      9,
+      (index) => chars[rnd.nextInt(chars.length)],
+    ).join();
+    return 'ACT-$code';
+  }
+
   Meal({
     this.id,
     required this.shortId,

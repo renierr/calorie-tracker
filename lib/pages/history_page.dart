@@ -172,10 +172,14 @@ class _HistoryPageState extends State<HistoryPage> {
                   // Filter Toolbar Box
                   HistoryFilterPanel(
                     filterType: appState.historyFilter,
+                    historyTypeFilter: appState.historyTypeFilter,
                     customStartDate: appState.historyCustomStartDate,
                     customEndDate: appState.historyCustomEndDate,
                     onFilterTypeChanged: (val) {
                       appState.setHistoryFilter(val);
+                    },
+                    onHistoryTypeFilterChanged: (val) {
+                      appState.setHistoryTypeFilter(val);
                     },
                     onStartDateChanged: (val) {
                       appState.setHistoryCustomDates(

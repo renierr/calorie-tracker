@@ -13,6 +13,16 @@ class MealMacroGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double gridWidth = constraints.maxWidth;
+
+        if (currentMeal.isActivity) {
+          return _MacroMetricCard(
+            width: gridWidth,
+            value: '-${currentMeal.calories} kcal',
+            label: 'Calories Burned',
+            color: AppTheme.accentAmber,
+          );
+        }
+
         final double cardWidth = (gridWidth - 10) / 2;
         return Wrap(
           spacing: 10,

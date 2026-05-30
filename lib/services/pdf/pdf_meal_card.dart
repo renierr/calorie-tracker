@@ -153,52 +153,62 @@ class PdfMealCardHelper {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Text(
-                      meal.foodName,
+                      meal.isActivity
+                          ? '[Activity] ${meal.foodName}'
+                          : meal.foodName,
                       style: pw.TextStyle(
                         fontWeight: pw.FontWeight.bold,
                         fontSize: 12,
-                        color: PdfColors.black,
+                        color: meal.isActivity ? pdfAmber : PdfColors.black,
                       ),
                     ),
                     pw.SizedBox(height: 6),
-                    // Row of compact macro tags
+                    // Row of compact tags
                     pw.Row(
                       children: [
-                        _buildCompactTag(
-                          label: localizations.caloriesKcal.replaceAll(
-                            ' (kcal)',
-                            '',
+                        if (!meal.isActivity) ...[
+                          _buildCompactTag(
+                            label: localizations.caloriesKcal.replaceAll(
+                              ' (kcal)',
+                              '',
+                            ),
+                            value: '${meal.calories}',
+                            color: pdfEmerald,
                           ),
-                          value: '${meal.calories}',
-                          color: pdfEmerald,
-                        ),
-                        pw.SizedBox(width: 6),
-                        _buildCompactTag(
-                          label: pLabel,
-                          value: '${meal.protein}g',
-                          color: pdfBlue,
-                        ),
-                        pw.SizedBox(width: 6),
-                        _buildCompactTag(
-                          label: cLabel,
-                          value: '${meal.carbs}g',
-                          color: pdfAmber,
-                        ),
-                        pw.SizedBox(width: 6),
-                        _buildCompactTag(
-                          label: fLabel,
-                          value: '${meal.fat}g',
-                          color: pdfRed,
-                        ),
-                        pw.SizedBox(width: 10),
-                        pw.Text(
-                          localizations.aiMatch(meal.confidence),
-                          style: pw.TextStyle(
-                            fontSize: 7.5,
-                            fontWeight: pw.FontWeight.bold,
-                            color: pdfGrey,
+                          pw.SizedBox(width: 6),
+                          _buildCompactTag(
+                            label: pLabel,
+                            value: '${meal.protein}g',
+                            color: pdfBlue,
                           ),
-                        ),
+                          pw.SizedBox(width: 6),
+                          _buildCompactTag(
+                            label: cLabel,
+                            value: '${meal.carbs}g',
+                            color: pdfAmber,
+                          ),
+                          pw.SizedBox(width: 6),
+                          _buildCompactTag(
+                            label: fLabel,
+                            value: '${meal.fat}g',
+                            color: pdfRed,
+                          ),
+                          pw.SizedBox(width: 10),
+                          pw.Text(
+                            localizations.aiMatch(meal.confidence),
+                            style: pw.TextStyle(
+                              fontSize: 7.5,
+                              fontWeight: pw.FontWeight.bold,
+                              color: pdfGrey,
+                            ),
+                          ),
+                        ] else ...[
+                          _buildCompactTag(
+                            label: 'Calories Burned',
+                            value: '-${meal.calories} kcal',
+                            color: pdfAmber,
+                          ),
+                        ],
                       ],
                     ),
                   ],

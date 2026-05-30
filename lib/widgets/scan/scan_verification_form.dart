@@ -180,14 +180,16 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
       return;
     }
 
+    final isAct = widget.appState.scanIsActivity;
     final newMeal = Meal(
-      shortId:
-          'MEAL-${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
+      shortId: isAct
+          ? Meal.generateRandomActivityShortId()
+          : 'MEAL-${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
       foodName: name,
       calories: calories,
-      protein: protein,
-      carbs: carbs,
-      fat: fat,
+      protein: isAct ? 0 : protein,
+      carbs: isAct ? 0 : carbs,
+      fat: isAct ? 0 : fat,
       confidence: widget.scanResult?.confidence ?? 100,
       imageBytes: widget.imageBytes,
       notes: notes,
@@ -204,7 +206,11 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(AppLocalizations.of(context)!.mealLogged),
+        content: Text(
+          isAct
+              ? 'Activity logged successfully'
+              : AppLocalizations.of(context)!.mealLogged,
+        ),
         backgroundColor: AppTheme.accentEmerald,
       ),
     );
@@ -238,7 +244,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   SizedBox(
                     width: isNarrow ? constraints.maxWidth : null,
                     child: Text(
-                      AppLocalizations.of(context)!.verifyEstimates,
+                      widget.appState.scanIsActivity
+                          ? 'Verify Activity Details'
+                          : AppLocalizations.of(context)!.verifyEstimates,
                       style: TextStyle(
                         color: colors.textPrimary,
                         fontSize: 16,
@@ -275,7 +283,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
 
           // Food Name
           Text(
-            AppLocalizations.of(context)!.mealDescription,
+            widget.appState.scanIsActivity
+                ? 'Activity / Exercise Name'
+                : AppLocalizations.of(context)!.mealDescription,
             style: TextStyle(color: colors.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 6),
@@ -283,7 +293,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             controller: _nameController,
             enabled: !_isReEvaluating,
             decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.avocadoHint,
+              hintText: widget.appState.scanIsActivity
+                  ? 'Running, Swimming, Cycling...'
+                  : AppLocalizations.of(context)!.avocadoHint,
             ),
           ),
           const SizedBox(height: 16),
@@ -296,7 +308,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.caloriesKcal,
+                      widget.appState.scanIsActivity
+                          ? 'Calories Burned (kcal)'
+                          : AppLocalizations.of(context)!.caloriesKcal,
                       style: TextStyle(
                         color: colors.textSecondary,
                         fontSize: 12,
@@ -317,95 +331,105 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.proteinG,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
+              if (!widget.appState.scanIsActivity) ...[
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.proteinG,
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _proteinController,
-                      enabled: !_isReEvaluating,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onTap: () {
-                        if (_proteinController.text == '0') {
-                          _proteinController.clear();
-                        }
-                      },
-                    ),
-                  ],
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: _proteinController,
+                        enabled: !_isReEvaluating,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        onTap: () {
+                          if (_proteinController.text == '0') {
+                            _proteinController.clear();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
           const SizedBox(height: 16),
 
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.carbsG,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
+          if (!widget.appState.scanIsActivity) ...[
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.carbsG,
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _carbsController,
-                      enabled: !_isReEvaluating,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onTap: () {
-                        if (_carbsController.text == '0') {
-                          _carbsController.clear();
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.fatG,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: _carbsController,
+                        enabled: !_isReEvaluating,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        onTap: () {
+                          if (_carbsController.text == '0') {
+                            _carbsController.clear();
+                          }
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _fatController,
-                      enabled: !_isReEvaluating,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onTap: () {
-                        if (_fatController.text == '0') {
-                          _fatController.clear();
-                        }
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.fatG,
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: _fatController,
+                        enabled: !_isReEvaluating,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        onTap: () {
+                          if (_fatController.text == '0') {
+                            _fatController.clear();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
           Text(
             AppLocalizations.of(context)!.bodyWeightKg,
             style: TextStyle(color: colors.textSecondary, fontSize: 12),
@@ -590,7 +614,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              if (widget.imageBytes != null)
+              if (widget.imageBytes != null && !widget.appState.scanIsActivity)
                 ElevatedButton(
                   onPressed: _isReEvaluating ? null : _reEvaluateMeal,
                   style: ElevatedButton.styleFrom(

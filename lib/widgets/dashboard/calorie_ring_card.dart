@@ -93,7 +93,75 @@ class CalorieRingCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          // Dynamic Breakdown Row
+          if (appState.totalCaloriesBurned > 0) ...[
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accentEmerald.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.restaurant,
+                        size: 12,
+                        color: AppTheme.accentEmerald,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Intake: ${appState.totalCaloriesIntake} kcal',
+                        style: const TextStyle(
+                          color: AppTheme.accentEmerald,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accentAmber.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.fitness_center,
+                        size: 12,
+                        color: AppTheme.accentAmber,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Burned: ${appState.totalCaloriesBurned} kcal',
+                        style: const TextStyle(
+                          color: AppTheme.accentAmber,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ] else ...[
+            const SizedBox(height: 16),
+          ],
 
           // Sub-Label listing remaining allowance
           Row(

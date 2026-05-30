@@ -189,13 +189,27 @@ class PdfService {
     required int proteinGoal,
     required int carbsGoal,
     required int fatGoal,
+    String pdfTypeFilter = 'all',
   }) async {
     final pdf = pw.Document();
 
-    final int totalCalories = meals.fold(0, (sum, m) => sum + m.calories);
-    final int totalProtein = meals.fold(0, (sum, m) => sum + m.protein);
-    final int totalCarbs = meals.fold(0, (sum, m) => sum + m.carbs);
-    final int totalFat = meals.fold(0, (sum, m) => sum + m.fat);
+    final int totalIntake = meals
+        .where((m) => m.isMeal)
+        .fold(0, (sum, m) => sum + m.calories);
+    final int totalBurned = meals
+        .where((m) => m.isActivity)
+        .fold(0, (sum, m) => sum + m.calories);
+    final int netCalories = totalIntake - totalBurned;
+
+    final int totalProtein = meals
+        .where((m) => m.isMeal)
+        .fold(0, (sum, m) => sum + m.protein);
+    final int totalCarbs = meals
+        .where((m) => m.isMeal)
+        .fold(0, (sum, m) => sum + m.carbs);
+    final int totalFat = meals
+        .where((m) => m.isMeal)
+        .fold(0, (sum, m) => sum + m.fat);
 
     final localizations = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toLanguageTag();
@@ -277,49 +291,125 @@ class PdfService {
             ],
 
             // Performance Cards Wrap/Row
-            pw.Row(
-              children: [
-                pw.Expanded(
-                  child: PdfMealCardHelper.buildSummaryStatCard(
-                    label: localizations.caloriesKcal.replaceAll(' (kcal)', ''),
-                    value: '$totalCalories kcal',
-                    accentColor: pdfEmerald,
+            if (pdfTypeFilter == 'activities') ...[
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: 'Calories Burned',
+                      value: '$totalBurned kcal',
+                      accentColor: pdfAmber,
+                    ),
                   ),
-                ),
-                pw.SizedBox(width: 8),
-                pw.Expanded(
-                  child: PdfMealCardHelper.buildSummaryStatCard(
-                    label: localizations.protein,
-                    value: '${totalProtein}g',
-                    accentColor: pdfBlue,
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: 'Activities Logged',
+                      value: '${meals.length}',
+                      accentColor: pdfGrey,
+                    ),
                   ),
-                ),
-                pw.SizedBox(width: 8),
-                pw.Expanded(
-                  child: PdfMealCardHelper.buildSummaryStatCard(
-                    label: localizations.carbs,
-                    value: '${totalCarbs}g',
-                    accentColor: pdfAmber,
+                ],
+              ),
+            ] else if (pdfTypeFilter == 'meals') ...[
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: 'Intake Calories',
+                      value: '$totalIntake kcal',
+                      accentColor: pdfEmerald,
+                    ),
                   ),
-                ),
-                pw.SizedBox(width: 8),
-                pw.Expanded(
-                  child: PdfMealCardHelper.buildSummaryStatCard(
-                    label: localizations.fat,
-                    value: '${totalFat}g',
-                    accentColor: pdfRed,
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: localizations.protein,
+                      value: '${totalProtein}g',
+                      accentColor: pdfBlue,
+                    ),
                   ),
-                ),
-                pw.SizedBox(width: 8),
-                pw.Expanded(
-                  child: PdfMealCardHelper.buildSummaryStatCard(
-                    label: localizations.pdfEntriesLabel,
-                    value: '${meals.length}',
-                    accentColor: pdfGrey,
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: localizations.carbs,
+                      value: '${totalCarbs}g',
+                      accentColor: pdfAmber,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: localizations.fat,
+                      value: '${totalFat}g',
+                      accentColor: pdfRed,
+                    ),
+                  ),
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: 'Meals Logged',
+                      value: '${meals.length}',
+                      accentColor: pdfGrey,
+                    ),
+                  ),
+                ],
+              ),
+            ] else ...[
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: 'Net Calories',
+                      value: '$netCalories kcal',
+                      accentColor: pdfEmerald,
+                    ),
+                  ),
+                  if (totalBurned > 0) ...[
+                    pw.SizedBox(width: 8),
+                    pw.Expanded(
+                      child: PdfMealCardHelper.buildSummaryStatCard(
+                        label: 'Burned',
+                        value: '$totalBurned kcal',
+                        accentColor: pdfAmber,
+                      ),
+                    ),
+                  ],
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: localizations.protein,
+                      value: '${totalProtein}g',
+                      accentColor: pdfBlue,
+                    ),
+                  ),
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: localizations.carbs,
+                      value: '${totalCarbs}g',
+                      accentColor: pdfAmber,
+                    ),
+                  ),
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: localizations.fat,
+                      value: '${totalFat}g',
+                      accentColor: pdfRed,
+                    ),
+                  ),
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: PdfMealCardHelper.buildSummaryStatCard(
+                      label: 'Logs Count',
+                      value: '${meals.length}',
+                      accentColor: pdfGrey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
             pw.SizedBox(height: 15),
 
             // Calorie Trend Chart

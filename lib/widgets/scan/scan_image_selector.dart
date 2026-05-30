@@ -9,6 +9,7 @@ class ScanImageSelector extends StatelessWidget {
   final VoidCallback onPickCamera;
   final VoidCallback onClear;
   final VoidCallback onLogManually;
+  final VoidCallback onLogActivity;
   final bool showForm;
 
   const ScanImageSelector({
@@ -18,6 +19,7 @@ class ScanImageSelector extends StatelessWidget {
     required this.onPickCamera,
     required this.onClear,
     required this.onLogManually,
+    required this.onLogActivity,
     required this.showForm,
   });
 
@@ -77,16 +79,33 @@ class ScanImageSelector extends StatelessWidget {
             ),
             if (!showForm) ...[
               const SizedBox(height: 12),
-              TextButton.icon(
-                icon: const Icon(
-                  Icons.edit_note,
-                  color: AppTheme.accentEmerald,
-                ),
-                label: Text(
-                  AppLocalizations.of(context)!.logManually,
-                  style: const TextStyle(color: AppTheme.accentEmerald),
-                ),
-                onPressed: onLogManually,
+              Wrap(
+                spacing: 16,
+                alignment: WrapAlignment.center,
+                children: [
+                  TextButton.icon(
+                    icon: const Icon(
+                      Icons.edit_note,
+                      color: AppTheme.accentEmerald,
+                    ),
+                    label: Text(
+                      AppLocalizations.of(context)!.logManually,
+                      style: const TextStyle(color: AppTheme.accentEmerald),
+                    ),
+                    onPressed: onLogManually,
+                  ),
+                  TextButton.icon(
+                    icon: const Icon(
+                      Icons.fitness_center,
+                      color: AppTheme.accentAmber,
+                    ),
+                    label: const Text(
+                      'Log Activity',
+                      style: TextStyle(color: AppTheme.accentAmber),
+                    ),
+                    onPressed: onLogActivity,
+                  ),
+                ],
               ),
             ],
           ],

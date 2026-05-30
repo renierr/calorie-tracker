@@ -131,7 +131,11 @@ mixin _GamificationState on ChangeNotifier {
       now,
       includeImages: false,
     );
-    final totalCalories = todayMeals.fold(0, (sum, m) => sum + m.calories);
+    final totalCalories = todayMeals.fold(
+      0,
+      (sum, m) =>
+          sum + (m.shortId.startsWith('ACT-') ? -m.calories : m.calories),
+    );
 
     if (totalCalories > _state.calorieGoal &&
         _gamificationStats.currentStreak > 0) {
@@ -199,7 +203,11 @@ mixin _GamificationState on ChangeNotifier {
           checkDate,
           includeImages: false,
         );
-        final totalCalories = mealsForDay.fold(0, (sum, m) => sum + m.calories);
+        final totalCalories = mealsForDay.fold(
+          0,
+          (sum, m) =>
+              sum + (m.shortId.startsWith('ACT-') ? -m.calories : m.calories),
+        );
 
         bool daySuccessful =
             mealsForDay.isNotEmpty && totalCalories <= _state.calorieGoal;

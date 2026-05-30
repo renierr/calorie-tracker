@@ -33,6 +33,7 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
   late final TextEditingController _notesController;
   bool _includeImages = true;
   bool _isTitleInitialized = false;
+  String _pdfTypeFilter = 'all';
 
   @override
   void initState() {
@@ -100,6 +101,36 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.addComments,
               ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Include in PDF Report',
+              style: TextStyle(color: colors.textSecondary, fontSize: 11),
+            ),
+            const SizedBox(height: 6),
+            DropdownButtonFormField<String>(
+              initialValue: _pdfTypeFilter,
+              dropdownColor: colors.surface,
+              style: TextStyle(color: colors.textPrimary, fontSize: 13),
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+              ),
+              items: const [
+                DropdownMenuItem(value: 'all', child: Text('All Logs')),
+                DropdownMenuItem(value: 'meals', child: Text('Meals Only')),
+                DropdownMenuItem(
+                  value: 'activities',
+                  child: Text('Activities Only'),
+                ),
+              ],
+              onChanged: (val) {
+                setState(() {
+                  _pdfTypeFilter = val ?? 'all';
+                });
+              },
             ),
             const SizedBox(height: 14),
             CheckboxListTile(
@@ -176,9 +207,18 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
               ),
             );
 
+            List<Meal> mealsToInclude = List.from(widget.filteredMeals);
+            if (_pdfTypeFilter == 'meals') {
+              mealsToInclude = mealsToInclude.where((m) => m.isMeal).toList();
+            } else if (_pdfTypeFilter == 'activities') {
+              mealsToInclude = mealsToInclude
+                  .where((m) => m.isActivity)
+                  .toList();
+            }
+
             await PdfService.generateSummaryReport(
               context: context,
-              meals: widget.filteredMeals,
+              meals: mealsToInclude,
               title: _titleController.text.trim(),
               timeframeStr: rangeText,
               userNotes: _notesController.text.trim(),
@@ -187,6 +227,7 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
               proteinGoal: widget.appState.proteinGoal,
               carbsGoal: widget.appState.carbsGoal,
               fatGoal: widget.appState.fatGoal,
+              pdfTypeFilter: _pdfTypeFilter,
             );
 
             if (widget.onReportGenerated != null) {

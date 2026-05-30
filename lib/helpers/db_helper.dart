@@ -299,6 +299,7 @@ class DbHelper {
     int? limit,
     int? beforeTimestamp,
     String filterType = 'all',
+    String typeFilter = 'all',
     DateTime? customStart,
     DateTime? customEnd,
     bool includeImages = false,
@@ -326,6 +327,12 @@ class DbHelper {
 
     final List<String> whereClauses = ['deleted = 0'];
     final List<dynamic> whereArgs = [];
+
+    if (typeFilter == 'meals') {
+      whereClauses.add("shortId NOT LIKE 'ACT-%'");
+    } else if (typeFilter == 'activities') {
+      whereClauses.add("shortId LIKE 'ACT-%'");
+    }
 
     if (beforeTimestamp != null) {
       whereClauses.add('timestamp < ?');
@@ -430,12 +437,19 @@ class DbHelper {
 
   Future<int> getMealsCount({
     String filterType = 'all',
+    String typeFilter = 'all',
     DateTime? customStart,
     DateTime? customEnd,
   }) async {
     final Database db = await database;
     final List<String> whereClauses = ['deleted = 0'];
     final List<dynamic> whereArgs = [];
+
+    if (typeFilter == 'meals') {
+      whereClauses.add("shortId NOT LIKE 'ACT-%'");
+    } else if (typeFilter == 'activities') {
+      whereClauses.add("shortId LIKE 'ACT-%'");
+    }
 
     final now = DateTime.now();
     final todayMidnight = DateTime(now.year, now.month, now.day);
@@ -561,8 +575,8 @@ class DbHelper {
     return await db.rawQuery('''
       SELECT 
         date(timestamp / 1000, 'unixepoch', 'localtime') as log_date,
-        SUM(calories) as total_calories,
-        COUNT(*) as meal_count
+        SUM(CASE WHEN shortId LIKE 'ACT-%' THEN -calories ELSE calories END) as total_calories,
+        SUM(CASE WHEN shortId NOT LIKE 'ACT-%' THEN 1 ELSE 0 END) as meal_count
       FROM $tableMeals
       WHERE deleted = 0
       GROUP BY log_date
