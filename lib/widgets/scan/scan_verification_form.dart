@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import '../../layout/adaptive_breakpoints.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
 import '../../services/ai_service.dart';
 import '../../l10n/app_localizations.dart';
-import '../adaptive/adaptive_action_group.dart';
+import '../meal_form_fields.dart';
+import 'scan_verification_header.dart';
+import 'scan_date_picker_tile.dart';
+import 'scan_verification_actions.dart';
 
 class ScanVerificationForm extends StatefulWidget {
   final AppState appState;
@@ -218,8 +219,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context);
-    final locale = Localizations.localeOf(context).toLanguageTag();
+    final isEnabled = !_isReEvaluating;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -230,440 +230,40 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final bool isNarrow = AppBreakpoints.isCompactContentWidth(
-                constraints.maxWidth,
-              );
-              return Wrap(
-                spacing: 10,
-                runSpacing: 8,
-                alignment: WrapAlignment.spaceBetween,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  SizedBox(
-                    width: isNarrow ? constraints.maxWidth : null,
-                    child: Text(
-                      widget.appState.scanIsActivity
-                          ? AppLocalizations.of(context)!.verifyActivityDetails
-                          : AppLocalizations.of(context)!.verifyEstimates,
-                      style: TextStyle(
-                        color: colors.textPrimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  if (widget.scanResult != null)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppTheme.accentEmerald.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.aiMatch(widget.scanResult!.confidence),
-                        style: const TextStyle(
-                          color: AppTheme.accentEmerald,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
+          ScanVerificationHeader(
+            isActivity: widget.appState.scanIsActivity,
+            scanResult: widget.scanResult,
           ),
           const SizedBox(height: 20),
-
-          // Food Name
-          Text(
-            widget.appState.scanIsActivity
-                ? AppLocalizations.of(context)!.activityName
-                : AppLocalizations.of(context)!.mealDescription,
-            style: TextStyle(color: colors.textSecondary, fontSize: 12),
-          ),
-          const SizedBox(height: 6),
-          TextField(
-            controller: _nameController,
-            enabled: !_isReEvaluating,
-            decoration: InputDecoration(
-              hintText: widget.appState.scanIsActivity
-                  ? AppLocalizations.of(context)!.activityHint
-                  : AppLocalizations.of(context)!.avocadoHint,
-            ),
+          MealFormFields(
+            isActivity: widget.appState.scanIsActivity,
+            isEnabled: isEnabled,
+            nameController: _nameController,
+            caloriesController: _caloriesController,
+            proteinController: _proteinController,
+            carbsController: _carbsController,
+            fatController: _fatController,
+            weightController: _weightController,
+            notesController: _notesController,
           ),
           const SizedBox(height: 16),
-
-          // Numeric stats row
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.appState.scanIsActivity
-                          ? AppLocalizations.of(context)!.caloriesBurnedKcal
-                          : AppLocalizations.of(context)!.caloriesKcal,
-                      style: TextStyle(
-                        color: colors.textSecondary,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: _caloriesController,
-                      enabled: !_isReEvaluating,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onTap: () {
-                        if (_caloriesController.text == '0') {
-                          _caloriesController.clear();
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              if (!widget.appState.scanIsActivity) ...[
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.proteinG,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _proteinController,
-                        enabled: !_isReEvaluating,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onTap: () {
-                          if (_proteinController.text == '0') {
-                            _proteinController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          if (!widget.appState.scanIsActivity) ...[
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.carbsG,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _carbsController,
-                        enabled: !_isReEvaluating,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onTap: () {
-                          if (_carbsController.text == '0') {
-                            _carbsController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.fatG,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _fatController,
-                        enabled: !_isReEvaluating,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onTap: () {
-                          if (_fatController.text == '0') {
-                            _fatController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-          Text(
-            AppLocalizations.of(context)!.bodyWeightKg,
-            style: TextStyle(color: colors.textSecondary, fontSize: 12),
-          ),
-          const SizedBox(height: 6),
-          TextField(
-            controller: _weightController,
-            enabled: !_isReEvaluating,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-            ],
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.optionalWeight,
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Analysis explanations
-          Text(
-            AppLocalizations.of(context)!.aiNotes,
-            style: TextStyle(color: colors.textSecondary, fontSize: 12),
-          ),
-          const SizedBox(height: 6),
-          TextField(
-            controller: _notesController,
-            enabled: !_isReEvaluating,
-            maxLines: 3,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.macroHint,
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Date picker for meal date
-          InkWell(
-            onTap: _isReEvaluating
-                ? null
-                : () async {
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: _mealDate,
-                      firstDate: DateTime(2020),
-                      lastDate: DateTime.now(),
-                    );
-                    if (picked != null) {
-                      setState(() => _mealDate = picked);
-                      widget.appState.updateScanDraftFields(mealDate: picked);
-                    }
-                  },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-              decoration: BoxDecoration(
-                color: colors.surfaceLight.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white.withValues(alpha: 0.08)
-                      : Colors.black.withValues(alpha: 0.08),
-                ),
-              ),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final bool isNarrow = AppBreakpoints.isCompactWidth(
-                    constraints.maxWidth,
-                  );
-                  final Widget staleDateIcon =
-                      (_mealDate ==
-                              DateTime.now().subtract(
-                                const Duration(days: 1),
-                              ) ||
-                          _mealDate.isBefore(
-                            DateTime.now().subtract(const Duration(days: 1)),
-                          ))
-                      ? const Padding(
-                          padding: EdgeInsets.only(left: 8),
-                          child: Icon(
-                            Icons.edit_calendar,
-                            color: AppTheme.accentAmber,
-                            size: 16,
-                          ),
-                        )
-                      : const SizedBox.shrink();
-
-                  if (isNarrow) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.calendar_today,
-                              color: AppTheme.accentEmerald,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              AppLocalizations.of(context)!.mealDate,
-                              style: TextStyle(
-                                color: colors.textSecondary,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                DateFormat.yMd(locale).format(_mealDate),
-                                style: TextStyle(
-                                  color: colors.textPrimary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                            staleDateIcon,
-                          ],
-                        ),
-                      ],
-                    );
-                  }
-
-                  return Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_today,
-                        color: AppTheme.accentEmerald,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        AppLocalizations.of(context)!.mealDate,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 13,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          DateFormat.yMd(locale).format(_mealDate),
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: colors.textPrimary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                      staleDateIcon,
-                    ],
-                  );
-                },
-              ),
-            ),
+          ScanDatePickerTile(
+            mealDate: _mealDate,
+            isEnabled: isEnabled,
+            onDateChanged: (picked) {
+              setState(() => _mealDate = picked);
+              widget.appState.updateScanDraftFields(mealDate: picked);
+            },
           ),
           const SizedBox(height: 25),
-          AdaptiveActionGroup(
-            spacing: 10,
-            actions: [
-              OutlinedButton(
-                onPressed: _isReEvaluating ? null : widget.onDiscard,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: colors.textPrimary,
-                  side: BorderSide(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white24
-                        : Colors.black26,
-                  ),
-                  minimumSize: const Size.fromHeight(48),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.discard,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              if (widget.imageBytes != null && !widget.appState.scanIsActivity)
-                ElevatedButton(
-                  onPressed: _isReEvaluating ? null : _reEvaluateMeal,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.accentBlue,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(48),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: _isReEvaluating
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.auto_awesome, size: 16),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                AppLocalizations.of(context)!.reEvaluate,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-              ElevatedButton(
-                onPressed: _isReEvaluating ? null : _saveMeal,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(48),
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.logAndSave,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
+          ScanVerificationActions(
+            isEnabled: isEnabled,
+            isReEvaluating: _isReEvaluating,
+            showReEvaluate:
+                widget.imageBytes != null && !widget.appState.scanIsActivity,
+            onDiscard: widget.onDiscard,
+            onReEvaluate: _reEvaluateMeal,
+            onSave: _saveMeal,
           ),
         ],
       ),

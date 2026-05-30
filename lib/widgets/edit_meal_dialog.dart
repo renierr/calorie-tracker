@@ -6,6 +6,7 @@ import '../models/meal_model.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../services/ai_service.dart';
+import 'meal_form_fields.dart';
 
 class EditMealDialog extends StatefulWidget {
   final Meal meal;
@@ -214,193 +215,16 @@ class _EditMealDialogState extends State<EditMealDialog> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.meal.isActivity
-                            ? AppLocalizations.of(context)!.activityName
-                            : AppLocalizations.of(context)!.mealDescription,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _nameController,
-                        enabled: isEnabled,
-                      ),
-                      const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.meal.isActivity
-                                      ? AppLocalizations.of(
-                                          context,
-                                        )!.caloriesBurnedKcal
-                                      : AppLocalizations.of(
-                                          context,
-                                        )!.caloriesKcal,
-                                  style: TextStyle(
-                                    color: colors.textSecondary,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                TextField(
-                                  controller: _caloriesController,
-                                  enabled: isEnabled,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  onTap: () {
-                                    if (_caloriesController.text == '0') {
-                                      _caloriesController.clear();
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (!widget.meal.isActivity) ...[
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.proteinG,
-                                    style: TextStyle(
-                                      color: colors.textSecondary,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  TextField(
-                                    controller: _proteinController,
-                                    enabled: isEnabled,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                    onTap: () {
-                                      if (_proteinController.text == '0') {
-                                        _proteinController.clear();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                      const SizedBox(height: 14),
-                      if (!widget.meal.isActivity) ...[
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.carbsG,
-                                    style: TextStyle(
-                                      color: colors.textSecondary,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  TextField(
-                                    controller: _carbsController,
-                                    enabled: isEnabled,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                    onTap: () {
-                                      if (_carbsController.text == '0') {
-                                        _carbsController.clear();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.fatG,
-                                    style: TextStyle(
-                                      color: colors.textSecondary,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  TextField(
-                                    controller: _fatController,
-                                    enabled: isEnabled,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                    onTap: () {
-                                      if (_fatController.text == '0') {
-                                        _fatController.clear();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                      ],
-                      Text(
-                        AppLocalizations.of(context)!.bodyWeightKg,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _weightController,
-                        enabled: isEnabled,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d*'),
-                          ),
-                        ],
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.of(
-                            context,
-                          )!.optionalWeight,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      Text(
-                        AppLocalizations.of(context)!.notes,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      TextField(
-                        controller: _notesController,
-                        enabled: isEnabled,
-                        maxLines: 2,
+                      MealFormFields(
+                        isActivity: widget.meal.isActivity,
+                        isEnabled: isEnabled,
+                        nameController: _nameController,
+                        caloriesController: _caloriesController,
+                        proteinController: _proteinController,
+                        carbsController: _carbsController,
+                        fatController: _fatController,
+                        weightController: _weightController,
+                        notesController: _notesController,
                       ),
 
                       if (!widget.meal.isActivity) ...[
