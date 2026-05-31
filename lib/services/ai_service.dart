@@ -122,8 +122,8 @@ abstract class BaseAIService implements AIService {
         'fat' (integer, total grams), 
         'confidence' (integer, 1-100 based on image visibility), and 
         'notes' (string, concise line-by-line breakdown in $targetLanguage 
-          listing: 1. identified ingredients/weights, 2. assumptions for hidden oils, and 
-          3. a 1-sentence takeaway, with each point on a new line without numbers""";
+          listing: - identified ingredients/weights, - assumptions for hidden oils, and 
+          - a 1-sentence takeaway, with each point on a new line without numbers""";
 
     if (includeAnthropicRawBlockInstruction) {
       instruction +=
