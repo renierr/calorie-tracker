@@ -56,6 +56,13 @@ class AppState extends ChangeNotifier
   String _aiApiKey = '';
   String _aiCustomUrl = '';
   String _aiReasoningEffort = 'none';
+
+  // Provider-specific settings cache maps
+  final Map<String, String> _aiProviderModels = {};
+  final Map<String, String> _aiProviderApiKeys = {};
+  final Map<String, String> _aiProviderCustomUrls = {};
+  final Map<String, String> _aiProviderReasoningEfforts = {};
+
   int _calorieGoal = 2000;
   int _proteinGoal = 130;
   int _carbsGoal = 220;

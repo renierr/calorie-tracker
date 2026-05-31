@@ -143,6 +143,10 @@ mixin _SettingsState on ChangeNotifier {
         'aiApiKey': _state._aiApiKey,
         'aiCustomUrl': _state._aiCustomUrl,
         'aiReasoningEffort': _state._aiReasoningEffort,
+        'aiProviderModels': _state._aiProviderModels,
+        'aiProviderApiKeys': _state._aiProviderApiKeys,
+        'aiProviderCustomUrls': _state._aiProviderCustomUrls,
+        'aiProviderReasoningEfforts': _state._aiProviderReasoningEfforts,
       },
     };
     return const JsonEncoder.withIndent('  ').convert(exportMap);
@@ -228,6 +232,8 @@ mixin _SettingsState on ChangeNotifier {
             settings['aiModel'] as String? ??
             AIServiceConfig.getDefaultModelForProvider(_state._aiProvider);
         await prefs.setString(AppState._keyAiModel, _state._aiModel);
+        final String pKey = _state._aiProvider.trim().toLowerCase();
+        await prefs.setString('ai_model_$pKey', _state._aiModel);
       }
       if (settings.containsKey('aiApiKey')) {
         _state._aiApiKey = settings['aiApiKey'] as String? ?? '';
@@ -235,13 +241,19 @@ mixin _SettingsState on ChangeNotifier {
           _state._aiApiKey = settings['geminiApiKey'] as String? ?? '';
         }
         await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
+        final String pKey = _state._aiProvider.trim().toLowerCase();
+        await prefs.setString('ai_api_key_$pKey', _state._aiApiKey);
       } else if (settings.containsKey('geminiApiKey')) {
         _state._aiApiKey = settings['geminiApiKey'] as String? ?? '';
         await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
+        final String pKey = _state._aiProvider.trim().toLowerCase();
+        await prefs.setString('ai_api_key_$pKey', _state._aiApiKey);
       }
       if (settings.containsKey('aiCustomUrl')) {
         _state._aiCustomUrl = settings['aiCustomUrl'] as String? ?? '';
         await prefs.setString(AppState._keyAiCustomUrl, _state._aiCustomUrl);
+        final String pKey = _state._aiProvider.trim().toLowerCase();
+        await prefs.setString('ai_custom_url_$pKey', _state._aiCustomUrl);
       }
       if (settings.containsKey('aiReasoningEffort')) {
         _state._aiReasoningEffort =
@@ -250,7 +262,62 @@ mixin _SettingsState on ChangeNotifier {
           AppState._keyAiReasoningEffort,
           _state._aiReasoningEffort,
         );
+        final String pKey = _state._aiProvider.trim().toLowerCase();
+        await prefs.setString(
+          'ai_reasoning_effort_$pKey',
+          _state._aiReasoningEffort,
+        );
       }
+
+      // Import provider-specific maps if present
+      if (settings.containsKey('aiProviderModels')) {
+        final Map<String, dynamic> models =
+            settings['aiProviderModels'] as Map<String, dynamic>? ?? {};
+        for (final entry in models.entries) {
+          _state._aiProviderModels[entry.key] = entry.value.toString();
+          await prefs.setString(
+            'ai_model_${entry.key}',
+            entry.value.toString(),
+          );
+        }
+      }
+      if (settings.containsKey('aiProviderApiKeys')) {
+        final Map<String, dynamic> keys =
+            settings['aiProviderApiKeys'] as Map<String, dynamic>? ?? {};
+        for (final entry in keys.entries) {
+          _state._aiProviderApiKeys[entry.key] = entry.value.toString();
+          await prefs.setString(
+            'ai_api_key_${entry.key}',
+            entry.value.toString(),
+          );
+        }
+      }
+      if (settings.containsKey('aiProviderCustomUrls')) {
+        final Map<String, dynamic> urls =
+            settings['aiProviderCustomUrls'] as Map<String, dynamic>? ?? {};
+        for (final entry in urls.entries) {
+          _state._aiProviderCustomUrls[entry.key] = entry.value.toString();
+          await prefs.setString(
+            'ai_custom_url_${entry.key}',
+            entry.value.toString(),
+          );
+        }
+      }
+      if (settings.containsKey('aiProviderReasoningEfforts')) {
+        final Map<String, dynamic> efforts =
+            settings['aiProviderReasoningEfforts'] as Map<String, dynamic>? ??
+            {};
+        for (final entry in efforts.entries) {
+          _state._aiProviderReasoningEfforts[entry.key] = entry.value
+              .toString();
+          await prefs.setString(
+            'ai_reasoning_effort_${entry.key}',
+            entry.value.toString(),
+          );
+        }
+      }
+
+      await _state.loadAISettings();
 
       notifyListeners();
     } finally {

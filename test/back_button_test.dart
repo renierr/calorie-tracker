@@ -29,7 +29,9 @@ class MockAppState extends AppState {
 }
 
 void main() {
-  testWidgets('AppAdaptiveLayout back button test', (WidgetTester tester) async {
+  testWidgets('AppAdaptiveLayout back button test', (
+    WidgetTester tester,
+  ) async {
     // Set screen size to mobile so that the bottom navigation bar is rendered
     tester.view.physicalSize = const Size(750, 1000);
     tester.view.devicePixelRatio = 1.0;
@@ -52,10 +54,7 @@ void main() {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
-            Locale('en'),
-            Locale('de'),
-          ],
+          supportedLocales: const [Locale('en'), Locale('de')],
           home: const AppAdaptiveLayout(),
         ),
       ),

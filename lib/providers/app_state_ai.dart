@@ -10,6 +10,28 @@ mixin _AiState on ChangeNotifier {
   String get aiCustomUrl => _state._aiCustomUrl;
   String get aiReasoningEffort => _state._aiReasoningEffort;
 
+  // Provider-specific getters
+  String getModelForProvider(String provider) {
+    final pKey = provider.toLowerCase();
+    return _state._aiProviderModels[pKey] ??
+        AIServiceConfig.getDefaultModelForProvider(pKey);
+  }
+
+  String getApiKeyForProvider(String provider) {
+    final pKey = provider.toLowerCase();
+    return _state._aiProviderApiKeys[pKey] ?? '';
+  }
+
+  String getCustomUrlForProvider(String provider) {
+    final pKey = provider.toLowerCase();
+    return _state._aiProviderCustomUrls[pKey] ?? '';
+  }
+
+  String getReasoningEffortForProvider(String provider) {
+    final pKey = provider.toLowerCase();
+    return _state._aiProviderReasoningEfforts[pKey] ?? 'none';
+  }
+
   Future<void> loadAISettings() async {
     final prefs = await SharedPreferences.getInstance();
     _state._aiProvider =
@@ -36,6 +58,62 @@ mixin _AiState on ChangeNotifier {
       _state._aiApiKey = legacyGeminiKey;
       await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
     }
+
+    // Load provider-specific settings
+    final providers = ['gemini', 'openai', 'anthropic', 'grok', 'custom'];
+    for (final p in providers) {
+      final pKey = p.toLowerCase();
+      // Model:
+      final pModel = prefs.getString('ai_model_$pKey');
+      if (pModel != null && pModel.isNotEmpty) {
+        _state._aiProviderModels[pKey] = pModel;
+      } else {
+        if (_state._aiProvider.toLowerCase() == pKey) {
+          _state._aiProviderModels[pKey] = _state._aiModel;
+        } else {
+          _state._aiProviderModels[pKey] =
+              AIServiceConfig.getDefaultModelForProvider(pKey);
+        }
+      }
+
+      // API Key:
+      final pApiKey = prefs.getString('ai_api_key_$pKey');
+      if (pApiKey != null) {
+        _state._aiProviderApiKeys[pKey] = pApiKey;
+      } else {
+        if (_state._aiProvider.toLowerCase() == pKey) {
+          _state._aiProviderApiKeys[pKey] = _state._aiApiKey;
+        } else if (pKey == 'gemini') {
+          _state._aiProviderApiKeys[pKey] = legacyGeminiKey ?? '';
+        } else {
+          _state._aiProviderApiKeys[pKey] = '';
+        }
+      }
+
+      // Custom URL:
+      final pCustomUrl = prefs.getString('ai_custom_url_$pKey');
+      if (pCustomUrl != null) {
+        _state._aiProviderCustomUrls[pKey] = pCustomUrl;
+      } else {
+        if (_state._aiProvider.toLowerCase() == pKey) {
+          _state._aiProviderCustomUrls[pKey] = _state._aiCustomUrl;
+        } else {
+          _state._aiProviderCustomUrls[pKey] = '';
+        }
+      }
+
+      // Reasoning Effort:
+      final pReasoningEffort = prefs.getString('ai_reasoning_effort_$pKey');
+      if (pReasoningEffort != null) {
+        _state._aiProviderReasoningEfforts[pKey] = pReasoningEffort;
+      } else {
+        if (_state._aiProvider.toLowerCase() == pKey) {
+          _state._aiProviderReasoningEfforts[pKey] = _state._aiReasoningEffort;
+        } else {
+          _state._aiProviderReasoningEfforts[pKey] = 'none';
+        }
+      }
+    }
     notifyListeners();
   }
 
@@ -61,6 +139,18 @@ mixin _AiState on ChangeNotifier {
       AppState._keyAiReasoningEffort,
       _state._aiReasoningEffort,
     );
+
+    // Save provider-specific settings too
+    final String pKey = provider.trim().toLowerCase();
+    _state._aiProviderModels[pKey] = model.trim();
+    _state._aiProviderApiKeys[pKey] = apiKey.trim();
+    _state._aiProviderCustomUrls[pKey] = customUrl.trim();
+    _state._aiProviderReasoningEfforts[pKey] = reasoningEffort.trim();
+
+    await prefs.setString('ai_model_$pKey', model.trim());
+    await prefs.setString('ai_api_key_$pKey', apiKey.trim());
+    await prefs.setString('ai_custom_url_$pKey', customUrl.trim());
+    await prefs.setString('ai_reasoning_effort_$pKey', reasoningEffort.trim());
 
     notifyListeners();
   }

@@ -75,16 +75,36 @@ class _AISettingsPageState extends State<AISettingsPage> {
     return isCustom || _selectedModel == 'custom' || !isModelStandard;
   }
 
-  // Update selected provider and reset model choice to default recommended
+  // Update selected provider and load provider-specific settings, while saving previous ones
   void _onProviderChanged(String? newProvider) {
-    if (newProvider == null) return;
+    if (newProvider == null || newProvider == _selectedProvider) return;
+
+    final String finalModel = _showCustomModelField
+        ? _customModelController.text.trim()
+        : _selectedModel;
+
+    _appState.saveAISettings(
+      provider: _selectedProvider,
+      model: finalModel,
+      apiKey: _apiKeyController.text.trim(),
+      customUrl: _customUrlController.text.trim(),
+      reasoningEffort: _selectedReasoningEffort,
+    );
+
     setState(() {
       _selectedProvider = newProvider;
-      if (_providerModels.containsKey(newProvider)) {
-        _selectedModel = _providerModels[newProvider]!.first;
-      } else {
-        _selectedModel = '';
-      }
+      _selectedModel = _appState.getModelForProvider(newProvider);
+      _selectedReasoningEffort = _appState.getReasoningEffortForProvider(
+        newProvider,
+      );
+      _apiKeyController.text = _appState.getApiKeyForProvider(newProvider);
+      _customUrlController.text = _appState.getCustomUrlForProvider(
+        newProvider,
+      );
+      _customModelController.text =
+          _isStandardModel(_selectedProvider, _selectedModel)
+          ? ''
+          : _selectedModel;
     });
   }
 
