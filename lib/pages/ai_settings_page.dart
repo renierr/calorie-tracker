@@ -21,6 +21,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
   late String _selectedProvider;
   late String _selectedModel;
   late String _selectedReasoningEffort;
+  late String _selectedFallbackProvider;
   late TextEditingController _customModelController;
   late TextEditingController _apiKeyController;
   late TextEditingController _customUrlController;
@@ -43,6 +44,9 @@ class _AISettingsPageState extends State<AISettingsPage> {
     _selectedProvider = _appState.aiProvider;
     _selectedModel = _appState.aiModel;
     _selectedReasoningEffort = _appState.aiReasoningEffort;
+    _selectedFallbackProvider = _appState.getFallbackForProvider(
+      _selectedProvider,
+    );
 
     _customModelController = TextEditingController(
       text: _isStandardModel(_selectedProvider, _selectedModel)
@@ -89,6 +93,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
       apiKey: _apiKeyController.text.trim(),
       customUrl: _customUrlController.text.trim(),
       reasoningEffort: _selectedReasoningEffort,
+      fallbackProvider: _selectedFallbackProvider,
     );
 
     setState(() {
@@ -97,6 +102,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
       _selectedReasoningEffort = _appState.getReasoningEffortForProvider(
         newProvider,
       );
+      _selectedFallbackProvider = _appState.getFallbackForProvider(newProvider);
       _apiKeyController.text = _appState.getApiKeyForProvider(newProvider);
       _customUrlController.text = _appState.getCustomUrlForProvider(
         newProvider,
@@ -189,6 +195,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
       apiKey: _apiKeyController.text.trim(),
       customUrl: _customUrlController.text.trim(),
       reasoningEffort: _selectedReasoningEffort,
+      fallbackProvider: _selectedFallbackProvider,
     );
 
     if (!mounted) return;
@@ -206,6 +213,20 @@ class _AISettingsPageState extends State<AISettingsPage> {
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
+
+    final fallbackOptions =
+        ['none', 'gemini', 'openai', 'anthropic', 'grok', 'custom']
+            .where(
+              (provider) =>
+                  provider == 'none' ||
+                  (provider != _selectedProvider &&
+                      _appState.isProviderConfigured(provider)),
+            )
+            .toList();
+
+    if (!fallbackOptions.contains(_selectedFallbackProvider)) {
+      _selectedFallbackProvider = 'none';
+    }
 
     final isCustom = _selectedProvider == 'custom';
     final bool isModelStandard = _isStandardModel(
@@ -397,6 +418,35 @@ class _AISettingsPageState extends State<AISettingsPage> {
                           if (val != null) {
                             setState(() {
                               _selectedReasoningEffort = val;
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Fallback Provider Dropdown Selector
+                      DropdownButtonFormField<String>(
+                        key: ValueKey(_selectedProvider),
+                        initialValue: _selectedFallbackProvider,
+                        decoration: InputDecoration(
+                          labelText: localizations.fallbackProviderLabel,
+                          helperText: localizations.fallbackProviderDesc,
+                          helperMaxLines: 2,
+                        ),
+                        items: fallbackOptions.map((provider) {
+                          return DropdownMenuItem(
+                            value: provider,
+                            child: Text(
+                              provider == 'none'
+                                  ? localizations.fallbackNone
+                                  : _appState.getProviderDisplayName(provider),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() {
+                              _selectedFallbackProvider = val;
                             });
                           }
                         },

@@ -352,6 +352,18 @@
   "weightShort": "W",
   "aiSettingsTitle": "AI Vision Configuration",
   "aiSettingsDesc": "Configure your preferred AI vision model for photo scanning.",
+  "fallbackProviderLabel": "Fallback Provider",
+  "fallbackProviderDesc": "Select a fallback provider that will be automatically suggested if the active AI scanner throws an error. A provider is only valid as fallback if it has a configured API key/credentials.",
+  "fallbackNone": "None",
+  "aiFallbackPromptTitle": "Try Fallback Provider?",
+  "aiFallbackPrompt": "Active AI scan failed. Would you like to try the fallback provider {fallbackName}?",
+  "@aiFallbackPrompt": {
+    "placeholders": {
+      "fallbackName": {
+        "type": "String"
+      }
+    }
+  },
   "aiProviderLabel": "AI Provider",
   "aiModelLabel": "Vision Model",
   "customUrlLabel": "Custom API Endpoint Base URL",

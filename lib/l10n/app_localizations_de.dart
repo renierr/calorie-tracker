@@ -725,6 +725,24 @@ class AppLocalizationsDe extends AppLocalizations {
       'Konfigurieren Sie Ihr bevorzugtes KI-Bilderkennungsmodell für das Scannen von Fotos.';
 
   @override
+  String get fallbackProviderLabel => 'Ausweichanbieter';
+
+  @override
+  String get fallbackProviderDesc =>
+      'Wählen Sie einen Ausweichanbieter aus, der automatisch vorgeschlagen wird, wenn der aktive KI-Scanner einen Fehler ausgibt. Ein Anbieter ist nur dann als Ausweichanbieter gültig, wenn er über einen konfigurierten API-Schlüssel/Zugangsdaten verfügt.';
+
+  @override
+  String get fallbackNone => 'Keiner';
+
+  @override
+  String get aiFallbackPromptTitle => 'Ausweichanbieter ausprobieren?';
+
+  @override
+  String aiFallbackPrompt(String fallbackName) {
+    return 'Die aktive KI-Analyse ist fehlgeschlagen. Möchten Sie den Ausweichanbieter $fallbackName ausprobieren?';
+  }
+
+  @override
   String get aiProviderLabel => 'KI-Anbieter';
 
   @override

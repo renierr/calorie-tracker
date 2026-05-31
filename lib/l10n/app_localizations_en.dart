@@ -721,6 +721,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'Configure your preferred AI vision model for photo scanning.';
 
   @override
+  String get fallbackProviderLabel => 'Fallback Provider';
+
+  @override
+  String get fallbackProviderDesc =>
+      'Select a fallback provider that will be automatically suggested if the active AI scanner throws an error. A provider is only valid as fallback if it has a configured API key/credentials.';
+
+  @override
+  String get fallbackNone => 'None';
+
+  @override
+  String get aiFallbackPromptTitle => 'Try Fallback Provider?';
+
+  @override
+  String aiFallbackPrompt(String fallbackName) {
+    return 'Active AI scan failed. Would you like to try the fallback provider $fallbackName?';
+  }
+
+  @override
   String get aiProviderLabel => 'AI Provider';
 
   @override

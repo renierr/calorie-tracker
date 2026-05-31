@@ -354,6 +354,18 @@
   "weightShort": "G",
   "aiSettingsTitle": "KI-Bilderkennung konfigurieren",
   "aiSettingsDesc": "Konfigurieren Sie Ihr bevorzugtes KI-Bilderkennungsmodell für das Scannen von Fotos.",
+  "fallbackProviderLabel": "Ausweichanbieter",
+  "fallbackProviderDesc": "Wählen Sie einen Ausweichanbieter aus, der automatisch vorgeschlagen wird, wenn der aktive KI-Scanner einen Fehler ausgibt. Ein Anbieter ist nur dann als Ausweichanbieter gültig, wenn er über einen konfigurierten API-Schlüssel/Zugangsdaten verfügt.",
+  "fallbackNone": "Keiner",
+  "aiFallbackPromptTitle": "Ausweichanbieter ausprobieren?",
+  "aiFallbackPrompt": "Die aktive KI-Analyse ist fehlgeschlagen. Möchten Sie den Ausweichanbieter {fallbackName} ausprobieren?",
+  "@aiFallbackPrompt": {
+    "placeholders": {
+      "fallbackName": {
+        "type": "String"
+      }
+    }
+  },
   "aiProviderLabel": "KI-Anbieter",
   "aiModelLabel": "Erkennungsmodell",
   "customUrlLabel": "Eigene API-Endpunkt-Basis-URL",

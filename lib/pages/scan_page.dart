@@ -10,6 +10,7 @@ import '../widgets/scan/scan_verification_form.dart';
 import '../widgets/scan/scan_favorites_list.dart';
 import '../widgets/scan/scan_hint_field.dart';
 import '../widgets/scan/scan_trigger_actions.dart';
+import '../widgets/scan/ai_fallback_dialog.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -80,7 +81,7 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   // Trigger AI scanning
-  Future<void> _scanMeal(AppState appState) async {
+  Future<void> _scanMeal(AppState appState, {String? overrideProvider}) async {
     final colors = AppTheme.of(context);
     if (appState.scanImageBytes == null) return;
 
@@ -95,34 +96,45 @@ class _ScanPageState extends State<ScanPage> {
         imageBytes: appState.scanImageBytes!,
         mimeType: appState.scanMimeType,
         userHint: _hintController.text,
+        overrideProvider: overrideProvider,
       );
 
       appState.setScanResult(result);
     } catch (e) {
       appState.setScanIsScanning(false);
       if (!mounted) return;
-      showDialog(
+
+      await AIFallbackDialog.handleFallback(
         context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: colors.surface,
-          title: Text(
-            AppLocalizations.of(context)!.aiError,
-            style: const TextStyle(color: AppTheme.accentRed),
-          ),
-          content: Text(
-            AppLocalizations.of(context)!.aiErrorDesc(e.toString()),
-            style: TextStyle(color: colors.textPrimary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                AppLocalizations.of(context)!.ok,
-                style: const TextStyle(color: AppTheme.accentEmerald),
+        appState: appState,
+        currentOverrideProvider: overrideProvider,
+        error: e,
+        onRetry: (fallback) => _scanMeal(appState, overrideProvider: fallback),
+        onErrorUnhandled: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: colors.surface,
+              title: Text(
+                AppLocalizations.of(context)!.aiError,
+                style: const TextStyle(color: AppTheme.accentRed),
               ),
+              content: Text(
+                AppLocalizations.of(context)!.aiErrorDesc(e.toString()),
+                style: TextStyle(color: colors.textPrimary),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    AppLocalizations.of(context)!.ok,
+                    style: const TextStyle(color: AppTheme.accentEmerald),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       );
     } finally {
       try {

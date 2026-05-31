@@ -9,6 +9,45 @@ mixin _AiState on ChangeNotifier {
   String get aiApiKey => _state._aiApiKey;
   String get aiCustomUrl => _state._aiCustomUrl;
   String get aiReasoningEffort => _state._aiReasoningEffort;
+  String get aiFallbackProvider => _state._aiFallbackProvider;
+
+  String get activeFallbackProvider {
+    final fallback = _state._aiFallbackProvider;
+    if (fallback == 'none') return 'none';
+    if (isProviderConfigured(fallback)) return fallback;
+    return 'none';
+  }
+
+  String getFallbackForProvider(String provider) {
+    final pKey = provider.toLowerCase();
+    return _state._aiProviderFallbacks[pKey] ?? 'none';
+  }
+
+  bool isProviderConfigured(String provider) {
+    final pKey = provider.toLowerCase();
+    if (pKey == 'custom') {
+      return getCustomUrlForProvider(pKey).isNotEmpty;
+    }
+    final key = getApiKeyForProvider(pKey);
+    return key.trim().isNotEmpty;
+  }
+
+  String getProviderDisplayName(String provider) {
+    switch (provider.toLowerCase()) {
+      case 'gemini':
+        return 'Google Gemini';
+      case 'openai':
+        return 'OpenAI';
+      case 'anthropic':
+        return 'Anthropic Claude';
+      case 'grok':
+        return 'xAI Grok';
+      case 'custom':
+        return 'Custom Endpoint';
+      default:
+        return provider;
+    }
+  }
 
   // Provider-specific getters
   String getModelForProvider(String provider) {
@@ -49,6 +88,8 @@ mixin _AiState on ChangeNotifier {
     _state._aiCustomUrl = prefs.getString(AppState._keyAiCustomUrl) ?? '';
     _state._aiReasoningEffort =
         prefs.getString(AppState._keyAiReasoningEffort) ?? 'none';
+    _state._aiFallbackProvider =
+        prefs.getString(AppState._keyAiFallbackProvider) ?? 'none';
 
     // Fallback/Migration for legacy Gemini key
     final legacyGeminiKey = prefs.getString(AppState._keyGeminiApiKey);
@@ -113,6 +154,10 @@ mixin _AiState on ChangeNotifier {
           _state._aiProviderReasoningEfforts[pKey] = 'none';
         }
       }
+
+      // Fallback:
+      final pFallback = prefs.getString('ai_fallback_$pKey');
+      _state._aiProviderFallbacks[pKey] = pFallback ?? 'none';
     }
     notifyListeners();
   }
@@ -123,6 +168,7 @@ mixin _AiState on ChangeNotifier {
     required String apiKey,
     required String customUrl,
     required String reasoningEffort,
+    String fallbackProvider = 'none',
   }) async {
     final prefs = await SharedPreferences.getInstance();
     _state._aiProvider = provider.trim();
@@ -130,6 +176,7 @@ mixin _AiState on ChangeNotifier {
     _state._aiApiKey = apiKey.trim();
     _state._aiCustomUrl = customUrl.trim();
     _state._aiReasoningEffort = reasoningEffort.trim();
+    _state._aiFallbackProvider = fallbackProvider.trim();
 
     await prefs.setString(AppState._keyAiProvider, _state._aiProvider);
     await prefs.setString(AppState._keyAiModel, _state._aiModel);
@@ -139,6 +186,10 @@ mixin _AiState on ChangeNotifier {
       AppState._keyAiReasoningEffort,
       _state._aiReasoningEffort,
     );
+    await prefs.setString(
+      AppState._keyAiFallbackProvider,
+      _state._aiFallbackProvider,
+    );
 
     // Save provider-specific settings too
     final String pKey = provider.trim().toLowerCase();
@@ -146,11 +197,13 @@ mixin _AiState on ChangeNotifier {
     _state._aiProviderApiKeys[pKey] = apiKey.trim();
     _state._aiProviderCustomUrls[pKey] = customUrl.trim();
     _state._aiProviderReasoningEfforts[pKey] = reasoningEffort.trim();
+    _state._aiProviderFallbacks[pKey] = fallbackProvider.trim();
 
     await prefs.setString('ai_model_$pKey', model.trim());
     await prefs.setString('ai_api_key_$pKey', apiKey.trim());
     await prefs.setString('ai_custom_url_$pKey', customUrl.trim());
     await prefs.setString('ai_reasoning_effort_$pKey', reasoningEffort.trim());
+    await prefs.setString('ai_fallback_$pKey', fallbackProvider.trim());
 
     notifyListeners();
   }
@@ -159,10 +212,21 @@ mixin _AiState on ChangeNotifier {
     required Uint8List imageBytes,
     required String mimeType,
     required String userHint,
+    String? overrideProvider,
   }) async {
-    final provider = _state._aiProvider;
-    final model = _state._aiModel;
-    final apiKey = _state._aiApiKey.trim();
+    final provider = overrideProvider ?? _state._aiProvider;
+    final model = overrideProvider != null
+        ? getModelForProvider(overrideProvider)
+        : _state._aiModel;
+    final apiKey = overrideProvider != null
+        ? getApiKeyForProvider(overrideProvider).trim()
+        : _state._aiApiKey.trim();
+    final customUrl = overrideProvider != null
+        ? getCustomUrlForProvider(overrideProvider).trim()
+        : _state._aiCustomUrl.trim();
+    final reasoningEffort = overrideProvider != null
+        ? getReasoningEffortForProvider(overrideProvider).trim()
+        : _state._aiReasoningEffort.trim();
 
     final service = AIServiceFactory.getService(provider);
     return await service.performAIAnalysis(
@@ -172,8 +236,8 @@ mixin _AiState on ChangeNotifier {
       userHint: userHint,
       languageCode: _state._appLocale,
       model: model,
-      customUrl: _state._aiCustomUrl,
-      reasoningEffort: _state._aiReasoningEffort,
+      customUrl: customUrl,
+      reasoningEffort: reasoningEffort,
     );
   }
 

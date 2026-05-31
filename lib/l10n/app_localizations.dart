@@ -1352,6 +1352,36 @@ abstract class AppLocalizations {
   /// **'Configure your preferred AI vision model for photo scanning.'**
   String get aiSettingsDesc;
 
+  /// No description provided for @fallbackProviderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fallback Provider'**
+  String get fallbackProviderLabel;
+
+  /// No description provided for @fallbackProviderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a fallback provider that will be automatically suggested if the active AI scanner throws an error. A provider is only valid as fallback if it has a configured API key/credentials.'**
+  String get fallbackProviderDesc;
+
+  /// No description provided for @fallbackNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get fallbackNone;
+
+  /// No description provided for @aiFallbackPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Fallback Provider?'**
+  String get aiFallbackPromptTitle;
+
+  /// No description provided for @aiFallbackPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Active AI scan failed. Would you like to try the fallback provider {fallbackName}?'**
+  String aiFallbackPrompt(String fallbackName);
+
   /// No description provided for @aiProviderLabel.
   ///
   /// In en, this message translates to:

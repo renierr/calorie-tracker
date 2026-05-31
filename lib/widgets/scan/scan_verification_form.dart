@@ -9,6 +9,7 @@ import '../meal_form_fields.dart';
 import 'scan_verification_header.dart';
 import 'scan_date_picker_tile.dart';
 import 'scan_verification_actions.dart';
+import 'ai_fallback_dialog.dart';
 
 class ScanVerificationForm extends StatefulWidget {
   final AppState appState;
@@ -97,12 +98,12 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     super.dispose();
   }
 
-  Future<void> _reEvaluateMeal() async {
+  Future<void> _reEvaluateMeal({String? overrideProvider}) async {
     if (widget.imageBytes == null) return;
 
-    final apiKey = widget.appState.aiApiKey;
-    final hasApiKey =
-        widget.appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
+    final provider = overrideProvider ?? widget.appState.aiProvider;
+    final apiKey = widget.appState.getApiKeyForProvider(provider);
+    final hasApiKey = provider == 'custom' || apiKey.trim().isNotEmpty;
     if (!hasApiKey) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.apiKeyMissing)),
@@ -130,6 +131,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         imageBytes: widget.imageBytes!,
         mimeType: 'image/jpeg',
         userHint: customHint,
+        overrideProvider: overrideProvider,
       );
 
       setState(() {
@@ -154,13 +156,23 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         _isReEvaluating = false;
       });
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.reEvaluationError(e.toString()),
-          ),
-          backgroundColor: AppTheme.accentRed,
-        ),
+
+      await AIFallbackDialog.handleFallback(
+        context: context,
+        appState: widget.appState,
+        currentOverrideProvider: overrideProvider,
+        error: e,
+        onRetry: (fallback) => _reEvaluateMeal(overrideProvider: fallback),
+        onErrorUnhandled: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.reEvaluationError(e.toString()),
+              ),
+              backgroundColor: AppTheme.accentRed,
+            ),
+          );
+        },
       );
     }
   }

@@ -7,6 +7,7 @@ import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../services/ai_service.dart';
 import 'meal_form_fields.dart';
+import 'scan/ai_fallback_dialog.dart';
 
 class EditMealDialog extends StatefulWidget {
   final Meal meal;
@@ -80,7 +81,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
     super.dispose();
   }
 
-  Future<void> _handleReEvaluation() async {
+  Future<void> _handleReEvaluation({String? overrideProvider}) async {
     final prompt = _reEvalPromptController.text.trim();
     if (prompt.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -94,9 +95,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
       return;
     }
 
-    final apiKey = widget.appState.aiApiKey;
-    final hasApiKey =
-        widget.appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
+    final provider = overrideProvider ?? widget.appState.aiProvider;
+    final apiKey = widget.appState.getApiKeyForProvider(provider);
+    final hasApiKey = provider == 'custom' || apiKey.trim().isNotEmpty;
     if (!hasApiKey) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -130,6 +131,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
         imageBytes: _imageBytes ?? Uint8List(0),
         mimeType: 'image/jpeg',
         userHint: customPrompt,
+        overrideProvider: overrideProvider,
       );
 
       if (mounted) {
@@ -152,13 +154,23 @@ class _EditMealDialogState extends State<EditMealDialog> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.reEvaluationError(e.toString()),
-            ),
-            backgroundColor: AppTheme.accentRed,
-          ),
+        await AIFallbackDialog.handleFallback(
+          context: context,
+          appState: widget.appState,
+          currentOverrideProvider: overrideProvider,
+          error: e,
+          onRetry: (fallback) =>
+              _handleReEvaluation(overrideProvider: fallback),
+          onErrorUnhandled: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(context)!.reEvaluationError(e.toString()),
+                ),
+                backgroundColor: AppTheme.accentRed,
+              ),
+            );
+          },
         );
       }
     } finally {

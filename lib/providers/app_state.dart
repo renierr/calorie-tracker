@@ -49,6 +49,7 @@ class AppState extends ChangeNotifier
   static const String _keyAiApiKey = 'ai_api_key';
   static const String _keyAiCustomUrl = 'ai_custom_url';
   static const String _keyAiReasoningEffort = 'ai_reasoning_effort';
+  static const String _keyAiFallbackProvider = 'ai_fallback_provider';
 
   // State variables
   String _aiProvider = AIServiceConfig.defaultProvider;
@@ -56,12 +57,14 @@ class AppState extends ChangeNotifier
   String _aiApiKey = '';
   String _aiCustomUrl = '';
   String _aiReasoningEffort = 'none';
+  String _aiFallbackProvider = 'none';
 
   // Provider-specific settings cache maps
   final Map<String, String> _aiProviderModels = {};
   final Map<String, String> _aiProviderApiKeys = {};
   final Map<String, String> _aiProviderCustomUrls = {};
   final Map<String, String> _aiProviderReasoningEfforts = {};
+  final Map<String, String> _aiProviderFallbacks = {};
 
   int _calorieGoal = 2000;
   int _proteinGoal = 130;
