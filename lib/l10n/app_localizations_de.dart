@@ -548,7 +548,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get importLabel => 'Importieren';
 
   @override
-  String get exportLabel => 'Export';
+  String get exportLabel => 'Exportieren';
 
   @override
   String importMealsSuccess(int count) {

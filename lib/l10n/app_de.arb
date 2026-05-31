@@ -193,6 +193,7 @@
   "pdfNotes": "KI-Analyse & Notizen",
   "pdfAiConfidence": "KI-Konfidenz",
   "importLabel": "Importieren",
+  "exportLabel": "Exportieren",
   "importMealsSuccess": "{count} Einträge erfolgreich importiert.",
   "@importMealsSuccess": {
     "placeholders": {
