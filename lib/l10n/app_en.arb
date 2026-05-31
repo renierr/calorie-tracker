@@ -595,6 +595,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "dropZonePrompt": "Drag & drop photo here or browse",
+  "dropZoneHovering": "Drop your image to start scanning!",
+  "pasteFromClipboard": "Paste Image",
+  "noImageInClipboard": "No image found in your clipboard."
 }
 

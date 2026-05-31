@@ -1179,4 +1179,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String activityLabel(String name) {
     return '[Activity] $name';
   }
+
+  @override
+  String get dropZonePrompt => 'Drag & drop photo here or browse';
+
+  @override
+  String get dropZoneHovering => 'Drop your image to start scanning!';
+
+  @override
+  String get pasteFromClipboard => 'Paste Image';
+
+  @override
+  String get noImageInClipboard => 'No image found in your clipboard.';
 }

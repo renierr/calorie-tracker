@@ -2167,6 +2167,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'[Activity] {name}'**
   String activityLabel(String name);
+
+  /// No description provided for @dropZonePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag & drop photo here or browse'**
+  String get dropZonePrompt;
+
+  /// No description provided for @dropZoneHovering.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop your image to start scanning!'**
+  String get dropZoneHovering;
+
+  /// No description provided for @pasteFromClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste Image'**
+  String get pasteFromClipboard;
+
+  /// No description provided for @noImageInClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'No image found in your clipboard.'**
+  String get noImageInClipboard;
 }
 
 class _AppLocalizationsDelegate

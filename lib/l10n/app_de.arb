@@ -596,6 +596,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "dropZonePrompt": "Ziehen Sie ein Foto hierher oder durchsuchen",
+  "dropZoneHovering": "Bild ablegen zum Scannen!",
+  "pasteFromClipboard": "Bild einfügen",
+  "noImageInClipboard": "Kein Bild in der Zwischenablage gefunden."
 }
 

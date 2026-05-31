@@ -310,4 +310,30 @@ mixin _AiState on ChangeNotifier {
     _state._scanMealDate = DateTime.now();
     notifyListeners();
   }
+
+  Uint8List _resizeAndNormalizeImage(Uint8List bytes) {
+    final image = img.decodeImage(bytes);
+    if (image == null) return bytes;
+
+    img.Image resized = image;
+    if (image.width > 800 || image.height > 800) {
+      if (image.width > image.height) {
+        resized = img.copyResize(image, width: 800);
+      } else {
+        resized = img.copyResize(image, height: 800);
+      }
+    }
+
+    return Uint8List.fromList(img.encodeJpg(resized, quality: 80));
+  }
+
+  Future<void> handleIncomingImageBytes(Uint8List rawBytes) async {
+    final processedBytes = _resizeAndNormalizeImage(rawBytes);
+    setScanImage(processedBytes, 'image/jpeg');
+
+    _state.selectTab(1);
+    _state._scanShowForm = false;
+    _state._scanResult = null;
+    notifyListeners();
+  }
 }

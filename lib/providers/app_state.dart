@@ -9,6 +9,7 @@ import '../models/gamification_model.dart';
 import '../l10n/app_localizations.dart';
 import '../services/sync_service.dart';
 import '../services/ai_service.dart';
+import 'package:image/image.dart' as img;
 
 part 'app_state_meals.dart';
 part 'app_state_settings.dart';

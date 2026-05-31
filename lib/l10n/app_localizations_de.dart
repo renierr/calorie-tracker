@@ -1188,4 +1188,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String activityLabel(String name) {
     return '[Aktivität] $name';
   }
+
+  @override
+  String get dropZonePrompt => 'Ziehen Sie ein Foto hierher oder durchsuchen';
+
+  @override
+  String get dropZoneHovering => 'Bild ablegen zum Scannen!';
+
+  @override
+  String get pasteFromClipboard => 'Bild einfügen';
+
+  @override
+  String get noImageInClipboard => 'Kein Bild in der Zwischenablage gefunden.';
 }
