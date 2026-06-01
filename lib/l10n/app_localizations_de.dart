@@ -1218,4 +1218,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noImageInClipboard => 'Kein Bild in der Zwischenablage gefunden.';
+
+  @override
+  String get imageCopiedToClipboard => 'Bild in die Zwischenablage kopiert';
+
+  @override
+  String failedToCopyImage(String error) {
+    return 'Bild konnte nicht kopiert werden: $error';
+  }
 }

@@ -613,6 +613,15 @@
   "dropZonePrompt": "Ziehen Sie ein Foto hierher oder durchsuchen",
   "dropZoneHovering": "Bild ablegen zum Scannen!",
   "pasteFromClipboard": "Bild einfügen",
-  "noImageInClipboard": "Kein Bild in der Zwischenablage gefunden."
+  "noImageInClipboard": "Kein Bild in der Zwischenablage gefunden.",
+  "imageCopiedToClipboard": "Bild in die Zwischenablage kopiert",
+  "failedToCopyImage": "Bild konnte nicht kopiert werden: {error}",
+  "@failedToCopyImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
 

@@ -14,6 +14,8 @@ import '../services/pdf_service.dart';
 import '../l10n/app_localizations.dart';
 import '../helpers/file_save_helper.dart';
 import 'edit_meal_dialog.dart';
+import 'package:pasteboard/pasteboard.dart';
+import 'custom_notification.dart';
 
 // Structured Sub-Components
 import 'meal_detail/meal_detail_card_view.dart';
@@ -171,12 +173,37 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
         child: Stack(
           alignment: Alignment.topRight,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: InteractiveViewer(
-                child: Image.memory(
-                  currentMeal.imageBytes!,
-                  fit: BoxFit.contain,
+            GestureDetector(
+              onLongPress: () async {
+                try {
+                  await Pasteboard.writeImage(currentMeal.imageBytes!);
+                  if (context.mounted) {
+                    final l10n = AppLocalizations.of(context)!;
+                    showNotificationDialog(
+                      context,
+                      l10n.imageCopiedToClipboard,
+                      isError: false,
+                    );
+                  }
+                } catch (e) {
+                  debugPrint("Failed to copy image to clipboard: $e");
+                  if (context.mounted) {
+                    final l10n = AppLocalizations.of(context)!;
+                    showNotificationDialog(
+                      context,
+                      l10n.failedToCopyImage(e.toString()),
+                      isError: true,
+                    );
+                  }
+                }
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: InteractiveViewer(
+                  child: Image.memory(
+                    currentMeal.imageBytes!,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),

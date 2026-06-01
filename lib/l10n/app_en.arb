@@ -611,6 +611,15 @@
   "dropZonePrompt": "Drag & drop photo here or browse",
   "dropZoneHovering": "Drop your image to start scanning!",
   "pasteFromClipboard": "Paste Image",
-  "noImageInClipboard": "No image found in your clipboard."
+  "noImageInClipboard": "No image found in your clipboard.",
+  "imageCopiedToClipboard": "Image copied to clipboard",
+  "failedToCopyImage": "Failed to copy image: {error}",
+  "@failedToCopyImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
 

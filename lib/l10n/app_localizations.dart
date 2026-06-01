@@ -2221,6 +2221,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No image found in your clipboard.'**
   String get noImageInClipboard;
+
+  /// No description provided for @imageCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Image copied to clipboard'**
+  String get imageCopiedToClipboard;
+
+  /// No description provided for @failedToCopyImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to copy image: {error}'**
+  String failedToCopyImage(String error);
 }
 
 class _AppLocalizationsDelegate

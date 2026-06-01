@@ -1209,4 +1209,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noImageInClipboard => 'No image found in your clipboard.';
+
+  @override
+  String get imageCopiedToClipboard => 'Image copied to clipboard';
+
+  @override
+  String failedToCopyImage(String error) {
+    return 'Failed to copy image: $error';
+  }
 }
