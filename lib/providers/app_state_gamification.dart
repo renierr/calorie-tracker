@@ -262,6 +262,10 @@ mixin _GamificationState on ChangeNotifier {
         checkDate = checkDate.add(const Duration(days: 1));
       }
 
+      final List<String> repairedAck = stats.acknowledgedBadges
+          .where((b) => badges.contains(b))
+          .toList();
+
       final newLevel = calculateLevel(xp);
       _gamificationStats = stats.copyWith(
         xp: xp,
@@ -270,6 +274,7 @@ mixin _GamificationState on ChangeNotifier {
         currentStreak: currentStreak,
         highestStreak: highestStreak,
         unlockedBadges: badges,
+        acknowledgedBadges: repairedAck,
         lastProcessedDate: _formatDate(
           todayMidnight.subtract(const Duration(days: 1)),
         ),
@@ -528,6 +533,10 @@ mixin _GamificationState on ChangeNotifier {
         }
       }
 
+      final List<String> repairedAck = currentStats.acknowledgedBadges
+          .where((b) => badges.contains(b))
+          .toList();
+
       final int newLevel = calculateLevel(xp);
       _gamificationStats = currentStats.copyWith(
         xp: xp,
@@ -536,6 +545,7 @@ mixin _GamificationState on ChangeNotifier {
         currentStreak: currentStreak,
         highestStreak: highestStreak,
         unlockedBadges: badges,
+        acknowledgedBadges: repairedAck,
         lastProcessedDate: _formatDate(
           DateTime.now().subtract(const Duration(days: 1)),
         ),
