@@ -213,6 +213,13 @@ class GamificationSettingsPage extends StatelessWidget {
                                 color: Colors.purple,
                                 onPressed: appState.triggerAdminPrestige,
                               ),
+                              AdminButton(
+                                label: l10n.btnResetAckBadges,
+                                icon: Icons.refresh,
+                                color: AppTheme.accentRed,
+                                onPressed:
+                                    appState.resetAdminAcknowledgedBadges,
+                              ),
                             ];
 
                             return Wrap(

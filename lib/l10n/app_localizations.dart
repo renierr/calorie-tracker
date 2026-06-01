@@ -1922,6 +1922,12 @@ abstract class AppLocalizations {
   /// **'Reset Streak Dialog'**
   String get btnTriggerStreakReset;
 
+  /// No description provided for @btnResetAckBadges.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Seen Awards'**
+  String get btnResetAckBadges;
+
   /// No description provided for @toggleGamification.
   ///
   /// In en, this message translates to:

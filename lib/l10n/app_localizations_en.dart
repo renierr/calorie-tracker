@@ -1045,6 +1045,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get btnTriggerStreakReset => 'Reset Streak Dialog';
 
   @override
+  String get btnResetAckBadges => 'Reset Seen Awards';
+
+  @override
   String get toggleGamification => 'Enable Gamification Mechanics';
 
   @override

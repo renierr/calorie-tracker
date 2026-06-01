@@ -534,6 +534,7 @@
   "btnTriggerShieldEarn": "Earn Shield Dialog",
   "btnTriggerShieldCons": "Use Shield Dialog",
   "btnTriggerStreakReset": "Reset Streak Dialog",
+  "btnResetAckBadges": "Reset Seen Awards",
   "toggleGamification": "Enable Gamification Mechanics",
   "streakProtection": "Streak Protection",
   "prestigeTitle": "Prestige Star Earned!",

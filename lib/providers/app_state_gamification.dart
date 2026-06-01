@@ -85,6 +85,15 @@ mixin _GamificationState on ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> resetAdminAcknowledgedBadges() async {
+    _gamificationStats = _gamificationStats.copyWith(
+      acknowledgedBadges: const [],
+    );
+    await _state._dbHelper.updateGamificationStats(_gamificationStats);
+    _checkUnacknowledgedBadges();
+    notifyListeners();
+  }
+
   // Award XP and handle level up
   Future<void> awardXp(int amount) async {
     final int oldXp = _gamificationStats.xp;

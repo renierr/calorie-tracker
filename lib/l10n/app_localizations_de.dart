@@ -1054,6 +1054,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get btnTriggerStreakReset => 'Serie zurückgesetzt Dialog';
 
   @override
+  String get btnResetAckBadges => 'Gesehene Awards zurücksetzen';
+
+  @override
   String get toggleGamification => 'Gamification-System aktivieren';
 
   @override

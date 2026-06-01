@@ -536,6 +536,7 @@
   "btnTriggerShieldEarn": "Schild verdient Dialog",
   "btnTriggerShieldCons": "Schild verbraucht Dialog",
   "btnTriggerStreakReset": "Serie zurückgesetzt Dialog",
+  "btnResetAckBadges": "Gesehene Awards zurücksetzen",
   "toggleGamification": "Gamification-System aktivieren",
   "streakProtection": "Serien-Schutz",
   "prestigeTitle": "Prestige-Stern verdient!",
