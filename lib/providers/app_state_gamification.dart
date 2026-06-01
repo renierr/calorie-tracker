@@ -389,17 +389,20 @@ mixin _GamificationState on ChangeNotifier {
   }
 
   Future<void> onBadgeDialogDismissed(String badgeId) async {
-    if (!_gamificationStats.acknowledgedBadges.contains(badgeId)) {
-      final List<String> updatedAck = List.from(
-        _gamificationStats.acknowledgedBadges,
-      );
-      updatedAck.add(badgeId);
-      _gamificationStats = _gamificationStats.copyWith(
-        acknowledgedBadges: updatedAck,
-      );
-      await _state._dbHelper.updateGamificationStats(_gamificationStats);
-      _checkUnacknowledgedBadges();
-      notifyListeners();
+    // Only persist acknowledgement if the badge is actually unlocked in stats (prevents admin test triggers from muting real achievements)
+    if (_gamificationStats.unlockedBadges.contains(badgeId)) {
+      if (!_gamificationStats.acknowledgedBadges.contains(badgeId)) {
+        final List<String> updatedAck = List.from(
+          _gamificationStats.acknowledgedBadges,
+        );
+        updatedAck.add(badgeId);
+        _gamificationStats = _gamificationStats.copyWith(
+          acknowledgedBadges: updatedAck,
+        );
+        await _state._dbHelper.updateGamificationStats(_gamificationStats);
+        _checkUnacknowledgedBadges();
+        notifyListeners();
+      }
     }
   }
 
