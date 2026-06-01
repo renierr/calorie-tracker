@@ -20,9 +20,10 @@ class GamificationSettingsPage extends StatelessWidget {
     // Direct local trigger validation for the active settings sub-page (Immediate dismissal to avoid cascading duplicates)
     if (appState.recentUnlockedBadge != null) {
       final badge = appState.recentUnlockedBadge!;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         appState.dismissBadgeNotification();
-        GamificationDialogs.showBadgeUnlocked(context, appState, badge);
+        await GamificationDialogs.showBadgeUnlocked(context, appState, badge);
+        appState.onBadgeDialogDismissed(badge);
       });
     }
     if (appState.showLevelUpNotification) {

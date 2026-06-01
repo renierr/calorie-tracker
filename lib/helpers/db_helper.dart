@@ -8,7 +8,7 @@ import '../models/gamification_model.dart';
 
 class DbHelper {
   static const String _dbName = 'calorie_tracker.db';
-  static const int _dbVersion = 5;
+  static const int _dbVersion = 6;
   static const String tableMeals = 'meals';
 
   // Private constructor
@@ -75,13 +75,14 @@ class DbHelper {
         current_streak INTEGER NOT NULL DEFAULT 0,
         highest_streak INTEGER NOT NULL DEFAULT 0,
         unlocked_badges TEXT NOT NULL DEFAULT '',
-        last_processed_date TEXT
+        last_processed_date TEXT,
+        acknowledged_badges TEXT NOT NULL DEFAULT ''
       )
     ''');
 
     await db.execute('''
-      INSERT INTO gamification_stats (id, xp, level, shields, current_streak, highest_streak, unlocked_badges, last_processed_date)
-      VALUES (1, 0, 1, 0, 0, 0, '', NULL)
+      INSERT INTO gamification_stats (id, xp, level, shields, current_streak, highest_streak, unlocked_badges, last_processed_date, acknowledged_badges)
+      VALUES (1, 0, 1, 0, 0, 0, '', NULL, '')
     ''');
   }
 
@@ -119,6 +120,18 @@ class DbHelper {
         INSERT OR IGNORE INTO gamification_stats (id, xp, level, shields, current_streak, highest_streak, unlocked_badges, last_processed_date)
         VALUES (1, 0, 1, 0, 0, 0, '', NULL)
       ''');
+    }
+    if (oldVersion < 6) {
+      try {
+        await db.execute(
+          'ALTER TABLE gamification_stats ADD COLUMN acknowledged_badges TEXT NOT NULL DEFAULT ""',
+        );
+        await db.execute(
+          'UPDATE gamification_stats SET acknowledged_badges = unlocked_badges',
+        );
+      } catch (e) {
+        // Safe fallback
+      }
     }
   }
 

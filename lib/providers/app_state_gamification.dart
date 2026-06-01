@@ -33,6 +33,9 @@ mixin _GamificationState on ChangeNotifier {
     notifyListeners();
     if (_gamificationEnabled) {
       await runDailyTransitionCheck();
+      if (_recentUnlockedBadge == null) {
+        _checkUnacknowledgedBadges();
+      }
     }
   }
 
@@ -373,6 +376,33 @@ mixin _GamificationState on ChangeNotifier {
     notifyListeners();
   }
 
+  void _checkUnacknowledgedBadges() {
+    if (!_gamificationEnabled) return;
+    for (final badge in _gamificationStats.unlockedBadges) {
+      if (!_gamificationStats.acknowledgedBadges.contains(badge)) {
+        _recentUnlockedBadge = badge;
+        _showConfetti = true;
+        notifyListeners();
+        break; // Only show one at a time
+      }
+    }
+  }
+
+  Future<void> onBadgeDialogDismissed(String badgeId) async {
+    if (!_gamificationStats.acknowledgedBadges.contains(badgeId)) {
+      final List<String> updatedAck = List.from(
+        _gamificationStats.acknowledgedBadges,
+      );
+      updatedAck.add(badgeId);
+      _gamificationStats = _gamificationStats.copyWith(
+        acknowledgedBadges: updatedAck,
+      );
+      await _state._dbHelper.updateGamificationStats(_gamificationStats);
+      _checkUnacknowledgedBadges();
+      notifyListeners();
+    }
+  }
+
   void dismissLevelUpNotification() {
     _showLevelUpNotification = false;
     notifyListeners();
@@ -407,6 +437,8 @@ mixin _GamificationState on ChangeNotifier {
     if (!_gamificationEnabled) return;
 
     try {
+      final currentStats = await _state._dbHelper.getGamificationStats();
+
       int xp = 0;
       int currentStreak = 0;
       int highestStreak = 0;
@@ -494,7 +526,7 @@ mixin _GamificationState on ChangeNotifier {
       }
 
       final int newLevel = calculateLevel(xp);
-      _gamificationStats = _gamificationStats.copyWith(
+      _gamificationStats = currentStats.copyWith(
         xp: xp,
         level: newLevel,
         shields: shields,
@@ -507,6 +539,9 @@ mixin _GamificationState on ChangeNotifier {
       );
 
       await _state._dbHelper.updateGamificationStats(_gamificationStats);
+      if (_recentUnlockedBadge == null) {
+        _checkUnacknowledgedBadges();
+      }
       notifyListeners();
     } catch (e) {
       debugPrint('Error in retroactive gamification re-evaluation: $e');

@@ -5,6 +5,7 @@ class GamificationStats {
   final int currentStreak;
   final int highestStreak;
   final List<String> unlockedBadges;
+  final List<String> acknowledgedBadges;
   final String? lastProcessedDate;
 
   int get prestigeStars {
@@ -29,6 +30,7 @@ class GamificationStats {
     required this.currentStreak,
     required this.highestStreak,
     required this.unlockedBadges,
+    required this.acknowledgedBadges,
     this.lastProcessedDate,
   });
 
@@ -40,6 +42,7 @@ class GamificationStats {
       currentStreak: 0,
       highestStreak: 0,
       unlockedBadges: const [],
+      acknowledgedBadges: const [],
       lastProcessedDate: null,
     );
   }
@@ -53,6 +56,7 @@ class GamificationStats {
       'current_streak': currentStreak,
       'highest_streak': highestStreak,
       'unlocked_badges': unlockedBadges.join(','),
+      'acknowledged_badges': acknowledgedBadges.join(','),
       'last_processed_date': lastProcessedDate,
     };
   }
@@ -62,6 +66,12 @@ class GamificationStats {
     final List<String> badgesList = badgesStr.isEmpty
         ? <String>[]
         : badgesStr.split(',');
+
+    final String ackBadgesStr = map['acknowledged_badges'] as String? ?? '';
+    final List<String> ackBadgesList = ackBadgesStr.isEmpty
+        ? <String>[]
+        : ackBadgesStr.split(',');
+
     return GamificationStats(
       xp: map['xp'] as int? ?? 0,
       level: map['level'] as int? ?? 1,
@@ -69,6 +79,7 @@ class GamificationStats {
       currentStreak: map['current_streak'] as int? ?? 0,
       highestStreak: map['highest_streak'] as int? ?? 0,
       unlockedBadges: badgesList,
+      acknowledgedBadges: ackBadgesList,
       lastProcessedDate: map['last_processed_date'] as String?,
     );
   }
@@ -80,6 +91,7 @@ class GamificationStats {
     int? currentStreak,
     int? highestStreak,
     List<String>? unlockedBadges,
+    List<String>? acknowledgedBadges,
     String? lastProcessedDate,
   }) {
     return GamificationStats(
@@ -89,6 +101,7 @@ class GamificationStats {
       currentStreak: currentStreak ?? this.currentStreak,
       highestStreak: highestStreak ?? this.highestStreak,
       unlockedBadges: unlockedBadges ?? this.unlockedBadges,
+      acknowledgedBadges: acknowledgedBadges ?? this.acknowledgedBadges,
       lastProcessedDate: lastProcessedDate ?? this.lastProcessedDate,
     );
   }

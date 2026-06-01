@@ -31,9 +31,10 @@ class _DashboardPageState extends State<DashboardPage> {
     // Safe post-frame callback execution for overlays & achievements
     if (appState.recentUnlockedBadge != null) {
       final badge = appState.recentUnlockedBadge!;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         appState.dismissBadgeNotification();
-        GamificationDialogs.showBadgeUnlocked(context, appState, badge);
+        await GamificationDialogs.showBadgeUnlocked(context, appState, badge);
+        appState.onBadgeDialogDismissed(badge);
       });
     }
     if (appState.showLevelUpNotification) {

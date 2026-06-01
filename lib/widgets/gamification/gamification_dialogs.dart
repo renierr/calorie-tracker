@@ -6,11 +6,11 @@ import 'base_gamification_dialog.dart';
 
 class GamificationDialogs {
   // 1. Badge Unlocked Dialog
-  static void showBadgeUnlocked(
+  static Future<void> showBadgeUnlocked(
     BuildContext context,
     AppState appState,
     String badgeId,
-  ) {
+  ) async {
     final l10n = AppLocalizations.of(context)!;
 
     IconData badgeIcon = Icons.stars;
@@ -35,7 +35,7 @@ class GamificationDialogs {
       badgeDesc = l10n.badgeWochenKoenigDesc;
     }
 
-    showDialog(
+    await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {

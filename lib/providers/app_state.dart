@@ -189,8 +189,8 @@ class AppState extends ChangeNotifier
     notifyListeners();
 
     await loadSettings();
-    await loadMeals();
     await loadGamification();
+    await loadMeals();
 
     _isLoading = false;
     notifyListeners();
