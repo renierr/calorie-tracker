@@ -58,20 +58,6 @@ class MainActivity : FlutterActivity() {
                             result.error("OPEN_ERROR", e.message, null)
                         }
                     }
-                    "shareFile" -> {
-                        val uriString = call.argument<String>("uri")
-                        val mimeType = call.argument<String>("mimeType") ?: "*/*"
-                        if (uriString == null) {
-                            result.error("INVALID_ARGS", "uri required", null)
-                            return@setMethodCallHandler
-                        }
-                        try {
-                            shareFile(uriString, mimeType)
-                            result.success(true)
-                        } catch (e: Exception) {
-                            result.error("SHARE_ERROR", e.message, null)
-                        }
-                    }
                     "showSystemNotification" -> {
                         val fileName = call.argument<String>("fileName")
                         val uriString = call.argument<String>("uri")
@@ -150,20 +136,6 @@ class MainActivity : FlutterActivity() {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         val chooser = Intent.createChooser(intent, "Open File").apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        startActivity(chooser)
-    }
-
-    private fun shareFile(uriString: String, mimeType: String) {
-        val uri = getUriForPath(uriString)
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = mimeType
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        val chooser = Intent.createChooser(intent, "Share File").apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         startActivity(chooser)

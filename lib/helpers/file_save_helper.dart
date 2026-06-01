@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../widgets/custom_notification.dart';
 import '../theme/theme.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,11 @@ class FileSaveHelper {
     String Function(String error)? errorMessageBuilder,
   }) async {
     try {
+      // Clean up old temporary files in the background
+      cleanUpTempFiles().catchError(
+        (e) => debugPrint("Temp cleanup failed: $e"),
+      );
+
       final appState = context.read<AppState>();
       final notificationsEnabled = appState.notificationsEnabled;
       String? destPath;
@@ -88,12 +94,23 @@ class FileSaveHelper {
             }
           }
 
+          // Write bytes to a temporary file to enable secure in-app sharing
+          String sharePath = uriString;
+          try {
+            final tempDir = await getTemporaryDirectory();
+            final tempFile = File('${tempDir.path}/$suggestedName');
+            await tempFile.writeAsBytes(bytes);
+            sharePath = tempFile.path;
+          } catch (e) {
+            debugPrint("Failed to create temporary file for sharing: $e");
+          }
+
           // Show in-app premium success dialog
           if (context.mounted) {
             showSuccessDialog(
               context: context,
               displayPath: filePath,
-              actualPath: uriString,
+              actualPath: sharePath,
               mimeType: mimeType,
               message:
                   successMessageAndroid ?? "File saved to Downloads folder",
@@ -160,27 +177,41 @@ class FileSaveHelper {
     }
   }
 
-  /// Shares the file natively, or opens the containing folder on Desktop.
+  /// Shares the file natively using share_plus on all platforms (mobile & desktop).
   static Future<void> shareFile(String path, String mimeType) async {
     try {
-      if (Platform.isAndroid) {
-        await _channel.invokeMethod('shareFile', {
-          'uri': path,
-          'mimeType': mimeType,
-        });
-      } else if (Platform.isWindows) {
-        // Select file in Windows Explorer
-        await Process.run('explorer.exe', ['/select,', path]);
-      } else if (Platform.isMacOS) {
-        // Reveal file in Finder
-        await Process.run('open', ['-R', path]);
-      } else if (Platform.isLinux) {
-        // Open containing directory on Linux
-        final file = File(path);
-        await Process.run('xdg-open', [file.parent.path]);
-      }
+      await SharePlus.instance.share(
+        ShareParams(files: [XFile(path, mimeType: mimeType)]),
+      );
     } catch (e) {
       debugPrint("Error sharing file: $e");
+    }
+  }
+
+  /// Cleans up old temporary files created by the application in the temp directory.
+  static Future<void> cleanUpTempFiles() async {
+    try {
+      final tempDir = await getTemporaryDirectory();
+      if (await tempDir.exists()) {
+        final List<FileSystemEntity> files = tempDir.listSync();
+        for (final file in files) {
+          if (file is File) {
+            final name = file.path.split(Platform.pathSeparator).last;
+            if (name.startsWith('Meal-Report-') ||
+                name.startsWith('meal_card_') ||
+                name.startsWith('Summary-Report-')) {
+              final lastModified = await file.lastModified();
+              final now = DateTime.now();
+              if (now.difference(lastModified).inMinutes > 5) {
+                await file.delete();
+                debugPrint("Cleaned up temp file: ${file.path}");
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error cleaning up temp files: $e");
     }
   }
 
@@ -326,9 +357,9 @@ class FileSaveHelper {
                             size: 18,
                             color: Colors.white,
                           ),
-                          label: Text(
-                            Platform.isWindows ? "Locate" : "Share",
-                            style: const TextStyle(color: Colors.white),
+                          label: const Text(
+                            "Share",
+                            style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.accentBlue,
