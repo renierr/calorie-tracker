@@ -90,9 +90,6 @@ class MealDetailCardView extends StatelessWidget {
                   MealNotesSection(notes: currentMeal.notes!),
                   const SizedBox(height: 16),
                 ],
-
-                // Brand watermark badge inside capture region
-                const MealCardWatermark(),
               ],
             ),
           ),
