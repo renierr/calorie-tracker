@@ -8,7 +8,6 @@ import '../widgets/custom_notification.dart';
 import '../theme/theme.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
-import '../l10n/app_localizations.dart';
 
 class FileSaveHelper {
   static const _channel = MethodChannel('de.renier.calorie_tracker/file_save');
@@ -272,42 +271,7 @@ class FileSaveHelper {
                         fontSize: 14,
                       ),
                     ),
-                    if (Platform.isAndroid) ...[
-                      const SizedBox(height: 12),
-                      Consumer<AppState>(
-                        builder: (context, appState, child) {
-                          return Row(
-                            children: [
-                              SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: Checkbox(
-                                  value: appState.notificationsEnabled,
-                                  activeColor: AppTheme.accentEmerald,
-                                  onChanged: (val) {
-                                    if (val != null) {
-                                      appState.setNotificationsEnabled(val);
-                                    }
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.enableNotifications,
-                                  style: TextStyle(
-                                    color: colors.textSecondary,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
+
                     const SizedBox(height: 20),
                     Wrap(
                       spacing: 8,
