@@ -9,7 +9,6 @@ import 'meal_detail_metadata.dart';
 import 'meal_macro_grid.dart';
 import 'meal_weight_card.dart';
 import 'meal_notes_section.dart';
-import 'meal_card_watermark.dart';
 
 class MealDetailCardView extends StatelessWidget {
   final Meal currentMeal;
