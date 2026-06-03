@@ -110,27 +110,21 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Panel 1: Language & Theme Selection (Combined)
-              LanguageThemeCard(appState: appState),
+              const LanguageThemeCard(),
               const SizedBox(height: 20),
 
-              // Panel 2: System Notifications
-              NotificationsCard(appState: appState),
+              const NotificationsCard(),
               const SizedBox(height: 20),
 
-              // Panel 3: AI Provider Configuration navigation tile
-              AiProviderConfigTile(appState: appState),
+              const AiProviderConfigTile(),
               const SizedBox(height: 20),
 
-              // Panel 4: Gamification Configuration
-              GamificationConfigTile(appState: appState),
+              const GamificationConfigTile(),
               const SizedBox(height: 20),
 
-              // Panel 5: Cloud Sync Configuration
-              SyncConfigCard(appState: appState),
+              const SyncConfigCard(),
               const SizedBox(height: 20),
 
-              // Panel 3: Calorie & Macro Target configuration
               TargetGoalsCard(
                 caloriesController: _caloriesController,
                 proteinController: _proteinController,
@@ -139,7 +133,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const SizedBox(height: 20),
 
-              // Bottom Save Settings Button
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -151,15 +144,12 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const SizedBox(height: 30),
 
-              // Panel 4: Reset database safety controls
-              MaintenanceCard(appState: appState),
+              const MaintenanceCard(),
               const SizedBox(height: 20),
 
-              // Panel 5: Export database
-              ExportCard(appState: appState),
+              const ExportCard(),
               const SizedBox(height: 30),
 
-              // Panel 6: App Version Info
               const VersionCard(),
               const SizedBox(height: 20),
             ],

@@ -81,7 +81,6 @@ class _HistoryPageState extends State<HistoryPage> {
     showDialog(
       context: context,
       builder: (dialogCtx) => ReportConfigDialog(
-        appState: appState,
         parentContext: context,
         filteredMeals: mealsToReport,
         filterType: appState.historyFilter,
@@ -236,7 +235,6 @@ class _HistoryPageState extends State<HistoryPage> {
                   final isSelected = _selectedMealIds.contains(meal.id);
                   return MealHistoryCard(
                     meal: meal,
-                    appState: appState,
                     isSelectionMode: _isSelectionMode,
                     isSelected: isSelected,
                     onTap: () {

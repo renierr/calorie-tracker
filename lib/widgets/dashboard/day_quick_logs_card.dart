@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
@@ -7,12 +8,11 @@ import '../meal_detail_dialog.dart';
 import 'quick_log_item.dart';
 
 class DayQuickLogsCard extends StatelessWidget {
-  final AppState appState;
-
-  const DayQuickLogsCard({super.key, required this.appState});
+  const DayQuickLogsCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final meals = appState.mealsForSelectedDate;
     final colors = AppTheme.of(context);
 
@@ -95,7 +95,7 @@ class DayQuickLogsCard extends StatelessWidget {
           scale: anim1.value,
           child: Opacity(
             opacity: anim1.value,
-            child: MealDetailDialog(meal: meal, appState: appState),
+            child: MealDetailDialog(meal: meal),
           ),
         );
       },

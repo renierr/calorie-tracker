@@ -1,18 +1,18 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
 import 'trend_chart_legend_item.dart';
 
 class TrendChartCard extends StatelessWidget {
-  final AppState appState;
-
-  const TrendChartCard({super.key, required this.appState});
+  const TrendChartCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     // Generate dates for the last 7 days including today
     final DateTime today = appState.selectedDate;
     final List<DateTime> last7Days = List.generate(7, (i) {

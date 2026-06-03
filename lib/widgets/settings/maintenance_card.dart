@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../adaptive/responsive_icon_button.dart';
 import '../../theme/theme.dart';
@@ -8,12 +9,11 @@ import '../../helpers/db_restore_helper.dart';
 import '../../helpers/settings_restore_helper.dart';
 
 class MaintenanceCard extends StatelessWidget {
-  final AppState appState;
-
-  const MaintenanceCard({super.key, required this.appState});
+  const MaintenanceCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
     return Container(
@@ -81,6 +81,7 @@ class MaintenanceCard extends StatelessWidget {
   }
 
   void _confirmEraseAll(BuildContext context) {
+    final appState = context.read<AppState>();
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
     showDialog(

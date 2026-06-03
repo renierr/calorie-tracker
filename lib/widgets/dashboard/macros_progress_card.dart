@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
 import 'macro_slider.dart';
 
 class MacrosProgressCard extends StatelessWidget {
-  final AppState appState;
-
-  const MacrosProgressCard({super.key, required this.appState});
+  const MacrosProgressCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     return Container(
       width: double.infinity,

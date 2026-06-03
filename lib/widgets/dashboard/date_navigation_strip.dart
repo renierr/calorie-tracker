@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 
 class DateNavigationStrip extends StatelessWidget {
-  final AppState appState;
-
-  const DateNavigationStrip({super.key, required this.appState});
+  const DateNavigationStrip({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final now = DateTime.now();
     final DateFormat formatter = DateFormat.yMMMd(
       Localizations.localeOf(context).toLanguageTag(),

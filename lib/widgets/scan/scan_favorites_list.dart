@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../providers/app_state.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
 
 class ScanFavoritesList extends StatelessWidget {
-  final AppState appState;
-
-  const ScanFavoritesList({super.key, required this.appState});
+  const ScanFavoritesList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     final double screenWidth = MediaQuery.of(context).size.width;
 

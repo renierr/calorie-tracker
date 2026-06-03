@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
@@ -12,7 +13,6 @@ import 'scan_verification_actions.dart';
 import 'ai_fallback_dialog.dart';
 
 class ScanVerificationForm extends StatefulWidget {
-  final AppState appState;
   final AIAnalysisResult? scanResult;
   final Uint8List? imageBytes;
   final VoidCallback onDiscard;
@@ -20,7 +20,6 @@ class ScanVerificationForm extends StatefulWidget {
 
   const ScanVerificationForm({
     super.key,
-    required this.appState,
     required this.scanResult,
     required this.imageBytes,
     required this.onDiscard,
@@ -46,7 +45,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   @override
   void initState() {
     super.initState();
-    final appState = widget.appState;
+    final appState = context.read<AppState>();
     _mealDate = appState.scanMealDate;
 
     _nameController = TextEditingController(text: appState.scanFoodName);
@@ -67,7 +66,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   }
 
   void _updateDraft() {
-    widget.appState.updateScanDraftFields(
+    context.read<AppState>().updateScanDraftFields(
       foodName: _nameController.text,
       calories: _caloriesController.text,
       protein: _proteinController.text,
@@ -101,8 +100,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   Future<void> _reEvaluateMeal({String? overrideProvider}) async {
     if (widget.imageBytes == null) return;
 
-    final provider = overrideProvider ?? widget.appState.aiProvider;
-    final apiKey = widget.appState.getApiKeyForProvider(provider);
+    final appState = context.read<AppState>();
+    final provider = overrideProvider ?? appState.aiProvider;
+    final apiKey = appState.getApiKeyForProvider(provider);
     final hasApiKey = provider == 'custom' || apiKey.trim().isNotEmpty;
     if (!hasApiKey) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -127,7 +127,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         customHint += 'Additional context/adjustments: "$currentNotes". ';
       }
 
-      final result = await widget.appState.performAIAnalysis(
+      final result = await appState.performAIAnalysis(
         imageBytes: widget.imageBytes!,
         mimeType: 'image/jpeg',
         userHint: customHint,
@@ -159,7 +159,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
 
       await AIFallbackDialog.handleFallback(
         context: context,
-        appState: widget.appState,
+        appState: context.read<AppState>(),
         currentOverrideProvider: overrideProvider,
         error: e,
         onRetry: (fallback) => _reEvaluateMeal(overrideProvider: fallback),
@@ -193,7 +193,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
       return;
     }
 
-    final isAct = widget.appState.scanIsActivity;
+    final isAct = context.read<AppState>().scanIsActivity;
     final newMeal = Meal(
       shortId: isAct
           ? Meal.generateRandomActivityShortId()
@@ -211,9 +211,10 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
 
-    await widget.appState.addMeal(newMeal);
+    final appState = context.read<AppState>();
+    await appState.addMeal(newMeal);
 
-    widget.appState.selectTab(0);
+    appState.selectTab(0);
     widget.onSaveSuccess();
 
     if (!mounted) return;
@@ -243,12 +244,12 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScanVerificationHeader(
-            isActivity: widget.appState.scanIsActivity,
+            isActivity: context.watch<AppState>().scanIsActivity,
             scanResult: widget.scanResult,
           ),
           const SizedBox(height: 20),
           MealFormFields(
-            isActivity: widget.appState.scanIsActivity,
+            isActivity: context.watch<AppState>().scanIsActivity,
             isEnabled: isEnabled,
             nameController: _nameController,
             caloriesController: _caloriesController,
@@ -264,7 +265,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             isEnabled: isEnabled,
             onDateChanged: (picked) {
               setState(() => _mealDate = picked);
-              widget.appState.updateScanDraftFields(mealDate: picked);
+              context.read<AppState>().updateScanDraftFields(mealDate: picked);
             },
           ),
           const SizedBox(height: 25),
@@ -272,7 +273,8 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             isEnabled: isEnabled,
             isReEvaluating: _isReEvaluating,
             showReEvaluate:
-                widget.imageBytes != null && !widget.appState.scanIsActivity,
+                widget.imageBytes != null &&
+                !context.watch<AppState>().scanIsActivity,
             onDiscard: widget.onDiscard,
             onReEvaluate: _reEvaluateMeal,
             onSave: _saveMeal,

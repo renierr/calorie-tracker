@@ -23,13 +23,8 @@ import 'meal_detail/meal_image_preview_dialog.dart';
 
 class MealDetailDialog extends StatefulWidget {
   final Meal meal;
-  final AppState appState;
 
-  const MealDetailDialog({
-    super.key,
-    required this.meal,
-    required this.appState,
-  });
+  const MealDetailDialog({super.key, required this.meal});
 
   @override
   State<MealDetailDialog> createState() => _MealDetailDialogState();
@@ -176,8 +171,7 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
   void _showEditMealDialog(BuildContext context, Meal currentMeal) {
     showDialog(
       context: context,
-      builder: (context) =>
-          EditMealDialog(meal: currentMeal, appState: widget.appState),
+      builder: (context) => EditMealDialog(meal: currentMeal),
     );
   }
 
@@ -206,7 +200,8 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
                 backgroundColor: AppTheme.accentRed,
               ),
               onPressed: () async {
-                await widget.appState.deleteMeal(currentMeal.id!);
+                final appState = context.read<AppState>();
+                await appState.deleteMeal(currentMeal.id!);
                 if (!confirmDialogContext.mounted) return;
                 Navigator.pop(confirmDialogContext); // pop confirmation
                 if (!context.mounted) return;

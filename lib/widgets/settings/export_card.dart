@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../adaptive/responsive_icon_button.dart';
 import '../../theme/theme.dart';
@@ -9,9 +10,7 @@ import '../../l10n/app_localizations.dart';
 import '../../helpers/file_save_helper.dart';
 
 class ExportCard extends StatefulWidget {
-  final AppState appState;
-
-  const ExportCard({super.key, required this.appState});
+  const ExportCard({super.key});
 
   @override
   State<ExportCard> createState() => _ExportCardState();
@@ -74,7 +73,8 @@ class _ExportCardState extends State<ExportCard> {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final localizations = AppLocalizations.of(context)!;
     try {
-      final bytes = await widget.appState.getDatabaseBytes();
+      final appState = context.read<AppState>();
+      final bytes = await appState.getDatabaseBytes();
       if (!mounted) return;
 
       await FileSaveHelper.saveFile(
@@ -99,7 +99,8 @@ class _ExportCardState extends State<ExportCard> {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final localizations = AppLocalizations.of(context)!;
     try {
-      final settingsJson = await widget.appState.exportSettingsToJson();
+      final appState = context.read<AppState>();
+      final settingsJson = await appState.exportSettingsToJson();
       final bytes = Uint8List.fromList(utf8.encode(settingsJson));
       if (!mounted) return;
 

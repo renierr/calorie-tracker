@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
-import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import 'meal_detail_dialog.dart';
 import 'mini_macro_chip.dart';
@@ -10,7 +9,6 @@ import 'history_selection_indicator.dart';
 
 class MealHistoryCard extends StatelessWidget {
   final Meal meal;
-  final AppState appState;
   final bool isSelectionMode;
   final bool isSelected;
   final VoidCallback onTap;
@@ -19,7 +17,6 @@ class MealHistoryCard extends StatelessWidget {
   const MealHistoryCard({
     super.key,
     required this.meal,
-    required this.appState,
     required this.isSelectionMode,
     required this.isSelected,
     required this.onTap,
@@ -266,7 +263,7 @@ class MealHistoryCard extends StatelessWidget {
           scale: anim1.value,
           child: Opacity(
             opacity: anim1.value,
-            child: MealDetailDialog(meal: meal, appState: appState),
+            child: MealDetailDialog(meal: meal),
           ),
         );
       },

@@ -112,46 +112,31 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Date Navigation Strip
-                    DateNavigationStrip(appState: appState),
+                    const DateNavigationStrip(),
                     const SizedBox(height: 20),
 
-                    if (isWide) ...[
+                    if (isWide)
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(child: CalorieRingCard(appState: appState)),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: MacrosProgressCard(appState: appState),
-                          ),
+                        children: const [
+                          Expanded(child: CalorieRingCard()),
+                          SizedBox(width: 20),
+                          Expanded(child: MacrosProgressCard()),
                         ],
-                      ),
+                      )
+                    else ...[
+                      const CalorieRingCard(),
                       const SizedBox(height: 20),
-                      TrendChartCard(appState: appState),
-                      const SizedBox(height: 20),
-                      if (appState.gamificationEnabled) ...[
-                        const GamificationCard(),
-                        const SizedBox(height: 20),
-                      ],
-                      DayQuickLogsCard(appState: appState),
-                    ] else ...[
-                      // Calorie Ring Indicator
-                      CalorieRingCard(appState: appState),
-                      const SizedBox(height: 20),
-                      // Macros Progress Slider
-                      MacrosProgressCard(appState: appState),
-                      const SizedBox(height: 20),
-                      // 7 Day Calorie Trend
-                      TrendChartCard(appState: appState),
-                      const SizedBox(height: 20),
-                      if (appState.gamificationEnabled) ...[
-                        const GamificationCard(),
-                        const SizedBox(height: 20),
-                      ],
-                      // Today's Logs Quick List
-                      DayQuickLogsCard(appState: appState),
+                      const MacrosProgressCard(),
                     ],
+                    const SizedBox(height: 20),
+                    const TrendChartCard(),
+                    const SizedBox(height: 20),
+                    if (appState.gamificationEnabled) ...[
+                      const GamificationCard(),
+                      const SizedBox(height: 20),
+                    ],
+                    const DayQuickLogsCard(),
                     const SizedBox(height: 20),
                   ],
                 ),

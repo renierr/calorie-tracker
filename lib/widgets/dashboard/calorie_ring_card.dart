@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
 
 class CalorieRingCard extends StatelessWidget {
-  final AppState appState;
-
-  const CalorieRingCard({super.key, required this.appState});
+  const CalorieRingCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final int consumed = appState.totalCaloriesConsumed;
     final int goal = appState.calorieGoal;
     final double percent = goal > 0 ? (consumed / goal).clamp(0.0, 1.0) : 0.0;

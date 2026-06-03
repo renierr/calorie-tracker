@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
@@ -7,7 +8,6 @@ import '../services/pdf_service.dart';
 import '../l10n/app_localizations.dart';
 
 class ReportConfigDialog extends StatefulWidget {
-  final AppState appState;
   final BuildContext? parentContext;
   final List<Meal> filteredMeals;
   final String filterType;
@@ -17,7 +17,6 @@ class ReportConfigDialog extends StatefulWidget {
 
   const ReportConfigDialog({
     super.key,
-    required this.appState,
     this.parentContext,
     required this.filteredMeals,
     required this.filterType,
@@ -275,10 +274,10 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
                 timeframeStr: rangeText,
                 userNotes: _notesController.text.trim(),
                 includeImages: _includeImages,
-                calorieGoal: widget.appState.calorieGoal,
-                proteinGoal: widget.appState.proteinGoal,
-                carbsGoal: widget.appState.carbsGoal,
-                fatGoal: widget.appState.fatGoal,
+                calorieGoal: context.read<AppState>().calorieGoal,
+                proteinGoal: context.read<AppState>().proteinGoal,
+                carbsGoal: context.read<AppState>().carbsGoal,
+                fatGoal: context.read<AppState>().fatGoal,
                 pdfTypeFilter: _pdfTypeFilter,
                 onGenerated: () {
                   safePopAll();

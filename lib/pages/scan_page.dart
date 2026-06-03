@@ -188,7 +188,7 @@ class _ScanPageState extends State<ScanPage> {
 
                   if (appState.scanImageBytes == null &&
                       !appState.scanShowForm) ...[
-                    ScanFavoritesList(appState: appState),
+                    const ScanFavoritesList(),
                     const SizedBox(height: 20),
                   ],
 
@@ -212,7 +212,6 @@ class _ScanPageState extends State<ScanPage> {
                   // Phase B: Form verification
                   if (appState.scanShowForm)
                     ScanVerificationForm(
-                      appState: appState,
                       scanResult: appState.scanResult,
                       imageBytes: appState.scanImageBytes,
                       onDiscard: () {

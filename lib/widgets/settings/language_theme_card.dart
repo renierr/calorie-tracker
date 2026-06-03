@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
 
 class LanguageThemeCard extends StatelessWidget {
-  final AppState appState;
-
-  const LanguageThemeCard({super.key, required this.appState});
+  const LanguageThemeCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
 

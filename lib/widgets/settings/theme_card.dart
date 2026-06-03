@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
 
 class ThemeCard extends StatelessWidget {
-  final AppState appState;
-
-  const ThemeCard({super.key, required this.appState});
+  const ThemeCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),

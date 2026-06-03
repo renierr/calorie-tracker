@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
@@ -11,9 +12,8 @@ import 'scan/ai_fallback_dialog.dart';
 
 class EditMealDialog extends StatefulWidget {
   final Meal meal;
-  final AppState appState;
 
-  const EditMealDialog({super.key, required this.meal, required this.appState});
+  const EditMealDialog({super.key, required this.meal});
 
   @override
   State<EditMealDialog> createState() => _EditMealDialogState();
@@ -56,8 +56,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
     // Asynchronously load the meal image from the database if not present in memory
     _imageBytes = widget.meal.imageBytes;
     if (_imageBytes == null && widget.meal.id != null) {
+      final appState = context.read<AppState>();
       _isLoadingImage = true;
-      widget.appState.getMealImageBytes(widget.meal.id!).then((bytes) {
+      appState.getMealImageBytes(widget.meal.id!).then((bytes) {
         if (mounted) {
           setState(() {
             _imageBytes = bytes;
@@ -95,8 +96,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
       return;
     }
 
-    final provider = overrideProvider ?? widget.appState.aiProvider;
-    final apiKey = widget.appState.getApiKeyForProvider(provider);
+    final appState = context.read<AppState>();
+    final provider = overrideProvider ?? appState.aiProvider;
+    final apiKey = appState.getApiKeyForProvider(provider);
     final hasApiKey = provider == 'custom' || apiKey.trim().isNotEmpty;
     if (!hasApiKey) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -127,7 +129,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
         userCorrection: prompt,
       );
 
-      final result = await widget.appState.performAIAnalysis(
+      final result = await appState.performAIAnalysis(
         imageBytes: _imageBytes ?? Uint8List(0),
         mimeType: 'image/jpeg',
         userHint: customPrompt,
@@ -156,7 +158,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
       if (mounted) {
         await AIFallbackDialog.handleFallback(
           context: context,
-          appState: widget.appState,
+          appState: context.read<AppState>(),
           currentOverrideProvider: overrideProvider,
           error: e,
           onRetry: (fallback) =>
@@ -373,7 +375,8 @@ class _EditMealDialogState extends State<EditMealDialog> {
                               clearWeight: weight == null,
                               updatedAt: DateTime.now().millisecondsSinceEpoch,
                             );
-                            await widget.appState.updateMeal(updatedMeal);
+                            final appState = context.read<AppState>();
+                            await appState.updateMeal(updatedMeal);
                             if (!context.mounted) return;
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
