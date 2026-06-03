@@ -29,22 +29,31 @@ class GeminiService extends BaseAIService {
     final responseSchema = Schema.object(
       properties: {
         'foodName': Schema.string(
-          description: 'Brief description of the meal in $targetLanguage',
+          description:
+              'Clean, brief title of the primary dish/meal in $targetLanguage. Do not include calorie counts or extra descriptions here.',
         ),
-        'calories': Schema.integer(description: 'Estimated energy in kcal'),
+        'calories': Schema.integer(
+          description: 'Total estimated energy in kcal',
+        ),
         'protein': Schema.integer(
-          description: 'Estimated protein weight in grams',
+          description: 'Total estimated protein weight in grams',
         ),
         'carbs': Schema.integer(
-          description: 'Estimated carbohydrates weight in grams',
+          description: 'Total estimated carbohydrates weight in grams',
         ),
-        'fat': Schema.integer(description: 'Estimated lipids weight in grams'),
+        'fat': Schema.integer(
+          description: 'Total estimated lipids weight in grams',
+        ),
         'confidence': Schema.integer(
-          description: 'Estimation confidence rating from 1 to 100',
+          description:
+              'Estimation confidence rating from 1 to 100 based on image clarity',
         ),
         'notes': Schema.string(
           description:
-              'Breakdown explanation of food portions or components detected in $targetLanguage',
+              'A concise breakdown in $targetLanguage written as a single, natural, conversational paragraph. '
+              'Do NOT use dashes, bullet points, or robotic prefixes like "Identified:" or "Assumptions:". '
+              'Smoothly blend the identified ingredients and weights into flowing sentences, '
+              'explicitly mention what you assumed for hidden oils/fats, and end with a 1-sentence takeaway.',
         ),
       },
       requiredProperties: [
