@@ -60,8 +60,8 @@ class DbRestoreHelper {
                 )
                 .toList();
             dbFiles.addAll(found);
-          } catch (_) {
-            // Swallow list permission errors
+          } catch (e) {
+            debugPrint('List DB backup directory failed: $e');
           }
         }
 
@@ -140,7 +140,9 @@ class DbRestoreHelper {
                     displayDate =
                         '${dt.day}.${dt.month}.${dt.year} ${dt.hour}:${dt.minute.toString().padLeft(2, '0')}';
                   }
-                } catch (_) {}
+                } catch (e) {
+                  debugPrint('Parse DB backup timestamp failed: $e');
+                }
 
                 return Card(
                   color: Theme.of(context).brightness == Brightness.dark

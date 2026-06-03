@@ -54,7 +54,11 @@ class QuickLogItem extends StatelessWidget {
               child: meal.imageBytes != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.memory(meal.imageBytes!, fit: BoxFit.cover),
+                      child: Image.memory(
+                        meal.imageBytes!,
+                        fit: BoxFit.cover,
+                        cacheWidth: 128,
+                      ),
                     )
                   : Icon(
                       meal.isActivity ? Icons.directions_run : Icons.fastfood,

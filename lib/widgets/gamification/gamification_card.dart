@@ -88,7 +88,7 @@ class GamificationCard extends StatelessWidget {
                   children: [
                     Text(
                       stats.prestigeStars > 0
-                          ? '${appState.getLevelTitle(currentLevel, context)} (⭐ x${stats.prestigeStars})'
+                          ? '${appState.getLevelTitle(currentLevel, context)}${AppLocalizations.of(context)!.prestigeStarsLabel(stats.prestigeStars)}'
                           : appState.getLevelTitle(currentLevel, context),
                       style: TextStyle(
                         color: colors.textPrimary,

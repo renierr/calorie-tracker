@@ -60,8 +60,8 @@ class SettingsRestoreHelper {
                 )
                 .toList();
             settingsFiles.addAll(found);
-          } catch (_) {
-            // Swallow list permission errors
+          } catch (e) {
+            debugPrint('List settings backup directory failed: $e');
           }
         }
 
@@ -149,7 +149,9 @@ class SettingsRestoreHelper {
                     displayDate =
                         '${dt.day}.${dt.month}.${dt.year} ${dt.hour}:${dt.minute.toString().padLeft(2, '0')}';
                   }
-                } catch (_) {}
+                } catch (e) {
+                  debugPrint('Parse settings backup timestamp failed: $e');
+                }
 
                 return Card(
                   color: Theme.of(context).brightness == Brightness.dark

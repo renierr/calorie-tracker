@@ -647,6 +647,14 @@
         "type": "String"
       }
     }
+  },
+  "prestigeStarsLabel": " (⭐ x{count})",
+  "@prestigeStarsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
 

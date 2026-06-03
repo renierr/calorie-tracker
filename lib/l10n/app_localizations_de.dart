@@ -1244,4 +1244,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String operationFailed(String error) {
     return 'Fehler: $error';
   }
+
+  @override
+  String prestigeStarsLabel(int count) {
+    return ' (⭐ x$count)';
+  }
 }

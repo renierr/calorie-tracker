@@ -147,6 +147,7 @@ class MealHistoryCard extends StatelessWidget {
                                 child: Image.memory(
                                   meal.imageBytes!,
                                   fit: BoxFit.cover,
+                                  cacheWidth: 120,
                                 ),
                               )
                             : Icon(

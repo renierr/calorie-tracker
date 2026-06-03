@@ -93,6 +93,7 @@ class ScanFavoritesList extends StatelessWidget {
                                 child: Image.memory(
                                   meal.imageBytes!,
                                   fit: BoxFit.cover,
+                                  cacheWidth: 128,
                                 ),
                               )
                             : Container(

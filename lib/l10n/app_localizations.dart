@@ -2257,6 +2257,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error: {error}'**
   String operationFailed(String error);
+
+  /// No description provided for @prestigeStarsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **' (⭐ x{count})'**
+  String prestigeStarsLabel(int count);
 }
 
 class _AppLocalizationsDelegate
