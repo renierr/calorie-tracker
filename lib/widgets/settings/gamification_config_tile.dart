@@ -12,10 +12,12 @@ class GamificationConfigTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final gamificationEnabled = context.select<AppState, bool>(
+      (s) => s.gamificationEnabled,
+    );
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
-    final statusText = appState.gamificationEnabled
+    final statusText = gamificationEnabled
         ? localizations.enabledLabel
         : localizations.disabledLabel;
 

@@ -13,7 +13,6 @@ class MaintenanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
     return Container(
@@ -60,8 +59,10 @@ class MaintenanceCard extends StatelessWidget {
               ),
               label: localizations.restoreDbBtn,
               color: AppTheme.accentRed,
-              onPressed: () =>
-                  DbRestoreHelper.handleRestoreFlow(context, appState),
+              onPressed: () => DbRestoreHelper.handleRestoreFlow(
+                context,
+                context.read<AppState>(),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -71,8 +72,10 @@ class MaintenanceCard extends StatelessWidget {
               icon: const Icon(Icons.settings, color: AppTheme.accentRed),
               label: localizations.restoreSettingsBtn,
               color: AppTheme.accentRed,
-              onPressed: () =>
-                  SettingsRestoreHelper.handleRestoreFlow(context, appState),
+              onPressed: () => SettingsRestoreHelper.handleRestoreFlow(
+                context,
+                context.read<AppState>(),
+              ),
             ),
           ),
         ],

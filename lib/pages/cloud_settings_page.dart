@@ -136,9 +136,13 @@ class _CloudSettingsPageState extends State<CloudSettingsPage> {
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final appState = context.watch<AppState>();
-    final bool syncing = appState.isSyncing || _isSyncingLocal;
-    final bool enabled = appState.syncEnabled;
+    final isSyncing = context.select<AppState, bool>((s) => s.isSyncing);
+    final syncEnabled = context.select<AppState, bool>((s) => s.syncEnabled);
+    final lastSyncedTime = context.select<AppState, int?>(
+      (s) => s.lastSyncedTime,
+    );
+    final bool syncing = isSyncing || _isSyncingLocal;
+    final bool enabled = syncEnabled;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.syncSettings)),
@@ -219,7 +223,7 @@ class _CloudSettingsPageState extends State<CloudSettingsPage> {
                       ),
                       value: enabled,
                       onChanged: (bool val) {
-                        appState.setSyncEnabled(val);
+                        context.read<AppState>().setSyncEnabled(val);
                       },
                     ),
                   ),
@@ -308,7 +312,7 @@ class _CloudSettingsPageState extends State<CloudSettingsPage> {
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        _formatLastSynced(appState.lastSyncedTime, context),
+                        _formatLastSynced(lastSyncedTime, context),
                         style: TextStyle(
                           color: colors.textSecondary,
                           fontSize: 12,

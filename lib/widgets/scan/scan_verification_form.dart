@@ -242,6 +242,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   @override
   Widget build(BuildContext context) {
     final isEnabled = !_isReEvaluating;
+    final isActivity = context.select<AppState, bool>((s) => s.scanIsActivity);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -253,12 +254,12 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScanVerificationHeader(
-            isActivity: context.watch<AppState>().scanIsActivity,
+            isActivity: isActivity,
             scanResult: widget.scanResult,
           ),
           const SizedBox(height: 20),
           MealFormFields(
-            isActivity: context.watch<AppState>().scanIsActivity,
+            isActivity: isActivity,
             isEnabled: isEnabled,
             nameController: _nameController,
             caloriesController: _caloriesController,
@@ -281,9 +282,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
           ScanVerificationActions(
             isEnabled: isEnabled,
             isReEvaluating: _isReEvaluating,
-            showReEvaluate:
-                widget.imageBytes != null &&
-                !context.watch<AppState>().scanIsActivity,
+            showReEvaluate: widget.imageBytes != null && !isActivity,
             onDiscard: widget.onDiscard,
             onReEvaluate: _reEvaluateMeal,
             onSave: _saveMeal,

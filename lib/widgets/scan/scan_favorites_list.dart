@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/app_state.dart';
+import '../../models/meal_model.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -9,7 +10,9 @@ class ScanFavoritesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final favoriteMeals = context.select<AppState, List<Meal>>(
+      (s) => s.favoriteMeals,
+    );
     final colors = AppTheme.of(context);
     final double screenWidth = MediaQuery.of(context).size.width;
 
@@ -31,7 +34,7 @@ class ScanFavoritesList extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        if (appState.favoriteMeals.isEmpty)
+        if (favoriteMeals.isEmpty)
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -46,7 +49,7 @@ class ScanFavoritesList extends StatelessWidget {
           Wrap(
             spacing: 12,
             runSpacing: 12,
-            children: appState.favoriteMeals.map((meal) {
+            children: favoriteMeals.map((meal) {
               // Calculate responsive fluid grid card width:
               // 1 Column on Mobile, 2 on Small Tablet, 3 on Large Tablet, 4 on Desktop
               final double calculatedWidth;
@@ -62,7 +65,7 @@ class ScanFavoritesList extends StatelessWidget {
 
               return InkWell(
                 onTap: () {
-                  appState.setTemplateMeal(meal);
+                  context.read<AppState>().setTemplateMeal(meal);
                 },
                 borderRadius: BorderRadius.circular(16),
                 child: Container(

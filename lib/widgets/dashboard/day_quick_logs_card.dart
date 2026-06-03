@@ -12,8 +12,9 @@ class DayQuickLogsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-    final meals = appState.mealsForSelectedDate;
+    final meals = context.select<AppState, List<Meal>>(
+      (s) => s.mealsForSelectedDate,
+    );
     final colors = AppTheme.of(context);
 
     return Container(

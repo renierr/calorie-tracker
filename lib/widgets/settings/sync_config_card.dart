@@ -12,10 +12,10 @@ class SyncConfigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final syncEnabled = context.select<AppState, bool>((s) => s.syncEnabled);
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
-    final statusText = appState.syncEnabled
+    final statusText = syncEnabled
         ? localizations.enabledLabel
         : localizations.disabledLabel;
 

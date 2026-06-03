@@ -10,7 +10,8 @@ class LanguageThemeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final appLocale = context.select<AppState, String>((s) => s.appLocale);
+    final themeMode = context.select<AppState, ThemeMode>((s) => s.themeMode);
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
 
@@ -38,7 +39,7 @@ class LanguageThemeCard extends StatelessWidget {
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                value: appState.appLocale,
+                value: appLocale,
                 dropdownColor: colors.surface,
                 isExpanded: true,
                 items: const [
@@ -46,7 +47,7 @@ class LanguageThemeCard extends StatelessWidget {
                   DropdownMenuItem(value: 'de', child: Text('Deutsch')),
                 ],
                 onChanged: (val) {
-                  if (val != null) appState.setLocale(val);
+                  if (val != null) context.read<AppState>().setLocale(val);
                 },
               ),
             ),
@@ -70,7 +71,7 @@ class LanguageThemeCard extends StatelessWidget {
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                value: _themeModeValue(appState),
+                value: _themeModeValue(themeMode),
                 dropdownColor: colors.surface,
                 isExpanded: true,
                 items: [
@@ -88,6 +89,7 @@ class LanguageThemeCard extends StatelessWidget {
                   ),
                 ],
                 onChanged: (val) {
+                  final appState = context.read<AppState>();
                   if (val == 'light') {
                     appState.setThemeMode(ThemeMode.light);
                   } else if (val == 'dark') {
@@ -104,8 +106,8 @@ class LanguageThemeCard extends StatelessWidget {
     );
   }
 
-  String _themeModeValue(AppState appState) {
-    switch (appState.themeMode) {
+  String _themeModeValue(ThemeMode themeMode) {
+    switch (themeMode) {
       case ThemeMode.light:
         return 'light';
       case ThemeMode.dark:

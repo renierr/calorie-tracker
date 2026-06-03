@@ -10,7 +10,7 @@ class ThemeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final themeMode = context.select<AppState, ThemeMode>((s) => s.themeMode);
     final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
@@ -35,7 +35,7 @@ class ThemeCard extends StatelessWidget {
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                value: _themeModeValue(appState),
+                value: _themeModeValue(themeMode),
                 dropdownColor: colors.surface,
                 isExpanded: true,
                 items: [
@@ -53,6 +53,7 @@ class ThemeCard extends StatelessWidget {
                   ),
                 ],
                 onChanged: (val) {
+                  final appState = context.read<AppState>();
                   if (val == 'light') {
                     appState.setThemeMode(ThemeMode.light);
                   } else if (val == 'dark') {
@@ -69,8 +70,8 @@ class ThemeCard extends StatelessWidget {
     );
   }
 
-  String _themeModeValue(AppState appState) {
-    switch (appState.themeMode) {
+  String _themeModeValue(ThemeMode themeMode) {
+    switch (themeMode) {
       case ThemeMode.light:
         return 'light';
       case ThemeMode.dark:

@@ -12,12 +12,13 @@ class AiProviderConfigTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final aiProvider = context.select<AppState, String>((s) => s.aiProvider);
+    final aiModel = context.select<AppState, String>((s) => s.aiModel);
     final colors = AppTheme.of(context);
     final localizations = AppLocalizations.of(context)!;
 
-    final providerName = appState.aiProvider.toUpperCase();
-    final modelName = appState.aiModel;
+    final providerName = aiProvider.toUpperCase();
+    final modelName = aiModel;
 
     return Container(
       padding: const EdgeInsets.all(20),

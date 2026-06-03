@@ -10,7 +10,9 @@ class NotificationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final notificationsEnabled = context.select<AppState, bool>(
+      (s) => s.notificationsEnabled,
+    );
     final colors = AppTheme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
@@ -40,11 +42,11 @@ class NotificationsCard extends StatelessWidget {
                 ),
               ),
               Switch(
-                value: appState.notificationsEnabled,
+                value: notificationsEnabled,
                 activeTrackColor: AppTheme.accentEmerald.withValues(alpha: 0.5),
                 activeThumbColor: AppTheme.accentEmerald,
                 onChanged: (val) {
-                  appState.setNotificationsEnabled(val);
+                  context.read<AppState>().setNotificationsEnabled(val);
                 },
               ),
             ],
