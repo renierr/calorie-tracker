@@ -655,6 +655,20 @@
         "type": "int"
       }
     }
+  },
+  "macroFormat": "E: {protein}g • K: {carbs}g • F: {fat}g",
+  "@macroFormat": {
+    "placeholders": {
+      "protein": {
+        "type": "int"
+      },
+      "carbs": {
+        "type": "int"
+      },
+      "fat": {
+        "type": "int"
+      }
+    }
   }
 }
 

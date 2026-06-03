@@ -1240,4 +1240,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String prestigeStarsLabel(int count) {
     return ' (⭐ x$count)';
   }
+
+  @override
+  String macroFormat(int protein, int carbs, int fat) {
+    return 'P: ${protein}g • C: ${carbs}g • F: ${fat}g';
+  }
 }

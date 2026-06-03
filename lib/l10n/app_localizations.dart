@@ -2263,6 +2263,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **' (⭐ x{count})'**
   String prestigeStarsLabel(int count);
+
+  /// No description provided for @macroFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'P: {protein}g • C: {carbs}g • F: {fat}g'**
+  String macroFormat(int protein, int carbs, int fat);
 }
 
 class _AppLocalizationsDelegate

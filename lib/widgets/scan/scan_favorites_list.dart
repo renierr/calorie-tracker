@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
+import '../meal_detail/meal_image_preview_dialog.dart';
 
 class ScanFavoritesList extends StatelessWidget {
   const ScanFavoritesList({super.key});
@@ -80,57 +82,68 @@ class ScanFavoritesList extends StatelessWidget {
                   child: Row(
                     children: [
                       // Meal Thumbnail
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: colors.surfaceLight,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: meal.imageBytes != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.memory(
-                                  meal.imageBytes!,
-                                  fit: BoxFit.cover,
-                                  cacheWidth: 128,
+                      GestureDetector(
+                        onTap: meal.imageBytes != null
+                            ? () => showDialog(
+                                context: context,
+                                builder: (_) => MealImagePreviewDialog(
+                                  currentMeal: meal,
+                                  tempFilesToDelete: <File>[],
                                 ),
                               )
-                            : Container(
-                                decoration: BoxDecoration(
+                            : null,
+                        child: Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            color: colors.surfaceLight,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: meal.imageBytes != null
+                              ? ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  gradient: LinearGradient(
-                                    colors: meal.isActivity
-                                        ? [
-                                            AppTheme.accentAmber.withValues(
-                                              alpha: 0.15,
-                                            ),
-                                            AppTheme.accentRed.withValues(
-                                              alpha: 0.15,
-                                            ),
-                                          ]
-                                        : [
-                                            AppTheme.accentEmerald.withValues(
-                                              alpha: 0.15,
-                                            ),
-                                            AppTheme.accentBlue.withValues(
-                                              alpha: 0.15,
-                                            ),
-                                          ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
+                                  child: Image.memory(
+                                    meal.imageBytes!,
+                                    fit: BoxFit.cover,
+                                    cacheWidth: 128,
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    gradient: LinearGradient(
+                                      colors: meal.isActivity
+                                          ? [
+                                              AppTheme.accentAmber.withValues(
+                                                alpha: 0.15,
+                                              ),
+                                              AppTheme.accentRed.withValues(
+                                                alpha: 0.15,
+                                              ),
+                                            ]
+                                          : [
+                                              AppTheme.accentEmerald.withValues(
+                                                alpha: 0.15,
+                                              ),
+                                              AppTheme.accentBlue.withValues(
+                                                alpha: 0.15,
+                                              ),
+                                            ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    meal.isActivity
+                                        ? Icons.directions_run
+                                        : Icons.fastfood,
+                                    color: meal.isActivity
+                                        ? AppTheme.accentAmber
+                                        : AppTheme.accentEmerald,
+                                    size: 24,
                                   ),
                                 ),
-                                child: Icon(
-                                  meal.isActivity
-                                      ? Icons.directions_run
-                                      : Icons.fastfood,
-                                  color: meal.isActivity
-                                      ? AppTheme.accentAmber
-                                      : AppTheme.accentEmerald,
-                                  size: 24,
-                                ),
-                              ),
+                        ),
                       ),
                       const SizedBox(width: 12),
                       // Details
@@ -165,7 +178,11 @@ class ScanFavoritesList extends StatelessWidget {
                             if (!meal.isActivity) ...[
                               const SizedBox(height: 2),
                               Text(
-                                'P: ${meal.protein}g • C: ${meal.carbs}g • F: ${meal.fat}g',
+                                AppLocalizations.of(context)!.macroFormat(
+                                  meal.protein,
+                                  meal.carbs,
+                                  meal.fat,
+                                ),
                                 style: TextStyle(
                                   color: colors.textMuted,
                                   fontSize: 10,
