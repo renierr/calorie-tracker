@@ -667,6 +667,32 @@
         "type": "int"
       }
     }
+  },
+  "noMealsToExport": "No meals found to export.",
+  "jsonBackup": "JSON Backup",
+  "reportDescription": "This compiles a PDF summarizing the {count} meals displayed in the active list.",
+  "@reportDescription": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restoreFailed": "Restore failed: {error}",
+  "@restoreFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToSaveSettings": "Failed to save settings: {error}",
+  "@failedToSaveSettings": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
 

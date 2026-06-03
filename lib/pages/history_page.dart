@@ -270,7 +270,10 @@ class _HistoryPageState extends State<HistoryPage> {
     try {
       final XFile? file = await openFile(
         acceptedTypeGroups: <XTypeGroup>[
-          const XTypeGroup(label: 'JSON Backup', extensions: <String>['json']),
+          XTypeGroup(
+            label: AppLocalizations.of(context)!.jsonBackup,
+            extensions: <String>['json'],
+          ),
         ],
       );
       if (file == null) return;
@@ -305,6 +308,7 @@ class _HistoryPageState extends State<HistoryPage> {
     AppState appState,
     List<Meal> filteredMeals,
   ) async {
+    final loc = AppLocalizations.of(context)!;
     final List<Meal> mealsToExport;
     if (_selectedMealIds.isNotEmpty) {
       mealsToExport = filteredMeals
@@ -329,8 +333,8 @@ class _HistoryPageState extends State<HistoryPage> {
     if (mealsToExport.isEmpty) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No meals found to export.'),
+        SnackBar(
+          content: Text(loc.noMealsToExport),
           backgroundColor: AppTheme.accentRed,
         ),
       );
@@ -342,7 +346,7 @@ class _HistoryPageState extends State<HistoryPage> {
       final FileSaveLocation? location = await getSaveLocation(
         suggestedName: 'nutriscan_export_$timestamp.json',
         acceptedTypeGroups: <XTypeGroup>[
-          const XTypeGroup(label: 'JSON Backup', extensions: <String>['json']),
+          XTypeGroup(label: loc.jsonBackup, extensions: <String>['json']),
         ],
       );
       if (location == null) return;

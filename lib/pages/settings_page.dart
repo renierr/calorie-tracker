@@ -100,8 +100,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.settingsTitle)),
       body: SingleChildScrollView(
@@ -139,7 +137,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.save),
                   label: Text(AppLocalizations.of(context)!.savePreferences),
-                  onPressed: () => _saveSettings(appState),
+                  onPressed: () => _saveSettings(context.read<AppState>()),
                 ),
               ),
               const SizedBox(height: 30),

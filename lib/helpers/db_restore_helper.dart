@@ -95,7 +95,11 @@ class DbRestoreHelper {
         isError: false,
       );
     } catch (e) {
-      _showSnackBar(scaffoldMessenger, 'Restore failed: $e', isError: true);
+      _showSnackBar(
+        scaffoldMessenger,
+        localizations.restoreFailed(e.toString()),
+        isError: true,
+      );
     }
   }
 

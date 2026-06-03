@@ -65,7 +65,9 @@ class _CloudSettingsPageState extends State<CloudSettingsPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to save settings: $e'),
+          content: Text(
+            AppLocalizations.of(context)!.failedToSaveSettings(e.toString()),
+          ),
           backgroundColor: AppTheme.accentRed,
         ),
       );

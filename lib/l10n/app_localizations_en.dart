@@ -1245,4 +1245,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String macroFormat(int protein, int carbs, int fat) {
     return 'P: ${protein}g • C: ${carbs}g • F: ${fat}g';
   }
+
+  @override
+  String get noMealsToExport => 'No meals found to export.';
+
+  @override
+  String get jsonBackup => 'JSON Backup';
+
+  @override
+  String reportDescription(int count) {
+    return 'This compiles a PDF summarizing the $count meals displayed in the active list.';
+  }
+
+  @override
+  String restoreFailed(String error) {
+    return 'Restore failed: $error';
+  }
+
+  @override
+  String failedToSaveSettings(String error) {
+    return 'Failed to save settings: $error';
+  }
 }

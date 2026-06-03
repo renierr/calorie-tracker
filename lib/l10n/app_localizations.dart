@@ -2269,6 +2269,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'P: {protein}g • C: {carbs}g • F: {fat}g'**
   String macroFormat(int protein, int carbs, int fat);
+
+  /// No description provided for @noMealsToExport.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals found to export.'**
+  String get noMealsToExport;
+
+  /// No description provided for @jsonBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'JSON Backup'**
+  String get jsonBackup;
+
+  /// No description provided for @reportDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This compiles a PDF summarizing the {count} meals displayed in the active list.'**
+  String reportDescription(int count);
+
+  /// No description provided for @restoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore failed: {error}'**
+  String restoreFailed(String error);
+
+  /// No description provided for @failedToSaveSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save settings: {error}'**
+  String failedToSaveSettings(String error);
 }
 
 class _AppLocalizationsDelegate

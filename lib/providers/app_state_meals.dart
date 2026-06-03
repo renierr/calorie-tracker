@@ -25,6 +25,7 @@ mixin _MealState on ChangeNotifier {
     _state._favoriteMeals = await _state._dbHelper.getFavoriteMeals(
       includeImages: true,
     );
+    _computeDailyTotals();
     if (refreshHistory) {
       await _state.loadFirstPageHistory(showLoading: false);
     }
@@ -130,6 +131,7 @@ mixin _MealState on ChangeNotifier {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _state._dbHelper.insertMeal(unsyncedMeal);
     await _reloadCaches();
+    notifyListeners();
     await _state.onMealAdded();
     await _state.checkTodayBudgetExceeded();
     if (_state._syncEnabled) {
@@ -141,6 +143,7 @@ mixin _MealState on ChangeNotifier {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _state._dbHelper.updateMeal(unsyncedMeal);
     await _reloadCaches();
+    notifyListeners();
     await _state.checkTodayBudgetExceeded();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
@@ -150,6 +153,7 @@ mixin _MealState on ChangeNotifier {
   Future<void> deleteMeal(int id) async {
     await _state._dbHelper.deleteMeal(id);
     await _reloadCaches();
+    notifyListeners();
     await _state.onMealDeleted();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
@@ -178,6 +182,7 @@ mixin _MealState on ChangeNotifier {
     _state._paginatedMeals = [];
     _state._hasMore = true;
     _state._historyTotalCount = 0;
+    _computeDailyTotals();
     notifyListeners();
   }
 

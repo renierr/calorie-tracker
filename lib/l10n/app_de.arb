@@ -669,6 +669,32 @@
         "type": "int"
       }
     }
+  },
+  "noMealsToExport": "Keine Mahlzeiten zum Exportieren gefunden.",
+  "jsonBackup": "JSON-Backup",
+  "reportDescription": "Erstellt ein PDF mit einer Zusammenfassung der {count} Mahlzeiten in der aktiven Liste.",
+  "@reportDescription": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restoreFailed": "Wiederherstellung fehlgeschlagen: {error}",
+  "@restoreFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToSaveSettings": "Fehler beim Speichern der Einstellungen: {error}",
+  "@failedToSaveSettings": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
 

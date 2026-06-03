@@ -80,7 +80,9 @@ class _ReportConfigDialogState extends State<ReportConfigDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'This compiles a PDF summarizing the ${widget.filteredMeals.length} meals displayed in the active list.',
+              AppLocalizations.of(
+                context,
+              )!.reportDescription(widget.filteredMeals.length),
               style: TextStyle(color: colors.textSecondary, fontSize: 12),
             ),
             const SizedBox(height: 16),
