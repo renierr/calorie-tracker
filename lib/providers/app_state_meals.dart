@@ -164,6 +164,7 @@ mixin _MealState on ChangeNotifier {
     );
     await _state._dbHelper.updateMeal(updated);
     await _reloadCaches(refreshHistory: false);
+    notifyListeners();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
