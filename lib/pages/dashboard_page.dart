@@ -22,52 +22,40 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   double? _dragStartX;
 
+  void _processPendingNotifications(AppState appState) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (appState.recentUnlockedBadge != null) {
+        final badge = appState.recentUnlockedBadge!;
+        appState.dismissBadgeNotification();
+        await GamificationDialogs.showBadgeUnlocked(context, appState, badge);
+        appState.onBadgeDialogDismissed(badge);
+      } else if (appState.showLevelUpNotification) {
+        final lvl = appState.gamificationStats.level;
+        appState.dismissLevelUpNotification();
+        GamificationDialogs.showLevelUp(context, appState, lvl);
+      } else if (appState.showPrestigeNotification) {
+        appState.dismissPrestigeNotification();
+        GamificationDialogs.showPrestigeStarEarned(context, appState);
+      } else if (appState.showShieldEarnedNotification) {
+        appState.dismissShieldEarnedNotification();
+        GamificationDialogs.showShieldEarned(context, appState);
+      } else if (appState.showShieldConsumedNotification) {
+        appState.dismissShieldConsumedNotification();
+        GamificationDialogs.showShieldConsumed(context, appState);
+      } else if (appState.showStreakResetNotification) {
+        appState.dismissStreakResetNotification();
+        GamificationDialogs.showStreakReset(context, appState);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     final double width = MediaQuery.of(context).size.width;
     final bool isWide = AppBreakpoints.isDesktopWidth(width);
 
-    // Safe post-frame callback execution for overlays & achievements
-    if (appState.recentUnlockedBadge != null) {
-      final badge = appState.recentUnlockedBadge!;
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        appState.dismissBadgeNotification();
-        await GamificationDialogs.showBadgeUnlocked(context, appState, badge);
-        appState.onBadgeDialogDismissed(badge);
-      });
-    }
-    if (appState.showLevelUpNotification) {
-      final lvl = appState.gamificationStats.level;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        appState.dismissLevelUpNotification();
-        GamificationDialogs.showLevelUp(context, appState, lvl);
-      });
-    }
-    if (appState.showShieldConsumedNotification) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        appState.dismissShieldConsumedNotification();
-        GamificationDialogs.showShieldConsumed(context, appState);
-      });
-    }
-    if (appState.showStreakResetNotification) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        appState.dismissStreakResetNotification();
-        GamificationDialogs.showStreakReset(context, appState);
-      });
-    }
-    if (appState.showShieldEarnedNotification) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        appState.dismissShieldEarnedNotification();
-        GamificationDialogs.showShieldEarned(context, appState);
-      });
-    }
-    if (appState.showPrestigeNotification) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        appState.dismissPrestigeNotification();
-        GamificationDialogs.showPrestigeStarEarned(context, appState);
-      });
-    }
+    _processPendingNotifications(appState);
 
     return Scaffold(
       appBar: AppBar(
