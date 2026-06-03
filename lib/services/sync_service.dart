@@ -71,18 +71,18 @@ class SyncService {
       );
     }
 
-    // 3. Get local records (including deleted ones)
+    // 3. Get local records (including deleted ones) — metadata only, no images
     final List<Meal> localRecords = await dbHelper.getActiveAndDeletedMeals();
+    final Map<String, Meal> localMap = {
+      for (final r in localRecords) r.shortId: r,
+    };
 
     final List<String> toPullIds = [];
     final List<Map<String, dynamic>> toPush = [];
 
     // 4. Resolve Deletions & Identify Pull Targets
     for (final sMeta in serverMetaMap.values) {
-      final Meal? lRec = localRecords.cast<Meal?>().firstWhere(
-        (r) => r?.shortId == sMeta.id,
-        orElse: () => null,
-      );
+      final Meal? lRec = localMap[sMeta.id];
 
       if (sMeta.deleted) {
         if (lRec != null) {
@@ -114,6 +114,11 @@ class SyncService {
       } else {
         // Active local record: push if not on server or if local record is newer
         if (sMeta == null || lRec.updatedAt > sMeta.updatedAt) {
+          // Fetch image on-demand for records that need pushing
+          Uint8List? imageBytes = lRec.imageBytes;
+          if (imageBytes == null && lRec.id != null) {
+            imageBytes = await dbHelper.getMealImageBytes(lRec.id!);
+          }
           // Serialize record, translating imageBytes to base64 imageBlob
           final Map<String, dynamic> serializedData = {
             'shortId': lRec.shortId,
@@ -128,11 +133,11 @@ class SyncService {
             'updatedAt': lRec.updatedAt,
             'weightKg': lRec.weightKg,
             'isFavorite': lRec.isFavorite,
-            'imageBlob': lRec.imageBytes != null
+            'imageBlob': imageBytes != null
                 ? {
                     '__type': 'blob',
-                    'mimeType': _detectMimeType(lRec.imageBytes!),
-                    'data': base64Encode(lRec.imageBytes!),
+                    'mimeType': _detectMimeType(imageBytes),
+                    'data': base64Encode(imageBytes),
                   }
                 : null,
           };
@@ -186,10 +191,7 @@ class SyncService {
       final bool serverDeleted = sRec['deleted'] as bool? ?? false;
       final int serverUpdatedAt = sRec['updatedAt'] as int? ?? 0;
 
-      final Meal? lRec = localRecords.cast<Meal?>().firstWhere(
-        (r) => r?.shortId == shortId,
-        orElse: () => null,
-      );
+      final Meal? lRec = localMap[shortId];
 
       if (serverDeleted) {
         if (lRec != null) {
@@ -292,14 +294,6 @@ class SyncService {
   static Uint8List? _deserializeImage(dynamic imageBlobObj) {
     if (imageBlobObj == null) return null;
     if (imageBlobObj is Map<String, dynamic>) {
-      if (imageBlobObj['__type'] == 'blob' && imageBlobObj['data'] is String) {
-        try {
-          return base64Decode(imageBlobObj['data'] as String);
-        } catch (e) {
-          debugPrint('$_logPrefix Failed to decode base64 image: $e');
-        }
-      }
-    } else if (imageBlobObj is Map) {
       if (imageBlobObj['__type'] == 'blob' && imageBlobObj['data'] is String) {
         try {
           return base64Decode(imageBlobObj['data'] as String);

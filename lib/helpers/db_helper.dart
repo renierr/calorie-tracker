@@ -290,7 +290,26 @@ class DbHelper {
 
   Future<List<Meal>> getActiveAndDeletedMeals() async {
     final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(tableMeals);
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableMeals,
+      columns: [
+        'id',
+        'shortId',
+        'foodName',
+        'calories',
+        'protein',
+        'carbs',
+        'fat',
+        'confidence',
+        'notes',
+        'timestamp',
+        'updatedAt',
+        'synced',
+        'deleted',
+        'isFavorite',
+        'weightKg',
+      ],
+    );
     return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
   }
 
