@@ -338,62 +338,18 @@ class DbHelper {
       if (includeImages) 'imageBytes',
     ];
 
-    final List<String> whereClauses = ['deleted = 0'];
-    final List<dynamic> whereArgs = [];
-
-    if (typeFilter == 'meals') {
-      whereClauses.add("shortId NOT LIKE 'ACT-%'");
-    } else if (typeFilter == 'activities') {
-      whereClauses.add("shortId LIKE 'ACT-%'");
-    }
+    final filter = _buildFilterConditions(
+      filterType: filterType,
+      typeFilter: typeFilter,
+      customStart: customStart,
+      customEnd: customEnd,
+    );
+    final List<String> whereClauses = ['deleted = 0', ...filter.clauses];
+    final List<dynamic> whereArgs = [...filter.args];
 
     if (beforeTimestamp != null) {
       whereClauses.add('timestamp < ?');
       whereArgs.add(beforeTimestamp);
-    }
-
-    final now = DateTime.now();
-    final todayMidnight = DateTime(now.year, now.month, now.day);
-
-    if (filterType == 'today') {
-      final start = todayMidnight.millisecondsSinceEpoch;
-      final end =
-          todayMidnight.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
-      whereClauses.add('timestamp >= ? AND timestamp <= ?');
-      whereArgs.addAll([start, end]);
-    } else if (filterType == 'yesterday') {
-      final yesterday = todayMidnight.subtract(const Duration(days: 1));
-      final start = yesterday.millisecondsSinceEpoch;
-      final end =
-          yesterday.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
-      whereClauses.add('timestamp >= ? AND timestamp <= ?');
-      whereArgs.addAll([start, end]);
-    } else if (filterType == 'week') {
-      final sevenDaysAgo = todayMidnight.subtract(const Duration(days: 6));
-      final start = sevenDaysAgo.millisecondsSinceEpoch;
-      whereClauses.add('timestamp >= ?');
-      whereArgs.add(start);
-    } else if (filterType == 'favorites') {
-      whereClauses.add('isFavorite = 1');
-    } else if (filterType == 'custom' &&
-        customStart != null &&
-        customEnd != null) {
-      final start = DateTime(
-        customStart.year,
-        customStart.month,
-        customStart.day,
-      ).millisecondsSinceEpoch;
-      final end = DateTime(
-        customEnd.year,
-        customEnd.month,
-        customEnd.day,
-        23,
-        59,
-        59,
-        999,
-      ).millisecondsSinceEpoch;
-      whereClauses.add('timestamp >= ? AND timestamp <= ?');
-      whereArgs.addAll([start, end]);
     }
 
     final List<Map<String, dynamic>> maps = await db.query(
@@ -455,58 +411,14 @@ class DbHelper {
     DateTime? customEnd,
   }) async {
     final Database db = await database;
-    final List<String> whereClauses = ['deleted = 0'];
-    final List<dynamic> whereArgs = [];
-
-    if (typeFilter == 'meals') {
-      whereClauses.add("shortId NOT LIKE 'ACT-%'");
-    } else if (typeFilter == 'activities') {
-      whereClauses.add("shortId LIKE 'ACT-%'");
-    }
-
-    final now = DateTime.now();
-    final todayMidnight = DateTime(now.year, now.month, now.day);
-
-    if (filterType == 'today') {
-      final start = todayMidnight.millisecondsSinceEpoch;
-      final end =
-          todayMidnight.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
-      whereClauses.add('timestamp >= ? AND timestamp <= ?');
-      whereArgs.addAll([start, end]);
-    } else if (filterType == 'yesterday') {
-      final yesterday = todayMidnight.subtract(const Duration(days: 1));
-      final start = yesterday.millisecondsSinceEpoch;
-      final end =
-          yesterday.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
-      whereClauses.add('timestamp >= ? AND timestamp <= ?');
-      whereArgs.addAll([start, end]);
-    } else if (filterType == 'week') {
-      final sevenDaysAgo = todayMidnight.subtract(const Duration(days: 6));
-      final start = sevenDaysAgo.millisecondsSinceEpoch;
-      whereClauses.add('timestamp >= ?');
-      whereArgs.add(start);
-    } else if (filterType == 'favorites') {
-      whereClauses.add('isFavorite = 1');
-    } else if (filterType == 'custom' &&
-        customStart != null &&
-        customEnd != null) {
-      final start = DateTime(
-        customStart.year,
-        customStart.month,
-        customStart.day,
-      ).millisecondsSinceEpoch;
-      final end = DateTime(
-        customEnd.year,
-        customEnd.month,
-        customEnd.day,
-        23,
-        59,
-        59,
-        999,
-      ).millisecondsSinceEpoch;
-      whereClauses.add('timestamp >= ? AND timestamp <= ?');
-      whereArgs.addAll([start, end]);
-    }
+    final filter = _buildFilterConditions(
+      filterType: filterType,
+      typeFilter: typeFilter,
+      customStart: customStart,
+      customEnd: customEnd,
+    );
+    final List<String> whereClauses = ['deleted = 0', ...filter.clauses];
+    final List<dynamic> whereArgs = [...filter.args];
 
     final List<Map<String, dynamic>> maps = await db.rawQuery(
       'SELECT COUNT(*) FROM $tableMeals WHERE ${whereClauses.join(' AND ')}',
@@ -559,6 +471,71 @@ class DbHelper {
       orderBy: 'timestamp DESC',
     );
     return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
+  }
+
+  /// Builds shared WHERE clause conditions for filterType/typeFilter.
+  /// Returns (clauses, args). Caller prepends 'deleted = 0' and appends any
+  /// query-specific conditions (e.g. beforeTimestamp).
+  ({List<String> clauses, List<dynamic> args}) _buildFilterConditions({
+    required String filterType,
+    required String typeFilter,
+    DateTime? customStart,
+    DateTime? customEnd,
+  }) {
+    final clauses = <String>[];
+    final args = <dynamic>[];
+
+    if (typeFilter == 'meals') {
+      clauses.add("shortId NOT LIKE 'ACT-%'");
+    } else if (typeFilter == 'activities') {
+      clauses.add("shortId LIKE 'ACT-%'");
+    }
+
+    final now = DateTime.now();
+    final todayMidnight = DateTime(now.year, now.month, now.day);
+
+    if (filterType == 'today') {
+      final start = todayMidnight.millisecondsSinceEpoch;
+      final end =
+          todayMidnight.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
+      clauses.add('timestamp >= ? AND timestamp <= ?');
+      args.addAll([start, end]);
+    } else if (filterType == 'yesterday') {
+      final yesterday = todayMidnight.subtract(const Duration(days: 1));
+      final start = yesterday.millisecondsSinceEpoch;
+      final end =
+          yesterday.add(const Duration(days: 1)).millisecondsSinceEpoch - 1;
+      clauses.add('timestamp >= ? AND timestamp <= ?');
+      args.addAll([start, end]);
+    } else if (filterType == 'week') {
+      final sevenDaysAgo = todayMidnight.subtract(const Duration(days: 6));
+      final start = sevenDaysAgo.millisecondsSinceEpoch;
+      clauses.add('timestamp >= ?');
+      args.add(start);
+    } else if (filterType == 'favorites') {
+      clauses.add('isFavorite = 1');
+    } else if (filterType == 'custom' &&
+        customStart != null &&
+        customEnd != null) {
+      final start = DateTime(
+        customStart.year,
+        customStart.month,
+        customStart.day,
+      ).millisecondsSinceEpoch;
+      final end = DateTime(
+        customEnd.year,
+        customEnd.month,
+        customEnd.day,
+        23,
+        59,
+        59,
+        999,
+      ).millisecondsSinceEpoch;
+      clauses.add('timestamp >= ? AND timestamp <= ?');
+      args.addAll([start, end]);
+    }
+
+    return (clauses: clauses, args: args);
   }
 
   // Gamification operations
