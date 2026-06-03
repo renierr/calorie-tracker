@@ -11,6 +11,7 @@ import '../widgets/scan/scan_favorites_list.dart';
 import '../widgets/scan/scan_hint_field.dart';
 import '../widgets/scan/scan_trigger_actions.dart';
 import '../widgets/scan/ai_fallback_dialog.dart';
+import '../widgets/scan/scanning_overlay.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -149,7 +150,6 @@ class _ScanPageState extends State<ScanPage> {
     final String apiKey = appState.aiApiKey;
     final bool hasApiKey =
         appState.aiProvider == 'custom' || apiKey.trim().isNotEmpty;
-    final colors = AppTheme.of(context);
 
     if (appState.templateMeal != null) {
       final template = appState.templateMeal!;
@@ -231,44 +231,7 @@ class _ScanPageState extends State<ScanPage> {
             ),
           ),
 
-          // Scanning full-screen loading spinner
-          if (appState.scanIsScanning)
-            Container(
-              color: Colors.black.withValues(alpha: 0.8),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AppTheme.accentEmerald,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      AppLocalizations.of(context)!.scanningTitle,
-                      style: TextStyle(
-                        color: colors.textPrimary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: Text(
-                        AppLocalizations.of(context)!.scanningDesc,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: colors.textSecondary,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          ScanningOverlay(isScanning: appState.scanIsScanning),
         ],
       ),
     );

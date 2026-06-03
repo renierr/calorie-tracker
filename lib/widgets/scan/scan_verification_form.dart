@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
@@ -116,6 +117,10 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     });
 
     try {
+      await WakelockPlus.enable();
+    } catch (_) {}
+
+    try {
       String customHint = '';
       final currentName = _nameController.text.trim();
       final currentNotes = _notesController.text.trim();
@@ -174,6 +179,10 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
           );
         },
       );
+    } finally {
+      try {
+        await WakelockPlus.disable();
+      } catch (_) {}
     }
   }
 
