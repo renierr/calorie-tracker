@@ -284,7 +284,7 @@ class _EditMealDialogState extends State<EditMealDialog> {
                             ),
                             alignLabelWithHint: true,
                           ),
-                          maxLines: 2,
+                          maxLines: 4,
                         ),
                         const SizedBox(height: 12),
                         SizedBox(

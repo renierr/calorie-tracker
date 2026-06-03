@@ -24,7 +24,7 @@ class ScanHintField extends StatelessWidget {
           const SizedBox(height: 12),
           TextField(
             controller: hintController,
-            maxLines: 2,
+            maxLines: 4,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.contextHint,
             ),

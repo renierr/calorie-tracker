@@ -184,7 +184,7 @@ class MealFormFields extends StatelessWidget {
           style: TextStyle(color: colors.textSecondary, fontSize: 11),
         ),
         const SizedBox(height: 6),
-        TextField(controller: notesController, enabled: isEnabled, maxLines: 2),
+        TextField(controller: notesController, enabled: isEnabled, maxLines: 4),
       ],
     );
   }
