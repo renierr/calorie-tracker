@@ -116,7 +116,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
 
     try {
       await WakelockPlus.enable();
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Wakelock enable failed: $e');
+    }
 
     try {
       final String customPrompt = BaseAIService.buildReEvaluationPrompt(
@@ -178,7 +180,9 @@ class _EditMealDialogState extends State<EditMealDialog> {
     } finally {
       try {
         await WakelockPlus.disable();
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Wakelock disable failed: $e');
+      }
       if (mounted) {
         setState(() {
           _isReEvaluating = false;

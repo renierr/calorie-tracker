@@ -623,6 +623,30 @@
         "type": "String"
       }
     }
+  },
+  "pasteImageFailed": "Fehler beim Einfügen des Bildes: {error}",
+  "@pasteImageFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "readDroppedFileFailed": "Fehler beim Lesen der abgelegten Datei: {error}",
+  "@readDroppedFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "operationFailed": "Fehler: {error}",
+  "@operationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
 

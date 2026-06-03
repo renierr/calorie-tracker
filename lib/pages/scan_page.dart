@@ -90,7 +90,9 @@ class _ScanPageState extends State<ScanPage> {
 
     try {
       await WakelockPlus.enable();
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Wakelock enable failed: $e');
+    }
 
     try {
       final result = await appState.performAIAnalysis(
@@ -140,7 +142,9 @@ class _ScanPageState extends State<ScanPage> {
     } finally {
       try {
         await WakelockPlus.disable();
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Wakelock disable failed: $e');
+      }
     }
   }
 

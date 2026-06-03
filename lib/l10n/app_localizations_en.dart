@@ -1220,4 +1220,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String failedToCopyImage(String error) {
     return 'Failed to copy image: $error';
   }
+
+  @override
+  String pasteImageFailed(String error) {
+    return 'Failed to paste image: $error';
+  }
+
+  @override
+  String readDroppedFileFailed(String error) {
+    return 'Failed to read dropped file: $error';
+  }
+
+  @override
+  String operationFailed(String error) {
+    return 'Error: $error';
+  }
 }

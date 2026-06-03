@@ -118,7 +118,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
 
     try {
       await WakelockPlus.enable();
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Wakelock enable failed: $e');
+    }
 
     try {
       String customHint = '';
@@ -182,7 +184,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     } finally {
       try {
         await WakelockPlus.disable();
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('Wakelock disable failed: $e');
+      }
     }
   }
 

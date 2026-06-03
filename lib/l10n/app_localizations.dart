@@ -2239,6 +2239,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to copy image: {error}'**
   String failedToCopyImage(String error);
+
+  /// No description provided for @pasteImageFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to paste image: {error}'**
+  String pasteImageFailed(String error);
+
+  /// No description provided for @readDroppedFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to read dropped file: {error}'**
+  String readDroppedFileFailed(String error);
+
+  /// No description provided for @operationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String operationFailed(String error);
 }
 
 class _AppLocalizationsDelegate

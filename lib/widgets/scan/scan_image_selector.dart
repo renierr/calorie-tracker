@@ -53,9 +53,13 @@ class _ScanImageSelectorState extends State<ScanImageSelector> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Failed to paste image: $e")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.pasteImageFailed(e.toString()),
+            ),
+          ),
+        );
       }
     }
   }
@@ -84,12 +88,15 @@ class _ScanImageSelectorState extends State<ScanImageSelector> {
             final file = detail.files.first;
             final appState = context.read<AppState>();
             final messenger = ScaffoldMessenger.of(context);
+            final loc = AppLocalizations.of(context)!;
             try {
               final bytes = await file.readAsBytes();
               await appState.handleIncomingImageBytes(bytes);
             } catch (e) {
               messenger.showSnackBar(
-                SnackBar(content: Text("Failed to read dropped file: $e")),
+                SnackBar(
+                  content: Text(loc.readDroppedFileFailed(e.toString())),
+                ),
               );
             }
           }

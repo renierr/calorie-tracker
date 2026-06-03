@@ -83,7 +83,9 @@ class _MealImagePreviewDialogState extends State<MealImagePreviewDialog> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Error: $e"),
+              content: Text(
+                AppLocalizations.of(context)!.operationFailed(e.toString()),
+              ),
               backgroundColor: AppTheme.accentRed,
             ),
           );
@@ -117,7 +119,9 @@ class _MealImagePreviewDialogState extends State<MealImagePreviewDialog> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Error: $e"),
+              content: Text(
+                AppLocalizations.of(context)!.operationFailed(e.toString()),
+              ),
               backgroundColor: AppTheme.accentRed,
             ),
           );

@@ -621,6 +621,30 @@
         "type": "String"
       }
     }
+  },
+  "pasteImageFailed": "Failed to paste image: {error}",
+  "@pasteImageFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "readDroppedFileFailed": "Failed to read dropped file: {error}",
+  "@readDroppedFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "operationFailed": "Error: {error}",
+  "@operationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }
 
