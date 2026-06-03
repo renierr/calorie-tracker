@@ -160,28 +160,20 @@ class AppState extends ChangeNotifier
   DateTime? get historyCustomStartDate => _historyCustomStartDate;
   DateTime? get historyCustomEndDate => _historyCustomEndDate;
 
-  // Daily totals calculations
-  int get totalCaloriesIntake => mealsForSelectedDate
-      .where((m) => m.isMeal)
-      .fold(0, (sum, meal) => sum + meal.calories);
+  // Daily totals — cached, computed once in loadSelectedDateMeals
+  int _cachedTotalCaloriesIntake = 0;
+  int _cachedTotalCaloriesBurned = 0;
+  int _cachedTotalProteinConsumed = 0;
+  int _cachedTotalCarbsConsumed = 0;
+  int _cachedTotalFatConsumed = 0;
 
-  int get totalCaloriesBurned => mealsForSelectedDate
-      .where((m) => m.isActivity)
-      .fold(0, (sum, meal) => sum + meal.calories);
-
-  int get totalCaloriesConsumed => totalCaloriesIntake - totalCaloriesBurned;
-
-  int get totalProteinConsumed => mealsForSelectedDate
-      .where((m) => m.isMeal)
-      .fold(0, (sum, meal) => sum + meal.protein);
-
-  int get totalCarbsConsumed => mealsForSelectedDate
-      .where((m) => m.isMeal)
-      .fold(0, (sum, meal) => sum + meal.carbs);
-
-  int get totalFatConsumed => mealsForSelectedDate
-      .where((m) => m.isMeal)
-      .fold(0, (sum, meal) => sum + meal.fat);
+  int get totalCaloriesIntake => _cachedTotalCaloriesIntake;
+  int get totalCaloriesBurned => _cachedTotalCaloriesBurned;
+  int get totalCaloriesConsumed =>
+      _cachedTotalCaloriesIntake - _cachedTotalCaloriesBurned;
+  int get totalProteinConsumed => _cachedTotalProteinConsumed;
+  int get totalCarbsConsumed => _cachedTotalCarbsConsumed;
+  int get totalFatConsumed => _cachedTotalFatConsumed;
 
   // Initialize and load everything on startup
   Future<void> init() async {

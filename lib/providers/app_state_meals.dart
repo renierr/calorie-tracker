@@ -35,7 +35,27 @@ mixin _MealState on ChangeNotifier {
       _state._selectedDate,
       includeImages: true,
     );
+    _computeDailyTotals();
     notifyListeners();
+  }
+
+  void _computeDailyTotals() {
+    int intake = 0, burned = 0, protein = 0, carbs = 0, fat = 0;
+    for (final meal in _state._selectedDateMeals) {
+      if (meal.isMeal) {
+        intake += meal.calories;
+        protein += meal.protein;
+        carbs += meal.carbs;
+        fat += meal.fat;
+      } else {
+        burned += meal.calories;
+      }
+    }
+    _state._cachedTotalCaloriesIntake = intake;
+    _state._cachedTotalCaloriesBurned = burned;
+    _state._cachedTotalProteinConsumed = protein;
+    _state._cachedTotalCarbsConsumed = carbs;
+    _state._cachedTotalFatConsumed = fat;
   }
 
   Future<List<Meal>> getMealsForFilter({required bool includeImages}) async {
