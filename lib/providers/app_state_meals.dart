@@ -14,6 +14,22 @@ mixin _MealState on ChangeNotifier {
     notifyListeners();
   }
 
+  /// Refreshes in-memory meal caches after a mutation.
+  /// Skips full gamification recalc — use targeted per-hook calls instead.
+  Future<void> _reloadCaches({bool refreshHistory = true}) async {
+    _state._meals = await _state._dbHelper.getAllMeals(includeImages: false);
+    _state._selectedDateMeals = await _state._dbHelper.getMealsForDate(
+      _state._selectedDate,
+      includeImages: true,
+    );
+    _state._favoriteMeals = await _state._dbHelper.getFavoriteMeals(
+      includeImages: true,
+    );
+    if (refreshHistory) {
+      await _state.loadFirstPageHistory(showLoading: false);
+    }
+  }
+
   Future<void> loadSelectedDateMeals() async {
     _state._selectedDateMeals = await _state._dbHelper.getMealsForDate(
       _state._selectedDate,
@@ -93,8 +109,9 @@ mixin _MealState on ChangeNotifier {
   Future<void> addMeal(Meal meal) async {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _state._dbHelper.insertMeal(unsyncedMeal);
-    await loadMeals();
+    await _reloadCaches();
     await _state.onMealAdded();
+    await _state.checkTodayBudgetExceeded();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
@@ -103,7 +120,7 @@ mixin _MealState on ChangeNotifier {
   Future<void> updateMeal(Meal meal) async {
     final unsyncedMeal = meal.copyWith(synced: 0);
     await _state._dbHelper.updateMeal(unsyncedMeal);
-    await loadMeals();
+    await _reloadCaches();
     await _state.checkTodayBudgetExceeded();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
@@ -112,7 +129,7 @@ mixin _MealState on ChangeNotifier {
 
   Future<void> deleteMeal(int id) async {
     await _state._dbHelper.deleteMeal(id);
-    await loadMeals();
+    await _reloadCaches();
     await _state.onMealDeleted();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
@@ -126,7 +143,7 @@ mixin _MealState on ChangeNotifier {
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
     await _state._dbHelper.updateMeal(updated);
-    await loadMeals();
+    await _reloadCaches(refreshHistory: false);
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
@@ -134,7 +151,13 @@ mixin _MealState on ChangeNotifier {
 
   Future<void> clearAllMeals() async {
     await _state._dbHelper.clearDatabase();
-    await loadMeals();
+    _state._meals = [];
+    _state._selectedDateMeals = [];
+    _state._favoriteMeals = [];
+    _state._paginatedMeals = [];
+    _state._hasMore = true;
+    _state._historyTotalCount = 0;
+    notifyListeners();
   }
 
   Future<String> exportMealsToJson(List<Meal> mealsToExport) async {
