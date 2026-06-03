@@ -43,20 +43,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppState>(
-      builder: (context, appState, _) {
-        return MaterialApp(
-          title: 'NutriScan Calorie Tracker',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: appState.themeMode,
-          locale: appState.locale,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ShareIntentListener(child: ResponsiveLayout()),
-        );
-      },
+    final themeMode = context.select((AppState a) => a.themeMode);
+    final locale = context.select((AppState a) => a.locale);
+    return MaterialApp(
+      title: 'NutriScan Calorie Tracker',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: const ShareIntentListener(child: ResponsiveLayout()),
     );
   }
 }
