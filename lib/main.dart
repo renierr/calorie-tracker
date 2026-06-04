@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:ui' show PlatformDispatcher;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -11,30 +12,48 @@ import 'l10n/app_localizations.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Create and initialize the app state provider (restores SharedPreferences & DB caches)
-  final appState = AppState();
-  await appState.init();
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('[FATAL] FlutterError: ${details.exception}');
+    debugPrint('[FATAL] Stack: ${details.stack}');
+  };
 
-  // Process startup CLI arguments (Desktop Open With)
-  if (args.isNotEmpty &&
-      (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
-    final String filePath = args[0];
-    final File file = File(filePath);
-    if (await file.exists()) {
-      try {
-        final bytes = await file.readAsBytes();
-        await appState.handleIncomingImageBytes(bytes);
-      } catch (e) {
-        debugPrint("Error loading image from CLI argument: $e");
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    debugPrint('[FATAL] PlatformDispatcher Error: $error');
+    debugPrint('[FATAL] Stack: $stack');
+    return true;
+  };
+
+  await runZonedGuarded(
+    () async {
+      final appState = AppState();
+      await appState.init();
+
+      if (args.isNotEmpty &&
+          (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
+        final String filePath = args[0];
+        final File file = File(filePath);
+        if (await file.exists()) {
+          try {
+            final bytes = await file.readAsBytes();
+            await appState.handleIncomingImageBytes(bytes);
+          } catch (e) {
+            debugPrint("Error loading image from CLI argument: $e");
+          }
+        }
       }
-    }
-  }
 
-  runApp(
-    ChangeNotifierProvider<AppState>.value(
-      value: appState,
-      child: const MyApp(),
-    ),
+      runApp(
+        ChangeNotifierProvider<AppState>.value(
+          value: appState,
+          child: const MyApp(),
+        ),
+      );
+    },
+    (Object error, StackTrace stack) {
+      debugPrint('[FATAL] Uncaught async error in runZonedGuarded: $error');
+      debugPrint('[FATAL] Stack: $stack');
+    },
   );
 }
 
@@ -73,7 +92,6 @@ class _ShareIntentListenerState extends State<ShareIntentListener> {
   @override
   void initState() {
     super.initState();
-    // Intercept native shares only on Mobile (Android & iOS)
     if (Platform.isAndroid || Platform.isIOS) {
       _intentDataStreamSubscription = ReceiveSharingIntent.instance
           .getMediaStream()
