@@ -367,6 +367,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get prefsSaved => 'Einstellungen erfolgreich gespeichert!';
 
   @override
+  String get saveMacroGoals => 'Makro-Ziele speichern';
+
+  @override
   String get dbCleared => 'Datenbankverlauf gelöscht.';
 
   @override

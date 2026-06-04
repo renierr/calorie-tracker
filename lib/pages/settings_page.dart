@@ -123,7 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: 52,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.save),
-                  label: Text(AppLocalizations.of(context)!.savePreferences),
+                  label: Text(AppLocalizations.of(context)!.saveMacroGoals),
                   onPressed: () => _saveSettings(context.read<AppState>()),
                 ),
               ),
@@ -135,10 +135,10 @@ class _SettingsPageState extends State<SettingsPage> {
               const AiProviderConfigTile(),
               const SizedBox(height: 20),
 
-              const GamificationConfigTile(),
+              const SyncConfigCard(),
               const SizedBox(height: 20),
 
-              const SyncConfigCard(),
+              const GamificationConfigTile(),
               const SizedBox(height: 20),
 
               const MaintenanceConfigTile(),

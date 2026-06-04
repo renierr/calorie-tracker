@@ -112,6 +112,7 @@
   "permanentlyErase": "Permanently Erase Database",
   "savePreferences": "Save Preferences",
   "prefsSaved": "Preferences saved successfully!",
+  "saveMacroGoals": "Save Macro Goals",
   "dbCleared": "Database log history cleared.",
   "language": "Language",
   "english": "English",

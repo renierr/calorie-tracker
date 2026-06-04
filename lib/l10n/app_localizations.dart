@@ -746,6 +746,12 @@ abstract class AppLocalizations {
   /// **'Preferences saved successfully!'**
   String get prefsSaved;
 
+  /// No description provided for @saveMacroGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Macro Goals'**
+  String get saveMacroGoals;
+
   /// No description provided for @dbCleared.
   ///
   /// In en, this message translates to:
