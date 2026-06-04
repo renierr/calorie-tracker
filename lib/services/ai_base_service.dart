@@ -50,10 +50,10 @@ abstract class BaseAIService implements AIService {
       "notes": (string, concise breakdown in $targetLanguage)
     }
     
-    CRITICAL FOR 'notes': Write this as a natural, conversational paragraph. 
+    CRITICAL FOR 'notes': Write this as a natural, conversational paragraph not more then 2 sentences. 
     Do NOT use dashes, bullet points, or robotic labels like "Identified:" or "Assumptions:". 
     Instead, smoothly blend the identified ingredients and estimated weights into normal sentences, 
-    explicitly mention what you assumed for hidden oils or fats, and wrap up with a 1-sentence takeaway.""";
+    mention what you assumed for hidden oils or fats if you asumed any, and wrap up with a takeaway.""";
 
     if (includeAnthropicRawBlockInstruction) {
       instruction +=

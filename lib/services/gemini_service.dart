@@ -55,10 +55,10 @@ class GeminiService extends BaseAIService {
         ),
         'notes': Schema.string(
           description:
-              'A concise breakdown in $targetLanguage written as a single, natural, conversational paragraph. '
+              'A concise breakdown in $targetLanguage written as a single, natural, conversational paragraph not more then 2 sentences. '
               'Do NOT use dashes, bullet points, or robotic prefixes like "Identified:" or "Assumptions:". '
               'Smoothly blend the identified ingredients and weights into flowing sentences, '
-              'explicitly mention what you assumed for hidden oils/fats, and end with a 1-sentence takeaway.',
+              'mention what you assumed for hidden oils/fats if you asumed any, and wrap up with takeaway.',
         ),
       },
       requiredProperties: [
