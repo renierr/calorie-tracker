@@ -15,7 +15,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 
 ## ALWAYS
 
-- **Caveman terse style** (caveman.md): REQUIRED. Drop filler, articles, pleasantries.
+- **Caveman style**: Short, direct answers. No filler.
 - Do not run production compilation or release builds unless explicitly requested.
 - **Git Write Consent**: Never run git write operations (`git add`, `git commit`, `git push`) without fresh explicit approval for each write command.
 - Never mention AI agents, co-authorship, or AI generation in commit messages or code.
@@ -35,7 +35,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 - Keep answers extremely short and concise.
 - Use English for code, comments, and docs.
 - Use explicit return types for methods.
-- Avoid custom hex codes. Reference variables from `AppTheme` in `lib/theme/theme.dart`.
+- Reference colors from `AppTheme` in `lib/theme/theme.dart`. No hardcoded hex codes.
 - Bind UI screens to state using `Consumer<AppState>`, `context.watch<AppState>()`, or `context.read<AppState>()`. Prefer `context.watch<T>()` over `Provider.of<T>(context)` and `context.read<T>()` over `Provider.of<T>(context, listen: false)` for cleaner, modern 2026 syntax. Use `context.read<T>()` in button callbacks and lifecycle methods.
 - Log errors with clear service or page context prefixes to make debugging easy.
 - Extract dialogs, detailed cards, or list items to `lib/widgets/` to promote modular codebase structure.
@@ -71,18 +71,9 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 
 ---
 
-## Package Dependencies Reference
+## Dependencies
 
-| Package | Purpose |
-|---|---|
-| `sqflite_common_ffi` | SQLite on Windows Desktop |
-| `provider` | State management via `ChangeNotifier` |
-| `shared_preferences` | API key and preferences persistence |
-| `intl` / `flutter_localizations` | Date formatting and l10n |
-| `image_picker` | Image selection |
-| `file_selector` | Native Save As / Open dialogs |
-| `pdf` (as `pw`) / `printing` | PDF reports generation and printing |
-| `google_generative_ai` | Gemini structured scanning |
+Dependencies in `pubspec.yaml`. Check there before adding new packages.
 
 ---
 

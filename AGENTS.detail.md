@@ -9,17 +9,11 @@ This document provides deep technical details, schemas, and protocol flows for k
 ### Cross-Platform File Saving & Export (Images, Databases, Reports)
 To ensure seamless, crash-free file exporting (e.g. SQLite database copies, downloaded images, PDF reports) across different operating systems, follow this platform logic:
 
-- **Desktop (Windows, macOS, Linux)**:
+- **Desktop**:
   - Always use `getSaveLocation()` from `package:file_selector` to open a native file picker dialogue.
   - Require user to select the destination, then write the bytes directly.
 
-- **Mobile (Android)**:
-  - Do NOT call `getSaveLocation()`, which throws `UnimplementedError` on Android.
-  - Implement a three-stage automated fallback flow:
-    1. **Public Download Folder**: Try `/storage/emulated/0/Download/` first. If folder exists and is writable, save the file there so it is easily accessible.
-    2. **App External Storage Fallback**: If public write fails or folder is restricted, use `getExternalStorageDirectory()` (resolves to `/storage/emulated/0/Android/data/<package_name>/files/`). This requires zero permissions.
-    3. **App Document Sandbox Fallback**: If external storage is missing or unmounted, fallback to the secure `getApplicationDocumentsDirectory()` folder.
-  - **Notification Placement**: Never show `ScaffoldMessenger` snackbars inside dialogs (as they render behind the active dialog in the page's route). Display an auto-dismissing, elegant overlay `Dialog` centered on screen with `barrierColor: Colors.black26`.
+- **Mobile (Android)**: Multi-stage file save fallback (public Download → external storage → app docs) — see `file_save_helper.dart`. Never show snackbars inside dialogs.
 
 ### Native SQLite Database Export
 - **Path to Copy**: Defined in `DbHelper.exportDatabase({required String destPath})`. Retrieves the active SQLite database path and uses Dart's `File(src).copy(destPath)` to copy the live SQLite file.
@@ -32,7 +26,7 @@ To ensure seamless, crash-free file exporting (e.g. SQLite database copies, down
   4. Overwrites the live database file with the file specified by `backupPath`.
   5. Re-opens and runs migrations to return a valid active database handle.
 - **Platform-Specific UI Selection**:
-  - **Desktop (Windows, macOS, Linux)**: Opens native file picker restricted to `.db` files using `openFile()` from `package:file_selector`.
+  - **Desktop**: Opens native file picker restricted to `.db` files using `openFile()` from `package:file_selector`.
   - **Mobile (Android)**: Scans the external storage directory (`getExternalStorageDirectory()`) or fallback app documents directory for database backups matching the pattern `nutriscan_db_*.db`. Displays a sorted list in a dialog for selection.
 
 ---
@@ -129,41 +123,7 @@ sequenceDiagram
 
 ---
 
-## 5. Tab Navigation & State Rules
-
-- `selectedTabIndex` is managed within `AppState` in `lib/providers/app_state.dart`.
-- Scan success navigation triggers `AppState.selectTab(0)` to switch focus back to Dashboard.
-- Screen layouts bind to index updates inside `ResponsiveLayout`.
-
----
-
-## 6. Input Validation Specifications
-
-- Numeric constraints on macro text fields: enforced via `FilteringTextInputFormatter.digitsOnly`.
-- Scan date selection: defaults to today, allows retro-active date assignment in the past.
-
----
-
-## 7. Icon Generation & Assets
-
-- **Source Asset**: `assets/logo/logo.png`.
-- **Android Launcher Icon Generation**: Configured in `pubspec.yaml` under `flutter_launcher_icons:`. Generate using:
-  ```bash
-  flutter pub run flutter_launcher_icons
-  ```
-- **Windows Executable Icon**: Located at `windows/runner/resources/app_icon.ico`. Custom multi-resolution packaging (16x16 to 256x256).
-
----
-
-## 8. Windows Desktop OS Specifics
-
-- Path resolving in MSYS2 environment (backslashes vs front slashes).
-- Dynamic FFI initialization (`sqfliteFfiInit()`) inside `lib/helpers/db_helper.dart`.
-- Local app data directory retrieval via `getApplicationSupportDirectory()`.
-
----
-
-## 9. Reusable Custom Widgets Guide
+## 5. Reusable Custom Widgets Guide
 
 To maintain a premium, coherent layout style and prevent duplicate visual implementations, always leverage existing custom widgets from `lib/widgets/`:
 
@@ -174,6 +134,9 @@ To maintain a premium, coherent layout style and prevent duplicate visual implem
   - `label`: String label content.
   - `color`: Active color palette matching the button context.
   - `isOutlined`: Set `true` for a transparent background with colored borders (similar to standard outlined buttons), or `false` for full solid elevated coloring.
+  - `borderWidth`: Border stroke width (default 1.2).
+  - `borderRadius`: Corner radius (default 10).
+  - `padding`: Edge insets (default vertical 12, horizontal 16).
   - `onPressed`: Core trigger handler callback.
 
 ### AdaptiveCardHeader (`lib/widgets/adaptive/adaptive_card_header.dart`)
@@ -184,7 +147,7 @@ To maintain a premium, coherent layout style and prevent duplicate visual implem
 
 ---
 
-## 10. Activity Tracking & Meal vs. Activity Distinction
+## 6. Activity Tracking & Meal vs. Activity Distinction
 
 ### Stable ID Separation
 To track both nutritional logs and physical exercises without adding a redundant second table, the application routes both types through a unified `meals` SQLite database table. They are cleanly separated using a strict naming convention in their alphanumeric `shortId` unique identifier:
