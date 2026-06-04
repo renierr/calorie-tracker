@@ -5,10 +5,16 @@ mixin _SettingsState on ChangeNotifier {
 
   Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    _state._calorieGoal = prefs.getInt(AppState._keyCalorieGoal) ?? 2000;
-    _state._proteinGoal = prefs.getInt(AppState._keyProteinGoal) ?? 130;
-    _state._carbsGoal = prefs.getInt(AppState._keyCarbsGoal) ?? 220;
-    _state._fatGoal = prefs.getInt(AppState._keyFatGoal) ?? 70;
+    _state._calorieGoal =
+        prefs.getInt(AppState._keyCalorieGoal) ??
+        AppConstants.defaultCalorieGoal;
+    _state._proteinGoal =
+        prefs.getInt(AppState._keyProteinGoal) ??
+        AppConstants.defaultProteinGoal;
+    _state._carbsGoal =
+        prefs.getInt(AppState._keyCarbsGoal) ?? AppConstants.defaultCarbsGoal;
+    _state._fatGoal =
+        prefs.getInt(AppState._keyFatGoal) ?? AppConstants.defaultFatGoal;
     _state._historyFilter =
         prefs.getString(AppState._keyHistoryFilter) ?? 'all';
     _state._appLocale = prefs.getString(AppState._keyLocale) ?? 'en';
@@ -165,19 +171,23 @@ mixin _SettingsState on ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
 
       if (settings.containsKey('calorieGoal')) {
-        _state._calorieGoal = settings['calorieGoal'] as int? ?? 2000;
+        _state._calorieGoal =
+            settings['calorieGoal'] as int? ?? AppConstants.defaultCalorieGoal;
         await prefs.setInt(AppState._keyCalorieGoal, _state._calorieGoal);
       }
       if (settings.containsKey('proteinGoal')) {
-        _state._proteinGoal = settings['proteinGoal'] as int? ?? 130;
+        _state._proteinGoal =
+            settings['proteinGoal'] as int? ?? AppConstants.defaultProteinGoal;
         await prefs.setInt(AppState._keyProteinGoal, _state._proteinGoal);
       }
       if (settings.containsKey('carbsGoal')) {
-        _state._carbsGoal = settings['carbsGoal'] as int? ?? 220;
+        _state._carbsGoal =
+            settings['carbsGoal'] as int? ?? AppConstants.defaultCarbsGoal;
         await prefs.setInt(AppState._keyCarbsGoal, _state._carbsGoal);
       }
       if (settings.containsKey('fatGoal')) {
-        _state._fatGoal = settings['fatGoal'] as int? ?? 70;
+        _state._fatGoal =
+            settings['fatGoal'] as int? ?? AppConstants.defaultFatGoal;
         await prefs.setInt(AppState._keyFatGoal, _state._fatGoal);
       }
       if (settings.containsKey('historyFilter')) {

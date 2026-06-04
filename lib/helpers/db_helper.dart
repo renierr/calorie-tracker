@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -130,7 +130,7 @@ class DbHelper {
           'UPDATE gamification_stats SET acknowledged_badges = unlocked_badges',
         );
       } catch (e) {
-        // Safe fallback
+        debugPrint('[DbHelper] Migration v6: $e');
       }
     }
   }
@@ -439,14 +439,11 @@ class DbHelper {
     final List<String> whereClauses = ['deleted = 0', ...filter.clauses];
     final List<dynamic> whereArgs = [...filter.args];
 
-    final List<Map<String, dynamic>> maps = await db.rawQuery(
-      'SELECT COUNT(*) FROM $tableMeals WHERE ${whereClauses.join(' AND ')}',
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM $tableMeals WHERE ${whereClauses.join(' AND ')}',
       whereArgs,
     );
-    if (maps.isNotEmpty && maps.first.isNotEmpty) {
-      return maps.first.values.first as int? ?? 0;
-    }
-    return 0;
+    return result.isNotEmpty ? result.first['cnt'] as int? ?? 0 : 0;
   }
 
   Future<Uint8List?> getMealImageBytes(int id) async {

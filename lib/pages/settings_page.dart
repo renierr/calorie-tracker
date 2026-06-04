@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
+import '../constants.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/settings/target_goals_card.dart';
 import '../widgets/settings/maintenance_config_tile.dart';
@@ -76,10 +77,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Trigger Settings Save Helper
   Future<void> _saveSettings(AppState appState) async {
-    final int calories = int.tryParse(_caloriesController.text) ?? 2000;
-    final int protein = int.tryParse(_proteinController.text) ?? 130;
-    final int carbs = int.tryParse(_carbsController.text) ?? 220;
-    final int fat = int.tryParse(_fatController.text) ?? 70;
+    final int calories =
+        int.tryParse(_caloriesController.text) ??
+        AppConstants.defaultCalorieGoal;
+    final int protein =
+        int.tryParse(_proteinController.text) ??
+        AppConstants.defaultProteinGoal;
+    final int carbs =
+        int.tryParse(_carbsController.text) ?? AppConstants.defaultCarbsGoal;
+    final int fat =
+        int.tryParse(_fatController.text) ?? AppConstants.defaultFatGoal;
 
     await appState.saveSettings(
       calories: calories,

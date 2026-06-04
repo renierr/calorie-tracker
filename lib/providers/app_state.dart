@@ -12,6 +12,7 @@ import '../services/ai_service_config.dart';
 import '../services/ai_analysis_result.dart';
 import '../services/ai_service_factory.dart';
 import '../services/secure_storage_service.dart';
+import '../constants.dart';
 import 'package:image/image.dart' as img;
 
 part 'app_state_meals.dart';
@@ -75,10 +76,10 @@ class AppState extends ChangeNotifier
   final Map<String, String> _aiProviderReasoningEfforts = {};
   final Map<String, String> _aiProviderFallbacks = {};
 
-  int _calorieGoal = 2000;
-  int _proteinGoal = 130;
-  int _carbsGoal = 220;
-  int _fatGoal = 70;
+  int _calorieGoal = AppConstants.defaultCalorieGoal;
+  int _proteinGoal = AppConstants.defaultProteinGoal;
+  int _carbsGoal = AppConstants.defaultCarbsGoal;
+  int _fatGoal = AppConstants.defaultFatGoal;
   String _historyFilter = 'all';
   String _historyTypeFilter = 'all'; // 'all', 'meals', 'activities'
   String _appLocale = 'en';

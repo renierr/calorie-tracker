@@ -79,7 +79,7 @@ mixin _MealState on ChangeNotifier {
     _state._hasMore = true;
     _state._isFetchingMore = false;
     _state._paginatedMeals = await _state._dbHelper.getMealsPaginated(
-      limit: 20,
+      limit: AppConstants.pageSize,
       filterType: _state._historyFilter,
       typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
@@ -87,7 +87,7 @@ mixin _MealState on ChangeNotifier {
       includeImages: true,
     );
 
-    _state._hasMore = _state._paginatedMeals.length == 20;
+    _state._hasMore = _state._paginatedMeals.length == AppConstants.pageSize;
 
     _state._historyTotalCount = await _state._dbHelper.getMealsCount(
       filterType: _state._historyFilter,
@@ -112,7 +112,7 @@ mixin _MealState on ChangeNotifier {
         ? _state._paginatedMeals.last.timestamp
         : null;
     final nextPageMeals = await _state._dbHelper.getMealsPaginated(
-      limit: 20,
+      limit: AppConstants.pageSize,
       beforeTimestamp: beforeTimestamp,
       filterType: _state._historyFilter,
       typeFilter: _state._historyTypeFilter,
