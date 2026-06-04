@@ -28,7 +28,7 @@ class TrendChartCard extends StatelessWidget {
                 date.month == day.month &&
                 date.day == day.day;
           })
-          .fold(0, (sum, m) => sum + m.calories);
+          .fold(0, (sum, m) => sum + (m.isActivity ? -m.calories : m.calories));
     }).toList();
 
     // Find body weights for each of these days (carry forward most recent)
