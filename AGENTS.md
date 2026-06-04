@@ -17,7 +17,7 @@ For detailed schemas, protocol sequences, and format specifications, refer to [A
 
 - **Caveman style**: Short, direct answers. No filler.
 - Do not run production compilation or release builds unless explicitly requested.
-- **Git Write Consent**: Never run git write operations (`git add`, `git commit`, `git push`) without fresh explicit approval for each write command.
+- **Git Write Consent**: Never run git write operations (`git add`, `git commit`, `git push`) without fresh explicit approval for each write command. "Fix it" or "proceed" is not approval to commit or push — ask first. A single "commit" or "push" in a prompt does not authorize further commits later in the same session — each requires its own explicit approval.
 - Never mention AI agents, co-authorship, or AI generation in commit messages or code.
 - **Resilience to Rejected Commands**: If a user rejects or stops a command execution, continue the task and provide the alternative results or plan. A rejected command must not abort the overall execution.
 - **State Management & Data Flow**: Always channel database operations, macro targets, date navigations, body weight logging (`weightKg`), and history filters through `AppState` in `lib/providers/app_state.dart`. Never update local state variables in views for persistent data.
