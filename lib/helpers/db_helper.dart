@@ -592,4 +592,41 @@ class DbHelper {
       ORDER BY log_date ASC
     ''');
   }
+
+  Future<Map<String, dynamic>> getImageStorageStats() async {
+    final Database db = await database;
+    final result = await db.rawQuery('''
+      SELECT 
+        COUNT(*) as count,
+        COALESCE(SUM(LENGTH(imageBytes)), 0) as total_bytes
+      FROM $tableMeals
+      WHERE imageBytes IS NOT NULL AND deleted = 0
+    ''');
+    return result.first;
+  }
+
+  Future<int> getNotesCount() async {
+    final Database db = await database;
+    final result = await db.rawQuery('''
+      SELECT COUNT(*) as count
+      FROM $tableMeals
+      WHERE notes IS NOT NULL AND notes != '' AND deleted = 0
+    ''');
+    return result.first['count'] as int;
+  }
+
+  Future<Map<String, dynamic>> getDateRangeStats() async {
+    final Database db = await database;
+    final result = await db.rawQuery('''
+      SELECT 
+        MIN(timestamp) as first_entry,
+        MAX(timestamp) as last_entry,
+        COUNT(*) as total_entries,
+        SUM(CASE WHEN shortId LIKE 'ACT-%' THEN 1 ELSE 0 END) as activity_count,
+        SUM(CASE WHEN shortId NOT LIKE 'ACT-%' THEN 1 ELSE 0 END) as meal_count
+      FROM $tableMeals
+      WHERE deleted = 0
+    ''');
+    return result.first;
+  }
 }

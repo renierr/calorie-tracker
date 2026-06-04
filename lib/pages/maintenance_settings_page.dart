@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/settings/backup_section_card.dart';
+import '../widgets/settings/stats_section_card.dart';
 import '../widgets/settings/danger_section_card.dart';
 
 class MaintenanceSettingsPage extends StatelessWidget {
@@ -19,6 +20,8 @@ class MaintenanceSettingsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const BackupSectionCard(),
+              const SizedBox(height: 20),
+              const StatsSectionCard(),
               const SizedBox(height: 20),
               const DangerSectionCard(),
             ],

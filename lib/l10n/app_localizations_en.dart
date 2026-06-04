@@ -1279,4 +1279,156 @@ class AppLocalizationsEn extends AppLocalizations {
   String failedToSaveSettings(String error) {
     return 'Failed to save settings: $error';
   }
+
+  @override
+  String get statsSectionTitle => 'Statistics';
+
+  @override
+  String get statsSectionDesc =>
+      'View detailed reports about your nutrition and activity data.';
+
+  @override
+  String get statsViewBtn => 'View Statistics';
+
+  @override
+  String get statsOverviewTitle => 'Overview';
+
+  @override
+  String statsTotalEntries(Object count) {
+    return 'Total Entries: $count';
+  }
+
+  @override
+  String statsMealsCount(Object count) {
+    return 'Meals: $count';
+  }
+
+  @override
+  String statsActivitiesCount(Object count) {
+    return 'Activities: $count';
+  }
+
+  @override
+  String statsDaysTracked(Object count) {
+    return 'Days with Data: $count';
+  }
+
+  @override
+  String statsDateRange(Object first, Object last) {
+    return '$first — $last';
+  }
+
+  @override
+  String statsAvgDailyCalories(Object kcal) {
+    return 'Avg Daily Net: $kcal kcal';
+  }
+
+  @override
+  String statsBestDay(Object kcal) {
+    return 'Best Day: $kcal kcal';
+  }
+
+  @override
+  String statsWorstDay(Object kcal) {
+    return 'Worst Day: $kcal kcal';
+  }
+
+  @override
+  String statsDaysUnderGoal(Object count, Object pct, Object total) {
+    return 'Days Under Goal: $count/$total ($pct%)';
+  }
+
+  @override
+  String statsMostLoggedFood(Object count, Object food) {
+    return 'Most Logged: $food (${count}x)';
+  }
+
+  @override
+  String statsAvgProtein(Object g) {
+    return 'Avg Protein: ${g}g';
+  }
+
+  @override
+  String statsAvgCarbs(Object g) {
+    return 'Avg Carbs: ${g}g';
+  }
+
+  @override
+  String statsAvgFat(Object g) {
+    return 'Avg Fat: ${g}g';
+  }
+
+  @override
+  String get statsGamificationTitle => 'Gamification';
+
+  @override
+  String statsLevel(Object lvl, Object title) {
+    return 'Level $lvl — $title';
+  }
+
+  @override
+  String statsXp(Object xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String statsXpToNext(Object xp) {
+    return '$xp XP to next level';
+  }
+
+  @override
+  String statsStreak(Object days) {
+    return 'Streak: $days days';
+  }
+
+  @override
+  String statsBestStreak(Object days) {
+    return 'Best: $days days';
+  }
+
+  @override
+  String statsShields(Object count) {
+    return 'Shields: $count';
+  }
+
+  @override
+  String statsPrestigeStars(Object count) {
+    return 'Prestige Stars: $count';
+  }
+
+  @override
+  String statsBadges(Object count) {
+    return 'Badges: $count';
+  }
+
+  @override
+  String get statsStorageTitle => 'Storage';
+
+  @override
+  String statsDbSize(Object size) {
+    return 'Database: $size MB';
+  }
+
+  @override
+  String statsPhotos(Object avg, Object count, Object size) {
+    return 'Photos: $count ($size MB, $avg KB avg)';
+  }
+
+  @override
+  String statsWithNotes(Object count) {
+    return 'Entries with Notes: $count';
+  }
+
+  @override
+  String get statsBodyWeightTitle => 'Body Weight';
+
+  @override
+  String statsWeightEntries(Object count) {
+    return 'Weight Logs: $count';
+  }
+
+  @override
+  String statsWeightRange(Object max, Object min) {
+    return '$min kg — $max kg';
+  }
 }

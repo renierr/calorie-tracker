@@ -2323,6 +2323,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save settings: {error}'**
   String failedToSaveSettings(String error);
+
+  /// No description provided for @statsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statsSectionTitle;
+
+  /// No description provided for @statsSectionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'View detailed reports about your nutrition and activity data.'**
+  String get statsSectionDesc;
+
+  /// No description provided for @statsViewBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'View Statistics'**
+  String get statsViewBtn;
+
+  /// No description provided for @statsOverviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get statsOverviewTitle;
+
+  /// No description provided for @statsTotalEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Entries: {count}'**
+  String statsTotalEntries(Object count);
+
+  /// No description provided for @statsMealsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals: {count}'**
+  String statsMealsCount(Object count);
+
+  /// No description provided for @statsActivitiesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities: {count}'**
+  String statsActivitiesCount(Object count);
+
+  /// No description provided for @statsDaysTracked.
+  ///
+  /// In en, this message translates to:
+  /// **'Days with Data: {count}'**
+  String statsDaysTracked(Object count);
+
+  /// No description provided for @statsDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} — {last}'**
+  String statsDateRange(Object first, Object last);
+
+  /// No description provided for @statsAvgDailyCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Daily Net: {kcal} kcal'**
+  String statsAvgDailyCalories(Object kcal);
+
+  /// No description provided for @statsBestDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Day: {kcal} kcal'**
+  String statsBestDay(Object kcal);
+
+  /// No description provided for @statsWorstDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Worst Day: {kcal} kcal'**
+  String statsWorstDay(Object kcal);
+
+  /// No description provided for @statsDaysUnderGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Days Under Goal: {count}/{total} ({pct}%)'**
+  String statsDaysUnderGoal(Object count, Object pct, Object total);
+
+  /// No description provided for @statsMostLoggedFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Logged: {food} ({count}x)'**
+  String statsMostLoggedFood(Object count, Object food);
+
+  /// No description provided for @statsAvgProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Protein: {g}g'**
+  String statsAvgProtein(Object g);
+
+  /// No description provided for @statsAvgCarbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Carbs: {g}g'**
+  String statsAvgCarbs(Object g);
+
+  /// No description provided for @statsAvgFat.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Fat: {g}g'**
+  String statsAvgFat(Object g);
+
+  /// No description provided for @statsGamificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gamification'**
+  String get statsGamificationTitle;
+
+  /// No description provided for @statsLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {lvl} — {title}'**
+  String statsLevel(Object lvl, Object title);
+
+  /// No description provided for @statsXp.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP'**
+  String statsXp(Object xp);
+
+  /// No description provided for @statsXpToNext.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP to next level'**
+  String statsXpToNext(Object xp);
+
+  /// No description provided for @statsStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak: {days} days'**
+  String statsStreak(Object days);
+
+  /// No description provided for @statsBestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Best: {days} days'**
+  String statsBestStreak(Object days);
+
+  /// No description provided for @statsShields.
+  ///
+  /// In en, this message translates to:
+  /// **'Shields: {count}'**
+  String statsShields(Object count);
+
+  /// No description provided for @statsPrestigeStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Prestige Stars: {count}'**
+  String statsPrestigeStars(Object count);
+
+  /// No description provided for @statsBadges.
+  ///
+  /// In en, this message translates to:
+  /// **'Badges: {count}'**
+  String statsBadges(Object count);
+
+  /// No description provided for @statsStorageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage'**
+  String get statsStorageTitle;
+
+  /// No description provided for @statsDbSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Database: {size} MB'**
+  String statsDbSize(Object size);
+
+  /// No description provided for @statsPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos: {count} ({size} MB, {avg} KB avg)'**
+  String statsPhotos(Object avg, Object count, Object size);
+
+  /// No description provided for @statsWithNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries with Notes: {count}'**
+  String statsWithNotes(Object count);
+
+  /// No description provided for @statsBodyWeightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Body Weight'**
+  String get statsBodyWeightTitle;
+
+  /// No description provided for @statsWeightEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight Logs: {count}'**
+  String statsWeightEntries(Object count);
+
+  /// No description provided for @statsWeightRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{min} kg — {max} kg'**
+  String statsWeightRange(Object max, Object min);
 }
 
 class _AppLocalizationsDelegate

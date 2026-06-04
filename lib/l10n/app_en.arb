@@ -697,6 +697,39 @@
         "type": "String"
       }
     }
-  }
+  },
+  "statsSectionTitle": "Statistics",
+  "statsSectionDesc": "View detailed reports about your nutrition and activity data.",
+  "statsViewBtn": "View Statistics",
+  "statsOverviewTitle": "Overview",
+  "statsTotalEntries": "Total Entries: {count}",
+  "statsMealsCount": "Meals: {count}",
+  "statsActivitiesCount": "Activities: {count}",
+  "statsDaysTracked": "Days with Data: {count}",
+  "statsDateRange": "{first} — {last}",
+  "statsAvgDailyCalories": "Avg Daily Net: {kcal} kcal",
+  "statsBestDay": "Best Day: {kcal} kcal",
+  "statsWorstDay": "Worst Day: {kcal} kcal",
+  "statsDaysUnderGoal": "Days Under Goal: {count}/{total} ({pct}%)",
+  "statsMostLoggedFood": "Most Logged: {food} ({count}x)",
+  "statsAvgProtein": "Avg Protein: {g}g",
+  "statsAvgCarbs": "Avg Carbs: {g}g",
+  "statsAvgFat": "Avg Fat: {g}g",
+  "statsGamificationTitle": "Gamification",
+  "statsLevel": "Level {lvl} — {title}",
+  "statsXp": "{xp} XP",
+  "statsXpToNext": "{xp} XP to next level",
+  "statsStreak": "Streak: {days} days",
+  "statsBestStreak": "Best: {days} days",
+  "statsShields": "Shields: {count}",
+  "statsPrestigeStars": "Prestige Stars: {count}",
+  "statsBadges": "Badges: {count}",
+  "statsStorageTitle": "Storage",
+  "statsDbSize": "Database: {size} MB",
+  "statsPhotos": "Photos: {count} ({size} MB, {avg} KB avg)",
+  "statsWithNotes": "Entries with Notes: {count}",
+  "statsBodyWeightTitle": "Body Weight",
+  "statsWeightEntries": "Weight Logs: {count}",
+  "statsWeightRange": "{min} kg — {max} kg"
 }
 

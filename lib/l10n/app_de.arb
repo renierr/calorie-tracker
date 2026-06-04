@@ -699,6 +699,39 @@
         "type": "String"
       }
     }
-  }
+  },
+  "statsSectionTitle": "Statistiken",
+  "statsSectionDesc": "Zeige detaillierte Berichte zu deinen Ernährungs- und Aktivitätsdaten.",
+  "statsViewBtn": "Statistiken anzeigen",
+  "statsOverviewTitle": "Übersicht",
+  "statsTotalEntries": "Einträge gesamt: {count}",
+  "statsMealsCount": "Mahlzeiten: {count}",
+  "statsActivitiesCount": "Aktivitäten: {count}",
+  "statsDaysTracked": "Tage mit Daten: {count}",
+  "statsDateRange": "{first} — {last}",
+  "statsAvgDailyCalories": "Ø Netto-Tageskalorien: {kcal} kcal",
+  "statsBestDay": "Bester Tag: {kcal} kcal",
+  "statsWorstDay": "Schlechtester Tag: {kcal} kcal",
+  "statsDaysUnderGoal": "Tage unter Ziel: {count}/{total} ({pct}%)",
+  "statsMostLoggedFood": "Häufigster Eintrag: {food} ({count}x)",
+  "statsAvgProtein": "Ø Protein: {g}g",
+  "statsAvgCarbs": "Ø Kohlenhydrate: {g}g",
+  "statsAvgFat": "Ø Fett: {g}g",
+  "statsGamificationTitle": "Gamification",
+  "statsLevel": "Level {lvl} — {title}",
+  "statsXp": "{xp} XP",
+  "statsXpToNext": "{xp} XP bis zum nächsten Level",
+  "statsStreak": "Serie: {days} Tage",
+  "statsBestStreak": "Beste: {days} Tage",
+  "statsShields": "Schilde: {count}",
+  "statsPrestigeStars": "Prestige-Sterne: {count}",
+  "statsBadges": "Abzeichen: {count}",
+  "statsStorageTitle": "Speicher",
+  "statsDbSize": "Datenbank: {size} MB",
+  "statsPhotos": "Fotos: {count} ({size} MB, {avg} KB Ø)",
+  "statsWithNotes": "Einträge mit Notizen: {count}",
+  "statsBodyWeightTitle": "Körpergewicht",
+  "statsWeightEntries": "Gewichtseinträge: {count}",
+  "statsWeightRange": "{min} kg — {max} kg"
 }
 
