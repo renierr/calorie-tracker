@@ -102,12 +102,14 @@ abstract class BaseAIService implements AIService {
     required String userCorrection,
   }) {
     return 'Original Meal: "$originalName", '
-        'Calories: $originalCalories kcal, '
-        'Protein: ${originalProtein}g, '
-        'Carbs: ${originalCarbs}g, '
-        'Fat: ${originalFat}g, '
-        'Notes: "$originalNotes". '
+        'Original Calories: $originalCalories kcal, '
+        'Original Protein: ${originalProtein}g, '
+        'Original Carbs: ${originalCarbs}g, '
+        'Original Fat: ${originalFat}g, '
+        'Original Notes: "$originalNotes". '
         'User eaten adjustment/correction instruction: "$userCorrection". '
-        'Please re-evaluate portions and visual changes to compute new nutritional values.';
+        'Please re-evaluate portions and visual changes to compute new nutritional values.'
+        'Originals should be adjusted if user provided corrections or hints that not all of the meal was eaten.'
+        'New Notes should be concise and max 2 sentences highlight the partly eaten hints if provided.';
   }
 }
