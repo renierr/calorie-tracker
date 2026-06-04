@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../adaptive/adaptive_card_header.dart';
-import '../adaptive/responsive_icon_button.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../../helpers/db_restore_helper.dart';
 import '../../helpers/settings_restore_helper.dart';
+import '../adaptive/adaptive_card_header.dart';
+import '../adaptive/responsive_icon_button.dart';
 
-class MaintenanceCard extends StatelessWidget {
-  const MaintenanceCard({super.key});
+class DangerSectionCard extends StatelessWidget {
+  const DangerSectionCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: AppTheme.premiumCardDecoration(
@@ -28,11 +29,11 @@ class MaintenanceCard extends StatelessWidget {
           AdaptiveCardHeader(
             icon: Icons.dangerous,
             iconColor: AppTheme.accentRed,
-            title: localizations.dangerZone,
+            title: l10n.dangerZone,
           ),
           const SizedBox(height: 10),
           Text(
-            localizations.dangerDesc,
+            l10n.dangerDesc,
             style: TextStyle(
               color: colors.textSecondary,
               fontSize: 12,
@@ -44,7 +45,7 @@ class MaintenanceCard extends StatelessWidget {
             width: double.infinity,
             child: ResponsiveIconButton(
               icon: const Icon(Icons.delete_forever, color: AppTheme.accentRed),
-              label: localizations.clearHistory,
+              label: l10n.clearHistory,
               color: AppTheme.accentRed,
               onPressed: () => _confirmEraseAll(context),
             ),
@@ -57,7 +58,7 @@ class MaintenanceCard extends StatelessWidget {
                 Icons.settings_backup_restore,
                 color: AppTheme.accentRed,
               ),
-              label: localizations.restoreDbBtn,
+              label: l10n.restoreDbBtn,
               color: AppTheme.accentRed,
               onPressed: () => DbRestoreHelper.handleRestoreFlow(
                 context,
@@ -70,7 +71,7 @@ class MaintenanceCard extends StatelessWidget {
             width: double.infinity,
             child: ResponsiveIconButton(
               icon: const Icon(Icons.settings, color: AppTheme.accentRed),
-              label: localizations.restoreSettingsBtn,
+              label: l10n.restoreSettingsBtn,
               color: AppTheme.accentRed,
               onPressed: () => SettingsRestoreHelper.handleRestoreFlow(
                 context,
@@ -86,25 +87,25 @@ class MaintenanceCard extends StatelessWidget {
   void _confirmEraseAll(BuildContext context) {
     final appState = context.read<AppState>();
     final colors = AppTheme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: colors.surface,
           title: Text(
-            localizations.eraseAll,
+            l10n.eraseAll,
             style: const TextStyle(
               color: AppTheme.accentRed,
               fontWeight: FontWeight.bold,
             ),
           ),
-          content: Text(localizations.eraseAllDesc),
+          content: Text(l10n.eraseAllDesc),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
-                localizations.cancel,
+                l10n.cancel,
                 style: TextStyle(color: colors.textSecondary),
               ),
             ),
@@ -116,11 +117,11 @@ class MaintenanceCard extends StatelessWidget {
                 await appState.clearAllMeals();
                 if (!context.mounted) return;
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(localizations.dbCleared)),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(l10n.dbCleared)));
               },
-              child: Text(localizations.permanentlyErase),
+              child: Text(l10n.permanentlyErase),
             ),
           ],
         );

@@ -1023,6 +1023,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get gamificationConfigureBtn => 'Erfolge konfigurieren';
 
   @override
+  String get maintenanceSettingsTitle => 'Wartung & Backup';
+
+  @override
+  String get maintenanceSettingsDesc =>
+      'Sichere, stelle wieder her und verwalte deine Datenbank und Einstellungen.';
+
+  @override
+  String get maintenanceConfigureBtn => 'Wartungscenter öffnen';
+
+  @override
   String get adminTriggersTitle => 'Entwickler- / Admin-Steuerung';
 
   @override

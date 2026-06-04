@@ -1862,6 +1862,24 @@ abstract class AppLocalizations {
   /// **'Configure Achievements'**
   String get gamificationConfigureBtn;
 
+  /// No description provided for @maintenanceSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance & Backup'**
+  String get maintenanceSettingsTitle;
+
+  /// No description provided for @maintenanceSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup, restore, and manage your database and settings.'**
+  String get maintenanceSettingsDesc;
+
+  /// No description provided for @maintenanceConfigureBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Maintenance Center'**
+  String get maintenanceConfigureBtn;
+
   /// No description provided for @adminTriggersTitle.
   ///
   /// In en, this message translates to:

@@ -1014,6 +1014,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gamificationConfigureBtn => 'Configure Achievements';
 
   @override
+  String get maintenanceSettingsTitle => 'Maintenance & Backup';
+
+  @override
+  String get maintenanceSettingsDesc =>
+      'Backup, restore, and manage your database and settings.';
+
+  @override
+  String get maintenanceConfigureBtn => 'Open Maintenance Center';
+
+  @override
   String get adminTriggersTitle => 'Developer Achievement Controls';
 
   @override

@@ -4,10 +4,9 @@ import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/settings/target_goals_card.dart';
-import '../widgets/settings/maintenance_card.dart';
+import '../widgets/settings/maintenance_config_tile.dart';
 import '../widgets/settings/language_theme_card.dart';
 import '../widgets/settings/notifications_card.dart';
-import '../widgets/settings/export_card.dart';
 import '../widgets/settings/sync_config_card.dart';
 import '../widgets/settings/version_card.dart';
 import '../widgets/settings/ai_provider_config_tile.dart';
@@ -111,18 +110,6 @@ class _SettingsPageState extends State<SettingsPage> {
               const LanguageThemeCard(),
               const SizedBox(height: 20),
 
-              const NotificationsCard(),
-              const SizedBox(height: 20),
-
-              const AiProviderConfigTile(),
-              const SizedBox(height: 20),
-
-              const GamificationConfigTile(),
-              const SizedBox(height: 20),
-
-              const SyncConfigCard(),
-              const SizedBox(height: 20),
-
               TargetGoalsCard(
                 caloriesController: _caloriesController,
                 proteinController: _proteinController,
@@ -142,11 +129,20 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const SizedBox(height: 30),
 
-              const MaintenanceCard(),
+              const NotificationsCard(),
               const SizedBox(height: 20),
 
-              const ExportCard(),
-              const SizedBox(height: 30),
+              const AiProviderConfigTile(),
+              const SizedBox(height: 20),
+
+              const GamificationConfigTile(),
+              const SizedBox(height: 20),
+
+              const SyncConfigCard(),
+              const SizedBox(height: 20),
+
+              const MaintenanceConfigTile(),
+              const SizedBox(height: 20),
 
               const VersionCard(),
               const SizedBox(height: 20),
