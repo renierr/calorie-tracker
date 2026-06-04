@@ -140,11 +140,9 @@ mixin _SettingsState on ChangeNotifier {
         'notificationsEnabled': _state._notificationsEnabled,
         'aiProvider': _state._aiProvider,
         'aiModel': _state._aiModel,
-        'aiApiKey': _state._aiApiKey,
         'aiCustomUrl': _state._aiCustomUrl,
         'aiReasoningEffort': _state._aiReasoningEffort,
         'aiProviderModels': _state._aiProviderModels,
-        'aiProviderApiKeys': _state._aiProviderApiKeys,
         'aiProviderCustomUrls': _state._aiProviderCustomUrls,
         'aiProviderReasoningEfforts': _state._aiProviderReasoningEfforts,
       },
@@ -235,20 +233,6 @@ mixin _SettingsState on ChangeNotifier {
         final String pKey = _state._aiProvider.trim().toLowerCase();
         await prefs.setString('ai_model_$pKey', _state._aiModel);
       }
-      if (settings.containsKey('aiApiKey')) {
-        _state._aiApiKey = settings['aiApiKey'] as String? ?? '';
-        if (_state._aiApiKey.isEmpty && settings.containsKey('geminiApiKey')) {
-          _state._aiApiKey = settings['geminiApiKey'] as String? ?? '';
-        }
-        await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
-        final String pKey = _state._aiProvider.trim().toLowerCase();
-        await prefs.setString('ai_api_key_$pKey', _state._aiApiKey);
-      } else if (settings.containsKey('geminiApiKey')) {
-        _state._aiApiKey = settings['geminiApiKey'] as String? ?? '';
-        await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
-        final String pKey = _state._aiProvider.trim().toLowerCase();
-        await prefs.setString('ai_api_key_$pKey', _state._aiApiKey);
-      }
       if (settings.containsKey('aiCustomUrl')) {
         _state._aiCustomUrl = settings['aiCustomUrl'] as String? ?? '';
         await prefs.setString(AppState._keyAiCustomUrl, _state._aiCustomUrl);
@@ -277,17 +261,6 @@ mixin _SettingsState on ChangeNotifier {
           _state._aiProviderModels[entry.key] = entry.value.toString();
           await prefs.setString(
             'ai_model_${entry.key}',
-            entry.value.toString(),
-          );
-        }
-      }
-      if (settings.containsKey('aiProviderApiKeys')) {
-        final Map<String, dynamic> keys =
-            settings['aiProviderApiKeys'] as Map<String, dynamic>? ?? {};
-        for (final entry in keys.entries) {
-          _state._aiProviderApiKeys[entry.key] = entry.value.toString();
-          await prefs.setString(
-            'ai_api_key_${entry.key}',
             entry.value.toString(),
           );
         }

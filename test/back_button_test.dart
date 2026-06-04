@@ -3,10 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:calorie_tracker/layout/app_adaptive_layout.dart';
 import 'package:calorie_tracker/providers/app_state.dart';
+import 'package:calorie_tracker/services/secure_storage_service.dart';
 import 'package:calorie_tracker/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MockAppState extends AppState {
+  MockAppState() : super(secureStorage: InMemorySecureStorage());
   int _tab = 0;
 
   @override

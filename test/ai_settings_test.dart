@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:calorie_tracker/providers/app_state.dart';
+import 'package:calorie_tracker/services/secure_storage_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -10,8 +11,12 @@ void main() {
       SharedPreferences.setMockInitialValues({});
     });
 
+    AppState createAppState() {
+      return AppState(secureStorage: InMemorySecureStorage());
+    }
+
     test('should cache and save settings per provider', () async {
-      final appState = AppState();
+      final appState = createAppState();
       await appState.loadAISettings();
 
       // Set and save settings for OpenAI
@@ -58,12 +63,11 @@ void main() {
       expect(appState.getReasoningEffortForProvider('anthropic'), 'medium');
 
       // Load into another AppState instance to test persistence
-      final appState2 = AppState();
+      final appState2 = createAppState();
       await appState2.loadAISettings();
 
-      // Verify settings are loaded and persisted per provider
+      // Non-key settings persist via SharedPreferences
       expect(appState2.getModelForProvider('openai'), 'gpt-4o');
-      expect(appState2.getApiKeyForProvider('openai'), 'sk-12345');
       expect(appState2.getCustomUrlForProvider('openai'), '');
       expect(appState2.getReasoningEffortForProvider('openai'), 'low');
 
@@ -71,7 +75,6 @@ void main() {
         appState2.getModelForProvider('anthropic'),
         'claude-3-5-sonnet-latest',
       );
-      expect(appState2.getApiKeyForProvider('anthropic'), 'anthropic-key');
       expect(
         appState2.getCustomUrlForProvider('anthropic'),
         'http://custom-anthropic.com',
@@ -80,7 +83,7 @@ void main() {
     });
 
     test('should export and import all provider settings correctly', () async {
-      final appState = AppState();
+      final appState = createAppState();
       await appState.loadAISettings();
 
       // Configure provider settings
@@ -104,20 +107,19 @@ void main() {
 
       // Verify that all providers settings exist in the JSON
       expect(jsonStr.contains('aiProviderModels'), true);
-      expect(jsonStr.contains('aiProviderApiKeys'), true);
+      expect(jsonStr.contains('aiProviderApiKeys'), false);
       expect(jsonStr.contains('aiProviderCustomUrls'), true);
       expect(jsonStr.contains('aiProviderReasoningEfforts'), true);
       expect(jsonStr.contains('gpt-4o'), true);
-      expect(jsonStr.contains('anthropic-key'), true);
 
       // Clear shared preferences
       SharedPreferences.setMockInitialValues({});
 
       // Import settings into a new AppState
-      final appState2 = AppState();
+      final appState2 = createAppState();
       await appState2.loadAISettings(); // will start fresh/empty
 
-      // Expect to be empty
+      // Expect to be empty (API keys not stored in SharedPreferences anymore)
       expect(appState2.getApiKeyForProvider('openai'), '');
 
       // Import settings from JSON
@@ -125,7 +127,7 @@ void main() {
 
       // Verify settings successfully restored for all providers
       expect(appState2.getModelForProvider('openai'), 'gpt-4o');
-      expect(appState2.getApiKeyForProvider('openai'), 'sk-12345');
+      expect(appState2.getApiKeyForProvider('openai'), ''); // not exported
       expect(appState2.getCustomUrlForProvider('openai'), '');
       expect(appState2.getReasoningEffortForProvider('openai'), 'low');
 
@@ -133,7 +135,7 @@ void main() {
         appState2.getModelForProvider('anthropic'),
         'claude-3-5-sonnet-latest',
       );
-      expect(appState2.getApiKeyForProvider('anthropic'), 'anthropic-key');
+      expect(appState2.getApiKeyForProvider('anthropic'), ''); // not exported
       expect(
         appState2.getCustomUrlForProvider('anthropic'),
         'http://custom-anthropic.com',

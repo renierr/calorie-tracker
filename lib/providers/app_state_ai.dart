@@ -84,7 +84,15 @@ mixin _AiState on ChangeNotifier {
         _state._aiProvider,
       );
     }
-    _state._aiApiKey = prefs.getString(AppState._keyAiApiKey) ?? '';
+    // Read current API key from secure storage, fall back to SharedPreferences
+    final secureCurrentKey = await _state.secureStorage.readApiKey(
+      _state._aiProvider,
+    );
+    if (secureCurrentKey != null && secureCurrentKey.isNotEmpty) {
+      _state._aiApiKey = secureCurrentKey;
+    } else {
+      _state._aiApiKey = prefs.getString(AppState._keyAiApiKey) ?? '';
+    }
     _state._aiCustomUrl = prefs.getString(AppState._keyAiCustomUrl) ?? '';
     _state._aiReasoningEffort =
         prefs.getString(AppState._keyAiReasoningEffort) ?? 'none';
@@ -92,12 +100,13 @@ mixin _AiState on ChangeNotifier {
         prefs.getString(AppState._keyAiFallbackProvider) ?? 'none';
 
     // Fallback/Migration for legacy Gemini key
-    final legacyGeminiKey = prefs.getString(AppState._keyGeminiApiKey);
-    if (_state._aiApiKey.isEmpty &&
-        legacyGeminiKey != null &&
-        legacyGeminiKey.isNotEmpty) {
-      _state._aiApiKey = legacyGeminiKey;
-      await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
+    if (_state._aiApiKey.isEmpty) {
+      final legacyGeminiKey = prefs.getString(AppState._keyGeminiApiKey);
+      if (legacyGeminiKey != null && legacyGeminiKey.isNotEmpty) {
+        _state._aiApiKey = legacyGeminiKey;
+        await _state.secureStorage.writeApiKey('gemini', legacyGeminiKey);
+        await prefs.remove(AppState._keyGeminiApiKey);
+      }
     }
 
     // Load provider-specific settings
@@ -117,15 +126,18 @@ mixin _AiState on ChangeNotifier {
         }
       }
 
-      // API Key:
-      final pApiKey = prefs.getString('ai_api_key_$pKey');
-      if (pApiKey != null) {
-        _state._aiProviderApiKeys[pKey] = pApiKey;
+      // API Key (from secure storage, fallback to SharedPreferences):
+      final secureKey = await _state.secureStorage.readApiKey(pKey);
+      if (secureKey != null && secureKey.isNotEmpty) {
+        _state._aiProviderApiKeys[pKey] = secureKey;
       } else {
-        if (_state._aiProvider.toLowerCase() == pKey) {
+        final spKey = prefs.getString('ai_api_key_$pKey');
+        if (spKey != null && spKey.isNotEmpty) {
+          _state._aiProviderApiKeys[pKey] = spKey;
+        } else if (_state._aiProvider.toLowerCase() == pKey) {
           _state._aiProviderApiKeys[pKey] = _state._aiApiKey;
         } else if (pKey == 'gemini') {
-          _state._aiProviderApiKeys[pKey] = legacyGeminiKey ?? '';
+          _state._aiProviderApiKeys[pKey] = _state._aiApiKey;
         } else {
           _state._aiProviderApiKeys[pKey] = '';
         }
@@ -159,6 +171,10 @@ mixin _AiState on ChangeNotifier {
       final pFallback = prefs.getString('ai_fallback_$pKey');
       _state._aiProviderFallbacks[pKey] = pFallback ?? 'none';
     }
+
+    // Migrate any remaining API keys from SharedPreferences to secure storage
+    await _state.secureStorage.migrateFromSharedPreferences(prefs);
+
     notifyListeners();
   }
 
@@ -180,7 +196,10 @@ mixin _AiState on ChangeNotifier {
 
     await prefs.setString(AppState._keyAiProvider, _state._aiProvider);
     await prefs.setString(AppState._keyAiModel, _state._aiModel);
-    await prefs.setString(AppState._keyAiApiKey, _state._aiApiKey);
+    await _state.secureStorage.writeApiKey(
+      provider.trim().toLowerCase(),
+      _state._aiApiKey,
+    );
     await prefs.setString(AppState._keyAiCustomUrl, _state._aiCustomUrl);
     await prefs.setString(
       AppState._keyAiReasoningEffort,
@@ -200,7 +219,7 @@ mixin _AiState on ChangeNotifier {
     _state._aiProviderFallbacks[pKey] = fallbackProvider.trim();
 
     await prefs.setString('ai_model_$pKey', model.trim());
-    await prefs.setString('ai_api_key_$pKey', apiKey.trim());
+    await _state.secureStorage.writeApiKey(pKey, apiKey.trim());
     await prefs.setString('ai_custom_url_$pKey', customUrl.trim());
     await prefs.setString('ai_reasoning_effort_$pKey', reasoningEffort.trim());
     await prefs.setString('ai_fallback_$pKey', fallbackProvider.trim());

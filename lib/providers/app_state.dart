@@ -9,6 +9,7 @@ import '../models/gamification_model.dart';
 import '../l10n/app_localizations.dart';
 import '../services/sync_service.dart';
 import '../services/ai_service.dart';
+import '../services/secure_storage_service.dart';
 import 'package:image/image.dart' as img;
 
 part 'app_state_meals.dart';
@@ -28,6 +29,12 @@ class AppState extends ChangeNotifier
         _GamificationState {
   // SQLite instance
   final DbHelper _dbHelper = DbHelper.instance;
+
+  // Secure storage for credentials (injectable for tests)
+  final SecureStorage secureStorage;
+
+  AppState({SecureStorage? secureStorage})
+    : secureStorage = secureStorage ?? createSecureStorage();
 
   // Preferences & settings keys
   static const String _keyGeminiApiKey = 'gemini_api_key';
