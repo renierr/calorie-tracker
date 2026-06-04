@@ -6,7 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../widgets/adaptive/adaptive_card_header.dart';
 import '../widgets/settings/gemini_info_dialog.dart';
 import '../widgets/settings/api_disclaimer_dialog.dart';
-import '../services/ai_service.dart';
+import '../services/ai_service_config.dart';
 
 class AISettingsPage extends StatefulWidget {
   const AISettingsPage({super.key});

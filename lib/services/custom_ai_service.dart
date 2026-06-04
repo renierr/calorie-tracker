@@ -1,4 +1,8 @@
-part of 'ai_service.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+import 'ai_analysis_result.dart';
+import 'ai_base_service.dart';
 
 class CustomAIService extends BaseAIService {
   @override
@@ -22,7 +26,6 @@ class CustomAIService extends BaseAIService {
 
     final String activeModel = getActiveModel(model);
 
-    // Parse the endpoint URL robustly
     String url = (customUrl ?? '').trim();
     if (url.isEmpty) {
       throw Exception('Custom API Endpoint Base URL is required.');
@@ -102,7 +105,6 @@ class CustomAIService extends BaseAIService {
       );
     }
 
-    // Handle potential raw JSON string that isn't pre-cleaned
     String jsonString = messageContent.trim();
     if (jsonString.startsWith('```json')) {
       jsonString = jsonString.substring(7);
@@ -145,7 +147,6 @@ class CustomAIService extends BaseAIService {
       headers['Authorization'] = 'Bearer $apiKey';
     }
 
-    // Try a simple ping post request
     final response = await http
         .post(
           Uri.parse(url),

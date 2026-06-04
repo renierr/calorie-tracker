@@ -1,4 +1,9 @@
-part of 'ai_service.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+import 'ai_analysis_result.dart';
+import 'ai_base_service.dart';
+import 'ai_service_config.dart';
 
 class AnthropicService extends BaseAIService {
   @override
@@ -43,7 +48,7 @@ class AnthropicService extends BaseAIService {
         !AIServiceConfig.providerModels['anthropic']!.contains(activeModel);
 
     if (isThinkingModel && reasoningEffort != 'none') {
-      int budgetTokens = 2048; // default to medium
+      int budgetTokens = 2048;
       if (reasoningEffort == 'low') {
         budgetTokens = 1024;
       } else if (reasoningEffort == 'high') {
@@ -102,7 +107,6 @@ class AnthropicService extends BaseAIService {
       throw Exception('Empty content returned from Anthropic API.');
     }
 
-    // Find the text block since Claude might return a thinking block before the text block
     String? messageText;
     for (final block in content) {
       if (block is Map<String, dynamic> && block['type'] == 'text') {
@@ -115,7 +119,6 @@ class AnthropicService extends BaseAIService {
       throw Exception('Received empty text content from Anthropic.');
     }
 
-    // Attempt to extract JSON if Claude wraps it in backticks
     String jsonString = messageText.trim();
     if (jsonString.startsWith('```json')) {
       jsonString = jsonString.substring(7);

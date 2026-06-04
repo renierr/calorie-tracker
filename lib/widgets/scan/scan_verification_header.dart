@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../layout/adaptive_breakpoints.dart';
 import '../../theme/theme.dart';
-import '../../services/ai_service.dart';
+import '../../services/ai_analysis_result.dart';
 import '../../l10n/app_localizations.dart';
 
 class ScanVerificationHeader extends StatelessWidget {

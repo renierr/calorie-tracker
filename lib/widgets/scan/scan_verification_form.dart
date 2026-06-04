@@ -5,7 +5,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../models/meal_model.dart';
-import '../../services/ai_service.dart';
+import '../../services/ai_analysis_result.dart';
 import '../../l10n/app_localizations.dart';
 import '../meal_form_fields.dart';
 import 'scan_verification_header.dart';

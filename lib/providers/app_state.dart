@@ -8,7 +8,9 @@ import '../models/meal_model.dart';
 import '../models/gamification_model.dart';
 import '../l10n/app_localizations.dart';
 import '../services/sync_service.dart';
-import '../services/ai_service.dart';
+import '../services/ai_service_config.dart';
+import '../services/ai_analysis_result.dart';
+import '../services/ai_service_factory.dart';
 import '../services/secure_storage_service.dart';
 import 'package:image/image.dart' as img;
 

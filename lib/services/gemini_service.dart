@@ -1,4 +1,9 @@
-part of 'ai_service.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'ai_analysis_result.dart';
+import 'ai_base_service.dart';
+import 'ai_service_config.dart';
 
 class GeminiService extends BaseAIService {
   @override
@@ -107,7 +112,6 @@ class GeminiService extends BaseAIService {
       model: getActiveModel(model),
       apiKey: apiKey,
     );
-    // Execute a cheap operation like counting tokens to verify key
     await generativeModel.countTokens([Content.text('Ping')]);
   }
 }

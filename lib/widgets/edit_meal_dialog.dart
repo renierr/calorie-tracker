@@ -6,7 +6,7 @@ import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
-import '../services/ai_service.dart';
+import '../services/ai_base_service.dart';
 import 'meal_form_fields.dart';
 import 'scan/ai_fallback_dialog.dart';
 

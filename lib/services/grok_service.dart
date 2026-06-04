@@ -1,4 +1,9 @@
-part of 'ai_service.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+import 'ai_analysis_result.dart';
+import 'ai_base_service.dart';
+import 'ai_service_config.dart';
 
 class GrokService extends BaseAIService {
   @override
