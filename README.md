@@ -16,7 +16,7 @@ Backed by advanced multi-provider visual AI models, NutriScan looks at your food
 Need adjustments? Simply enter an interactive **Correction Prompt** (e.g., *"I only ate half"* or *"add 50g chicken breast"*) during verification or from the edit dialog, and the AI will re-evaluate your macros instantly.
 
 > [!NOTE]
-> **API Key & Manual Logging**: To use the visual scanner, you must provide your own API key for your chosen provider (Google Gemini, OpenAI, or Anthropic) in the Settings page. However, **manual meal logging is always fully supported** at all times, even without an API key or active internet connection.
+> **API Key & Manual Logging**: To use the visual scanner, you must provide your own API key for your chosen provider (Google Gemini, OpenAI, Anthropic, Grok, or Custom AI) in the Settings page. However, **manual meal logging is always fully supported** at all times, even without an API key or active internet connection.
 
 ### 🏃‍♀️ Dynamic Activity Tracking
 Track workouts, exercises, and physical activities (like running, swimming, and cycling) alongside your meals. 
@@ -39,7 +39,7 @@ between your nutrition goals and your weight progress on a unified dashboard.
 ### 📂 Favorites & Easy Filtering
 Quickly look back at your history or search for your favorite meals. 
 
-With custom tags and favorites tracking, you can instantly find and repeat high-protein breakfasts, low-carb snacks, or balanced dinners with a single tap.
+With favorites tracking, you can instantly find and repeat high-protein breakfasts, low-carb snacks, or balanced dinners with a single tap.
 
 ### 📄 Elegant PDF Summary Reports
 Create high-end, professional PDF reports of your nutritional logs. 
@@ -82,7 +82,7 @@ Overview of key files and directories under the `lib/` directory:
 ### Key Technical Systems
 
 1. **Multi-Provider AI Scanning & Re-Evaluation**:
-   - Analyzes photos using Gemini, OpenAI, Anthropic, or Custom AI endpoints with strict structured JSON schemas to guarantee exact calorie and macro totals.
+   - Analyzes photos using Gemini, OpenAI, Anthropic, Grok, or Custom AI endpoints with strict structured JSON schemas to guarantee exact calorie and macro totals.
    - Supports live dynamic re-evaluation using correction prompts, merging historical image bytes and new prompt instructions.
    - Interactive Verification Form allows users to review and adjust values before saving.
 
@@ -92,7 +92,7 @@ Overview of key files and directories under the `lib/` directory:
 
 3. **Offline-First SQLite Storage**:
    - Highly performant database schema storing meal descriptions, macro grams (Protein, Carbohydrates, Lipid Fats), total calories, body weight in kg, AI confidence ratings, notes, dates, and raw photo bytes (BLOB).
-   - Utilizes `sqflite` on Android and FFI bindings on Windows Desktop.
+   - Utilizes `sqflite` on Android and FFI bindings on Desktop.
 
 4. **Multi-Platform Responsiveness**:
    - Mobile Layout (bottom bar) vs. Desktop Layout (left sidebar).
@@ -122,6 +122,10 @@ Launch the developer workspace with live-reload support:
     ```bash
     flutter run -d windows
     ```
+*   **Linux Desktop**:
+    ```bash
+    flutter run -d linux
+    ```
 *   **Android (Device or Emulator)**:
     ```bash
     flutter run -d android
@@ -140,7 +144,13 @@ Compile optimized, standalone binary files for deployment:
     ```bash
     flutter build windows --release
     ```
-    *The standalone compiled files will be generated under: `build/windows/x64/runner/Release/`*
+    *Output: `build/windows/x64/runner/Release/`*
+
+*   **Linux Desktop (Executable)**:
+    ```bash
+    flutter build linux --release
+    ```
+    *Output: `build/linux/x64/release/bundle/`*
 
 *   **Android (Release APK)**:
     ```bash
@@ -153,7 +163,7 @@ Compile optimized, standalone binary files for deployment:
 ### Settings & Initial Setup
 
 On first startup, navigate to the **Settings** panel:
-1.  Configure your preferred **AI Provider** (Gemini, OpenAI, Anthropic, or Custom AI).
+1.  Configure your preferred **AI Provider** (Gemini, OpenAI, Anthropic, Grok, or Custom AI).
 2.  Input your **API Key** and verify credentials.
 3.  Tune your daily goals: Calorie Budget (kcal), Protein (g), Carbohydrates (g), and Lipid Fats (g).
 4.  Save preferences to arm the automated visual scanning!
@@ -162,7 +172,7 @@ On first startup, navigate to the **Settings** panel:
 
 ### Production Packaging & Distribution Guide
 
-Follow these precise steps to package, compile, and distribute the NutriScan Calorie Tracker app on Windows Desktop and Android.
+Follow these precise steps to package, compile, and distribute the NutriScan Calorie Tracker app on Windows, Linux, and Android.
 
 #### 1. Windows Desktop (Standalone Executable)
 
@@ -192,7 +202,21 @@ The directory contains:
 
 ---
 
-#### 2. Android App (APK & AAB bundles)
+#### 2. Linux Desktop (Standalone Bundle)
+
+##### A. Build Command
+```bash
+flutter build linux --release
+```
+
+##### B. Output Directory
+`calorie-tracker/build/linux/x64/release/bundle/`
+
+The directory contains the `nutriscan_calorie_tracker` executable, shared libraries, and a `data/` folder. Zip the entire `bundle/` directory for distribution.
+
+---
+
+#### 3. Android App (APK & AAB bundles)
 
 ##### A. Compile Single Portable Installable (Release APK)
 Generates a standalone `.apk` containing resources for all hardware architectures:
