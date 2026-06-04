@@ -62,7 +62,7 @@ void main() {
       ),
     );
 
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     // Verify initially on tab 1
     expect(mockState.selectedTabIndex, 1);
@@ -75,7 +75,7 @@ void main() {
     expect(mockState.selectedTabIndex, 0);
 
     // Pump widget to rebuild UI under new state
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     // Press back again (now on tab 0 - Dashboard)
     final handledSecondTime = await tester.binding.handlePopRoute();
