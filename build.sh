@@ -39,6 +39,7 @@ show_help() {
   echo -e "  \033[1;32mclean\033[0m       - Clean Flutter build cache and clear dist/ (always runs first)"
   echo -e "  \033[1;32mapk\033[0m         - Build universal Android APK"
   echo -e "  \033[1;32mapks\033[0m        - Build Android APKs split per ABI (apk-split also accepted)"
+  echo -e "  \033[1;32mapks1\033[0m       - Build Android arm64-v8a Split APK"
   echo -e "  \033[1;32mbundle\033[0m      - Build Android App Bundle (.aab)"
   echo -e "  \033[1;32mwindows\033[0m     - Build Windows Desktop release"
   echo -e "  \033[1;32mlinux\033[0m       - Build Linux Desktop release"
@@ -146,6 +147,7 @@ fi
 RUN_CLEAN=false
 RUN_APK=false
 RUN_APK_SPLIT=false
+RUN_APKS1=false
 RUN_BUNDLE=false
 RUN_WINDOWS=false
 RUN_LINUX=false
@@ -183,6 +185,10 @@ for arg in "$@"; do
     apks|apk-split)
       RUN_APK_SPLIT=true
       TASKS+=("apk-split")
+      ;;
+    apks1)
+      RUN_APKS1=true
+      TASKS+=("apks1")
       ;;
     bundle)
       RUN_BUNDLE=true
@@ -243,8 +249,8 @@ for task in "${TASKS[@]}"; do
       if flutter build apk --release; then
         if [ -f "$APK_SRC_DIR/app-release.apk" ]; then
           echo -e "\033[1;32m>>> Moving & renaming APK to dist/...\033[0m"
-          cp "$APK_SRC_DIR/app-release.apk" "$DIST_DIR/${APP_NAME}-release.apk"
-          echo -e "\033[1;32m>>> Saved: $DIST_DIR/${APP_NAME}-release.apk\033[0m"
+          cp "$APK_SRC_DIR/app-release.apk" "$DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-release.apk"
+          echo -e "\033[1;32m>>> Saved: $DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-release.apk\033[0m"
         else
           echo -e "\033[1;31mError: APK output not found at $APK_SRC_DIR/app-release.apk\033[0m"
           exit 1
@@ -269,7 +275,7 @@ for task in "${TASKS[@]}"; do
             abi="${filename#app-}"
             abi="${abi%-release.apk}"
             
-            target_name="${APP_NAME}-${abi}-release.apk"
+            target_name="${APP_NAME}${ZIP_SUFFIX}-${abi}-release.apk"
             echo -e "\033[1;32m>>> Moving & renaming $filename to $target_name\033[0m"
             cp "$file" "$DIST_DIR/$target_name"
             found_any=true
@@ -286,6 +292,26 @@ for task in "${TASKS[@]}"; do
       fi
       ;;
 
+    apks1)
+      echo -e "\033[1;32m>>> Building Android arm64-v8a APK (Release)${VER_STR}...\033[0m"
+      # Prevent copying older files: delete old build output first
+      rm -f "$APK_SRC_DIR/app-release.apk"
+      
+      if flutter build apk --release --target-platform android-arm64; then
+        if [ -f "$APK_SRC_DIR/app-release.apk" ]; then
+          echo -e "\033[1;32m>>> Moving & renaming APK to dist/...\033[0m"
+          cp "$APK_SRC_DIR/app-release.apk" "$DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-arm64-v8a-release.apk"
+          echo -e "\033[1;32m>>> Saved: $DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-arm64-v8a-release.apk\033[0m"
+        else
+          echo -e "\033[1;31mError: APK output not found at $APK_SRC_DIR/app-release.apk\033[0m"
+          exit 1
+        fi
+      else
+        echo -e "\033[1;31mError: Flutter apk build failed. Aborting.\033[0m"
+        exit 1
+      fi
+      ;;
+
     bundle)
       echo -e "\033[1;32m>>> Building Android App Bundle (Release)${VER_STR}...\033[0m"
       # Prevent copying older files: delete old bundle first
@@ -294,8 +320,8 @@ for task in "${TASKS[@]}"; do
       if flutter build appbundle --release; then
         if [ -f "$BUNDLE_SRC" ]; then
           echo -e "\033[1;32m>>> Moving & renaming App Bundle to dist/...\033[0m"
-          cp "$BUNDLE_SRC" "$DIST_DIR/${APP_NAME}-release.aab"
-          echo -e "\033[1;32m>>> Saved: $DIST_DIR/${APP_NAME}-release.aab\033[0m"
+          cp "$BUNDLE_SRC" "$DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-release.aab"
+          echo -e "\033[1;32m>>> Saved: $DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-release.aab\033[0m"
         else
           echo -e "\033[1;31mError: App Bundle output not found at $BUNDLE_SRC\033[0m"
           exit 1
@@ -319,6 +345,7 @@ for task in "${TASKS[@]}"; do
           
           # Copy release folder contents
           cp -r "$WINDOWS_SRC_DIR"/* "$DIST_DIR/${APP_NAME}-windows/"
+          echo "$VERSION" > "$DIST_DIR/${APP_NAME}-windows/version.txt"
           echo -e "\033[1;32m>>> Saved Windows build to: $DIST_DIR/${APP_NAME}-windows/\033[0m"
           if [ "$PACKAGE" = true ]; then
             package_windows
@@ -347,6 +374,7 @@ for task in "${TASKS[@]}"; do
           
           # Copy release folder contents
           cp -r "$LINUX_SRC_DIR"/* "$DIST_DIR/${APP_NAME}-linux/"
+          echo "$VERSION" > "$DIST_DIR/${APP_NAME}-linux/version.txt"
           echo -e "\033[1;32m>>> Saved Linux build to: $DIST_DIR/${APP_NAME}-linux/\033[0m"
           if [ "$PACKAGE" = true ]; then
             package_linux
