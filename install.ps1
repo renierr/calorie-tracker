@@ -14,6 +14,14 @@ $ScriptPath = $PSCommandPath
 $SourceDir = Join-Path $PSScriptRoot 'dist\NutriScan-windows'
 $Version = '0.0.0'
 
+if ($Version -eq '0.0.0' -and (Test-Path (Join-Path $PSScriptRoot 'pubspec.yaml'))) {
+  $versionLine = Get-Content (Join-Path $PSScriptRoot 'pubspec.yaml') | Select-String -Pattern '^version:\s*'
+  if ($versionLine) {
+    $Version = ($versionLine.Line -replace '^version:\s*', '').Trim()
+  }
+}
+
+
 function Write-Info  { Write-Host "INFO: $($args[0])" -ForegroundColor Cyan }
 function Write-Ok    { Write-Host "OK:   $($args[0])" -ForegroundColor Green }
 function Write-Warn  { Write-Host "WARN: $($args[0])" -ForegroundColor Yellow }
@@ -120,6 +128,7 @@ function Install-All {
 }
 
 # --- Entry point ---
+Write-Info "Starting installer for $AppName (v$Version)..."
 if ($Uninstall) {
   if (-not $Silent) {
     $answer = Read-Host "Uninstall $AppName from $InstallDir? [y/N]"
