@@ -293,21 +293,32 @@ for task in "${TASKS[@]}"; do
       ;;
 
     apks1)
-      echo -e "\033[1;32m>>> Building Android arm64-v8a APK (Release)${VER_STR}...\033[0m"
-      # Prevent copying older files: delete old build output first
-      rm -f "$APK_SRC_DIR/app-release.apk"
+      echo -e "\033[1;32m>>> Building Android arm64-v8a Split APK (Release)${VER_STR}...\033[0m"
+      # Prevent copying older files: delete old split APKs first
+      rm -f "$APK_SRC_DIR"/app-*-release.apk
       
-      if flutter build apk --release --target-platform android-arm64; then
-        if [ -f "$APK_SRC_DIR/app-release.apk" ]; then
-          echo -e "\033[1;32m>>> Moving & renaming APK to dist/...\033[0m"
-          cp "$APK_SRC_DIR/app-release.apk" "$DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-arm64-v8a-release.apk"
-          echo -e "\033[1;32m>>> Saved: $DIST_DIR/${APP_NAME}${ZIP_SUFFIX}-arm64-v8a-release.apk\033[0m"
-        else
-          echo -e "\033[1;31mError: APK output not found at $APK_SRC_DIR/app-release.apk\033[0m"
+      if flutter build apk --release --target-platform android-arm64 --split-per-abi; then
+        echo -e "\033[1;32m>>> Processing and renaming split APKs...\033[0m"
+        found_any=false
+        for file in "$APK_SRC_DIR"/app-*-release.apk; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file")
+            abi="${filename#app-}"
+            abi="${abi%-release.apk}"
+            
+            target_name="${APP_NAME}${ZIP_SUFFIX}-${abi}-release.apk"
+            echo -e "\033[1;32m>>> Moving & renaming $filename to $target_name\033[0m"
+            cp "$file" "$DIST_DIR/$target_name"
+            found_any=true
+          fi
+        done
+        
+        if [ "$found_any" = false ]; then
+          echo -e "\033[1;31mError: Split APKs not found in $APK_SRC_DIR. Aborting.\033[0m"
           exit 1
         fi
       else
-        echo -e "\033[1;31mError: Flutter apk build failed. Aborting.\033[0m"
+        echo -e "\033[1;31mError: Flutter split apk build failed. Aborting.\033[0m"
         exit 1
       fi
       ;;
