@@ -374,7 +374,7 @@ mixin _AiState on ChangeNotifier {
     _state._scanCarbs = template.carbs.toString();
     _state._scanFat = template.fat.toString();
     _state._scanNotes = template.notes ?? '';
-    _state._scanWeight = template.weightKg?.toString() ?? '';
+    _state._scanWeight = '';
     _state._scanMealDate = DateTime.now();
     _state._scanShowForm = true;
     _state._scanIsScanning = false;
