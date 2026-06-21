@@ -401,6 +401,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsExported => 'Einstellungen erfolgreich exportiert.';
 
   @override
+  String get tempFilesTitle => 'Temporäre Dateien';
+
+  @override
+  String get tempFilesDesc =>
+      'Bereinige den Cache und temporären Speicher für Freigaben.';
+
+  @override
+  String tempFilesUsage(int count, String size) {
+    return '$count Datei(en) belegen $size';
+  }
+
+  @override
+  String get tempFilesCleanUp => 'Temporäre Dateien bereinigen';
+
+  @override
+  String get tempFilesCleanedUp => 'Temporäre Dateien erfolgreich bereinigt';
+
+  @override
   String settingsExportFailed(String error) {
     return 'Export der Einstellungen fehlgeschlagen: $error';
   }

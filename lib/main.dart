@@ -8,9 +8,11 @@ import 'theme/theme.dart';
 import 'providers/app_state.dart';
 import 'widgets/responsive_layout.dart';
 import 'l10n/app_localizations.dart';
+import 'helpers/temp_file_manager.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await TempFileManager.init();
 
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);

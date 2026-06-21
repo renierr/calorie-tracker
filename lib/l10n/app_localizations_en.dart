@@ -400,6 +400,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsExported => 'Settings exported successfully.';
 
   @override
+  String get tempFilesTitle => 'Temporary Files';
+
+  @override
+  String get tempFilesDesc => 'Clear cache and temporary file sharing storage.';
+
+  @override
+  String tempFilesUsage(int count, String size) {
+    return '$count file(s) using $size';
+  }
+
+  @override
+  String get tempFilesCleanUp => 'Clean Up Temp Files';
+
+  @override
+  String get tempFilesCleanedUp => 'Temporary files cleaned up successfully';
+
+  @override
   String settingsExportFailed(String error) {
     return 'Settings export failed: $error';
   }

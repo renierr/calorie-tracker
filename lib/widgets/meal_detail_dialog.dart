@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -6,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:file_selector/file_selector.dart';
-import 'package:path_provider/path_provider.dart';
+import '../helpers/temp_file_manager.dart';
 import '../theme/theme.dart';
 import '../models/meal_model.dart';
 import '../providers/app_state.dart';
@@ -34,7 +33,7 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
   final GlobalKey _boundaryKey = GlobalKey();
   bool _isExporting = false;
   bool _isSharing = false;
-  final List<File> _tempFilesToDelete = [];
+  final TempFileScope _tempFileScope = TempFileManager.createScope();
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +162,7 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
       context: context,
       builder: (context) => MealImagePreviewDialog(
         currentMeal: currentMeal,
-        tempFilesToDelete: _tempFilesToDelete,
+        tempFileScope: _tempFileScope,
       ),
     );
   }
@@ -302,12 +301,11 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
       final Uint8List pngBytes = await _captureCardBytes();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-      final Directory tempDir = await getTemporaryDirectory();
-      final String tempPath =
-          '${tempDir.path}/meal_card_${currentMeal.shortId}_$timestamp.png';
-      final File tempFile = File(tempPath);
-      await tempFile.writeAsBytes(pngBytes);
-      _tempFilesToDelete.add(tempFile);
+      final String fileName = 'meal_card_${currentMeal.shortId}_$timestamp.png';
+      final String tempPath = await _tempFileScope.createFile(
+        fileName,
+        bytes: pngBytes,
+      );
 
       await FileSaveHelper.shareFile(tempPath, 'image/png');
     } catch (e) {
@@ -333,15 +331,7 @@ class _MealDetailDialogState extends State<MealDetailDialog> {
 
   @override
   void dispose() {
-    for (final file in _tempFilesToDelete) {
-      try {
-        if (file.existsSync()) {
-          file.deleteSync();
-        }
-      } catch (e) {
-        debugPrint("Error deleting temp file: $e");
-      }
-    }
+    _tempFileScope.cleanTracked();
     super.dispose();
   }
 }

@@ -125,6 +125,21 @@
   "exportSettingsBtn": "Einstellungen exportieren",
   "dbExported": "Datenbank erfolgreich exportiert.",
   "settingsExported": "Einstellungen erfolgreich exportiert.",
+  "tempFilesTitle": "Temporäre Dateien",
+  "tempFilesDesc": "Bereinige den Cache und temporären Speicher für Freigaben.",
+  "tempFilesUsage": "{count} Datei(en) belegen {size}",
+  "@tempFilesUsage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "tempFilesCleanUp": "Temporäre Dateien bereinigen",
+  "tempFilesCleanedUp": "Temporäre Dateien erfolgreich bereinigt",
   "settingsExportFailed": "Export der Einstellungen fehlgeschlagen: {error}",
   "@settingsExportFailed": {
     "placeholders": {

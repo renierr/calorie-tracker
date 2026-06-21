@@ -123,6 +123,21 @@
   "exportSettingsBtn": "Export Settings",
   "dbExported": "Database exported successfully.",
   "settingsExported": "Settings exported successfully.",
+  "tempFilesTitle": "Temporary Files",
+  "tempFilesDesc": "Clear cache and temporary file sharing storage.",
+  "tempFilesUsage": "{count} file(s) using {size}",
+  "@tempFilesUsage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "tempFilesCleanUp": "Clean Up Temp Files",
+  "tempFilesCleanedUp": "Temporary files cleaned up successfully",
   "settingsExportFailed": "Settings export failed: {error}",
   "@settingsExportFailed": {
     "placeholders": {

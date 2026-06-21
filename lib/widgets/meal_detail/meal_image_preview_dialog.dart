@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pasteboard/pasteboard.dart';
+import '../../helpers/temp_file_manager.dart';
 import '../../models/meal_model.dart';
 import '../../theme/theme.dart';
 import '../../helpers/file_save_helper.dart';
@@ -11,12 +10,12 @@ import '../custom_notification.dart';
 
 class MealImagePreviewDialog extends StatefulWidget {
   final Meal currentMeal;
-  final List<File> tempFilesToDelete;
+  final TempFileScope? tempFileScope;
 
   const MealImagePreviewDialog({
     super.key,
     required this.currentMeal,
-    required this.tempFilesToDelete,
+    this.tempFileScope,
   });
 
   @override
@@ -26,6 +25,21 @@ class MealImagePreviewDialog extends StatefulWidget {
 class _MealImagePreviewDialogState extends State<MealImagePreviewDialog> {
   bool _isDownloading = false;
   bool _isSharing = false;
+  late final TempFileScope _tempFileScope;
+
+  @override
+  void initState() {
+    super.initState();
+    _tempFileScope = widget.tempFileScope ?? TempFileManager.createScope();
+  }
+
+  @override
+  void dispose() {
+    if (widget.tempFileScope == null) {
+      _tempFileScope.cleanTracked();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,12 +120,12 @@ class _MealImagePreviewDialogState extends State<MealImagePreviewDialog> {
       });
       try {
         final timestamp = DateTime.now().millisecondsSinceEpoch;
-        final Directory tempDir = await getTemporaryDirectory();
-        final String tempPath =
-            '${tempDir.path}/meal_image_${widget.currentMeal.shortId}_$timestamp.$extension';
-        final File tempFile = File(tempPath);
-        await tempFile.writeAsBytes(widget.currentMeal.imageBytes!);
-        widget.tempFilesToDelete.add(tempFile);
+        final String fileName =
+            'meal_image_${widget.currentMeal.shortId}_$timestamp.$extension';
+        final String tempPath = await _tempFileScope.createFile(
+          fileName,
+          bytes: widget.currentMeal.imageBytes!,
+        );
 
         await FileSaveHelper.shareFile(tempPath, mimeType);
       } catch (e) {

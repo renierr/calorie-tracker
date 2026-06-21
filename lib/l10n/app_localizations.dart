@@ -812,6 +812,36 @@ abstract class AppLocalizations {
   /// **'Settings exported successfully.'**
   String get settingsExported;
 
+  /// No description provided for @tempFilesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary Files'**
+  String get tempFilesTitle;
+
+  /// No description provided for @tempFilesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear cache and temporary file sharing storage.'**
+  String get tempFilesDesc;
+
+  /// No description provided for @tempFilesUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} file(s) using {size}'**
+  String tempFilesUsage(int count, String size);
+
+  /// No description provided for @tempFilesCleanUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Up Temp Files'**
+  String get tempFilesCleanUp;
+
+  /// No description provided for @tempFilesCleanedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary files cleaned up successfully'**
+  String get tempFilesCleanedUp;
+
   /// No description provided for @settingsExportFailed.
   ///
   /// In en, this message translates to:

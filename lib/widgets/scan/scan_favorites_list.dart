@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/app_state.dart';
@@ -86,10 +85,8 @@ class ScanFavoritesList extends StatelessWidget {
                         onTap: meal.imageBytes != null
                             ? () => showDialog(
                                 context: context,
-                                builder: (_) => MealImagePreviewDialog(
-                                  currentMeal: meal,
-                                  tempFilesToDelete: <File>[],
-                                ),
+                                builder: (_) =>
+                                    MealImagePreviewDialog(currentMeal: meal),
                               )
                             : null,
                         child: Container(

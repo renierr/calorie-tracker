@@ -8,6 +8,7 @@ import '../widgets/custom_notification.dart';
 import '../theme/theme.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
+import 'temp_file_manager.dart';
 
 class FileSaveHelper {
   static const _channel = MethodChannel('de.renier.calorie_tracker/file_save');
@@ -96,10 +97,10 @@ class FileSaveHelper {
           // Write bytes to a temporary file to enable secure in-app sharing
           String sharePath = uriString;
           try {
-            final tempDir = await getTemporaryDirectory();
-            final tempFile = File('${tempDir.path}/$suggestedName');
-            await tempFile.writeAsBytes(bytes);
-            sharePath = tempFile.path;
+            sharePath = await TempFileManager.createFile(
+              suggestedName,
+              bytes: bytes,
+            );
           } catch (e) {
             debugPrint("Failed to create temporary file for sharing: $e");
           }
@@ -190,25 +191,7 @@ class FileSaveHelper {
   /// Cleans up old temporary files created by the application in the temp directory.
   static Future<void> cleanUpTempFiles() async {
     try {
-      final tempDir = await getTemporaryDirectory();
-      if (await tempDir.exists()) {
-        final List<FileSystemEntity> files = tempDir.listSync();
-        for (final file in files) {
-          if (file is File) {
-            final name = file.path.split(Platform.pathSeparator).last;
-            if (name.startsWith('Meal-Report-') ||
-                name.startsWith('meal_card_') ||
-                name.startsWith('Summary-Report-')) {
-              final lastModified = await file.lastModified();
-              final now = DateTime.now();
-              if (now.difference(lastModified).inMinutes > 5) {
-                await file.delete();
-                debugPrint("Cleaned up temp file: ${file.path}");
-              }
-            }
-          }
-        }
-      }
+      await TempFileManager.cleanTracked();
     } catch (e) {
       debugPrint("Error cleaning up temp files: $e");
     }
