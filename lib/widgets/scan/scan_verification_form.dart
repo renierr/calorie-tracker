@@ -12,6 +12,7 @@ import 'scan_verification_header.dart';
 import 'scan_date_picker_tile.dart';
 import 'scan_verification_actions.dart';
 import 'ai_fallback_dialog.dart';
+import '../../services/ai_base_service.dart';
 
 class ScanVerificationForm extends StatefulWidget {
   final AIAnalysisResult? scanResult;
@@ -42,6 +43,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   late final TextEditingController _fatController;
   late final TextEditingController _notesController;
   late final TextEditingController _weightController;
+  late final TextEditingController _reEvalPromptController;
 
   @override
   void initState() {
@@ -56,6 +58,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     _fatController = TextEditingController(text: appState.scanFat);
     _notesController = TextEditingController(text: appState.scanNotes);
     _weightController = TextEditingController(text: appState.scanWeight);
+    _reEvalPromptController = TextEditingController();
 
     _nameController.addListener(_updateDraft);
     _caloriesController.addListener(_updateDraft);
@@ -95,11 +98,25 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     _fatController.dispose();
     _notesController.dispose();
     _weightController.dispose();
+    _reEvalPromptController.dispose();
     super.dispose();
   }
 
   Future<void> _reEvaluateMeal({String? overrideProvider}) async {
     if (widget.imageBytes == null) return;
+
+    final prompt = _reEvalPromptController.text.trim();
+    if (prompt.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.reEvaluateInstructionHint,
+          ),
+          backgroundColor: AppTheme.accentRed,
+        ),
+      );
+      return;
+    }
 
     final appState = context.read<AppState>();
     final provider = overrideProvider ?? appState.aiProvider;
@@ -123,21 +140,28 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     }
 
     try {
-      String customHint = '';
-      final currentName = _nameController.text.trim();
-      final currentNotes = _notesController.text.trim();
-
-      if (currentName.isNotEmpty) {
-        customHint += 'User thinks food is: "$currentName". ';
-      }
-      if (currentNotes.isNotEmpty) {
-        customHint += 'Additional context/adjustments: "$currentNotes". ';
-      }
-
       final result = await appState.performAIAnalysis(
         imageBytes: widget.imageBytes!,
         mimeType: 'image/jpeg',
-        userHint: customHint,
+        userHint: BaseAIService.buildReEvaluationPrompt(
+          originalName:
+              widget.scanResult?.foodName ?? _nameController.text.trim(),
+          originalCalories:
+              widget.scanResult?.calories ??
+              (int.tryParse(_caloriesController.text) ?? 0),
+          originalProtein:
+              widget.scanResult?.protein ??
+              (int.tryParse(_proteinController.text) ?? 0),
+          originalCarbs:
+              widget.scanResult?.carbs ??
+              (int.tryParse(_carbsController.text) ?? 0),
+          originalFat:
+              widget.scanResult?.fat ??
+              (int.tryParse(_fatController.text) ?? 0),
+          originalNotes:
+              widget.scanResult?.notes ?? _notesController.text.trim(),
+          userCorrection: prompt,
+        ),
         overrideProvider: overrideProvider,
       );
 
@@ -148,6 +172,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
         _carbsController.text = result.carbs.toString();
         _fatController.text = result.fat.toString();
         _notesController.text = result.notes;
+        _reEvalPromptController.clear();
         _isReEvaluating = false;
       });
 
@@ -247,6 +272,7 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
   Widget build(BuildContext context) {
     final isEnabled = !_isReEvaluating;
     final isActivity = context.select<AppState, bool>((s) => s.scanIsActivity);
+    final colors = AppTheme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -273,6 +299,49 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             weightController: _weightController,
             notesController: _notesController,
           ),
+          if (widget.imageBytes != null && !isActivity) ...[
+            const SizedBox(height: 8),
+            const Divider(height: 24),
+            Row(
+              children: [
+                const Icon(
+                  Icons.auto_awesome,
+                  color: AppTheme.accentBlue,
+                  size: 16,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  AppLocalizations.of(context)!.reEvaluate,
+                  style: TextStyle(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _reEvalPromptController,
+              enabled: isEnabled,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.reEvaluateInstruction,
+                hintText: AppLocalizations.of(
+                  context,
+                )!.reEvaluateInstructionHint,
+                labelStyle: TextStyle(
+                  color: colors.textSecondary,
+                  fontSize: 11,
+                ),
+                hintStyle: TextStyle(
+                  color: colors.textSecondary.withValues(alpha: 0.6),
+                  fontSize: 11,
+                ),
+                alignLabelWithHint: true,
+              ),
+              maxLines: 4,
+            ),
+          ],
           const SizedBox(height: 16),
           ScanDatePickerTile(
             mealDate: _mealDate,
