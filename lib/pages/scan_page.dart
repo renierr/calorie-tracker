@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,9 +55,17 @@ class _ScanPageState extends State<ScanPage> {
         imageQuality: 80,
       );
       if (image != null) {
-        final bytes = await image.readAsBytes();
+        Uint8List bytes = await image.readAsBytes();
         if (!mounted) return;
         final appState = context.read<AppState>();
+
+        // On desktop platforms, image_picker does not support resizing/compressing natively,
+        // so we manually resize the image bytes using our background isolate helper.
+        if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+          bytes = await appState.resizeImageIfNecessary(bytes);
+        }
+
+        if (!mounted) return;
         appState.setScanImage(bytes, image.mimeType ?? 'image/jpeg');
       }
     } catch (e) {

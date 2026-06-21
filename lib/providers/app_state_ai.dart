@@ -295,7 +295,10 @@ mixin _AiState on ChangeNotifier {
   String get scanWeight => _state._scanWeight;
   DateTime get scanMealDate => _state._scanMealDate;
 
-  // Setters/Helpers
+  Future<Uint8List> resizeImageIfNecessary(Uint8List bytes) {
+    return compute(_resizeAndNormalizeImageStandalone, bytes);
+  }
+
   void setScanImage(Uint8List? bytes, String mimeType) {
     _state._scanImageBytes = bytes;
     _state._scanMimeType = mimeType;
