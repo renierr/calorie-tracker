@@ -38,28 +38,8 @@ mixin _GamificationState on ChangeNotifier {
 
     if (_gamificationEnabled) {
       await runDailyTransitionCheck();
+      _checkUnacknowledgedBadges();
     }
-
-    // Auto-acknowledge all unlocked badges on app launch so opening/reopening the app never spams old dialogs
-    final updatedAck = Set<String>.from(
-      _gamificationStats.unlockedBadges,
-    ).toList();
-    if (updatedAck.length != _gamificationStats.acknowledgedBadges.length) {
-      _gamificationStats = _gamificationStats.copyWith(
-        acknowledgedBadges: updatedAck,
-      );
-      await _state._dbHelper.updateGamificationStats(_gamificationStats);
-    }
-
-    // Reset transient notification flags on startup to ensure a clean launch
-    _recentUnlockedBadge = null;
-    _showConfetti = false;
-    _showLevelUpNotification = false;
-    _showPrestigeMilestoneNotification = false;
-    _showPrestigeNotification = false;
-    _showShieldEarnedNotification = false;
-    _showShieldConsumedNotification = false;
-    _showStreakResetNotification = false;
 
     notifyListeners();
   }
