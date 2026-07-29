@@ -312,9 +312,7 @@ mixin _GamificationState on ChangeNotifier {
         highestStreak: highestStreak,
         unlockedBadges: badges,
         acknowledgedBadges: repairedAck,
-        lastProcessedDate: _formatDate(
-          todayMidnight.subtract(const Duration(days: 1)),
-        ),
+        lastProcessedDate: todayStr,
       );
 
       await _state._dbHelper.updateGamificationStats(_gamificationStats);
@@ -414,8 +412,13 @@ mixin _GamificationState on ChangeNotifier {
   }
 
   void dismissBadgeNotification() {
-    _recentUnlockedBadge = null;
-    notifyListeners();
+    if (_recentUnlockedBadge != null) {
+      final badge = _recentUnlockedBadge!;
+      _recentUnlockedBadge = null;
+      onBadgeDialogDismissed(badge);
+    } else {
+      notifyListeners();
+    }
   }
 
   void _checkUnacknowledgedBadges() {
