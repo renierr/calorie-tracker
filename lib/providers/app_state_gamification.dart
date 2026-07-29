@@ -36,20 +36,32 @@ mixin _GamificationState on ChangeNotifier {
     _gamificationEnabled = prefs.getBool('gamification_enabled') ?? true;
     _gamificationStats = await _state._dbHelper.getGamificationStats();
 
-    // Auto-acknowledge existing unlocked badges on startup so old badges don't re-trigger popups every launch
-    if (_gamificationStats.unlockedBadges.length >
-        _gamificationStats.acknowledgedBadges.length) {
-      final updatedAck = List<String>.from(_gamificationStats.unlockedBadges);
+    if (_gamificationEnabled) {
+      await runDailyTransitionCheck();
+    }
+
+    // Auto-acknowledge all unlocked badges on app launch so opening/reopening the app never spams old dialogs
+    final updatedAck = Set<String>.from(
+      _gamificationStats.unlockedBadges,
+    ).toList();
+    if (updatedAck.length != _gamificationStats.acknowledgedBadges.length) {
       _gamificationStats = _gamificationStats.copyWith(
         acknowledgedBadges: updatedAck,
       );
       await _state._dbHelper.updateGamificationStats(_gamificationStats);
     }
 
+    // Reset transient notification flags on startup to ensure a clean launch
+    _recentUnlockedBadge = null;
+    _showConfetti = false;
+    _showLevelUpNotification = false;
+    _showPrestigeMilestoneNotification = false;
+    _showPrestigeNotification = false;
+    _showShieldEarnedNotification = false;
+    _showShieldConsumedNotification = false;
+    _showStreakResetNotification = false;
+
     notifyListeners();
-    if (_gamificationEnabled) {
-      await runDailyTransitionCheck();
-    }
   }
 
   Future<void> setGamificationEnabled(bool enabled) async {
@@ -707,28 +719,23 @@ mixin _GamificationState on ChangeNotifier {
 
   Future<void> _checkLiveBadges() async {
     final List<String> badges = List.from(_gamificationStats.unlockedBadges);
-    String? newBadge;
 
     if (!badges.contains('spark')) {
       badges.add('spark');
-      newBadge = 'spark';
     }
 
     final int streak = _gamificationStats.currentStreak;
     if (streak >= 100 && !badges.contains('hundred_day_legend')) {
       badges.add('hundred_day_legend');
-      newBadge = 'hundred_day_legend';
     }
     if (streak >= 365 && !badges.contains('year_titan')) {
       badges.add('year_titan');
-      newBadge = 'year_titan';
     }
 
     final imageStats = await _state._dbHelper.getImageStorageStats();
     final int photosCount = (imageStats['count'] as num?)?.toInt() ?? 0;
     if (photosCount >= 50 && !badges.contains('photo_gourmet')) {
       badges.add('photo_gourmet');
-      newBadge = 'photo_gourmet';
     }
 
     final favorites = await _state._dbHelper.getFavoriteMeals(
@@ -736,14 +743,12 @@ mixin _GamificationState on ChangeNotifier {
     );
     if (favorites.length >= 10 && !badges.contains('favorite_chef')) {
       badges.add('favorite_chef');
-      newBadge = 'favorite_chef';
     }
 
     if (_gamificationStats.highestStreak > 7 &&
         _gamificationStats.currentStreak >= 7 &&
         !badges.contains('comeback_kid')) {
       badges.add('comeback_kid');
-      newBadge = 'comeback_kid';
     }
 
     final summaries = await _state._dbHelper.getDailyCalorieSummaries();
@@ -754,27 +759,22 @@ mixin _GamificationState on ChangeNotifier {
 
     if (totalMeals >= 100 && !badges.contains('diary_veteran')) {
       badges.add('diary_veteran');
-      newBadge = 'diary_veteran';
     }
     if (totalMeals >= 500 && !badges.contains('calorie_archivist')) {
       badges.add('calorie_archivist');
-      newBadge = 'calorie_archivist';
     }
     if (totalMeals >= 1000 && !badges.contains('thousand_club')) {
       badges.add('thousand_club');
-      newBadge = 'thousand_club';
     }
 
     final int stars = _gamificationStats.prestigeStars;
     if (stars >= 10 && !badges.contains('prestige_pioneer')) {
       badges.add('prestige_pioneer');
-      newBadge = 'prestige_pioneer';
     }
 
     if (_gamificationStats.shields >= 10 &&
         !badges.contains('shield_collector')) {
       badges.add('shield_collector');
-      newBadge = 'shield_collector';
     }
 
     final todayMeals = await _state._dbHelper.getMealsForDate(
@@ -807,31 +807,31 @@ mixin _GamificationState on ChangeNotifier {
       if ((todayNet - _state.calorieGoal).abs() <= 20 &&
           !badges.contains('bullseye')) {
         badges.add('bullseye');
-        newBadge = 'bullseye';
       }
       if (todayProtein >= _state.proteinGoal &&
           !badges.contains('protein_pro')) {
         badges.add('protein_pro');
-        newBadge = 'protein_pro';
       }
       if (todayProtein >= _state.proteinGoal &&
           todayCarbs <= _state.carbsGoal &&
           todayFat <= _state.fatGoal &&
           !badges.contains('macro_balance')) {
         badges.add('macro_balance');
-        newBadge = 'macro_balance';
       }
       if (todayBurned >= 500 && !badges.contains('burn_master')) {
         badges.add('burn_master');
-        newBadge = 'burn_master';
       }
     }
 
     if (badges.length > _gamificationStats.unlockedBadges.length) {
       _gamificationStats = _gamificationStats.copyWith(unlockedBadges: badges);
       await _state._dbHelper.updateGamificationStats(_gamificationStats);
-      if (newBadge != null) {
-        _recentUnlockedBadge = newBadge;
+
+      final unacknowledged = badges
+          .where((b) => !_gamificationStats.acknowledgedBadges.contains(b))
+          .toList();
+      if (unacknowledged.isNotEmpty) {
+        _recentUnlockedBadge = unacknowledged.first;
         _showConfetti = true;
       }
       notifyListeners();

@@ -159,9 +159,11 @@ class _AchievementsPageState extends State<AchievementsPage> {
               ),
             ),
 
-            // Filter Chips
+            // Filter Chips (Horizontally Scrollable)
             SliverToBoxAdapter(
-              child: Padding(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
