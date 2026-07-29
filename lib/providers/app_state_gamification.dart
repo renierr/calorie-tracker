@@ -197,6 +197,7 @@ mixin _GamificationState on ChangeNotifier {
       bool streakReset = false;
       String? newlyUnlockedBadge;
       bool showStreakShieldEarned = false;
+      final Map<String, int> fitnessMonthActivities = {};
 
       int consecutiveMissedDays = 0;
 
@@ -210,6 +211,15 @@ mixin _GamificationState on ChangeNotifier {
           (sum, m) =>
               sum + (m.shortId.startsWith('ACT-') ? -m.calories : m.calories),
         );
+
+        final int dayActivities = mealsForDay
+            .where((m) => m.shortId.startsWith('ACT-'))
+            .length;
+        if (dayActivities > 0) {
+          final String monthKey = _formatDate(checkDate).substring(0, 7);
+          fitnessMonthActivities[monthKey] =
+              (fitnessMonthActivities[monthKey] ?? 0) + dayActivities;
+        }
 
         bool daySuccessful =
             mealsForDay.isNotEmpty && totalCalories <= _state.calorieGoal;
@@ -297,6 +307,12 @@ mixin _GamificationState on ChangeNotifier {
       if (shields >= 10 && !badges.contains('shield_collector')) {
         badges.add('shield_collector');
         newlyUnlockedBadge = 'shield_collector';
+      }
+
+      if (fitnessMonthActivities.values.any((c) => c >= 10) &&
+          !badges.contains('fitness_knight')) {
+        badges.add('fitness_knight');
+        newlyUnlockedBadge = 'fitness_knight';
       }
 
       final List<String> repairedAck = stats.acknowledgedBadges
@@ -494,6 +510,7 @@ mixin _GamificationState on ChangeNotifier {
       int shieldsConsumed = 0;
       int totalMeals = 0;
       final List<String> badges = [];
+      final Map<String, int> fitnessMonthActivities = {};
 
       final summaries = await _state._dbHelper.getDailyCalorieSummaries();
 
@@ -546,6 +563,15 @@ mixin _GamificationState on ChangeNotifier {
           final int totalFat = summary != null
               ? (summary['total_fat'] as num).toInt()
               : 0;
+
+          final int dayActivities = summary != null
+              ? (summary['activity_count'] as num).toInt()
+              : 0;
+          if (dayActivities > 0) {
+            final String monthKey = dateStr.substring(0, 7);
+            fitnessMonthActivities[monthKey] =
+                (fitnessMonthActivities[monthKey] ?? 0) + dayActivities;
+          }
 
           if (mealCount > 0 &&
               totalCalories < (_state.calorieGoal * 0.5).round() &&
@@ -661,6 +687,10 @@ mixin _GamificationState on ChangeNotifier {
       if (netShields >= 10 && !badges.contains('shield_collector')) {
         badges.add('shield_collector');
       }
+      if (fitnessMonthActivities.values.any((c) => c >= 10) &&
+          !badges.contains('fitness_knight')) {
+        badges.add('fitness_knight');
+      }
       if (highestStreak > 7 &&
           currentStreak >= 7 &&
           !badges.contains('comeback_kid')) {
@@ -687,6 +717,7 @@ mixin _GamificationState on ChangeNotifier {
       );
 
       await _state._dbHelper.updateGamificationStats(_gamificationStats);
+      _checkUnacknowledgedBadges();
       notifyListeners();
     } catch (e) {
       debugPrint('Error in retroactive gamification re-evaluation: $e');
@@ -743,6 +774,19 @@ mixin _GamificationState on ChangeNotifier {
       badges.add('thousand_club');
     }
 
+    final Map<String, int> monthActivities = {};
+    for (final s in summaries) {
+      final int count = (s['activity_count'] as num).toInt();
+      if (count > 0) {
+        final String monthKey = (s['log_date'] as String).substring(0, 7);
+        monthActivities[monthKey] = (monthActivities[monthKey] ?? 0) + count;
+      }
+    }
+    if (monthActivities.values.any((c) => c >= 10) &&
+        !badges.contains('fitness_knight')) {
+      badges.add('fitness_knight');
+    }
+
     final int stars = _gamificationStats.prestigeStars;
     if (stars >= 10 && !badges.contains('prestige_pioneer')) {
       badges.add('prestige_pioneer');
@@ -796,6 +840,11 @@ mixin _GamificationState on ChangeNotifier {
       }
       if (todayBurned >= 500 && !badges.contains('burn_master')) {
         badges.add('burn_master');
+      }
+      if (todayIntake > 0 &&
+          todayIntake < (_state.calorieGoal * 0.5).round() &&
+          !badges.contains('calorie_saver')) {
+        badges.add('calorie_saver');
       }
     }
 
