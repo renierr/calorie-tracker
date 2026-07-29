@@ -551,13 +551,13 @@ mixin _GamificationState on ChangeNotifier {
 
           if (mealCount > 0 &&
               totalCalories < (_state.calorieGoal * 0.5).round() &&
-              !badges.contains('kalorien_sparfuchs')) {
-            badges.add('kalorien_sparfuchs');
+              !badges.contains('calorie_saver')) {
+            badges.add('calorie_saver');
           }
           if (mealCount > 0 &&
               (totalCalories - _state.calorieGoal).abs() <= 20 &&
-              !badges.contains('punktlandung')) {
-            badges.add('punktlandung');
+              !badges.contains('bullseye')) {
+            badges.add('bullseye');
           }
           if (burnedCalories >= 500 && !badges.contains('burn_master')) {
             badges.add('burn_master');
@@ -566,8 +566,8 @@ mixin _GamificationState on ChangeNotifier {
               totalProtein >= _state.proteinGoal &&
               totalCarbs <= _state.carbsGoal &&
               totalFat <= _state.fatGoal &&
-              !badges.contains('makro_ausgleich')) {
-            badges.add('makro_ausgleich');
+              !badges.contains('macro_balance')) {
+            badges.add('macro_balance');
           }
 
           final bool daySuccessful =
@@ -797,21 +797,21 @@ mixin _GamificationState on ChangeNotifier {
       );
 
       if ((todayNet - _state.calorieGoal).abs() <= 20 &&
-          !badges.contains('punktlandung')) {
-        badges.add('punktlandung');
-        newBadge = 'punktlandung';
+          !badges.contains('bullseye')) {
+        badges.add('bullseye');
+        newBadge = 'bullseye';
       }
       if (todayProtein >= _state.proteinGoal &&
-          !badges.contains('protein_profi')) {
-        badges.add('protein_profi');
-        newBadge = 'protein_profi';
+          !badges.contains('protein_pro')) {
+        badges.add('protein_pro');
+        newBadge = 'protein_pro';
       }
       if (todayProtein >= _state.proteinGoal &&
           todayCarbs <= _state.carbsGoal &&
           todayFat <= _state.fatGoal &&
-          !badges.contains('makro_ausgleich')) {
-        badges.add('makro_ausgleich');
-        newBadge = 'makro_ausgleich';
+          !badges.contains('macro_balance')) {
+        badges.add('macro_balance');
+        newBadge = 'macro_balance';
       }
       if (todayBurned >= 500 && !badges.contains('burn_master')) {
         badges.add('burn_master');

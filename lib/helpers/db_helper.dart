@@ -17,6 +17,16 @@ class DbHelper {
 
   Database? _database;
 
+  @visibleForTesting
+  void setDatabaseForTesting(Database? db) {
+    _database = db;
+  }
+
+  @visibleForTesting
+  Future<void> initOnCreateForTesting(Database db) async {
+    await _onCreate(db, _dbVersion);
+  }
+
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();

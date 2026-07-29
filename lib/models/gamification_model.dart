@@ -23,6 +23,19 @@ class GamificationStats {
     return (xp - 5400) % 1000;
   }
 
+  static int calculateLevel(int xp) {
+    if (xp >= 5400) return 10;
+    if (xp >= 4400) return 9;
+    if (xp >= 3500) return 8;
+    if (xp >= 2700) return 7;
+    if (xp >= 2000) return 6;
+    if (xp >= 1400) return 5;
+    if (xp >= 900) return 4;
+    if (xp >= 500) return 3;
+    if (xp >= 200) return 2;
+    return 1;
+  }
+
   GamificationStats({
     required this.xp,
     required this.level,
