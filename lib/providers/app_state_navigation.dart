@@ -22,6 +22,9 @@ mixin _NavigationState on ChangeNotifier {
 
   void selectTab(int index) {
     _state._selectedTabIndex = index;
+    if (index == 1) {
+      _state._scanMealDate = DateTime.now();
+    }
     notifyListeners();
   }
 

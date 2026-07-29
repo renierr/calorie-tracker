@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../theme/theme.dart';
 import '../../providers/app_state.dart';
 import '../../l10n/app_localizations.dart';
+import '../../pages/achievements_page.dart';
 
 class GamificationCard extends StatelessWidget {
   const GamificationCard({super.key});
@@ -108,15 +109,20 @@ class GamificationCard extends StatelessWidget {
                 ),
               ),
 
-              // Badges trigger button
+              // Badges trigger button -> opens dedicated AchievementsPage
               IconButton(
-                onPressed: () => _showBadgesSheet(context, appState),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AchievementsPage()),
+                  );
+                },
                 icon: const Icon(
                   Icons.emoji_events,
                   color: AppTheme.accentAmber,
                   size: 26,
                 ),
-                tooltip: AppLocalizations.of(context)!.badgesTitle,
+                tooltip: AppLocalizations.of(context)!.achievementsTitle,
               ),
             ],
           ),
@@ -318,298 +324,4 @@ class GamificationCard extends StatelessWidget {
       ),
     );
   }
-
-  void _showBadgesSheet(BuildContext context, AppState appState) {
-    final colors = AppTheme.of(context);
-    final stats = appState.gamificationStats;
-    final l10n = AppLocalizations.of(context)!;
-
-    final badgeList = [
-      _BadgeItem(
-        id: 'spark',
-        title: l10n.badgeZundfunkeTitle,
-        description: l10n.badgeZundfunkeDesc,
-        icon: Icons.flash_on,
-        color: AppTheme.accentAmber,
-        isUnlocked: stats.unlockedBadges.contains('spark'),
-      ),
-      _BadgeItem(
-        id: 'triple_discipline',
-        title: l10n.badgeDreifacheDisziplinTitle,
-        description: l10n.badgeDreifacheDisziplinDesc,
-        icon: Icons.local_fire_department,
-        color: AppTheme.accentRed,
-        isUnlocked: stats.unlockedBadges.contains('triple_discipline'),
-      ),
-      _BadgeItem(
-        id: 'week_king',
-        title: l10n.badgeWochenKoenigTitle,
-        description: l10n.badgeWochenKoenigDesc,
-        icon: Icons.emoji_events,
-        color: Colors.amber,
-        isUnlocked: stats.unlockedBadges.contains('week_king'),
-      ),
-      _BadgeItem(
-        id: 'hundred_day_legend',
-        title: l10n.badgeHunderterLegendeTitle,
-        description: l10n.badgeHunderterLegendeDesc,
-        icon: Icons.military_tech,
-        color: Colors.deepOrange,
-        isUnlocked: stats.unlockedBadges.contains('hundred_day_legend'),
-      ),
-      _BadgeItem(
-        id: 'year_titan',
-        title: l10n.badgeJahresTitanTitle,
-        description: l10n.badgeJahresTitanDesc,
-        icon: Icons.workspace_premium,
-        color: Colors.amber,
-        isUnlocked: stats.unlockedBadges.contains('year_titan'),
-      ),
-      _BadgeItem(
-        id: 'diary_veteran',
-        title: l10n.badgeTagebuchVeteranTitle,
-        description: l10n.badgeTagebuchVeteranDesc,
-        icon: Icons.menu_book,
-        color: AppTheme.accentBlue,
-        isUnlocked: stats.unlockedBadges.contains('diary_veteran'),
-      ),
-      _BadgeItem(
-        id: 'calorie_archivist',
-        title: l10n.badgeKalorienArchivarTitle,
-        description: l10n.badgeKalorienArchivarDesc,
-        icon: Icons.inventory_2,
-        color: Colors.indigo,
-        isUnlocked: stats.unlockedBadges.contains('calorie_archivist'),
-      ),
-      _BadgeItem(
-        id: 'thousand_club',
-        title: l10n.badgeTausenderClubTitle,
-        description: l10n.badgeTausenderClubDesc,
-        icon: Icons.stars,
-        color: Colors.teal,
-        isUnlocked: stats.unlockedBadges.contains('thousand_club'),
-      ),
-      _BadgeItem(
-        id: 'prestige_pioneer',
-        title: l10n.badgePrestigePionierTitle,
-        description: l10n.badgePrestigePionierDesc,
-        icon: Icons.auto_awesome,
-        color: Colors.purple,
-        isUnlocked: stats.unlockedBadges.contains('prestige_pioneer'),
-      ),
-      _BadgeItem(
-        id: 'shield_collector',
-        title: l10n.badgeSchildSammlerTitle,
-        description: l10n.badgeSchildSammlerDesc,
-        icon: Icons.shield,
-        color: AppTheme.accentEmerald,
-        isUnlocked: stats.unlockedBadges.contains('shield_collector'),
-      ),
-      _BadgeItem(
-        id: 'comeback_kid',
-        title: l10n.badgeComebackKidTitle,
-        description: l10n.badgeComebackKidDesc,
-        icon: Icons.loop,
-        color: Colors.amber,
-        isUnlocked: stats.unlockedBadges.contains('comeback_kid'),
-      ),
-      _BadgeItem(
-        id: 'bullseye',
-        title: l10n.badgePunktlandungTitle,
-        description: l10n.badgePunktlandungDesc,
-        icon: Icons.center_focus_strong,
-        color: AppTheme.accentEmerald,
-        isUnlocked: stats.unlockedBadges.contains('bullseye'),
-      ),
-      _BadgeItem(
-        id: 'protein_pro',
-        title: l10n.badgeProteinProfiTitle,
-        description: l10n.badgeProteinProfiDesc,
-        icon: Icons.fitness_center,
-        color: Colors.deepOrange,
-        isUnlocked: stats.unlockedBadges.contains('protein_pro'),
-      ),
-      _BadgeItem(
-        id: 'macro_balance',
-        title: l10n.badgeMakroAusgleichTitle,
-        description: l10n.badgeMakroAusgleichDesc,
-        icon: Icons.pie_chart,
-        color: AppTheme.accentBlue,
-        isUnlocked: stats.unlockedBadges.contains('macro_balance'),
-      ),
-      _BadgeItem(
-        id: 'burn_master',
-        title: l10n.badgeBurnMasterTitle,
-        description: l10n.badgeBurnMasterDesc,
-        icon: Icons.local_fire_department,
-        color: AppTheme.accentRed,
-        isUnlocked: stats.unlockedBadges.contains('burn_master'),
-      ),
-      _BadgeItem(
-        id: 'fitness_knight',
-        title: l10n.badgeFitnessRitterTitle,
-        description: l10n.badgeFitnessRitterDesc,
-        icon: Icons.directions_run,
-        color: Colors.purple,
-        isUnlocked: stats.unlockedBadges.contains('fitness_knight'),
-      ),
-      _BadgeItem(
-        id: 'photo_gourmet',
-        title: l10n.badgeFotoGourmetTitle,
-        description: l10n.badgeFotoGourmetDesc,
-        icon: Icons.camera_alt,
-        color: Colors.cyan,
-        isUnlocked: stats.unlockedBadges.contains('photo_gourmet'),
-      ),
-      _BadgeItem(
-        id: 'favorite_chef',
-        title: l10n.badgeFavoritenChefTitle,
-        description: l10n.badgeFavoritenChefDesc,
-        icon: Icons.favorite,
-        color: Colors.pink,
-        isUnlocked: stats.unlockedBadges.contains('favorite_chef'),
-      ),
-      _BadgeItem(
-        id: 'calorie_saver',
-        title: l10n.badgeKalorienSparfuchsTitle,
-        description: l10n.badgeKalorienSparfuchsDesc,
-        icon: Icons.savings,
-        color: Colors.lightGreen,
-        isUnlocked: stats.unlockedBadges.contains('calorie_saver'),
-      ),
-    ];
-
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: colors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: colors.surfaceLight,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.badgesTitle,
-                  style: TextStyle(
-                    color: colors.textPrimary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Flexible(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: badgeList.length,
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 16, thickness: 0.5),
-                    itemBuilder: (context, index) {
-                      final item = badgeList[index];
-                      return Opacity(
-                        opacity: item.isUnlocked ? 1.0 : 0.35,
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 54,
-                              height: 54,
-                              decoration: BoxDecoration(
-                                color: item.isUnlocked
-                                    ? item.color.withValues(alpha: 0.15)
-                                    : colors.surfaceLight,
-                                shape: BoxShape.circle,
-                                border: item.isUnlocked
-                                    ? Border.all(color: item.color, width: 1.5)
-                                    : null,
-                              ),
-                              child: Icon(
-                                item.icon,
-                                color: item.isUnlocked
-                                    ? item.color
-                                    : colors.textMuted,
-                                size: 28,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        item.title,
-                                        style: TextStyle(
-                                          color: colors.textPrimary,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      if (item.isUnlocked)
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: AppTheme.accentEmerald,
-                                          size: 16,
-                                        ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    item.description,
-                                    style: TextStyle(
-                                      color: colors.textSecondary,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _BadgeItem {
-  final String id;
-  final String title;
-  final String description;
-  final IconData icon;
-  final Color color;
-  final bool isUnlocked;
-
-  const _BadgeItem({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.icon,
-    required this.color,
-    required this.isUnlocked,
-  });
 }

@@ -35,12 +35,20 @@ mixin _GamificationState on ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     _gamificationEnabled = prefs.getBool('gamification_enabled') ?? true;
     _gamificationStats = await _state._dbHelper.getGamificationStats();
+
+    // Auto-acknowledge existing unlocked badges on startup so old badges don't re-trigger popups every launch
+    if (_gamificationStats.unlockedBadges.length >
+        _gamificationStats.acknowledgedBadges.length) {
+      final updatedAck = List<String>.from(_gamificationStats.unlockedBadges);
+      _gamificationStats = _gamificationStats.copyWith(
+        acknowledgedBadges: updatedAck,
+      );
+      await _state._dbHelper.updateGamificationStats(_gamificationStats);
+    }
+
     notifyListeners();
     if (_gamificationEnabled) {
       await runDailyTransitionCheck();
-      if (_recentUnlockedBadge == null) {
-        _checkUnacknowledgedBadges();
-      }
     }
   }
 

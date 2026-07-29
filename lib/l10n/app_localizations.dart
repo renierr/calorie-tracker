@@ -1724,6 +1724,48 @@ abstract class AppLocalizations {
   /// **'Unlocked Badges'**
   String get badgesTitle;
 
+  /// No description provided for @achievementsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements & Badges'**
+  String get achievementsTitle;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All ({count})'**
+  String filterAll(int count);
+
+  /// No description provided for @filterUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked ({count})'**
+  String filterUnlocked(int count);
+
+  /// No description provided for @filterLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked ({count})'**
+  String filterLocked(int count);
+
+  /// No description provided for @badgeUnlockedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked'**
+  String get badgeUnlockedStatus;
+
+  /// No description provided for @badgeLockedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked'**
+  String get badgeLockedStatus;
+
+  /// No description provided for @achievementsProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{unlocked} of {total} Unlocked ({percent}%)'**
+  String achievementsProgress(int unlocked, int total, int percent);
+
   /// No description provided for @badgeUnlockedPopup.
   ///
   /// In en, this message translates to:

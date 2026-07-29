@@ -330,6 +330,7 @@ mixin _AiState on ChangeNotifier {
       _state._scanFat = result.fat.toString();
       _state._scanNotes = result.notes;
     }
+    _state._scanMealDate = DateTime.now();
     _state._scanIsAiFlow = true;
     _state._scanShowForm = true;
     _state._scanIsScanning = false;

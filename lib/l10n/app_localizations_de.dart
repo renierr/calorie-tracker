@@ -948,6 +948,35 @@ class AppLocalizationsDe extends AppLocalizations {
   String get badgesTitle => 'Freigeschaltete Abzeichen';
 
   @override
+  String get achievementsTitle => 'Erfolge & Abzeichen';
+
+  @override
+  String filterAll(int count) {
+    return 'Alle ($count)';
+  }
+
+  @override
+  String filterUnlocked(int count) {
+    return 'Freigeschaltet ($count)';
+  }
+
+  @override
+  String filterLocked(int count) {
+    return 'Gesperrt ($count)';
+  }
+
+  @override
+  String get badgeUnlockedStatus => 'Freigeschaltet';
+
+  @override
+  String get badgeLockedStatus => 'Gesperrt';
+
+  @override
+  String achievementsProgress(int unlocked, int total, int percent) {
+    return '$unlocked von $total freigeschaltet ($percent%)';
+  }
+
+  @override
   String get badgeUnlockedPopup => 'Abzeichen freigeschaltet!';
 
   @override

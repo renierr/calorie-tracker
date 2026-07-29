@@ -499,6 +499,47 @@
     }
   },
   "badgesTitle": "Unlocked Badges",
+  "achievementsTitle": "Achievements & Badges",
+  "filterAll": "All ({count})",
+  "@filterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterUnlocked": "Unlocked ({count})",
+  "@filterUnlocked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterLocked": "Locked ({count})",
+  "@filterLocked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "badgeUnlockedStatus": "Unlocked",
+  "badgeLockedStatus": "Locked",
+  "achievementsProgress": "{unlocked} of {total} Unlocked ({percent}%)",
+  "@achievementsProgress": {
+    "placeholders": {
+      "unlocked": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "badgeUnlockedPopup": "Badge Unlocked!",
   "levelUpPopup": "Level Up!",
   "levelUpDesc": "Congratulations! You reached level {lvl} - {title}!",

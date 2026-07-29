@@ -938,6 +938,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get badgesTitle => 'Unlocked Badges';
 
   @override
+  String get achievementsTitle => 'Achievements & Badges';
+
+  @override
+  String filterAll(int count) {
+    return 'All ($count)';
+  }
+
+  @override
+  String filterUnlocked(int count) {
+    return 'Unlocked ($count)';
+  }
+
+  @override
+  String filterLocked(int count) {
+    return 'Locked ($count)';
+  }
+
+  @override
+  String get badgeUnlockedStatus => 'Unlocked';
+
+  @override
+  String get badgeLockedStatus => 'Locked';
+
+  @override
+  String achievementsProgress(int unlocked, int total, int percent) {
+    return '$unlocked of $total Unlocked ($percent%)';
+  }
+
+  @override
   String get badgeUnlockedPopup => 'Badge Unlocked!';
 
   @override

@@ -305,7 +305,11 @@ void main() {
         'triple_discipline',
         'week_king',
       ]);
-      expect(appState.gamificationStats.acknowledgedBadges, ['spark']);
+      expect(appState.gamificationStats.acknowledgedBadges, [
+        'spark',
+        'triple_discipline',
+        'week_king',
+      ]);
     });
   });
 }

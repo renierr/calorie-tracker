@@ -501,6 +501,47 @@
     }
   },
   "badgesTitle": "Freigeschaltete Abzeichen",
+  "achievementsTitle": "Erfolge & Abzeichen",
+  "filterAll": "Alle ({count})",
+  "@filterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterUnlocked": "Freigeschaltet ({count})",
+  "@filterUnlocked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterLocked": "Gesperrt ({count})",
+  "@filterLocked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "badgeUnlockedStatus": "Freigeschaltet",
+  "badgeLockedStatus": "Gesperrt",
+  "achievementsProgress": "{unlocked} von {total} freigeschaltet ({percent}%)",
+  "@achievementsProgress": {
+    "placeholders": {
+      "unlocked": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "badgeUnlockedPopup": "Abzeichen freigeschaltet!",
   "levelUpPopup": "Level aufgestiegen!",
   "levelUpDesc": "Herzlichen Glückwunsch! Du hast Level {lvl} - {title} erreicht!",
