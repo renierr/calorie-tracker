@@ -412,13 +412,8 @@ mixin _GamificationState on ChangeNotifier {
   }
 
   void dismissBadgeNotification() {
-    if (_recentUnlockedBadge != null) {
-      final badge = _recentUnlockedBadge!;
-      _recentUnlockedBadge = null;
-      onBadgeDialogDismissed(badge);
-    } else {
-      notifyListeners();
-    }
+    _recentUnlockedBadge = null;
+    notifyListeners();
   }
 
   void _checkUnacknowledgedBadges() {
@@ -644,10 +639,6 @@ mixin _GamificationState on ChangeNotifier {
         }
       }
 
-      final List<String> repairedAck = currentStats.acknowledgedBadges
-          .where((b) => badges.contains(b))
-          .toList();
-
       final int totalPrestigeShields = xp < 5400 ? 0 : (xp - 5400) ~/ 1000;
       final int netShields =
           (streakShieldsEarned + totalPrestigeShields - shieldsConsumed).clamp(
@@ -676,6 +667,13 @@ mixin _GamificationState on ChangeNotifier {
         badges.add('comeback_kid');
       }
 
+      // Rebuild repairedAck AFTER all badges have been computed
+      final List<String> finalAck = currentStats.acknowledgedBadges
+          .where((b) => badges.contains(b))
+          .toList();
+
+      final now = DateTime.now();
+      final String todayStr = _formatDate(now);
       final int newLevel = calculateLevel(xp);
       _gamificationStats = currentStats.copyWith(
         xp: xp,
@@ -684,16 +682,11 @@ mixin _GamificationState on ChangeNotifier {
         currentStreak: currentStreak,
         highestStreak: highestStreak,
         unlockedBadges: badges,
-        acknowledgedBadges: repairedAck,
-        lastProcessedDate: _formatDate(
-          DateTime.now().subtract(const Duration(days: 1)),
-        ),
+        acknowledgedBadges: finalAck,
+        lastProcessedDate: todayStr,
       );
 
       await _state._dbHelper.updateGamificationStats(_gamificationStats);
-      if (_recentUnlockedBadge == null) {
-        _checkUnacknowledgedBadges();
-      }
       notifyListeners();
     } catch (e) {
       debugPrint('Error in retroactive gamification re-evaluation: $e');
