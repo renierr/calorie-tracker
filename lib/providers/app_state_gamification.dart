@@ -12,6 +12,8 @@ mixin _GamificationState on ChangeNotifier {
   bool _showShieldEarnedNotification = false;
   bool _showLevelUpNotification = false;
   bool _showPrestigeNotification = false;
+  bool _showPrestigeMilestoneNotification = false;
+  int _prestigeMilestoneStarCount = 10;
   int _oldLevel = 1;
 
   // Getters
@@ -24,6 +26,9 @@ mixin _GamificationState on ChangeNotifier {
   bool get showShieldEarnedNotification => _showShieldEarnedNotification;
   bool get showLevelUpNotification => _showLevelUpNotification;
   bool get showPrestigeNotification => _showPrestigeNotification;
+  bool get showPrestigeMilestoneNotification =>
+      _showPrestigeMilestoneNotification;
+  int get prestigeMilestoneStarCount => _prestigeMilestoneStarCount;
   int get oldLevel => _oldLevel;
 
   Future<void> loadGamification() async {
@@ -85,6 +90,13 @@ mixin _GamificationState on ChangeNotifier {
     notifyListeners();
   }
 
+  void triggerAdminPrestigeMilestone(int count) {
+    _showPrestigeMilestoneNotification = true;
+    _prestigeMilestoneStarCount = count;
+    _showConfetti = true;
+    notifyListeners();
+  }
+
   Future<void> resetAdminAcknowledgedBadges() async {
     _gamificationStats = _gamificationStats.copyWith(
       acknowledgedBadges: const [],
@@ -118,6 +130,12 @@ mixin _GamificationState on ChangeNotifier {
       if (newStars > oldStars) {
         showPrestige = true;
         shieldsAwarded = newStars - oldStars;
+
+        // Check for every 10th Star Milestone (10, 20, 30...)
+        if (newStars > 0 && newStars % 10 == 0) {
+          _showPrestigeMilestoneNotification = true;
+          _prestigeMilestoneStarCount = newStars;
+        }
       }
     }
 
@@ -136,40 +154,10 @@ mixin _GamificationState on ChangeNotifier {
     notifyListeners();
   }
 
-  // Check and consume shield or reset streak for today if budget exceeded
-  Future<void> checkTodayBudgetExceeded() async {
-    final now = DateTime.now();
-    final todayMeals = await _state._dbHelper.getMealsForDate(
-      now,
-      includeImages: false,
-    );
-    final totalCalories = todayMeals.fold(
-      0,
-      (sum, m) =>
-          sum + (m.shortId.startsWith('ACT-') ? -m.calories : m.calories),
-    );
-
-    if (totalCalories > _state.calorieGoal &&
-        _gamificationStats.currentStreak > 0) {
-      if (_gamificationStats.shields > 0) {
-        _gamificationStats = _gamificationStats.copyWith(
-          shields: _gamificationStats.shields - 1,
-        );
-        await _state._dbHelper.updateGamificationStats(_gamificationStats);
-        _showShieldConsumedNotification = true;
-        notifyListeners();
-      } else {
-        _gamificationStats = _gamificationStats.copyWith(currentStreak: 0);
-        await _state._dbHelper.updateGamificationStats(_gamificationStats);
-        _showStreakResetNotification = true;
-        notifyListeners();
-      }
-    }
-  }
-
-  // Award XP for logged meals (10 XP per log)
+  // Award XP for logged meals (10 XP per log) and check live badge achievements
   Future<void> onMealAdded() async {
     await awardXp(10);
+    await _checkLiveBadges();
   }
 
   // Deduct XP on deleting meal to prevent exploits
@@ -210,6 +198,8 @@ mixin _GamificationState on ChangeNotifier {
       String? newlyUnlockedBadge;
       bool showStreakShieldEarned = false;
 
+      int consecutiveMissedDays = 0;
+
       while (checkDate.isBefore(todayMidnight)) {
         final mealsForDay = await _state._dbHelper.getMealsForDate(
           checkDate,
@@ -225,6 +215,7 @@ mixin _GamificationState on ChangeNotifier {
             mealsForDay.isNotEmpty && totalCalories <= _state.calorieGoal;
 
         if (daySuccessful) {
+          consecutiveMissedDays = 0;
           currentStreak++;
           xp += 100; // Daily success XP
 
@@ -232,16 +223,16 @@ mixin _GamificationState on ChangeNotifier {
             highestStreak = currentStreak;
           }
 
-          if (currentStreak == 3 && !badges.contains('dreifache_disziplin')) {
-            badges.add('dreifache_disziplin');
+          if (currentStreak == 3 && !badges.contains('triple_discipline')) {
+            badges.add('triple_discipline');
             xp += 50; // Bonus XP
-            newlyUnlockedBadge = 'dreifache_disziplin';
+            newlyUnlockedBadge = 'triple_discipline';
           }
 
-          if (currentStreak == 7 && !badges.contains('wochen_koenig')) {
-            badges.add('wochen_koenig');
+          if (currentStreak == 7 && !badges.contains('week_king')) {
+            badges.add('week_king');
             shields++; // Earn 1 shield
-            newlyUnlockedBadge = 'wochen_koenig';
+            newlyUnlockedBadge = 'week_king';
             showStreakShieldEarned = true;
           }
 
@@ -252,23 +243,60 @@ mixin _GamificationState on ChangeNotifier {
             showStreakShieldEarned = true;
           }
 
-          if (!badges.contains('zundfunke')) {
-            badges.add('zundfunke');
-            newlyUnlockedBadge = 'zundfunke';
+          if (!badges.contains('spark')) {
+            badges.add('spark');
+            newlyUnlockedBadge = 'spark';
+          }
+
+          if (currentStreak >= 100 && !badges.contains('hundred_day_legend')) {
+            badges.add('hundred_day_legend');
+            newlyUnlockedBadge = 'hundred_day_legend';
+          }
+
+          if (currentStreak >= 365 && !badges.contains('year_titan')) {
+            badges.add('year_titan');
+            newlyUnlockedBadge = 'year_titan';
           }
         } else {
-          if (shields > 0 && mealsForDay.isNotEmpty) {
-            // Shield is only consumed if they actively tracked but failed.
-            // If they skipped tracking completely (mealsForDay.isEmpty), the streak breaks.
-            shields--;
-            shieldConsumed = true;
+          if (mealsForDay.isNotEmpty) {
+            // Tracked over budget -> consume shield or reset streak
+            consecutiveMissedDays = 0;
+            if (shields > 0) {
+              shields--;
+              shieldConsumed = true;
+            } else {
+              currentStreak = 0;
+              streakReset = true;
+            }
           } else {
-            currentStreak = 0;
-            streakReset = true;
+            // Missed day (0 meals logged) -> 1-day grace period
+            consecutiveMissedDays++;
+            if (consecutiveMissedDays > 1) {
+              // 2nd+ consecutive missed day
+              if (shields > 0) {
+                shields--;
+                shieldConsumed = true;
+              } else {
+                currentStreak = 0;
+                streakReset = true;
+              }
+            }
+            // 1st missed day: grace period! Streak preserved, 0 shields used.
           }
         }
 
         checkDate = checkDate.add(const Duration(days: 1));
+      }
+
+      final totalPrestigeStars = xp < 5400 ? 0 : (xp - 5400) ~/ 1000;
+      if (totalPrestigeStars >= 10 && !badges.contains('prestige_pioneer')) {
+        badges.add('prestige_pioneer');
+        newlyUnlockedBadge = 'prestige_pioneer';
+      }
+
+      if (shields >= 10 && !badges.contains('shield_collector')) {
+        badges.add('shield_collector');
+        newlyUnlockedBadge = 'shield_collector';
       }
 
       final List<String> repairedAck = stats.acknowledgedBadges
@@ -445,6 +473,11 @@ mixin _GamificationState on ChangeNotifier {
     notifyListeners();
   }
 
+  void dismissPrestigeMilestoneNotification() {
+    _showPrestigeMilestoneNotification = false;
+    notifyListeners();
+  }
+
   void clearConfetti() {
     _showConfetti = false;
     notifyListeners();
@@ -459,14 +492,16 @@ mixin _GamificationState on ChangeNotifier {
       int xp = 0;
       int currentStreak = 0;
       int highestStreak = 0;
-      int shields = 0;
+      int streakShieldsEarned = 0;
+      int shieldsConsumed = 0;
+      int totalMeals = 0;
       final List<String> badges = [];
 
       final summaries = await _state._dbHelper.getDailyCalorieSummaries();
 
       if (summaries.isNotEmpty) {
         // Calculate all active meals XP (+10 XP per meal)
-        final int totalMeals = summaries.fold<int>(
+        totalMeals = summaries.fold<int>(
           0,
           (sum, s) => sum + (s['meal_count'] as num).toInt(),
         );
@@ -489,6 +524,8 @@ mixin _GamificationState on ChangeNotifier {
           firstDate.day,
         );
 
+        int consecutiveMissedDays = 0;
+
         while (checkDate.isBefore(todayMidnight)) {
           final String dateStr = _formatDate(checkDate);
           final summary = summaryMap[dateStr];
@@ -499,11 +536,45 @@ mixin _GamificationState on ChangeNotifier {
           final int totalCalories = summary != null
               ? (summary['total_calories'] as num).toInt()
               : 0;
+          final int burnedCalories = summary != null
+              ? (summary['burned_calories'] as num).toInt()
+              : 0;
+          final int totalProtein = summary != null
+              ? (summary['total_protein'] as num).toInt()
+              : 0;
+          final int totalCarbs = summary != null
+              ? (summary['total_carbs'] as num).toInt()
+              : 0;
+          final int totalFat = summary != null
+              ? (summary['total_fat'] as num).toInt()
+              : 0;
+
+          if (mealCount > 0 &&
+              totalCalories < (_state.calorieGoal * 0.5).round() &&
+              !badges.contains('kalorien_sparfuchs')) {
+            badges.add('kalorien_sparfuchs');
+          }
+          if (mealCount > 0 &&
+              (totalCalories - _state.calorieGoal).abs() <= 20 &&
+              !badges.contains('punktlandung')) {
+            badges.add('punktlandung');
+          }
+          if (burnedCalories >= 500 && !badges.contains('burn_master')) {
+            badges.add('burn_master');
+          }
+          if (mealCount > 0 &&
+              totalProtein >= _state.proteinGoal &&
+              totalCarbs <= _state.carbsGoal &&
+              totalFat <= _state.fatGoal &&
+              !badges.contains('makro_ausgleich')) {
+            badges.add('makro_ausgleich');
+          }
 
           final bool daySuccessful =
               mealCount > 0 && totalCalories <= _state.calorieGoal;
 
           if (daySuccessful) {
+            consecutiveMissedDays = 0;
             currentStreak++;
             xp += 100;
 
@@ -511,30 +582,58 @@ mixin _GamificationState on ChangeNotifier {
               highestStreak = currentStreak;
             }
 
-            if (currentStreak == 3 && !badges.contains('dreifache_disziplin')) {
-              badges.add('dreifache_disziplin');
+            if (currentStreak == 3 && !badges.contains('triple_discipline')) {
+              badges.add('triple_discipline');
               xp += 50;
             }
 
-            if (currentStreak == 7 && !badges.contains('wochen_koenig')) {
-              badges.add('wochen_koenig');
-              shields++;
+            if (currentStreak == 7 && !badges.contains('week_king')) {
+              badges.add('week_king');
+              streakShieldsEarned++;
             }
 
             if (currentStreak > 0 &&
                 currentStreak % 7 == 0 &&
                 currentStreak != 7) {
-              shields++;
+              streakShieldsEarned++;
             }
 
-            if (!badges.contains('zundfunke')) {
-              badges.add('zundfunke');
+            if (!badges.contains('spark')) {
+              badges.add('spark');
+            }
+
+            if (currentStreak >= 100 &&
+                !badges.contains('hundred_day_legend')) {
+              badges.add('hundred_day_legend');
+            }
+
+            if (currentStreak >= 365 && !badges.contains('year_titan')) {
+              badges.add('year_titan');
             }
           } else {
-            if (shields > 0 && mealCount > 0) {
-              shields--;
+            final int prestigeShields = xp < 5400 ? 0 : (xp - 5400) ~/ 1000;
+            final int availableShields =
+                (streakShieldsEarned + prestigeShields) - shieldsConsumed;
+
+            if (mealCount > 0) {
+              // Logged over budget -> consume shield or reset streak
+              consecutiveMissedDays = 0;
+              if (availableShields > 0) {
+                shieldsConsumed++;
+              } else {
+                currentStreak = 0;
+              }
             } else {
-              currentStreak = 0;
+              // Missed day (0 meals logged) -> 1-day grace period
+              consecutiveMissedDays++;
+              if (consecutiveMissedDays > 1) {
+                if (availableShields > 0) {
+                  shieldsConsumed++;
+                } else {
+                  currentStreak = 0;
+                }
+              }
+              // 1st missed day: grace period! Streak preserved, 0 shields used.
             }
           }
 
@@ -546,11 +645,39 @@ mixin _GamificationState on ChangeNotifier {
           .where((b) => badges.contains(b))
           .toList();
 
+      final int totalPrestigeShields = xp < 5400 ? 0 : (xp - 5400) ~/ 1000;
+      final int netShields =
+          (streakShieldsEarned + totalPrestigeShields - shieldsConsumed).clamp(
+            0,
+            999,
+          );
+
+      if (totalMeals >= 100 && !badges.contains('diary_veteran')) {
+        badges.add('diary_veteran');
+      }
+      if (totalMeals >= 500 && !badges.contains('calorie_archivist')) {
+        badges.add('calorie_archivist');
+      }
+      if (totalMeals >= 1000 && !badges.contains('thousand_club')) {
+        badges.add('thousand_club');
+      }
+      if (totalPrestigeShields >= 10 && !badges.contains('prestige_pioneer')) {
+        badges.add('prestige_pioneer');
+      }
+      if (netShields >= 10 && !badges.contains('shield_collector')) {
+        badges.add('shield_collector');
+      }
+      if (highestStreak > 7 &&
+          currentStreak >= 7 &&
+          !badges.contains('comeback_kid')) {
+        badges.add('comeback_kid');
+      }
+
       final int newLevel = calculateLevel(xp);
       _gamificationStats = currentStats.copyWith(
         xp: xp,
         level: newLevel,
-        shields: shields,
+        shields: netShields,
         currentStreak: currentStreak,
         highestStreak: highestStreak,
         unlockedBadges: badges,
@@ -567,6 +694,139 @@ mixin _GamificationState on ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error in retroactive gamification re-evaluation: $e');
+    }
+  }
+
+  Future<void> _checkLiveBadges() async {
+    final List<String> badges = List.from(_gamificationStats.unlockedBadges);
+    String? newBadge;
+
+    if (!badges.contains('spark')) {
+      badges.add('spark');
+      newBadge = 'spark';
+    }
+
+    final int streak = _gamificationStats.currentStreak;
+    if (streak >= 100 && !badges.contains('hundred_day_legend')) {
+      badges.add('hundred_day_legend');
+      newBadge = 'hundred_day_legend';
+    }
+    if (streak >= 365 && !badges.contains('year_titan')) {
+      badges.add('year_titan');
+      newBadge = 'year_titan';
+    }
+
+    final imageStats = await _state._dbHelper.getImageStorageStats();
+    final int photosCount = (imageStats['count'] as num?)?.toInt() ?? 0;
+    if (photosCount >= 50 && !badges.contains('photo_gourmet')) {
+      badges.add('photo_gourmet');
+      newBadge = 'photo_gourmet';
+    }
+
+    final favorites = await _state._dbHelper.getFavoriteMeals(
+      includeImages: false,
+    );
+    if (favorites.length >= 10 && !badges.contains('favorite_chef')) {
+      badges.add('favorite_chef');
+      newBadge = 'favorite_chef';
+    }
+
+    if (_gamificationStats.highestStreak > 7 &&
+        _gamificationStats.currentStreak >= 7 &&
+        !badges.contains('comeback_kid')) {
+      badges.add('comeback_kid');
+      newBadge = 'comeback_kid';
+    }
+
+    final summaries = await _state._dbHelper.getDailyCalorieSummaries();
+    final int totalMeals = summaries.fold<int>(
+      0,
+      (sum, s) => sum + (s['meal_count'] as num).toInt(),
+    );
+
+    if (totalMeals >= 100 && !badges.contains('diary_veteran')) {
+      badges.add('diary_veteran');
+      newBadge = 'diary_veteran';
+    }
+    if (totalMeals >= 500 && !badges.contains('calorie_archivist')) {
+      badges.add('calorie_archivist');
+      newBadge = 'calorie_archivist';
+    }
+    if (totalMeals >= 1000 && !badges.contains('thousand_club')) {
+      badges.add('thousand_club');
+      newBadge = 'thousand_club';
+    }
+
+    final int stars = _gamificationStats.prestigeStars;
+    if (stars >= 10 && !badges.contains('prestige_pioneer')) {
+      badges.add('prestige_pioneer');
+      newBadge = 'prestige_pioneer';
+    }
+
+    if (_gamificationStats.shields >= 10 &&
+        !badges.contains('shield_collector')) {
+      badges.add('shield_collector');
+      newBadge = 'shield_collector';
+    }
+
+    final todayMeals = await _state._dbHelper.getMealsForDate(
+      DateTime.now(),
+      includeImages: false,
+    );
+    if (todayMeals.isNotEmpty) {
+      final int todayIntake = todayMeals.fold(
+        0,
+        (sum, m) => sum + (m.shortId.startsWith('ACT-') ? 0 : m.calories),
+      );
+      final int todayBurned = todayMeals.fold(
+        0,
+        (sum, m) => sum + (m.shortId.startsWith('ACT-') ? m.calories : 0),
+      );
+      final int todayNet = todayIntake - todayBurned;
+      final int todayProtein = todayMeals.fold(
+        0,
+        (sum, m) => sum + (m.shortId.startsWith('ACT-') ? 0 : m.protein),
+      );
+      final int todayCarbs = todayMeals.fold(
+        0,
+        (sum, m) => sum + (m.shortId.startsWith('ACT-') ? 0 : m.carbs),
+      );
+      final int todayFat = todayMeals.fold(
+        0,
+        (sum, m) => sum + (m.shortId.startsWith('ACT-') ? 0 : m.fat),
+      );
+
+      if ((todayNet - _state.calorieGoal).abs() <= 20 &&
+          !badges.contains('punktlandung')) {
+        badges.add('punktlandung');
+        newBadge = 'punktlandung';
+      }
+      if (todayProtein >= _state.proteinGoal &&
+          !badges.contains('protein_profi')) {
+        badges.add('protein_profi');
+        newBadge = 'protein_profi';
+      }
+      if (todayProtein >= _state.proteinGoal &&
+          todayCarbs <= _state.carbsGoal &&
+          todayFat <= _state.fatGoal &&
+          !badges.contains('makro_ausgleich')) {
+        badges.add('makro_ausgleich');
+        newBadge = 'makro_ausgleich';
+      }
+      if (todayBurned >= 500 && !badges.contains('burn_master')) {
+        badges.add('burn_master');
+        newBadge = 'burn_master';
+      }
+    }
+
+    if (badges.length > _gamificationStats.unlockedBadges.length) {
+      _gamificationStats = _gamificationStats.copyWith(unlockedBadges: badges);
+      await _state._dbHelper.updateGamificationStats(_gamificationStats);
+      if (newBadge != null) {
+        _recentUnlockedBadge = newBadge;
+        _showConfetti = true;
+      }
+      notifyListeners();
     }
   }
 

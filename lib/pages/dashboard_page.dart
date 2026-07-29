@@ -33,6 +33,10 @@ class _DashboardPageState extends State<DashboardPage> {
         final lvl = appState.gamificationStats.level;
         appState.dismissLevelUpNotification();
         GamificationDialogs.showLevelUp(context, appState, lvl);
+      } else if (appState.showPrestigeMilestoneNotification) {
+        final count = appState.prestigeMilestoneStarCount;
+        appState.dismissPrestigeMilestoneNotification();
+        GamificationDialogs.showPrestigeMilestone(context, appState, count);
       } else if (appState.showPrestigeNotification) {
         appState.dismissPrestigeNotification();
         GamificationDialogs.showPrestigeStarEarned(context, appState);

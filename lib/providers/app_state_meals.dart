@@ -133,7 +133,6 @@ mixin _MealState on ChangeNotifier {
     await _reloadCaches();
     notifyListeners();
     await _state.onMealAdded();
-    await _state.checkTodayBudgetExceeded();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
@@ -144,7 +143,6 @@ mixin _MealState on ChangeNotifier {
     await _state._dbHelper.updateMeal(unsyncedMeal);
     await _reloadCaches();
     notifyListeners();
-    await _state.checkTodayBudgetExceeded();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }

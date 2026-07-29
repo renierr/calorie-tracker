@@ -527,6 +527,38 @@
   "badgeDreifacheDisziplinDesc": "3 Tage in Folge Einträge vorgenommen und unter dem Limit geblieben.",
   "badgeWochenKoenigTitle": "Wochen-König",
   "badgeWochenKoenigDesc": "Die perfekte Woche! 7 Tage in Folge diszipliniert geblieben.",
+  "badgeHunderterLegendeTitle": "100-Tage-Legende",
+  "badgeHunderterLegendeDesc": "Eine unglaubliche 100-Tage-Serie erreicht!",
+  "badgeJahresTitanTitle": "Jahres-Titan",
+  "badgeJahresTitanDesc": "Eine legendäre 365-Tage-Serie gehalten!",
+  "badgeTagebuchVeteranTitle": "Tagebuch-Veteran",
+  "badgeTagebuchVeteranDesc": "Insgesamt 100 Mahlzeiten im Tagebuch eingetragen.",
+  "badgeKalorienArchivarTitle": "Kalorien-Archivar",
+  "badgeKalorienArchivarDesc": "Insgesamt 500 Mahlzeiten im Tagebuch erfasst.",
+  "badgeTausenderClubTitle": "1000er-Club",
+  "badgeTausenderClubDesc": "Dem elitären Club mit 1.000 eingetragenen Mahlzeiten beigetreten!",
+  "badgePrestigePionierTitle": "Prestige-Pionier",
+  "badgePrestigePionierDesc": "10 Prestige-Sterne über Level 10 hinaus verdient!",
+  "badgeSchildSammlerTitle": "Schild-Sammler",
+  "badgeSchildSammlerDesc": "10 Schutzschilde gleichzeitig angesammelt!",
+  "badgeComebackKidTitle": "Stehaufmännchen",
+  "badgeComebackKidDesc": "Nach einer unterbrochenen Serie erfolgreich wieder eine 7-Tage-Serie aufgebaut!",
+  "badgePunktlandungTitle": "Punktlandung",
+  "badgePunktlandungDesc": "Einen Tag innerhalb von ±20 Kalorien deines genauen Kalorienziels beendet!",
+  "badgeProteinProfiTitle": "Protein-Profi",
+  "badgeProteinProfiDesc": "An 7 Tagen in Folge dein tägliches Proteinziel erreicht!",
+  "badgeMakroAusgleichTitle": "Makro-Ausgleich",
+  "badgeMakroAusgleichDesc": "An einem Tag alle Ziele für Protein, Kohlenhydrate und Fett erreicht!",
+  "badgeBurnMasterTitle": "Aktivitäts-Schub",
+  "badgeBurnMasterDesc": "An einem Tag über 500 kcal durch Sport und Aktivität verbrannt!",
+  "badgeFitnessRitterTitle": "Fitness-Ritter",
+  "badgeFitnessRitterDesc": "10 Sport-Aktivitäten in einem Monat absolviert!",
+  "badgeFotoGourmetTitle": "Foto-Gourmet",
+  "badgeFotoGourmetDesc": "50 Mahlzeiten mit Fotos im Tagebuch festgehalten!",
+  "badgeFavoritenChefTitle": "Favoriten-Chef",
+  "badgeFavoritenChefDesc": "10 Lieblingsgerichte als Favoriten gespeichert!",
+  "badgeKalorienSparfuchsTitle": "Kalorien-Sparfuchs",
+  "badgeKalorienSparfuchsDesc": "Einen vollen Tag mit weniger als 50% deines Kalorienziels beendet!",
 
   "lvlCouchPotato": "Couch-Potato",
   "lvlMotivatedBeginner": "Motivierter Einsteiger",
@@ -560,7 +592,25 @@
   "streakProtection": "Serien-Schutz",
   "prestigeTitle": "Prestige-Stern verdient!",
   "prestigeDesc": "Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Du erhältst +1 Serien-Schutzschild!",
+  "prestigeMilestoneTitle": "{count}. Prestige-Stern Meilenstein!",
+  "@prestigeMilestoneTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prestigeMilestoneDesc": "Legendäre Disziplin! Du hast deinen {count}. Prestige-Stern über Level 10 hinaus erreicht! Eine wahre Inspiration!",
+  "@prestigeMilestoneDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "btnTriggerPrestige": "Prestige auslösen",
+  "btnRecalculateGamification": "Stats neu berechnen",
+  "recalculateGamificationSuccess": "Gamification-Statistiken wurden erfolgreich aus dem Verlauf neu berechnet!",
   "statusLabel": "Status: {status}",
   "@statusLabel": {
     "placeholders": {

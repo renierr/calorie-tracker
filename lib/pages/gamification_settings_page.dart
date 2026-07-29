@@ -51,6 +51,13 @@ class GamificationSettingsPage extends StatelessWidget {
         GamificationDialogs.showShieldEarned(context, appState);
       });
     }
+    if (appState.showPrestigeMilestoneNotification) {
+      final count = appState.prestigeMilestoneStarCount;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        appState.dismissPrestigeMilestoneNotification();
+        GamificationDialogs.showPrestigeMilestone(context, appState, count);
+      });
+    }
     if (appState.showPrestigeNotification) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         appState.dismissPrestigeNotification();
@@ -172,14 +179,14 @@ class GamificationSettingsPage extends StatelessWidget {
                                 icon: Icons.flash_on,
                                 color: AppTheme.accentAmber,
                                 onPressed: () =>
-                                    appState.triggerAdminBadge('zundfunke'),
+                                    appState.triggerAdminBadge('spark'),
                               ),
                               AdminButton(
                                 label: l10n.btnTriggerBadgeThree,
                                 icon: Icons.local_fire_department,
                                 color: AppTheme.accentRed,
                                 onPressed: () => appState.triggerAdminBadge(
-                                  'dreifache_disziplin',
+                                  'triple_discipline',
                                 ),
                               ),
                               AdminButton(
@@ -187,7 +194,7 @@ class GamificationSettingsPage extends StatelessWidget {
                                 icon: Icons.emoji_events,
                                 color: Colors.yellow.shade700,
                                 onPressed: () =>
-                                    appState.triggerAdminBadge('wochen_koenig'),
+                                    appState.triggerAdminBadge('week_king'),
                               ),
                               AdminButton(
                                 label: l10n.btnTriggerShieldEarn,
@@ -219,6 +226,24 @@ class GamificationSettingsPage extends StatelessWidget {
                                 color: AppTheme.accentRed,
                                 onPressed:
                                     appState.resetAdminAcknowledgedBadges,
+                              ),
+                              AdminButton(
+                                label: l10n.btnRecalculateGamification,
+                                icon: Icons.calculate,
+                                color: AppTheme.accentEmerald,
+                                onPressed: () async {
+                                  await appState.recalculateAllGamification();
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          l10n.recalculateGamificationSuccess,
+                                        ),
+                                        backgroundColor: AppTheme.accentEmerald,
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ];
 

@@ -1001,6 +1001,117 @@ class AppLocalizationsDe extends AppLocalizations {
       'Die perfekte Woche! 7 Tage in Folge diszipliniert geblieben.';
 
   @override
+  String get badgeHunderterLegendeTitle => '100-Tage-Legende';
+
+  @override
+  String get badgeHunderterLegendeDesc =>
+      'Eine unglaubliche 100-Tage-Serie erreicht!';
+
+  @override
+  String get badgeJahresTitanTitle => 'Jahres-Titan';
+
+  @override
+  String get badgeJahresTitanDesc => 'Eine legendäre 365-Tage-Serie gehalten!';
+
+  @override
+  String get badgeTagebuchVeteranTitle => 'Tagebuch-Veteran';
+
+  @override
+  String get badgeTagebuchVeteranDesc =>
+      'Insgesamt 100 Mahlzeiten im Tagebuch eingetragen.';
+
+  @override
+  String get badgeKalorienArchivarTitle => 'Kalorien-Archivar';
+
+  @override
+  String get badgeKalorienArchivarDesc =>
+      'Insgesamt 500 Mahlzeiten im Tagebuch erfasst.';
+
+  @override
+  String get badgeTausenderClubTitle => '1000er-Club';
+
+  @override
+  String get badgeTausenderClubDesc =>
+      'Dem elitären Club mit 1.000 eingetragenen Mahlzeiten beigetreten!';
+
+  @override
+  String get badgePrestigePionierTitle => 'Prestige-Pionier';
+
+  @override
+  String get badgePrestigePionierDesc =>
+      '10 Prestige-Sterne über Level 10 hinaus verdient!';
+
+  @override
+  String get badgeSchildSammlerTitle => 'Schild-Sammler';
+
+  @override
+  String get badgeSchildSammlerDesc =>
+      '10 Schutzschilde gleichzeitig angesammelt!';
+
+  @override
+  String get badgeComebackKidTitle => 'Stehaufmännchen';
+
+  @override
+  String get badgeComebackKidDesc =>
+      'Nach einer unterbrochenen Serie erfolgreich wieder eine 7-Tage-Serie aufgebaut!';
+
+  @override
+  String get badgePunktlandungTitle => 'Punktlandung';
+
+  @override
+  String get badgePunktlandungDesc =>
+      'Einen Tag innerhalb von ±20 Kalorien deines genauen Kalorienziels beendet!';
+
+  @override
+  String get badgeProteinProfiTitle => 'Protein-Profi';
+
+  @override
+  String get badgeProteinProfiDesc =>
+      'An 7 Tagen in Folge dein tägliches Proteinziel erreicht!';
+
+  @override
+  String get badgeMakroAusgleichTitle => 'Makro-Ausgleich';
+
+  @override
+  String get badgeMakroAusgleichDesc =>
+      'An einem Tag alle Ziele für Protein, Kohlenhydrate und Fett erreicht!';
+
+  @override
+  String get badgeBurnMasterTitle => 'Aktivitäts-Schub';
+
+  @override
+  String get badgeBurnMasterDesc =>
+      'An einem Tag über 500 kcal durch Sport und Aktivität verbrannt!';
+
+  @override
+  String get badgeFitnessRitterTitle => 'Fitness-Ritter';
+
+  @override
+  String get badgeFitnessRitterDesc =>
+      '10 Sport-Aktivitäten in einem Monat absolviert!';
+
+  @override
+  String get badgeFotoGourmetTitle => 'Foto-Gourmet';
+
+  @override
+  String get badgeFotoGourmetDesc =>
+      '50 Mahlzeiten mit Fotos im Tagebuch festgehalten!';
+
+  @override
+  String get badgeFavoritenChefTitle => 'Favoriten-Chef';
+
+  @override
+  String get badgeFavoritenChefDesc =>
+      '10 Lieblingsgerichte als Favoriten gespeichert!';
+
+  @override
+  String get badgeKalorienSparfuchsTitle => 'Kalorien-Sparfuchs';
+
+  @override
+  String get badgeKalorienSparfuchsDesc =>
+      'Einen vollen Tag mit weniger als 50% deines Kalorienziels beendet!';
+
+  @override
   String get lvlCouchPotato => 'Couch-Potato';
 
   @override
@@ -1101,7 +1212,24 @@ class AppLocalizationsDe extends AppLocalizations {
       'Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Du erhältst +1 Serien-Schutzschild!';
 
   @override
+  String prestigeMilestoneTitle(int count) {
+    return '$count. Prestige-Stern Meilenstein!';
+  }
+
+  @override
+  String prestigeMilestoneDesc(int count) {
+    return 'Legendäre Disziplin! Du hast deinen $count. Prestige-Stern über Level 10 hinaus erreicht! Eine wahre Inspiration!';
+  }
+
+  @override
   String get btnTriggerPrestige => 'Prestige auslösen';
+
+  @override
+  String get btnRecalculateGamification => 'Stats neu berechnen';
+
+  @override
+  String get recalculateGamificationSuccess =>
+      'Gamification-Statistiken wurden erfolgreich aus dem Verlauf neu berechnet!';
 
   @override
   String statusLabel(String status) {

@@ -62,7 +62,8 @@ import 'app_localizations_en.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +71,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,17 +84,18 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
-    Locale('en')
+    Locale('en'),
   ];
 
   /// No description provided for @appTitle.
@@ -1811,6 +1814,198 @@ abstract class AppLocalizations {
   /// **'The perfect week! Stayed on track 7 consecutive days.'**
   String get badgeWochenKoenigDesc;
 
+  /// No description provided for @badgeHunderterLegendeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'100-Day Legend'**
+  String get badgeHunderterLegendeTitle;
+
+  /// No description provided for @badgeHunderterLegendeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reached an incredible 100-day streak!'**
+  String get badgeHunderterLegendeDesc;
+
+  /// No description provided for @badgeJahresTitanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly Titan'**
+  String get badgeJahresTitanTitle;
+
+  /// No description provided for @badgeJahresTitanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintained a streak for a full 365 days!'**
+  String get badgeJahresTitanDesc;
+
+  /// No description provided for @badgeTagebuchVeteranTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diary Veteran'**
+  String get badgeTagebuchVeteranTitle;
+
+  /// No description provided for @badgeTagebuchVeteranDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged 100 total meals in your diary.'**
+  String get badgeTagebuchVeteranDesc;
+
+  /// No description provided for @badgeKalorienArchivarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie Archivist'**
+  String get badgeKalorienArchivarTitle;
+
+  /// No description provided for @badgeKalorienArchivarDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged 500 total meals in your diary.'**
+  String get badgeKalorienArchivarDesc;
+
+  /// No description provided for @badgeTausenderClubTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'1,000 Club'**
+  String get badgeTausenderClubTitle;
+
+  /// No description provided for @badgeTausenderClubDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Entered the elite 1,000 total logged meals club!'**
+  String get badgeTausenderClubDesc;
+
+  /// No description provided for @badgePrestigePionierTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prestige Pioneer'**
+  String get badgePrestigePionierTitle;
+
+  /// No description provided for @badgePrestigePionierDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned 10 Prestige Stars beyond Level 10!'**
+  String get badgePrestigePionierDesc;
+
+  /// No description provided for @badgeSchildSammlerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield Collector'**
+  String get badgeSchildSammlerTitle;
+
+  /// No description provided for @badgeSchildSammlerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Accumulated and held 10 protection shields at once!'**
+  String get badgeSchildSammlerDesc;
+
+  /// No description provided for @badgeComebackKidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Comeback Kid'**
+  String get badgeComebackKidTitle;
+
+  /// No description provided for @badgeComebackKidDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Rebuilt a 7-day streak after previously losing a streak!'**
+  String get badgeComebackKidDesc;
+
+  /// No description provided for @badgePunktlandungTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bullseye'**
+  String get badgePunktlandungTitle;
+
+  /// No description provided for @badgePunktlandungDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended a day within ±20 calories of your exact daily calorie goal!'**
+  String get badgePunktlandungDesc;
+
+  /// No description provided for @badgeProteinProfiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein Pro'**
+  String get badgeProteinProfiTitle;
+
+  /// No description provided for @badgeProteinProfiDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Met your daily protein target 7 days in a row!'**
+  String get badgeProteinProfiDesc;
+
+  /// No description provided for @badgeMakroAusgleichTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Macro Balance'**
+  String get badgeMakroAusgleichTitle;
+
+  /// No description provided for @badgeMakroAusgleichDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Met all your protein, carb, and fat targets on the same day!'**
+  String get badgeMakroAusgleichDesc;
+
+  /// No description provided for @badgeBurnMasterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Burn Master'**
+  String get badgeBurnMasterTitle;
+
+  /// No description provided for @badgeBurnMasterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Burned 500+ kcal through exercise activities in a single day!'**
+  String get badgeBurnMasterDesc;
+
+  /// No description provided for @badgeFitnessRitterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness Knight'**
+  String get badgeFitnessRitterTitle;
+
+  /// No description provided for @badgeFitnessRitterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged 10 workout activities in a single month!'**
+  String get badgeFitnessRitterDesc;
+
+  /// No description provided for @badgeFotoGourmetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo Gourmet'**
+  String get badgeFotoGourmetTitle;
+
+  /// No description provided for @badgeFotoGourmetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged 50 meals with AI food photos!'**
+  String get badgeFotoGourmetDesc;
+
+  /// No description provided for @badgeFavoritenChefTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Chef'**
+  String get badgeFavoritenChefTitle;
+
+  /// No description provided for @badgeFavoritenChefDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved 10 favorite meals for quick logging!'**
+  String get badgeFavoritenChefDesc;
+
+  /// No description provided for @badgeKalorienSparfuchsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie Saver'**
+  String get badgeKalorienSparfuchsTitle;
+
+  /// No description provided for @badgeKalorienSparfuchsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended a full completed day with less than 50% of your calorie goal!'**
+  String get badgeKalorienSparfuchsDesc;
+
   /// No description provided for @lvlCouchPotato.
   ///
   /// In en, this message translates to:
@@ -2003,11 +2198,35 @@ abstract class AppLocalizations {
   /// **'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!'**
   String get prestigeDesc;
 
+  /// No description provided for @prestigeMilestoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}th Prestige Star Milestone!'**
+  String prestigeMilestoneTitle(int count);
+
+  /// No description provided for @prestigeMilestoneDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Legendary dedication! You achieved your {count}th Prestige Star beyond Level 10! Truly an inspiration!'**
+  String prestigeMilestoneDesc(int count);
+
   /// No description provided for @btnTriggerPrestige.
   ///
   /// In en, this message translates to:
   /// **'Trigger Prestige'**
   String get btnTriggerPrestige;
+
+  /// No description provided for @btnRecalculateGamification.
+  ///
+  /// In en, this message translates to:
+  /// **'Recalculate Stats'**
+  String get btnRecalculateGamification;
+
+  /// No description provided for @recalculateGamificationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Gamification stats successfully recalculated from history!'**
+  String get recalculateGamificationSuccess;
 
   /// No description provided for @statusLabel.
   ///
@@ -2550,7 +2769,8 @@ abstract class AppLocalizations {
   String statsWeightRange(Object max, Object min);
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -2559,25 +2779,26 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['de', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return AppLocalizationsDe();
-    case 'en': return AppLocalizationsEn();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
+      return AppLocalizationsEn();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

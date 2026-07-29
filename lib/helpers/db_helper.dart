@@ -582,7 +582,12 @@ class DbHelper {
       SELECT 
         date(timestamp / 1000, 'unixepoch', 'localtime') as log_date,
         SUM(CASE WHEN shortId LIKE 'ACT-%' THEN -calories ELSE calories END) as total_calories,
-        SUM(CASE WHEN shortId NOT LIKE 'ACT-%' THEN 1 ELSE 0 END) as meal_count
+        SUM(CASE WHEN shortId LIKE 'ACT-%' THEN calories ELSE 0 END) as burned_calories,
+        SUM(CASE WHEN shortId NOT LIKE 'ACT-%' THEN 1 ELSE 0 END) as meal_count,
+        SUM(CASE WHEN shortId LIKE 'ACT-%' THEN 1 ELSE 0 END) as activity_count,
+        SUM(CASE WHEN shortId NOT LIKE 'ACT-%' THEN protein ELSE 0 END) as total_protein,
+        SUM(CASE WHEN shortId NOT LIKE 'ACT-%' THEN carbs ELSE 0 END) as total_carbs,
+        SUM(CASE WHEN shortId NOT LIKE 'ACT-%' THEN fat ELSE 0 END) as total_fat
       FROM $tableMeals
       WHERE deleted = 0
       GROUP BY log_date

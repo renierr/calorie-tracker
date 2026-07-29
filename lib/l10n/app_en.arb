@@ -525,6 +525,38 @@
   "badgeDreifacheDisziplinDesc": "Logged foods and stayed under limit for 3 consecutive days.",
   "badgeWochenKoenigTitle": "Week King",
   "badgeWochenKoenigDesc": "The perfect week! Stayed on track 7 consecutive days.",
+  "badgeHunderterLegendeTitle": "100-Day Legend",
+  "badgeHunderterLegendeDesc": "Reached an incredible 100-day streak!",
+  "badgeJahresTitanTitle": "Yearly Titan",
+  "badgeJahresTitanDesc": "Maintained a streak for a full 365 days!",
+  "badgeTagebuchVeteranTitle": "Diary Veteran",
+  "badgeTagebuchVeteranDesc": "Logged 100 total meals in your diary.",
+  "badgeKalorienArchivarTitle": "Calorie Archivist",
+  "badgeKalorienArchivarDesc": "Logged 500 total meals in your diary.",
+  "badgeTausenderClubTitle": "1,000 Club",
+  "badgeTausenderClubDesc": "Entered the elite 1,000 total logged meals club!",
+  "badgePrestigePionierTitle": "Prestige Pioneer",
+  "badgePrestigePionierDesc": "Earned 10 Prestige Stars beyond Level 10!",
+  "badgeSchildSammlerTitle": "Shield Collector",
+  "badgeSchildSammlerDesc": "Accumulated and held 10 protection shields at once!",
+  "badgeComebackKidTitle": "Comeback Kid",
+  "badgeComebackKidDesc": "Rebuilt a 7-day streak after previously losing a streak!",
+  "badgePunktlandungTitle": "Bullseye",
+  "badgePunktlandungDesc": "Ended a day within ±20 calories of your exact daily calorie goal!",
+  "badgeProteinProfiTitle": "Protein Pro",
+  "badgeProteinProfiDesc": "Met your daily protein target 7 days in a row!",
+  "badgeMakroAusgleichTitle": "Macro Balance",
+  "badgeMakroAusgleichDesc": "Met all your protein, carb, and fat targets on the same day!",
+  "badgeBurnMasterTitle": "Burn Master",
+  "badgeBurnMasterDesc": "Burned 500+ kcal through exercise activities in a single day!",
+  "badgeFitnessRitterTitle": "Fitness Knight",
+  "badgeFitnessRitterDesc": "Logged 10 workout activities in a single month!",
+  "badgeFotoGourmetTitle": "Photo Gourmet",
+  "badgeFotoGourmetDesc": "Logged 50 meals with AI food photos!",
+  "badgeFavoritenChefTitle": "Favorite Chef",
+  "badgeFavoritenChefDesc": "Saved 10 favorite meals for quick logging!",
+  "badgeKalorienSparfuchsTitle": "Calorie Saver",
+  "badgeKalorienSparfuchsDesc": "Ended a full completed day with less than 50% of your calorie goal!",
 
   "lvlCouchPotato": "Couch-Potato",
   "lvlMotivatedBeginner": "Motivated Beginner",
@@ -558,7 +590,25 @@
   "streakProtection": "Streak Protection",
   "prestigeTitle": "Prestige Star Earned!",
   "prestigeDesc": "Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!",
+  "prestigeMilestoneTitle": "{count}th Prestige Star Milestone!",
+  "@prestigeMilestoneTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prestigeMilestoneDesc": "Legendary dedication! You achieved your {count}th Prestige Star beyond Level 10! Truly an inspiration!",
+  "@prestigeMilestoneDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "btnTriggerPrestige": "Trigger Prestige",
+  "btnRecalculateGamification": "Recalculate Stats",
+  "recalculateGamificationSuccess": "Gamification stats successfully recalculated from history!",
   "statusLabel": "Status: {status}",
   "@statusLabel": {
     "placeholders": {

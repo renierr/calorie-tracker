@@ -991,6 +991,116 @@ class AppLocalizationsEn extends AppLocalizations {
       'The perfect week! Stayed on track 7 consecutive days.';
 
   @override
+  String get badgeHunderterLegendeTitle => '100-Day Legend';
+
+  @override
+  String get badgeHunderterLegendeDesc =>
+      'Reached an incredible 100-day streak!';
+
+  @override
+  String get badgeJahresTitanTitle => 'Yearly Titan';
+
+  @override
+  String get badgeJahresTitanDesc => 'Maintained a streak for a full 365 days!';
+
+  @override
+  String get badgeTagebuchVeteranTitle => 'Diary Veteran';
+
+  @override
+  String get badgeTagebuchVeteranDesc =>
+      'Logged 100 total meals in your diary.';
+
+  @override
+  String get badgeKalorienArchivarTitle => 'Calorie Archivist';
+
+  @override
+  String get badgeKalorienArchivarDesc =>
+      'Logged 500 total meals in your diary.';
+
+  @override
+  String get badgeTausenderClubTitle => '1,000 Club';
+
+  @override
+  String get badgeTausenderClubDesc =>
+      'Entered the elite 1,000 total logged meals club!';
+
+  @override
+  String get badgePrestigePionierTitle => 'Prestige Pioneer';
+
+  @override
+  String get badgePrestigePionierDesc =>
+      'Earned 10 Prestige Stars beyond Level 10!';
+
+  @override
+  String get badgeSchildSammlerTitle => 'Shield Collector';
+
+  @override
+  String get badgeSchildSammlerDesc =>
+      'Accumulated and held 10 protection shields at once!';
+
+  @override
+  String get badgeComebackKidTitle => 'Comeback Kid';
+
+  @override
+  String get badgeComebackKidDesc =>
+      'Rebuilt a 7-day streak after previously losing a streak!';
+
+  @override
+  String get badgePunktlandungTitle => 'Bullseye';
+
+  @override
+  String get badgePunktlandungDesc =>
+      'Ended a day within ±20 calories of your exact daily calorie goal!';
+
+  @override
+  String get badgeProteinProfiTitle => 'Protein Pro';
+
+  @override
+  String get badgeProteinProfiDesc =>
+      'Met your daily protein target 7 days in a row!';
+
+  @override
+  String get badgeMakroAusgleichTitle => 'Macro Balance';
+
+  @override
+  String get badgeMakroAusgleichDesc =>
+      'Met all your protein, carb, and fat targets on the same day!';
+
+  @override
+  String get badgeBurnMasterTitle => 'Burn Master';
+
+  @override
+  String get badgeBurnMasterDesc =>
+      'Burned 500+ kcal through exercise activities in a single day!';
+
+  @override
+  String get badgeFitnessRitterTitle => 'Fitness Knight';
+
+  @override
+  String get badgeFitnessRitterDesc =>
+      'Logged 10 workout activities in a single month!';
+
+  @override
+  String get badgeFotoGourmetTitle => 'Photo Gourmet';
+
+  @override
+  String get badgeFotoGourmetDesc => 'Logged 50 meals with AI food photos!';
+
+  @override
+  String get badgeFavoritenChefTitle => 'Favorite Chef';
+
+  @override
+  String get badgeFavoritenChefDesc =>
+      'Saved 10 favorite meals for quick logging!';
+
+  @override
+  String get badgeKalorienSparfuchsTitle => 'Calorie Saver';
+
+  @override
+  String get badgeKalorienSparfuchsDesc =>
+      'Ended a full completed day with less than 50% of your calorie goal!';
+
+  @override
   String get lvlCouchPotato => 'Couch-Potato';
 
   @override
@@ -1091,7 +1201,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!';
 
   @override
+  String prestigeMilestoneTitle(int count) {
+    return '${count}th Prestige Star Milestone!';
+  }
+
+  @override
+  String prestigeMilestoneDesc(int count) {
+    return 'Legendary dedication! You achieved your ${count}th Prestige Star beyond Level 10! Truly an inspiration!';
+  }
+
+  @override
   String get btnTriggerPrestige => 'Trigger Prestige';
+
+  @override
+  String get btnRecalculateGamification => 'Recalculate Stats';
+
+  @override
+  String get recalculateGamificationSuccess =>
+      'Gamification stats successfully recalculated from history!';
 
   @override
   String statusLabel(String status) {

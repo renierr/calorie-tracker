@@ -61,16 +61,57 @@ class GamificationStats {
     };
   }
 
+  static String normalizeBadgeId(String id) {
+    switch (id) {
+      case 'zundfunke':
+        return 'spark';
+      case 'dreifache_disziplin':
+        return 'triple_discipline';
+      case 'wochen_koenig':
+        return 'week_king';
+      case 'hunderter_legende':
+        return 'hundred_day_legend';
+      case 'jahres_titan':
+        return 'year_titan';
+      case 'tagebuch_veteran':
+        return 'diary_veteran';
+      case 'kalorien_archivar':
+        return 'calorie_archivist';
+      case 'tausender_club':
+        return 'thousand_club';
+      case 'prestige_pionier':
+        return 'prestige_pioneer';
+      case 'schild_sammler':
+        return 'shield_collector';
+      case 'punktlandung':
+        return 'bullseye';
+      case 'protein_profi':
+        return 'protein_pro';
+      case 'makro_ausgleich':
+        return 'macro_balance';
+      case 'fitness_ritter':
+        return 'fitness_knight';
+      case 'foto_gourmet':
+        return 'photo_gourmet';
+      case 'favoriten_chef':
+        return 'favorite_chef';
+      case 'kalorien_sparfuchs':
+        return 'calorie_saver';
+      default:
+        return id;
+    }
+  }
+
   factory GamificationStats.fromMap(Map<String, dynamic> map) {
     final String badgesStr = map['unlocked_badges'] as String? ?? '';
     final List<String> badgesList = badgesStr.isEmpty
         ? <String>[]
-        : badgesStr.split(',');
+        : badgesStr.split(',').map(normalizeBadgeId).toSet().toList();
 
     final String ackBadgesStr = map['acknowledged_badges'] as String? ?? '';
     final List<String> ackBadgesList = ackBadgesStr.isEmpty
         ? <String>[]
-        : ackBadgesStr.split(',');
+        : ackBadgesStr.split(',').map(normalizeBadgeId).toSet().toList();
 
     return GamificationStats(
       xp: map['xp'] as int? ?? 0,
