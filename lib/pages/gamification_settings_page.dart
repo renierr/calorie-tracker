@@ -21,9 +21,10 @@ class GamificationSettingsPage extends StatelessWidget {
     if (appState.recentUnlockedBadge != null) {
       final badge = appState.recentUnlockedBadge!;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!context.mounted) return;
         appState.dismissBadgeNotification();
         await GamificationDialogs.showBadgeUnlocked(context, appState, badge);
-        appState.onBadgeDialogDismissed(badge);
+        await appState.onBadgeDialogDismissed(badge);
       });
     }
     if (appState.showLevelUpNotification) {

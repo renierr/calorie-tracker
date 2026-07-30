@@ -630,7 +630,7 @@
   "toggleGamification": "Enable Gamification Mechanics",
   "streakProtection": "Streak Protection",
   "prestigeTitle": "Prestige Star Earned!",
-  "prestigeDesc": "Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!",
+  "prestigeDesc": "Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. Every 10th star grants a Streak Shield!",
   "prestigeMilestoneTitle": "{count}th Prestige Star Milestone!",
   "@prestigeMilestoneTitle": {
     "placeholders": {
@@ -639,7 +639,7 @@
       }
     }
   },
-  "prestigeMilestoneDesc": "Legendary dedication! You achieved your {count}th Prestige Star beyond Level 10! Truly an inspiration!",
+  "prestigeMilestoneDesc": "Legendary dedication! You achieved your {count}th Prestige Star beyond Level 10 and earned +1 Streak Shield!",
   "@prestigeMilestoneDesc": {
     "placeholders": {
       "count": {

@@ -24,11 +24,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _processPendingNotifications(AppState appState) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
       if (appState.recentUnlockedBadge != null) {
         final badge = appState.recentUnlockedBadge!;
         appState.dismissBadgeNotification();
         await GamificationDialogs.showBadgeUnlocked(context, appState, badge);
-        appState.onBadgeDialogDismissed(badge);
+        await appState.onBadgeDialogDismissed(badge);
       } else if (appState.showLevelUpNotification) {
         final lvl = appState.gamificationStats.level;
         appState.dismissLevelUpNotification();

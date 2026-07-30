@@ -632,7 +632,7 @@
   "toggleGamification": "Gamification-System aktivieren",
   "streakProtection": "Serien-Schutz",
   "prestigeTitle": "Prestige-Stern verdient!",
-  "prestigeDesc": "Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Du erhältst +1 Serien-Schutzschild!",
+  "prestigeDesc": "Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Jeder 10. Stern bringt ein Serien-Schutzschild!",
   "prestigeMilestoneTitle": "{count}. Prestige-Stern Meilenstein!",
   "@prestigeMilestoneTitle": {
     "placeholders": {
@@ -641,7 +641,7 @@
       }
     }
   },
-  "prestigeMilestoneDesc": "Legendäre Disziplin! Du hast deinen {count}. Prestige-Stern über Level 10 hinaus erreicht! Eine wahre Inspiration!",
+  "prestigeMilestoneDesc": "Legendäre Disziplin! Du hast deinen {count}. Prestige-Stern über Level 10 hinaus erreicht und +1 Serien-Schutzschild erhalten!",
   "@prestigeMilestoneDesc": {
     "placeholders": {
       "count": {

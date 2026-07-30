@@ -1238,7 +1238,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get prestigeDesc =>
-      'Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Du erhältst +1 Serien-Schutzschild!';
+      'Unglaubliche Disziplin! Du hast einen weiteren Meilenstein von 1000 XP über Level 10 hinaus erreicht. Jeder 10. Stern bringt ein Serien-Schutzschild!';
 
   @override
   String prestigeMilestoneTitle(int count) {
@@ -1247,7 +1247,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String prestigeMilestoneDesc(int count) {
-    return 'Legendäre Disziplin! Du hast deinen $count. Prestige-Stern über Level 10 hinaus erreicht! Eine wahre Inspiration!';
+    return 'Legendäre Disziplin! Du hast deinen $count. Prestige-Stern über Level 10 hinaus erreicht und +1 Serien-Schutzschild erhalten!';
   }
 
   @override

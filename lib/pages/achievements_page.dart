@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:calorie_tracker/l10n/app_localizations.dart';
 import 'package:calorie_tracker/providers/app_state.dart';
 import 'package:calorie_tracker/theme/theme.dart';
+import 'package:calorie_tracker/widgets/gamification/badge_detail_dialog.dart';
 
 class AchievementsPage extends StatefulWidget {
   const AchievementsPage({super.key});
@@ -196,10 +197,10 @@ class _AchievementsPageState extends State<AchievementsPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: MediaQuery.of(context).size.width > 600
-                      ? 3
-                      : 1,
-                  mainAxisExtent: 140,
+                  crossAxisCount: _columnsFor(
+                    MediaQuery.of(context).size.width,
+                  ),
+                  mainAxisExtent: 156,
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
                 ),
@@ -215,6 +216,13 @@ class _AchievementsPageState extends State<AchievementsPage> {
         ),
       ),
     );
+  }
+
+  /// Keeps the badge tiles wide enough for title and description
+  int _columnsFor(double width) {
+    if (width > 1100) return 3;
+    if (width > 700) return 2;
+    return 1;
   }
 
   Widget _buildFilterChip({
@@ -438,7 +446,6 @@ class _BadgeCard extends StatelessWidget {
     final activeColor = item.isUnlocked ? item.color : colors.textMuted;
 
     return Container(
-      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(16),
@@ -458,121 +465,153 @@ class _BadgeCard extends StatelessWidget {
               ]
             : null,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Icon Container
-          Stack(
-            alignment: Alignment.center,
-            children: [
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => BadgeDetailDialog.show(
+            context,
+            title: item.title,
+            description: item.description,
+            icon: item.icon,
+            color: item.color,
+            isUnlocked: item.isUnlocked,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: _buildContent(context, colors, activeColor),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    AppThemeColors colors,
+    Color activeColor,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Icon Container
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: item.isUnlocked
+                    ? activeColor.withValues(alpha: 0.15)
+                    : colors.surfaceLight,
+                border: Border.all(
+                  color: item.isUnlocked
+                      ? activeColor.withValues(alpha: 0.4)
+                      : colors.surfaceLight,
+                  width: 1.5,
+                ),
+              ),
+              child: Icon(item.icon, color: activeColor, size: 26),
+            ),
+            if (!item.isUnlocked)
               Container(
                 width: 52,
                 height: 52,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: item.isUnlocked
-                      ? activeColor.withValues(alpha: 0.15)
-                      : colors.surfaceLight,
-                  border: Border.all(
-                    color: item.isUnlocked
-                        ? activeColor.withValues(alpha: 0.4)
-                        : colors.surfaceLight,
-                    width: 1.5,
-                  ),
+                  color: Colors.black.withValues(alpha: 0.35),
                 ),
-                child: Icon(item.icon, color: activeColor, size: 26),
+                child: const Icon(Icons.lock, color: Colors.white70, size: 20),
               ),
-              if (!item.isUnlocked)
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.black.withValues(alpha: 0.35),
-                  ),
-                  child: const Icon(
-                    Icons.lock,
-                    color: Colors.white70,
-                    size: 20,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 14),
+          ],
+        ),
+        const SizedBox(width: 14),
 
-          // Content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        item.title,
-                        style: TextStyle(
-                          color: item.isUnlocked
-                              ? colors.textPrimary
-                              : colors.textMuted,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: item.isUnlocked
-                            ? AppTheme.accentEmerald.withValues(alpha: 0.15)
-                            : colors.surfaceLight,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            item.isUnlocked ? Icons.check_circle : Icons.lock,
-                            color: item.isUnlocked
-                                ? AppTheme.accentEmerald
-                                : colors.textMuted,
-                            size: 10,
-                          ),
-                          const SizedBox(width: 3),
-                          Text(
-                            item.isUnlocked
-                                ? l10n.badgeUnlockedStatus
-                                : l10n.badgeLockedStatus,
-                            style: TextStyle(
-                              color: item.isUnlocked
-                                  ? AppTheme.accentEmerald
-                                  : colors.textMuted,
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+        // Content
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                item.title,
+                style: TextStyle(
+                  color: item.isUnlocked
+                      ? colors.textPrimary
+                      : colors.textMuted,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 4),
-                Text(
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
                   item.description,
                   style: TextStyle(
                     color: colors.textSecondary,
                     fontSize: 11,
                     height: 1.25,
                   ),
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ],
+              ),
+              const SizedBox(height: 6),
+              _StatusChip(
+                isUnlocked: item.isUnlocked,
+                colors: colors,
+                l10n: l10n,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  final bool isUnlocked;
+  final AppThemeColors colors;
+  final AppLocalizations l10n;
+
+  const _StatusChip({
+    required this.isUnlocked,
+    required this.colors,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final Color color = isUnlocked ? AppTheme.accentEmerald : colors.textMuted;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: isUnlocked
+            ? AppTheme.accentEmerald.withValues(alpha: 0.15)
+            : colors.surfaceLight,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isUnlocked ? Icons.check_circle : Icons.lock,
+            color: color,
+            size: 10,
+          ),
+          const SizedBox(width: 3),
+          Text(
+            isUnlocked ? l10n.badgeUnlockedStatus : l10n.badgeLockedStatus,
+            style: TextStyle(
+              color: color,
+              fontSize: 9,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

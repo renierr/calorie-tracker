@@ -1227,7 +1227,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prestigeDesc =>
-      'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!';
+      'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. Every 10th star grants a Streak Shield!';
 
   @override
   String prestigeMilestoneTitle(int count) {
@@ -1236,7 +1236,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String prestigeMilestoneDesc(int count) {
-    return 'Legendary dedication! You achieved your ${count}th Prestige Star beyond Level 10! Truly an inspiration!';
+    return 'Legendary dedication! You achieved your ${count}th Prestige Star beyond Level 10 and earned +1 Streak Shield!';
   }
 
   @override

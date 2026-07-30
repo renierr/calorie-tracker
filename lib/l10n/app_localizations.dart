@@ -2237,7 +2237,7 @@ abstract class AppLocalizations {
   /// No description provided for @prestigeDesc.
   ///
   /// In en, this message translates to:
-  /// **'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. You earned +1 Streak Shield!'**
+  /// **'Incredible discipline! You surpassed another 1000 XP milestone beyond Level 10. Every 10th star grants a Streak Shield!'**
   String get prestigeDesc;
 
   /// No description provided for @prestigeMilestoneTitle.
@@ -2249,7 +2249,7 @@ abstract class AppLocalizations {
   /// No description provided for @prestigeMilestoneDesc.
   ///
   /// In en, this message translates to:
-  /// **'Legendary dedication! You achieved your {count}th Prestige Star beyond Level 10! Truly an inspiration!'**
+  /// **'Legendary dedication! You achieved your {count}th Prestige Star beyond Level 10 and earned +1 Streak Shield!'**
   String prestigeMilestoneDesc(int count);
 
   /// No description provided for @btnTriggerPrestige.
