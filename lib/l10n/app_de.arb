@@ -851,5 +851,55 @@
   "statsWithNotes": "Einträge mit Notizen: {count}",
   "statsBodyWeightTitle": "Körpergewicht",
   "statsWeightEntries": "Gewichtseinträge: {count}",
-  "statsWeightRange": "{min} kg — {max} kg"
+  "statsWeightRange": "{min} kg — {max} kg",
+  "healthConnectTitle": "Health Connect",
+  "healthConnectCardDescription": "Erfasste Mahlzeiten und Makronährstoffe in Android Health Connect veröffentlichen.",
+  "healthConnectEnabledStatus": "Mahlzeiten-Veröffentlichung aktiviert",
+  "healthConnectDisabledStatus": "Mahlzeiten-Veröffentlichung deaktiviert",
+  "healthConnectUnavailableTitle": "Health Connect ist nicht verfügbar",
+  "healthConnectUnavailableDescription": "Die Veröffentlichung in Health Connect ist nur unter Android verfügbar.",
+  "healthConnectMealsTitle": "Mahlzeiten-Nährwerte veröffentlichen",
+  "healthConnectMealsDescription": "NutriScan veröffentlicht Name, Kalorien, Eiweiß, Kohlenhydrate und Fett jeder Mahlzeit. Aktivitäten und Körpergewicht werden nicht veröffentlicht.",
+  "healthConnectEnableTitle": "Neue und bearbeitete Mahlzeiten veröffentlichen",
+  "healthConnectEnableDescription": "Schreibt jede Mahlzeit nach dem Speichern in Health Connect. Bestehende Einträge werden mit Jetzt veröffentlichen übertragen.",
+  "healthConnectOpenTitle": "Health Connect öffnen",
+  "healthConnectOpenDescription": "Berechtigungen verwalten und Health-Connect-Daten ansehen.",
+  "healthConnectOpenFallback": "Health-Connect-Einstellungen sind hier nicht verfügbar, daher wurden die App-Einstellungen geöffnet.",
+  "healthConnectOpenFailed": "Health Connect konnte nicht geöffnet werden: {error}",
+  "@healthConnectOpenFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "healthConnectPublishNowTitle": "Jetzt veröffentlichen",
+  "healthConnectPublishNowDescription": "Alle aktuellen Mahlzeiten senden. Wiederholtes Veröffentlichen aktualisiert dieselben Health-Connect-Einträge ohne Duplikate.",
+  "healthConnectReconcileTitle": "Veröffentlichte Mahlzeiten abgleichen",
+  "healthConnectReconcileDescription": "NutriScan-Nährwerteinträge entfernen und den aktuellen Mahlzeitenverlauf erneut veröffentlichen. Nach Löschungen oder einer Sicherungswiederherstellung verwenden.",
+  "healthConnectRemoveTitle": "NutriScan-Daten entfernen",
+  "healthConnectRemoveDescription": "Löscht nur von NutriScan geschriebene Nährwerteinträge. Andere Apps bleiben unverändert.",
+  "healthConnectRemoveConfirm": "Alle von NutriScan in Health Connect geschriebenen Nährwerteinträge entfernen? Der lokale Mahlzeitenverlauf bleibt unverändert.",
+  "healthConnectPublishSuccess": "{count} Mahlzeit(en) in Health Connect veröffentlicht.",
+  "@healthConnectPublishSuccess": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "healthConnectPublishPartial": "{published} Mahlzeit(en) veröffentlicht; {failed} fehlgeschlagen.",
+  "@healthConnectPublishPartial": {
+    "placeholders": {
+      "published": { "type": "int" },
+      "failed": { "type": "int" }
+    }
+  },
+  "healthConnectPermissionNeeded": "Die Schreibberechtigung für Health-Connect-Nährwerte wird benötigt.",
+  "healthConnectPublishFailed": "Die Veröffentlichung in Health Connect ist fehlgeschlagen.",
+  "healthConnectPublishingTitle": "Mahlzeiten werden veröffentlicht",
+  "healthConnectPublishingDescription": "Der Mahlzeitenverlauf wird an Health Connect gesendet. NutriScan bis zum Abschluss geöffnet lassen.",
+  "healthConnectPublishingProgress": "{processed} von {total} Mahlzeiten veröffentlicht",
+  "@healthConnectPublishingProgress": {
+    "placeholders": {
+      "processed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  }
 }

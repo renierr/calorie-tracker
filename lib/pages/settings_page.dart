@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme.dart';
@@ -12,6 +14,7 @@ import '../widgets/settings/sync_config_card.dart';
 import '../widgets/settings/version_card.dart';
 import '../widgets/settings/ai_provider_config_tile.dart';
 import '../widgets/settings/gamification_config_tile.dart';
+import '../widgets/settings/health_connect_config_card.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -144,6 +147,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
               const SyncConfigCard(),
               const SizedBox(height: 20),
+
+              if (Platform.isAndroid) ...[
+                const HealthConnectConfigCard(),
+                const SizedBox(height: 20),
+              ],
 
               const GamificationConfigTile(),
               const SizedBox(height: 20),

@@ -1635,4 +1635,114 @@ class AppLocalizationsDe extends AppLocalizations {
   String statsWeightRange(Object max, Object min) {
     return '$min kg — $max kg';
   }
+
+  @override
+  String get healthConnectTitle => 'Health Connect';
+
+  @override
+  String get healthConnectCardDescription =>
+      'Erfasste Mahlzeiten und Makronährstoffe in Android Health Connect veröffentlichen.';
+
+  @override
+  String get healthConnectEnabledStatus =>
+      'Mahlzeiten-Veröffentlichung aktiviert';
+
+  @override
+  String get healthConnectDisabledStatus =>
+      'Mahlzeiten-Veröffentlichung deaktiviert';
+
+  @override
+  String get healthConnectUnavailableTitle =>
+      'Health Connect ist nicht verfügbar';
+
+  @override
+  String get healthConnectUnavailableDescription =>
+      'Die Veröffentlichung in Health Connect ist nur unter Android verfügbar.';
+
+  @override
+  String get healthConnectMealsTitle => 'Mahlzeiten-Nährwerte veröffentlichen';
+
+  @override
+  String get healthConnectMealsDescription =>
+      'NutriScan veröffentlicht Name, Kalorien, Eiweiß, Kohlenhydrate und Fett jeder Mahlzeit. Aktivitäten und Körpergewicht werden nicht veröffentlicht.';
+
+  @override
+  String get healthConnectEnableTitle =>
+      'Neue und bearbeitete Mahlzeiten veröffentlichen';
+
+  @override
+  String get healthConnectEnableDescription =>
+      'Schreibt jede Mahlzeit nach dem Speichern in Health Connect. Bestehende Einträge werden mit Jetzt veröffentlichen übertragen.';
+
+  @override
+  String get healthConnectOpenTitle => 'Health Connect öffnen';
+
+  @override
+  String get healthConnectOpenDescription =>
+      'Berechtigungen verwalten und Health-Connect-Daten ansehen.';
+
+  @override
+  String get healthConnectOpenFallback =>
+      'Health-Connect-Einstellungen sind hier nicht verfügbar, daher wurden die App-Einstellungen geöffnet.';
+
+  @override
+  String healthConnectOpenFailed(String error) {
+    return 'Health Connect konnte nicht geöffnet werden: $error';
+  }
+
+  @override
+  String get healthConnectPublishNowTitle => 'Jetzt veröffentlichen';
+
+  @override
+  String get healthConnectPublishNowDescription =>
+      'Alle aktuellen Mahlzeiten senden. Wiederholtes Veröffentlichen aktualisiert dieselben Health-Connect-Einträge ohne Duplikate.';
+
+  @override
+  String get healthConnectReconcileTitle =>
+      'Veröffentlichte Mahlzeiten abgleichen';
+
+  @override
+  String get healthConnectReconcileDescription =>
+      'NutriScan-Nährwerteinträge entfernen und den aktuellen Mahlzeitenverlauf erneut veröffentlichen. Nach Löschungen oder einer Sicherungswiederherstellung verwenden.';
+
+  @override
+  String get healthConnectRemoveTitle => 'NutriScan-Daten entfernen';
+
+  @override
+  String get healthConnectRemoveDescription =>
+      'Löscht nur von NutriScan geschriebene Nährwerteinträge. Andere Apps bleiben unverändert.';
+
+  @override
+  String get healthConnectRemoveConfirm =>
+      'Alle von NutriScan in Health Connect geschriebenen Nährwerteinträge entfernen? Der lokale Mahlzeitenverlauf bleibt unverändert.';
+
+  @override
+  String healthConnectPublishSuccess(int count) {
+    return '$count Mahlzeit(en) in Health Connect veröffentlicht.';
+  }
+
+  @override
+  String healthConnectPublishPartial(int published, int failed) {
+    return '$published Mahlzeit(en) veröffentlicht; $failed fehlgeschlagen.';
+  }
+
+  @override
+  String get healthConnectPermissionNeeded =>
+      'Die Schreibberechtigung für Health-Connect-Nährwerte wird benötigt.';
+
+  @override
+  String get healthConnectPublishFailed =>
+      'Die Veröffentlichung in Health Connect ist fehlgeschlagen.';
+
+  @override
+  String get healthConnectPublishingTitle => 'Mahlzeiten werden veröffentlicht';
+
+  @override
+  String get healthConnectPublishingDescription =>
+      'Der Mahlzeitenverlauf wird an Health Connect gesendet. NutriScan bis zum Abschluss geöffnet lassen.';
+
+  @override
+  String healthConnectPublishingProgress(int processed, int total) {
+    return '$processed von $total Mahlzeiten veröffentlicht';
+  }
 }

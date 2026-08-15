@@ -180,6 +180,9 @@ mixin _MealState on ChangeNotifier {
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
+    if (_state._healthConnectEnabled) {
+      HealthConnectNutritionPublisher.instance.publishMeals([unsyncedMeal]);
+    }
   }
 
   Future<void> updateMeal(Meal meal) async {
@@ -190,6 +193,9 @@ mixin _MealState on ChangeNotifier {
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
     }
+    if (_state._healthConnectEnabled) {
+      HealthConnectNutritionPublisher.instance.publishMeals([unsyncedMeal]);
+    }
   }
 
   Future<void> deleteMeal(int id) async {
@@ -199,6 +205,9 @@ mixin _MealState on ChangeNotifier {
     await _state.onMealDeleted();
     if (_state._syncEnabled) {
       _state._trySyncIfAvailable();
+    }
+    if (_state._healthConnectEnabled) {
+      _state.publishMealsToHealthConnect(reconcile: true);
     }
   }
 

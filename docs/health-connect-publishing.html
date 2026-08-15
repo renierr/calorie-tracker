@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NutriScan Health Connect Publishing</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b0f19; --panel:#161f30; --line:#283650; --ink:#f9fafb; --muted:#9ca3af; --green:#10b981; --blue:#3b82f6; --red:#ef4444; }
+    * { box-sizing:border-box } body { margin:0; font-family:Inter,system-ui,sans-serif; background:radial-gradient(circle at 80% 0,#12384a,transparent 35%),var(--bg); color:var(--ink); line-height:1.5 }
+    main { max-width:1040px; margin:auto; padding:48px 22px 80px } h1 { font-size:clamp(2.2rem,5vw,4.5rem); letter-spacing:-.06em; margin:0 0 12px } h2 { margin-top:0 } .lead { color:var(--muted); max-width:700px; font-size:1.12rem } .pill { display:inline-block; padding:5px 10px; border:1px solid #176b59; color:#70e0bf; border-radius:999px; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin:32px 0 } .card { background:linear-gradient(145deg,#1b273b,var(--panel)); border:1px solid var(--line); border-radius:18px; padding:20px } .card strong { display:block; color:var(--green); font-size:1.45rem } .flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:12px; margin:28px 0 } .node { border:1px solid var(--line); background:var(--panel); border-radius:14px; padding:18px; text-align:center } .arrow { color:var(--green); font-size:1.8rem }
+    code { background:#09111f; color:#9fe7d0; padding:3px 6px; border-radius:5px; overflow-wrap:anywhere } .identity { border-left:3px solid var(--blue); padding:16px 20px; background:#101d30; border-radius:0 12px 12px 0 } button { border:0; border-radius:10px; padding:10px 14px; color:#06251d; background:var(--green); cursor:pointer; font-weight:700 } button:hover { filter:brightness(1.12) } .details { margin-top:14px; color:var(--muted) } .hidden { display:none } ul { padding-left:20px } .no { color:#ffaaa5 } @media(max-width:650px){main{padding-top:32px}.flow{grid-template-columns:1fr;gap:7px}.arrow{transform:rotate(90deg);text-align:center}}
+  </style>
+</head>
+<body>
+  <main>
+    <span class="pill">Android only · v1</span>
+    <h1>Meals, not duplicates.</h1>
+    <p class="lead">NutriScan sends logged meals to the device-local Health Connect store. Cloud-synced meals remain one Health Connect record, even when published from more than one device.</p>
+    <section class="grid">
+      <div class="card"><strong>NutritionRecord</strong>One Health Connect record per logged meal.</div>
+      <div class="card"><strong>5 values</strong>Name, calories, protein, carbohydrates, and total fat.</div>
+      <div class="card"><strong>0 extra apps</strong>Health Dashboard and other readers can identify the NutriScan origin.</div>
+    </section>
+    <section class="flow" aria-label="Publishing flow">
+      <div class="node">NutriScan meal<br><small>stable short ID</small></div><div class="arrow">→</div>
+      <div class="node">Health Connect<br><small>local Android store</small></div><div class="arrow">→</div>
+      <div class="node">Authorized apps<br><small>read with source awareness</small></div>
+    </section>
+    <section class="card">
+      <h2>Cross-device identity</h2>
+      <div class="identity"><code>clientRecordId = nutriscan:meal:&lt;shortId&gt;</code><br><br><code>clientRecordVersion = updatedAt</code></div>
+      <p class="details">The meal <code>shortId</code> moves with NutriScan cloud sync. Health Connect combines the writing package and client record ID, so publishing the same synced meal on a second device updates its existing record. The newest <code>updatedAt</code> version wins.</p>
+      <button id="toggle">Show example</button>
+      <p id="example" class="details hidden"><code>MEAL-ABC123XYZ</code> becomes <code>nutriscan:meal:MEAL-ABC123XYZ</code>. An edit raises the version and replaces the nutrition values.</p>
+    </section>
+    <section class="card">
+      <h2>Exact Health Connect mapping</h2>
+      <p class="details">Each NutriScan food entry creates one Android Health Connect <code>NutritionRecord</code>. NutriScan does not create separate calorie or macro records.</p>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;text-align:left"><thead><tr style="color:var(--green)"><th style="padding:10px">NutriScan field</th><th style="padding:10px">Health Connect field</th><th style="padding:10px">Data type / unit</th></tr></thead><tbody><tr><td style="padding:10px">Food name</td><td style="padding:10px"><code>NutritionRecord.foodName</code></td><td style="padding:10px">String</td></tr><tr><td style="padding:10px">Calories</td><td style="padding:10px"><code>NutritionRecord.energy</code></td><td style="padding:10px"><code>Energy.kilocalories</code> / kcal</td></tr><tr><td style="padding:10px">Protein</td><td style="padding:10px"><code>NutritionRecord.protein</code></td><td style="padding:10px"><code>Mass.grams</code> / g</td></tr><tr><td style="padding:10px">Carbohydrates</td><td style="padding:10px"><code>NutritionRecord.totalCarbohydrate</code></td><td style="padding:10px"><code>Mass.grams</code> / g</td></tr><tr><td style="padding:10px">Fat</td><td style="padding:10px"><code>NutritionRecord.totalFat</code></td><td style="padding:10px"><code>Mass.grams</code> / g</td></tr><tr><td style="padding:10px">Logged time</td><td style="padding:10px"><code>startTime</code> and <code>endTime</code></td><td style="padding:10px">One-second interval beginning at the logged timestamp</td></tr><tr><td style="padding:10px">NutriScan record ID</td><td style="padding:10px"><code>Metadata.clientRecordId</code></td><td style="padding:10px"><code>nutriscan:meal:&lt;shortId&gt;</code></td></tr><tr><td style="padding:10px">Last local edit</td><td style="padding:10px"><code>Metadata.clientRecordVersion</code></td><td style="padding:10px">NutriScan <code>updatedAt</code> Unix milliseconds</td></tr></tbody></table></div>
+      <h3 style="margin:24px 0 8px">Example</h3>
+      <pre style="margin:0;padding:16px;overflow:auto;background:#09111f;border-radius:10px;color:#c9f7e8"><code>NutriScan meal
+shortId:  MEAL-ABC123XYZ
+name:     Chicken rice bowl
+logged:   2026-08-15 12:30:00
+calories: 640 kcal
+protein:  42 g
+carbs:    68 g
+fat:      20 g
+
+Health Connect NutritionRecord
+foodName:           "Chicken rice bowl"
+energy:             640 kcal
+protein:            42 g
+totalCarbohydrate:  68 g
+totalFat:           20 g
+startTime:          2026-08-15 12:30:00
+endTime:            2026-08-15 12:30:01
+clientRecordId:     "nutriscan:meal:MEAL-ABC123XYZ"</code></pre>
+    </section>
+    <section class="grid">
+      <div class="card"><h2>Automatic</h2><p>When enabled, newly saved and edited meals publish immediately. The first request asks only for Nutrition write permission.</p></div>
+      <div class="card"><h2>Manual</h2><p><b>Publish now</b> backfills history and shows live progress. <b>Reconcile</b> deletes NutriScan nutrition records, then recreates the current meal history after a deletion or restore.</p></div>
+      <div class="card"><h2>Removal</h2><p><b>Remove NutriScan data</b> deletes only Nutrition records written by NutriScan. Local meals and data from other apps stay intact.</p></div>
+    </section>
+    <section class="card">
+      <h2>Scope</h2>
+      <ul><li>Published: meal name, calories, protein, carbohydrates, total fat.</li><li class="no">Not published in v1: activities, calories burned, body weight, photos, notes, and AI confidence.</li><li>Available only on Android. Windows and Linux do not display the Health Connect settings entry.</li></ul>
+    </section>
+  </main>
+  <script>document.getElementById('toggle').onclick=()=>document.getElementById('example').classList.toggle('hidden');</script>
+</body>
+</html>

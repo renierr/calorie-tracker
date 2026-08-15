@@ -27,6 +27,8 @@ mixin _SettingsState on ChangeNotifier {
     _state._syncEnabled = prefs.getBool(AppState._keySyncEnabled) ?? false;
     _state._notificationsEnabled =
         prefs.getBool(AppState._keyNotificationsEnabled) ?? true;
+    _state._healthConnectEnabled =
+        prefs.getBool(AppState._keyHealthConnectEnabled) ?? false;
 
     await _state.loadAISettings();
     notifyListeners();
@@ -103,6 +105,58 @@ mixin _SettingsState on ChangeNotifier {
     await prefs.setBool(AppState._keyNotificationsEnabled, enabled);
   }
 
+  Future<void> setHealthConnectEnabled(bool enabled) async {
+    _state._healthConnectEnabled = enabled;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(AppState._keyHealthConnectEnabled, enabled);
+  }
+
+  Future<HealthConnectPublishResult> publishMealsToHealthConnect({
+    bool reconcile = false,
+  }) async {
+    final meals = await _state._dbHelper.getAllMeals(includeImages: false);
+    _state._isHealthConnectPublishing = true;
+    _state._healthConnectPublishedCount = 0;
+    _state._healthConnectPublishTotal = meals
+        .where((meal) => meal.isMeal)
+        .length;
+    notifyListeners();
+    try {
+      void onProgress(int processed, int total) {
+        _state._healthConnectPublishedCount = processed;
+        _state._healthConnectPublishTotal = total;
+        notifyListeners();
+      }
+
+      return reconcile
+          ? await HealthConnectNutritionPublisher.instance.reconcileMeals(
+              meals,
+              onProgress: onProgress,
+            )
+          : await HealthConnectNutritionPublisher.instance.publishMeals(
+              meals,
+              onProgress: onProgress,
+            );
+    } finally {
+      _state._isHealthConnectPublishing = false;
+      notifyListeners();
+    }
+  }
+
+  Future<HealthConnectPublishResult> removeMealsFromHealthConnect() async {
+    _state._isHealthConnectPublishing = true;
+    _state._healthConnectPublishedCount = 0;
+    _state._healthConnectPublishTotal = 0;
+    notifyListeners();
+    try {
+      return await HealthConnectNutritionPublisher.instance.removeAll();
+    } finally {
+      _state._isHealthConnectPublishing = false;
+      notifyListeners();
+    }
+  }
+
   ThemeMode _parseThemeMode(String s) {
     switch (s) {
       case 'light':
@@ -154,6 +208,7 @@ mixin _SettingsState on ChangeNotifier {
         'syncUserId': _state._syncUserId,
         'syncEnabled': _state._syncEnabled,
         'notificationsEnabled': _state._notificationsEnabled,
+        'healthConnectEnabled': _state._healthConnectEnabled,
         'aiProvider': _state._aiProvider,
         'aiModel': _state._aiModel,
         'aiCustomUrl': _state._aiCustomUrl,
@@ -237,6 +292,14 @@ mixin _SettingsState on ChangeNotifier {
         await prefs.setBool(
           AppState._keyNotificationsEnabled,
           _state._notificationsEnabled,
+        );
+      }
+      if (settings.containsKey('healthConnectEnabled')) {
+        _state._healthConnectEnabled =
+            settings['healthConnectEnabled'] as bool? ?? false;
+        await prefs.setBool(
+          AppState._keyHealthConnectEnabled,
+          _state._healthConnectEnabled,
         );
       }
       if (settings.containsKey('aiProvider')) {

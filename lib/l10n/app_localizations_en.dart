@@ -1624,4 +1624,108 @@ class AppLocalizationsEn extends AppLocalizations {
   String statsWeightRange(Object max, Object min) {
     return '$min kg — $max kg';
   }
+
+  @override
+  String get healthConnectTitle => 'Health Connect';
+
+  @override
+  String get healthConnectCardDescription =>
+      'Publish logged meals and macronutrients to Android Health Connect.';
+
+  @override
+  String get healthConnectEnabledStatus => 'Meal publishing enabled';
+
+  @override
+  String get healthConnectDisabledStatus => 'Meal publishing disabled';
+
+  @override
+  String get healthConnectUnavailableTitle => 'Health Connect is unavailable';
+
+  @override
+  String get healthConnectUnavailableDescription =>
+      'Health Connect publishing is available on Android only.';
+
+  @override
+  String get healthConnectMealsTitle => 'Meal nutrition publishing';
+
+  @override
+  String get healthConnectMealsDescription =>
+      'NutriScan publishes each logged meal\'s name, calories, protein, carbohydrates, and fat. Activities and body weight are not published.';
+
+  @override
+  String get healthConnectEnableTitle => 'Publish new and edited meals';
+
+  @override
+  String get healthConnectEnableDescription =>
+      'Writes each meal to Health Connect after it is saved. Existing history is sent with Publish now.';
+
+  @override
+  String get healthConnectOpenTitle => 'Open Health Connect';
+
+  @override
+  String get healthConnectOpenDescription =>
+      'Manage Health Connect permissions and inspect its data.';
+
+  @override
+  String get healthConnectOpenFallback =>
+      'Health Connect settings are unavailable here, so app settings opened instead.';
+
+  @override
+  String healthConnectOpenFailed(String error) {
+    return 'Could not open Health Connect: $error';
+  }
+
+  @override
+  String get healthConnectPublishNowTitle => 'Publish now';
+
+  @override
+  String get healthConnectPublishNowDescription =>
+      'Send all current meals. Repeated publishing updates the same Health Connect records without duplicates.';
+
+  @override
+  String get healthConnectReconcileTitle => 'Reconcile published meals';
+
+  @override
+  String get healthConnectReconcileDescription =>
+      'Remove NutriScan nutrition records, then publish the current meal history again. Use after deletions or restoring a backup.';
+
+  @override
+  String get healthConnectRemoveTitle => 'Remove NutriScan data';
+
+  @override
+  String get healthConnectRemoveDescription =>
+      'Delete only nutrition records written by NutriScan. Other apps are not affected.';
+
+  @override
+  String get healthConnectRemoveConfirm =>
+      'Remove all nutrition records NutriScan wrote to Health Connect? Your local meal history is not changed.';
+
+  @override
+  String healthConnectPublishSuccess(int count) {
+    return 'Published $count meal(s) to Health Connect.';
+  }
+
+  @override
+  String healthConnectPublishPartial(int published, int failed) {
+    return 'Published $published meal(s); $failed failed.';
+  }
+
+  @override
+  String get healthConnectPermissionNeeded =>
+      'Health Connect nutrition write permission is required.';
+
+  @override
+  String get healthConnectPublishFailed => 'Health Connect publishing failed.';
+
+  @override
+  String get healthConnectPublishingTitle => 'Publishing meals';
+
+  @override
+  String get healthConnectPublishingDescription =>
+      'Sending your meal history to Health Connect. Keep NutriScan open until this finishes.';
+
+  @override
+  String healthConnectPublishingProgress(int processed, int total) {
+    return '$processed of $total meals published';
+  }
 }

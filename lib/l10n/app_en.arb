@@ -849,5 +849,55 @@
   "statsWithNotes": "Entries with Notes: {count}",
   "statsBodyWeightTitle": "Body Weight",
   "statsWeightEntries": "Weight Logs: {count}",
-  "statsWeightRange": "{min} kg — {max} kg"
+  "statsWeightRange": "{min} kg — {max} kg",
+  "healthConnectTitle": "Health Connect",
+  "healthConnectCardDescription": "Publish logged meals and macronutrients to Android Health Connect.",
+  "healthConnectEnabledStatus": "Meal publishing enabled",
+  "healthConnectDisabledStatus": "Meal publishing disabled",
+  "healthConnectUnavailableTitle": "Health Connect is unavailable",
+  "healthConnectUnavailableDescription": "Health Connect publishing is available on Android only.",
+  "healthConnectMealsTitle": "Meal nutrition publishing",
+  "healthConnectMealsDescription": "NutriScan publishes each logged meal's name, calories, protein, carbohydrates, and fat. Activities and body weight are not published.",
+  "healthConnectEnableTitle": "Publish new and edited meals",
+  "healthConnectEnableDescription": "Writes each meal to Health Connect after it is saved. Existing history is sent with Publish now.",
+  "healthConnectOpenTitle": "Open Health Connect",
+  "healthConnectOpenDescription": "Manage Health Connect permissions and inspect its data.",
+  "healthConnectOpenFallback": "Health Connect settings are unavailable here, so app settings opened instead.",
+  "healthConnectOpenFailed": "Could not open Health Connect: {error}",
+  "@healthConnectOpenFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "healthConnectPublishNowTitle": "Publish now",
+  "healthConnectPublishNowDescription": "Send all current meals. Repeated publishing updates the same Health Connect records without duplicates.",
+  "healthConnectReconcileTitle": "Reconcile published meals",
+  "healthConnectReconcileDescription": "Remove NutriScan nutrition records, then publish the current meal history again. Use after deletions or restoring a backup.",
+  "healthConnectRemoveTitle": "Remove NutriScan data",
+  "healthConnectRemoveDescription": "Delete only nutrition records written by NutriScan. Other apps are not affected.",
+  "healthConnectRemoveConfirm": "Remove all nutrition records NutriScan wrote to Health Connect? Your local meal history is not changed.",
+  "healthConnectPublishSuccess": "Published {count} meal(s) to Health Connect.",
+  "@healthConnectPublishSuccess": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "healthConnectPublishPartial": "Published {published} meal(s); {failed} failed.",
+  "@healthConnectPublishPartial": {
+    "placeholders": {
+      "published": { "type": "int" },
+      "failed": { "type": "int" }
+    }
+  },
+  "healthConnectPermissionNeeded": "Health Connect nutrition write permission is required.",
+  "healthConnectPublishFailed": "Health Connect publishing failed.",
+  "healthConnectPublishingTitle": "Publishing meals",
+  "healthConnectPublishingDescription": "Sending your meal history to Health Connect. Keep NutriScan open until this finishes.",
+  "healthConnectPublishingProgress": "{processed} of {total} meals published",
+  "@healthConnectPublishingProgress": {
+    "placeholders": {
+      "processed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  }
 }

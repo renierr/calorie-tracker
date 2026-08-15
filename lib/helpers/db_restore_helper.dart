@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
+import 'android_database_restore_picker.dart';
 
 class DbRestoreHelper {
   static Future<void> handleRestoreFlow(
@@ -18,7 +19,10 @@ class DbRestoreHelper {
     try {
       String? selectedPath;
 
-      if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+      if (Platform.isAndroid) {
+        selectedPath = await AndroidDatabaseRestorePicker.pick();
+        if (selectedPath == null) return;
+      } else if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
         const XTypeGroup typeGroup = XTypeGroup(
           label: 'SQLite Databases',
           extensions: <String>['db'],

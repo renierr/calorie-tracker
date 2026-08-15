@@ -2845,6 +2845,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{min} kg — {max} kg'**
   String statsWeightRange(Object max, Object min);
+
+  /// No description provided for @healthConnectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect'**
+  String get healthConnectTitle;
+
+  /// No description provided for @healthConnectCardDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish logged meals and macronutrients to Android Health Connect.'**
+  String get healthConnectCardDescription;
+
+  /// No description provided for @healthConnectEnabledStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal publishing enabled'**
+  String get healthConnectEnabledStatus;
+
+  /// No description provided for @healthConnectDisabledStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal publishing disabled'**
+  String get healthConnectDisabledStatus;
+
+  /// No description provided for @healthConnectUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect is unavailable'**
+  String get healthConnectUnavailableTitle;
+
+  /// No description provided for @healthConnectUnavailableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect publishing is available on Android only.'**
+  String get healthConnectUnavailableDescription;
+
+  /// No description provided for @healthConnectMealsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal nutrition publishing'**
+  String get healthConnectMealsTitle;
+
+  /// No description provided for @healthConnectMealsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'NutriScan publishes each logged meal\'s name, calories, protein, carbohydrates, and fat. Activities and body weight are not published.'**
+  String get healthConnectMealsDescription;
+
+  /// No description provided for @healthConnectEnableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish new and edited meals'**
+  String get healthConnectEnableTitle;
+
+  /// No description provided for @healthConnectEnableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Writes each meal to Health Connect after it is saved. Existing history is sent with Publish now.'**
+  String get healthConnectEnableDescription;
+
+  /// No description provided for @healthConnectOpenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Health Connect'**
+  String get healthConnectOpenTitle;
+
+  /// No description provided for @healthConnectOpenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Health Connect permissions and inspect its data.'**
+  String get healthConnectOpenDescription;
+
+  /// No description provided for @healthConnectOpenFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect settings are unavailable here, so app settings opened instead.'**
+  String get healthConnectOpenFallback;
+
+  /// No description provided for @healthConnectOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open Health Connect: {error}'**
+  String healthConnectOpenFailed(String error);
+
+  /// No description provided for @healthConnectPublishNowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish now'**
+  String get healthConnectPublishNowTitle;
+
+  /// No description provided for @healthConnectPublishNowDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Send all current meals. Repeated publishing updates the same Health Connect records without duplicates.'**
+  String get healthConnectPublishNowDescription;
+
+  /// No description provided for @healthConnectReconcileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconcile published meals'**
+  String get healthConnectReconcileTitle;
+
+  /// No description provided for @healthConnectReconcileDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove NutriScan nutrition records, then publish the current meal history again. Use after deletions or restoring a backup.'**
+  String get healthConnectReconcileDescription;
+
+  /// No description provided for @healthConnectRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove NutriScan data'**
+  String get healthConnectRemoveTitle;
+
+  /// No description provided for @healthConnectRemoveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete only nutrition records written by NutriScan. Other apps are not affected.'**
+  String get healthConnectRemoveDescription;
+
+  /// No description provided for @healthConnectRemoveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove all nutrition records NutriScan wrote to Health Connect? Your local meal history is not changed.'**
+  String get healthConnectRemoveConfirm;
+
+  /// No description provided for @healthConnectPublishSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Published {count} meal(s) to Health Connect.'**
+  String healthConnectPublishSuccess(int count);
+
+  /// No description provided for @healthConnectPublishPartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Published {published} meal(s); {failed} failed.'**
+  String healthConnectPublishPartial(int published, int failed);
+
+  /// No description provided for @healthConnectPermissionNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect nutrition write permission is required.'**
+  String get healthConnectPermissionNeeded;
+
+  /// No description provided for @healthConnectPublishFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect publishing failed.'**
+  String get healthConnectPublishFailed;
+
+  /// No description provided for @healthConnectPublishingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishing meals'**
+  String get healthConnectPublishingTitle;
+
+  /// No description provided for @healthConnectPublishingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending your meal history to Health Connect. Keep NutriScan open until this finishes.'**
+  String get healthConnectPublishingDescription;
+
+  /// No description provided for @healthConnectPublishingProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{processed} of {total} meals published'**
+  String healthConnectPublishingProgress(int processed, int total);
 }
 
 class _AppLocalizationsDelegate

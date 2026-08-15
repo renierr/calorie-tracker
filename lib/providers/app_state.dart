@@ -12,6 +12,7 @@ import '../services/ai_service_config.dart';
 import '../services/ai_analysis_result.dart';
 import '../services/ai_service_factory.dart';
 import '../services/secure_storage_service.dart';
+import '../services/health_connect_nutrition_publisher.dart';
 import '../constants.dart';
 import 'package:image/image.dart' as img;
 
@@ -53,6 +54,7 @@ class AppState extends ChangeNotifier
   static const String _keyLastSyncedTime = 'last_synced_time';
   static const String _keySyncEnabled = 'sync_enabled';
   static const String _keyNotificationsEnabled = 'notifications_enabled';
+  static const String _keyHealthConnectEnabled = 'health_connect_enabled';
 
   static const String _keyAiProvider = 'ai_provider';
   static const String _keyAiModel = 'ai_model';
@@ -87,6 +89,10 @@ class AppState extends ChangeNotifier
   String _appLocale = 'en';
   ThemeMode _themeMode = ThemeMode.system;
   bool _notificationsEnabled = true;
+  bool _healthConnectEnabled = false;
+  bool _isHealthConnectPublishing = false;
+  int _healthConnectPublishedCount = 0;
+  int _healthConnectPublishTotal = 0;
 
   String _syncServerUrl = '';
   String _syncUserId = 'user-1';
@@ -161,6 +167,10 @@ class AppState extends ChangeNotifier
   bool get isSyncing => _isSyncing;
   bool get syncEnabled => _syncEnabled;
   bool get notificationsEnabled => _notificationsEnabled;
+  bool get healthConnectEnabled => _healthConnectEnabled;
+  bool get isHealthConnectPublishing => _isHealthConnectPublishing;
+  int get healthConnectPublishedCount => _healthConnectPublishedCount;
+  int get healthConnectPublishTotal => _healthConnectPublishTotal;
   bool get scanIsActivity => _scanIsActivity;
 
   // Optimized lazy-loaded selected date meals

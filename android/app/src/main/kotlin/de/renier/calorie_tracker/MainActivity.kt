@@ -7,22 +7,29 @@ import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.ComponentName
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
+import java.io.FileOutputStream
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
     private val CHANNEL = "de.renier.calorie_tracker/file_save"
+    private val HEALTH_CONNECT_CHANNEL = "de.renier.calorie_tracker/health_connect"
+    private val DATABASE_RESTORE_CHANNEL = "de.renier.calorie_tracker/database_restore"
+    private var databaseRestoreResult: MethodChannel.Result? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -78,6 +85,96 @@ class MainActivity : FlutterActivity() {
                     }
                 }
             }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, HEALTH_CONNECT_CHANNEL)
+            .setMethodCallHandler { call, result ->
+                if (call.method != "openSettings") {
+                    result.notImplemented()
+                    return@setMethodCallHandler
+                }
+                val opened = openHealthConnectSettings()
+                if (opened != null) {
+                    result.success(mapOf("fallback" to opened.startsWith("fallback:")))
+                } else {
+                    result.error("HEALTH_CONNECT_UNAVAILABLE", "Could not open Health Connect settings on this device.", null)
+                }
+            }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, DATABASE_RESTORE_CHANNEL)
+            .setMethodCallHandler { call, result ->
+                if (call.method != "pickDatabase") {
+                    result.notImplemented()
+                    return@setMethodCallHandler
+                }
+                if (databaseRestoreResult != null) {
+                    result.error("PICK_IN_PROGRESS", "A database picker is already open", null)
+                    return@setMethodCallHandler
+                }
+                databaseRestoreResult = result
+                startActivityForResult(
+                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "application/octet-stream"
+                    },
+                    DATABASE_RESTORE_REQUEST_CODE,
+                )
+            }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != DATABASE_RESTORE_REQUEST_CODE) return
+        val result = databaseRestoreResult ?: return
+        databaseRestoreResult = null
+        val uri = data?.data
+        if (resultCode != RESULT_OK || uri == null) {
+            result.success(null)
+            return
+        }
+        try {
+            val destination = File(cacheDir, "restore-${System.currentTimeMillis()}.db")
+            contentResolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(destination).use { output -> input.copyTo(output) }
+            } ?: throw IllegalStateException("Could not read the selected database")
+            result.success(destination.absolutePath)
+        } catch (e: Exception) {
+            result.error("DATABASE_COPY_FAILED", e.message, null)
+        }
+    }
+
+    private fun openHealthConnectSettings(): String? {
+        val platform = Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+        val attempts = mutableListOf<Pair<String, Intent>>()
+        if (platform) {
+            attempts.add("home:platform" to Intent("android.health.connect.action.HEALTH_HOME_SETTINGS"))
+            attempts.add("data:platform" to Intent("android.health.connect.action.MANAGE_HEALTH_DATA"))
+        } else {
+            attempts.add("home:apk" to Intent("androidx.health.ACTION_HEALTH_CONNECT_SETTINGS").setPackage("com.google.android.apps.healthdata"))
+            attempts.add("data:apk" to Intent("androidx.health.ACTION_MANAGE_HEALTH_DATA").setPackage("com.google.android.apps.healthdata"))
+        }
+        attempts.add("uri:healthconnect" to Intent(Intent.ACTION_VIEW, Uri.parse("healthconnect://settings")))
+        listOf("com.google.android.healthconnect.controller", "com.android.healthconnect.controller").forEach { classPrefix ->
+            attempts.add("component:$classPrefix" to Intent(Intent.ACTION_MAIN).apply {
+                component = ComponentName("com.google.android.healthconnect.controller", "$classPrefix.MainActivity")
+            })
+        }
+        attempts.add("fallback:appInfo" to Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.parse("package:$packageName")
+        })
+        for ((label, intent) in attempts) {
+            try {
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                return label
+            } catch (e: Exception) {
+                Log.w("NutriScanHealthConnect", "$label failed: ${e.message}")
+            }
+        }
+        return null
+    }
+
+    private companion object {
+        const val DATABASE_RESTORE_REQUEST_CODE = 4812
     }
 
     private fun saveToDownloads(bytes: ByteArray, fileName: String, mimeType: String): Map<String, String> {
