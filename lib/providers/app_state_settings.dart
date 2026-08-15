@@ -115,14 +115,16 @@ mixin _SettingsState on ChangeNotifier {
   Future<HealthConnectPublishResult> publishMealsToHealthConnect({
     bool reconcile = false,
   }) async {
-    final meals = await _state._dbHelper.getAllMeals(includeImages: false);
     _state._isHealthConnectPublishing = true;
     _state._healthConnectPublishedCount = 0;
-    _state._healthConnectPublishTotal = meals
-        .where((meal) => meal.isMeal)
-        .length;
+    _state._healthConnectPublishTotal = 0;
     notifyListeners();
     try {
+      final meals = await _state._dbHelper.getAllMeals(includeImages: false);
+      _state._healthConnectPublishTotal = meals
+          .where((meal) => meal.isMeal)
+          .length;
+      notifyListeners();
       void onProgress(int processed, int total) {
         _state._healthConnectPublishedCount = processed;
         _state._healthConnectPublishTotal = total;
