@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:file_selector/file_selector.dart';
 import '../theme/theme.dart';
 import '../providers/app_state.dart';
 import '../models/meal_model.dart';
@@ -9,7 +7,6 @@ import '../l10n/app_localizations.dart';
 import '../widgets/report_config_dialog.dart';
 import '../widgets/history_filter_panel.dart';
 import '../widgets/meal_history_card.dart';
-import '../widgets/history/history_data_actions_card.dart';
 import '../widgets/history/history_report_action_card.dart';
 import '../widgets/history/history_empty_state.dart';
 
@@ -123,7 +120,13 @@ class _HistoryPageState extends State<HistoryPage> {
               )
             : null,
         actions: [
-          if (!_isSelectionMode)
+          if (!_isSelectionMode) ...[
+            IconButton(
+              icon: const Icon(Icons.picture_as_pdf_outlined),
+              tooltip: AppLocalizations.of(context)!.reportPdf,
+              onPressed: () =>
+                  _showReportConfigDialog(context, appState, filteredMeals),
+            ),
             IconButton(
               icon: const Icon(Icons.checklist),
               tooltip: AppLocalizations.of(context)!.selectMeals,
@@ -132,8 +135,8 @@ class _HistoryPageState extends State<HistoryPage> {
                   _isSelectionMode = true;
                 });
               },
-            )
-          else
+            ),
+          ] else
             TextButton(
               onPressed: () {
                 setState(() {
@@ -155,20 +158,7 @@ class _HistoryPageState extends State<HistoryPage> {
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  // Import/Export Action Card
                   const SizedBox(height: 10),
-                  HistoryDataActionsCard(
-                    onImportPressed: () => _handleImport(context, appState),
-                    onExportPressed: () =>
-                        _handleExport(context, appState, filteredMeals),
-                    onReportPressed: () => _showReportConfigDialog(
-                      context,
-                      appState,
-                      filteredMeals,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-
                   // Filter Toolbar Box
                   HistoryFilterPanel(
                     filterType: appState.historyFilter,
@@ -266,121 +256,5 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       ),
     );
-  }
-
-  Future<void> _handleImport(BuildContext context, AppState appState) async {
-    try {
-      final XFile? file = await openFile(
-        acceptedTypeGroups: <XTypeGroup>[
-          XTypeGroup(
-            label: AppLocalizations.of(context)!.jsonBackup,
-            extensions: <String>['json'],
-          ),
-        ],
-      );
-      if (file == null) return;
-
-      final String content = await file.readAsString();
-      final int count = await appState.importMealsFromJson(content);
-
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.importMealsSuccess(count),
-          ),
-          backgroundColor: AppTheme.accentEmerald,
-        ),
-      );
-    } catch (e) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.importMealsError(e.toString()),
-          ),
-          backgroundColor: AppTheme.accentRed,
-        ),
-      );
-    }
-  }
-
-  Future<void> _handleExport(
-    BuildContext context,
-    AppState appState,
-    List<Meal> filteredMeals,
-  ) async {
-    final loc = AppLocalizations.of(context)!;
-    final List<Meal> mealsToExport;
-    if (_selectedMealIds.isNotEmpty) {
-      mealsToExport = filteredMeals
-          .where((m) => _selectedMealIds.contains(m.id))
-          .toList();
-    } else {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentEmerald),
-          ),
-        ),
-      );
-      mealsToExport = await appState.getMealsForFilter(includeImages: true);
-      if (context.mounted) {
-        Navigator.of(context).pop(); // dismiss loading
-      }
-    }
-
-    if (mealsToExport.isEmpty) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(loc.noMealsToExport),
-          backgroundColor: AppTheme.accentRed,
-        ),
-      );
-      return;
-    }
-
-    try {
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final FileSaveLocation? location = await getSaveLocation(
-        suggestedName: 'nutriscan_export_$timestamp.json',
-        acceptedTypeGroups: <XTypeGroup>[
-          XTypeGroup(label: loc.jsonBackup, extensions: <String>['json']),
-        ],
-      );
-      if (location == null) return;
-
-      final String jsonContent = await appState.exportMealsToJson(
-        mealsToExport,
-      );
-      final File file = File(location.path);
-      await file.writeAsString(jsonContent);
-
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.exportMealsSuccess),
-          backgroundColor: AppTheme.accentEmerald,
-        ),
-      );
-
-      setState(() {
-        _isSelectionMode = false;
-        _selectedMealIds.clear();
-      });
-    } catch (e) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.exportMealsError(e.toString()),
-          ),
-          backgroundColor: AppTheme.accentRed,
-        ),
-      );
-    }
   }
 }
