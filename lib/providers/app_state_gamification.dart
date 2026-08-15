@@ -510,10 +510,10 @@ mixin _GamificationState on ChangeNotifier {
       added.add('photo_gourmet');
     }
 
-    final favorites = await _state._dbHelper.getFavoriteMeals(
-      includeImages: false,
+    final favoritesCount = await _state._dbHelper.getMealsCount(
+      filterType: 'favorites',
     );
-    if (favorites.length >= 10 && !badges.contains('favorite_chef')) {
+    if (favoritesCount >= 10 && !badges.contains('favorite_chef')) {
       badges.add('favorite_chef');
       added.add('favorite_chef');
     }

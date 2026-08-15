@@ -61,6 +61,17 @@
   "ok": "OK",
 
   "historyTitle": "Verlauf",
+  "searchFavoritesHint": "Favoriten suchen",
+  "favoritesCount": "{count} Favoriten",
+  "@favoritesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noFavoriteSearchResults": "Keine passenden Favoriten gefunden.",
+  "loadMore": "Mehr laden",
   "filterTimeframe": "Zeitraum filtern:",
   "allTime": "Alle Einträge",
   "today": "Heute",
@@ -69,6 +80,8 @@
   "customRange": "Benutzerdefiniert",
   "startDate": "Startdatum",
   "endDate": "Enddatum",
+  "searchHistoryHint": "Einträge suchen",
+  "clearSearch": "Suche löschen",
   "logsInFilter": "{count} Einträge im aktiven Filter",
   "compilePdf": "Einträge in einen PDF-Bericht umwandeln.",
   "reportPdf": "PDF-Bericht",
@@ -840,4 +853,3 @@
   "statsWeightEntries": "Gewichtseinträge: {count}",
   "statsWeightRange": "{min} kg — {max} kg"
 }
-

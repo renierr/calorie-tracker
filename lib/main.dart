@@ -10,24 +10,24 @@ import 'widgets/responsive_layout.dart';
 import 'l10n/app_localizations.dart';
 import 'helpers/temp_file_manager.dart';
 
-void main(List<String> args) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await TempFileManager.init();
-
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    debugPrint('[FATAL] FlutterError: ${details.exception}');
-    debugPrint('[FATAL] Stack: ${details.stack}');
-  };
-
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    debugPrint('[FATAL] PlatformDispatcher Error: $error');
-    debugPrint('[FATAL] Stack: $stack');
-    return true;
-  };
-
-  await runZonedGuarded(
+void main(List<String> args) {
+  runZonedGuarded(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await TempFileManager.init();
+
+      FlutterError.onError = (FlutterErrorDetails details) {
+        FlutterError.presentError(details);
+        debugPrint('[FATAL] FlutterError: ${details.exception}');
+        debugPrint('[FATAL] Stack: ${details.stack}');
+      };
+
+      PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+        debugPrint('[FATAL] PlatformDispatcher Error: $error');
+        debugPrint('[FATAL] Stack: $stack');
+        return true;
+      };
+
       final appState = AppState();
       await appState.init();
 

@@ -340,10 +340,12 @@ class DbHelper {
   Future<List<Meal>> getMealsPaginated({
     int? limit,
     int? beforeTimestamp,
+    int offset = 0,
     String filterType = 'all',
     String typeFilter = 'all',
     DateTime? customStart,
     DateTime? customEnd,
+    String searchQuery = '',
     bool includeImages = false,
   }) async {
     final Database db = await database;
@@ -376,18 +378,33 @@ class DbHelper {
     final List<String> whereClauses = ['deleted = 0', ...filter.clauses];
     final List<dynamic> whereArgs = [...filter.args];
 
+    final search = _buildSearchConditions(searchQuery);
+    if (search != null) {
+      whereClauses.add(search.clause);
+      whereArgs.addAll(search.args);
+    }
     if (beforeTimestamp != null) {
       whereClauses.add('timestamp < ?');
       whereArgs.add(beforeTimestamp);
     }
 
-    final List<Map<String, dynamic>> maps = await db.query(
-      tableMeals,
-      columns: columns,
-      where: whereClauses.isEmpty ? null : whereClauses.join(' AND '),
-      whereArgs: whereArgs.isEmpty ? null : whereArgs,
-      orderBy: 'timestamp DESC',
-      limit: limit,
+    final query = StringBuffer(
+      'SELECT ${columns.join(', ')} FROM $tableMeals '
+      'WHERE ${whereClauses.join(' AND ')} '
+      'ORDER BY ${search?.orderBy ?? 'timestamp DESC'}',
+    );
+    final queryArgs = <dynamic>[...whereArgs, ...?search?.orderArgs];
+    if (limit != null) {
+      query.write(' LIMIT ?');
+      queryArgs.add(limit);
+      if (search != null) {
+        query.write(' OFFSET ?');
+        queryArgs.add(offset);
+      }
+    }
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+      query.toString(),
+      queryArgs,
     );
 
     return List.generate(maps.length, (i) => Meal.fromMap(maps[i]));
@@ -438,6 +455,7 @@ class DbHelper {
     String typeFilter = 'all',
     DateTime? customStart,
     DateTime? customEnd,
+    String searchQuery = '',
   }) async {
     final Database db = await database;
     final filter = _buildFilterConditions(
@@ -448,6 +466,11 @@ class DbHelper {
     );
     final List<String> whereClauses = ['deleted = 0', ...filter.clauses];
     final List<dynamic> whereArgs = [...filter.args];
+    final search = _buildSearchConditions(searchQuery);
+    if (search != null) {
+      whereClauses.add(search.clause);
+      whereArgs.addAll(search.args);
+    }
 
     final result = await db.rawQuery(
       'SELECT COUNT(*) AS cnt FROM $tableMeals WHERE ${whereClauses.join(' AND ')}',
@@ -562,6 +585,38 @@ class DbHelper {
     }
 
     return (clauses: clauses, args: args);
+  }
+
+  /// Builds a case-insensitive all-words search and ranks title matches before
+  /// note matches.
+  ({String clause, List<String> args, String orderBy, List<String> orderArgs})?
+  _buildSearchConditions(String query) {
+    final words = query
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .toList();
+    if (words.isEmpty) return null;
+
+    final patterns = words
+        .map(
+          (word) =>
+              '%${word.replaceAllMapped(RegExp(r'[\\%_]'), (match) => '\\${match[0]}')}%',
+        )
+        .toList();
+    final titleClauses = patterns
+        .map((_) => "foodName LIKE ? ESCAPE '\\' COLLATE NOCASE")
+        .join(' AND ');
+    final noteClauses = patterns
+        .map((_) => "COALESCE(notes, '') LIKE ? ESCAPE '\\' COLLATE NOCASE")
+        .join(' AND ');
+
+    return (
+      clause: "(($titleClauses) OR ($noteClauses))",
+      args: [...patterns, ...patterns],
+      orderBy: "CASE WHEN $titleClauses THEN 0 ELSE 1 END, timestamp DESC",
+      orderArgs: patterns,
+    );
   }
 
   // Gamification operations

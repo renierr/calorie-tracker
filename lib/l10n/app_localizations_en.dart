@@ -200,6 +200,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyTitle => 'History Logs';
 
   @override
+  String get searchFavoritesHint => 'Search favorites';
+
+  @override
+  String favoritesCount(int count) {
+    return '$count Favorite Entries';
+  }
+
+  @override
+  String get noFavoriteSearchResults => 'No matching favorites found.';
+
+  @override
+  String get loadMore => 'Load more';
+
+  @override
   String get filterTimeframe => 'Filter Timeframe:';
 
   @override
@@ -222,6 +236,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get endDate => 'End Date';
+
+  @override
+  String get searchHistoryHint => 'Search entries';
+
+  @override
+  String get clearSearch => 'Clear search';
 
   @override
   String logsInFilter(Object count) {

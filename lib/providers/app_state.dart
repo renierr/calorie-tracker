@@ -82,6 +82,8 @@ class AppState extends ChangeNotifier
   int _fatGoal = AppConstants.defaultFatGoal;
   String _historyFilter = 'all';
   String _historyTypeFilter = 'all'; // 'all', 'meals', 'activities'
+  String _historySearchQuery = '';
+  String _favoriteSearchQuery = '';
   String _appLocale = 'en';
   ThemeMode _themeMode = ThemeMode.system;
   bool _notificationsEnabled = true;
@@ -93,7 +95,7 @@ class AppState extends ChangeNotifier
   bool _syncEnabled = false;
 
   List<Meal> _meals = [];
-  List<Meal> _favoriteMeals = [];
+  List<Meal> _paginatedFavoriteMeals = [];
   bool _isLoading = false;
 
   // Selected date for Dashboard tracking (defaults to today)
@@ -142,11 +144,13 @@ class AppState extends ChangeNotifier
   int get fatGoal => _fatGoal;
   String get historyFilter => _historyFilter;
   String get historyTypeFilter => _historyTypeFilter;
+  String get historySearchQuery => _historySearchQuery;
+  String get favoriteSearchQuery => _favoriteSearchQuery;
   String get appLocale => _appLocale;
   ThemeMode get themeMode => _themeMode;
   Locale get locale => Locale(_appLocale);
   List<Meal> get meals => _meals;
-  List<Meal> get favoriteMeals => _favoriteMeals;
+  List<Meal> get favoriteMeals => _paginatedFavoriteMeals;
   bool get isLoading => _isLoading;
   DateTime get selectedDate => _selectedDate;
   int get selectedTabIndex => _selectedTabIndex;
@@ -166,6 +170,12 @@ class AppState extends ChangeNotifier
   List<Meal> get paginatedMeals => _paginatedMeals;
   bool get hasMore => _hasMore;
   bool get isFetchingMore => _isFetchingMore;
+  bool _hasMoreFavoriteMeals = true;
+  bool _isFetchingMoreFavoriteMeals = false;
+  int _favoriteTotalCount = 0;
+  bool get hasMoreFavoriteMeals => _hasMoreFavoriteMeals;
+  bool get isFetchingMoreFavoriteMeals => _isFetchingMoreFavoriteMeals;
+  int get favoriteTotalCount => _favoriteTotalCount;
   int get historyTotalCount => _historyTotalCount;
   DateTime? get historyCustomStartDate => _historyCustomStartDate;
   DateTime? get historyCustomEndDate => _historyCustomEndDate;

@@ -60,6 +60,17 @@
   "ok": "OK",
 
   "historyTitle": "History Logs",
+  "searchFavoritesHint": "Search favorites",
+  "favoritesCount": "{count} Favorite Entries",
+  "@favoritesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noFavoriteSearchResults": "No matching favorites found.",
+  "loadMore": "Load more",
   "filterTimeframe": "Filter Timeframe:",
   "allTime": "All Time",
   "today": "Today",
@@ -68,6 +79,8 @@
   "customRange": "Custom Range",
   "startDate": "Start Date",
   "endDate": "End Date",
+  "searchHistoryHint": "Search entries",
+  "clearSearch": "Clear search",
   "logsInFilter": "{count} logs in active filter",
   "compilePdf": "Compile entries into a nutritional PDF report.",
   "reportPdf": "Report PDF",
@@ -838,4 +851,3 @@
   "statsWeightEntries": "Weight Logs: {count}",
   "statsWeightRange": "{min} kg — {max} kg"
 }
-

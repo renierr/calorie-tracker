@@ -173,6 +173,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   HistoryFilterPanel(
                     filterType: appState.historyFilter,
                     historyTypeFilter: appState.historyTypeFilter,
+                    searchQuery: appState.historySearchQuery,
                     customStartDate: appState.historyCustomStartDate,
                     customEndDate: appState.historyCustomEndDate,
                     onFilterTypeChanged: (val) {
@@ -181,6 +182,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     onHistoryTypeFilterChanged: (val) {
                       appState.setHistoryTypeFilter(val);
                     },
+                    onSearchQueryChanged: appState.setHistorySearchQuery,
                     onStartDateChanged: (val) {
                       appState.setHistoryCustomDates(
                         val,

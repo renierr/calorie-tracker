@@ -434,6 +434,30 @@ abstract class AppLocalizations {
   /// **'History Logs'**
   String get historyTitle;
 
+  /// No description provided for @searchFavoritesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search favorites'**
+  String get searchFavoritesHint;
+
+  /// No description provided for @favoritesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Favorite Entries'**
+  String favoritesCount(int count);
+
+  /// No description provided for @noFavoriteSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching favorites found.'**
+  String get noFavoriteSearchResults;
+
+  /// No description provided for @loadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get loadMore;
+
   /// No description provided for @filterTimeframe.
   ///
   /// In en, this message translates to:
@@ -481,6 +505,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'End Date'**
   String get endDate;
+
+  /// No description provided for @searchHistoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search entries'**
+  String get searchHistoryHint;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
 
   /// No description provided for @logsInFilter.
   ///

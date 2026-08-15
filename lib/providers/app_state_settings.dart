@@ -66,6 +66,16 @@ mixin _SettingsState on ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setHistorySearchQuery(String query) async {
+    _state._historySearchQuery = query;
+    await _state.loadFirstPageHistory(showLoading: false);
+  }
+
+  Future<void> setFavoriteSearchQuery(String query) async {
+    _state._favoriteSearchQuery = query;
+    await _state.loadFirstPageFavoriteMeals();
+  }
+
   Future<void> setHistoryCustomDates(DateTime? start, DateTime? end) async {
     _state._historyCustomStartDate = start;
     _state._historyCustomEndDate = end;

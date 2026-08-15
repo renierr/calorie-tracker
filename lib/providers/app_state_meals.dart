@@ -5,9 +5,7 @@ mixin _MealState on ChangeNotifier {
 
   Future<void> loadMeals() async {
     _state._meals = await _state._dbHelper.getAllMeals(includeImages: false);
-    _state._favoriteMeals = await _state._dbHelper.getFavoriteMeals(
-      includeImages: true,
-    );
+    await loadFirstPageFavoriteMeals();
     await _state.loadSelectedDateMeals();
     await _state.loadFirstPageHistory(showLoading: false);
     await _state.recalculateAllGamification();
@@ -22,9 +20,7 @@ mixin _MealState on ChangeNotifier {
       _state._selectedDate,
       includeImages: true,
     );
-    _state._favoriteMeals = await _state._dbHelper.getFavoriteMeals(
-      includeImages: true,
-    );
+    await loadFirstPageFavoriteMeals();
     _computeDailyTotals();
     if (refreshHistory) {
       await _state.loadFirstPageHistory(showLoading: false);
@@ -66,6 +62,7 @@ mixin _MealState on ChangeNotifier {
       typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
+      searchQuery: _state._historySearchQuery,
       includeImages: includeImages,
     );
   }
@@ -84,6 +81,7 @@ mixin _MealState on ChangeNotifier {
       typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
+      searchQuery: _state._historySearchQuery,
       includeImages: true,
     );
 
@@ -94,6 +92,7 @@ mixin _MealState on ChangeNotifier {
       typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
+      searchQuery: _state._historySearchQuery,
     );
 
     if (showLoading) {
@@ -108,22 +107,67 @@ mixin _MealState on ChangeNotifier {
     _state._isFetchingMore = true;
     notifyListeners();
 
-    final int? beforeTimestamp = _state._paginatedMeals.isNotEmpty
-        ? _state._paginatedMeals.last.timestamp
-        : null;
+    final isSearching = _state._historySearchQuery.trim().isNotEmpty;
     final nextPageMeals = await _state._dbHelper.getMealsPaginated(
       limit: AppConstants.pageSize,
-      beforeTimestamp: beforeTimestamp,
+      beforeTimestamp: isSearching || _state._paginatedMeals.isEmpty
+          ? null
+          : _state._paginatedMeals.last.timestamp,
+      offset: isSearching ? _state._paginatedMeals.length : 0,
       filterType: _state._historyFilter,
       typeFilter: _state._historyTypeFilter,
       customStart: _state._historyCustomStartDate,
       customEnd: _state._historyCustomEndDate,
+      searchQuery: _state._historySearchQuery,
       includeImages: true,
     );
 
     _state._paginatedMeals.addAll(nextPageMeals);
-    _state._hasMore = nextPageMeals.length == 20;
+    _state._hasMore = nextPageMeals.length == AppConstants.pageSize;
     _state._isFetchingMore = false;
+    notifyListeners();
+  }
+
+  Future<void> loadFirstPageFavoriteMeals() async {
+    _state._hasMoreFavoriteMeals = true;
+    _state._isFetchingMoreFavoriteMeals = false;
+    _state._paginatedFavoriteMeals = await _state._dbHelper.getMealsPaginated(
+      limit: AppConstants.pageSize,
+      filterType: 'favorites',
+      searchQuery: _state._favoriteSearchQuery,
+      includeImages: true,
+    );
+    _state._hasMoreFavoriteMeals =
+        _state._paginatedFavoriteMeals.length == AppConstants.pageSize;
+    _state._favoriteTotalCount = await _state._dbHelper.getMealsCount(
+      filterType: 'favorites',
+      searchQuery: _state._favoriteSearchQuery,
+    );
+    notifyListeners();
+  }
+
+  Future<void> fetchNextPageFavoriteMeals() async {
+    if (_state._isFetchingMoreFavoriteMeals || !_state._hasMoreFavoriteMeals) {
+      return;
+    }
+
+    _state._isFetchingMoreFavoriteMeals = true;
+    notifyListeners();
+    final isSearching = _state._favoriteSearchQuery.trim().isNotEmpty;
+    final nextPageMeals = await _state._dbHelper.getMealsPaginated(
+      limit: AppConstants.pageSize,
+      beforeTimestamp: isSearching || _state._paginatedFavoriteMeals.isEmpty
+          ? null
+          : _state._paginatedFavoriteMeals.last.timestamp,
+      offset: isSearching ? _state._paginatedFavoriteMeals.length : 0,
+      filterType: 'favorites',
+      searchQuery: _state._favoriteSearchQuery,
+      includeImages: true,
+    );
+    _state._paginatedFavoriteMeals.addAll(nextPageMeals);
+    _state._hasMoreFavoriteMeals =
+        nextPageMeals.length == AppConstants.pageSize;
+    _state._isFetchingMoreFavoriteMeals = false;
     notifyListeners();
   }
 
@@ -176,7 +220,8 @@ mixin _MealState on ChangeNotifier {
     await _state._dbHelper.clearDatabase();
     _state._meals = [];
     _state._selectedDateMeals = [];
-    _state._favoriteMeals = [];
+    _state._paginatedFavoriteMeals = [];
+    _state._favoriteTotalCount = 0;
     _state._paginatedMeals = [];
     _state._hasMore = true;
     _state._historyTotalCount = 0;

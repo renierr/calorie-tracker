@@ -1,16 +1,19 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../layout/adaptive_breakpoints.dart';
 import '../theme/theme.dart';
 import '../l10n/app_localizations.dart';
 
-class HistoryFilterPanel extends StatelessWidget {
+class HistoryFilterPanel extends StatefulWidget {
   final String filterType;
   final String historyTypeFilter;
+  final String searchQuery;
   final DateTime? customStartDate;
   final DateTime? customEndDate;
   final ValueChanged<String> onFilterTypeChanged;
   final ValueChanged<String> onHistoryTypeFilterChanged;
+  final ValueChanged<String> onSearchQueryChanged;
   final ValueChanged<DateTime?> onStartDateChanged;
   final ValueChanged<DateTime?> onEndDateChanged;
 
@@ -18,13 +21,44 @@ class HistoryFilterPanel extends StatelessWidget {
     super.key,
     required this.filterType,
     required this.historyTypeFilter,
+    required this.searchQuery,
     required this.customStartDate,
     required this.customEndDate,
     required this.onFilterTypeChanged,
     required this.onHistoryTypeFilterChanged,
+    required this.onSearchQueryChanged,
     required this.onStartDateChanged,
     required this.onEndDateChanged,
   });
+
+  @override
+  State<HistoryFilterPanel> createState() => _HistoryFilterPanelState();
+}
+
+class _HistoryFilterPanelState extends State<HistoryFilterPanel> {
+  late final TextEditingController _searchController;
+  Timer? _searchDebounce;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(text: widget.searchQuery);
+  }
+
+  @override
+  void didUpdateWidget(covariant HistoryFilterPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.searchQuery != _searchController.text) {
+      _searchController.text = widget.searchQuery;
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchDebounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +77,7 @@ class HistoryFilterPanel extends StatelessWidget {
               );
               final dropdown = DropdownButton<String>(
                 isExpanded: isNarrow,
-                value: filterType,
+                value: widget.filterType,
                 dropdownColor: colors.surface,
                 iconEnabledColor: colors.textPrimary,
                 underline: const SizedBox(),
@@ -74,7 +108,7 @@ class HistoryFilterPanel extends StatelessWidget {
                   ),
                 ],
                 onChanged: (val) {
-                  onFilterTypeChanged(val ?? 'all');
+                  widget.onFilterTypeChanged(val ?? 'all');
                 },
               );
 
@@ -130,7 +164,7 @@ class HistoryFilterPanel extends StatelessWidget {
               );
             },
           ),
-          if (filterType == 'custom') ...[
+          if (widget.filterType == 'custom') ...[
             const SizedBox(height: 12),
             Row(
               children: [
@@ -139,12 +173,12 @@ class HistoryFilterPanel extends StatelessWidget {
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: context,
-                        initialDate: customStartDate ?? DateTime.now(),
+                        initialDate: widget.customStartDate ?? DateTime.now(),
                         firstDate: DateTime(2020),
                         lastDate: DateTime.now(),
                       );
                       if (picked != null) {
-                        onStartDateChanged(picked);
+                        widget.onStartDateChanged(picked);
                       }
                     },
                     child: Container(
@@ -157,11 +191,13 @@ class HistoryFilterPanel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        customStartDate == null
+                        widget.customStartDate == null
                             ? AppLocalizations.of(context)!.startDate
-                            : DateFormat.yMd(locale).format(customStartDate!),
+                            : DateFormat.yMd(
+                                locale,
+                              ).format(widget.customStartDate!),
                         style: TextStyle(
-                          color: customStartDate == null
+                          color: widget.customStartDate == null
                               ? colors.textMuted
                               : colors.textPrimary,
                           fontSize: 13,
@@ -176,12 +212,12 @@ class HistoryFilterPanel extends StatelessWidget {
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: context,
-                        initialDate: customEndDate ?? DateTime.now(),
+                        initialDate: widget.customEndDate ?? DateTime.now(),
                         firstDate: DateTime(2020),
                         lastDate: DateTime.now(),
                       );
                       if (picked != null) {
-                        onEndDateChanged(picked);
+                        widget.onEndDateChanged(picked);
                       }
                     },
                     child: Container(
@@ -194,11 +230,13 @@ class HistoryFilterPanel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        customEndDate == null
+                        widget.customEndDate == null
                             ? AppLocalizations.of(context)!.endDate
-                            : DateFormat.yMd(locale).format(customEndDate!),
+                            : DateFormat.yMd(
+                                locale,
+                              ).format(widget.customEndDate!),
                         style: TextStyle(
-                          color: customEndDate == null
+                          color: widget.customEndDate == null
                               ? colors.textMuted
                               : colors.textPrimary,
                           fontSize: 13,
@@ -218,7 +256,7 @@ class HistoryFilterPanel extends StatelessWidget {
               );
               final typeDropdown = DropdownButton<String>(
                 isExpanded: isNarrow,
-                value: historyTypeFilter,
+                value: widget.historyTypeFilter,
                 dropdownColor: colors.surface,
                 iconEnabledColor: colors.textPrimary,
                 underline: const SizedBox(),
@@ -237,7 +275,7 @@ class HistoryFilterPanel extends StatelessWidget {
                   ),
                 ],
                 onChanged: (val) {
-                  onHistoryTypeFilterChanged(val ?? 'all');
+                  widget.onHistoryTypeFilterChanged(val ?? 'all');
                 },
               );
 
@@ -292,6 +330,31 @@ class HistoryFilterPanel extends StatelessWidget {
                 ],
               );
             },
+          ),
+          const Divider(height: 24),
+          TextField(
+            controller: _searchController,
+            onChanged: (query) {
+              _searchDebounce?.cancel();
+              _searchDebounce = Timer(const Duration(milliseconds: 250), () {
+                widget.onSearchQueryChanged(query);
+              });
+            },
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.searchHistoryHint,
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: widget.searchQuery.isEmpty
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.clear),
+                      tooltip: AppLocalizations.of(context)!.clearSearch,
+                      onPressed: () {
+                        _searchDebounce?.cancel();
+                        _searchController.clear();
+                        widget.onSearchQueryChanged('');
+                      },
+                    ),
+            ),
           ),
         ],
       ),
