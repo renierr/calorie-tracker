@@ -29,6 +29,7 @@ class HealthConnectNutritionPublisher {
       HealthConnectNutritionPublisher._();
 
   bool _isPublishing = false;
+  static const _writeBatchSize = 500;
 
   Future<HealthConnectPublishResult> publishMeals(
     List<Meal> meals, {
@@ -54,27 +55,7 @@ class HealthConnectNutritionPublisher {
         );
       }
 
-      var published = 0;
-      var failed = 0;
-      final mealRecords = meals.where((meal) => meal.isMeal).toList();
-      for (var index = 0; index < mealRecords.length; index++) {
-        final meal = mealRecords[index];
-        try {
-          await connector.writeRecords([_recordFor(meal)]);
-          published++;
-        } catch (error) {
-          failed++;
-          stderr.writeln(
-            '[HealthConnect] Failed to publish ${meal.shortId}: $error',
-          );
-        }
-        onProgress?.call(index + 1, mealRecords.length);
-      }
-      return HealthConnectPublishResult(
-        HealthConnectPublishOutcome.ran,
-        published: published,
-        failed: failed,
-      );
+      return _writeMeals(connector, meals, onProgress: onProgress);
     } catch (error) {
       stderr.writeln('[HealthConnect] Nutrition publishing failed: $error');
       return const HealthConnectPublishResult(
@@ -118,27 +99,7 @@ class HealthConnectNutritionPublisher {
           endTime: DateTime.now().add(const Duration(days: 1)),
         ),
       );
-      var published = 0;
-      var failed = 0;
-      final mealRecords = meals.where((meal) => meal.isMeal).toList();
-      for (var index = 0; index < mealRecords.length; index++) {
-        final meal = mealRecords[index];
-        try {
-          await connector.writeRecords([_recordFor(meal)]);
-          published++;
-        } catch (error) {
-          failed++;
-          stderr.writeln(
-            '[HealthConnect] Failed to publish ${meal.shortId}: $error',
-          );
-        }
-        onProgress?.call(index + 1, mealRecords.length);
-      }
-      return HealthConnectPublishResult(
-        HealthConnectPublishOutcome.ran,
-        published: published,
-        failed: failed,
-      );
+      return _writeMeals(connector, meals, onProgress: onProgress);
     } catch (error) {
       stderr.writeln('[HealthConnect] Nutrition reconciliation failed: $error');
       return const HealthConnectPublishResult(
@@ -148,6 +109,37 @@ class HealthConnectNutritionPublisher {
     } finally {
       _isPublishing = false;
     }
+  }
+
+  Future<HealthConnectPublishResult> _writeMeals(
+    hc.HealthConnector connector,
+    List<Meal> meals, {
+    void Function(int processed, int total)? onProgress,
+  }) async {
+    final mealRecords = meals.where((meal) => meal.isMeal).toList();
+    var published = 0;
+    var failed = 0;
+    for (var start = 0; start < mealRecords.length; start += _writeBatchSize) {
+      final end = (start + _writeBatchSize).clamp(0, mealRecords.length);
+      final batch = mealRecords.sublist(start, end);
+      try {
+        await connector.writeRecords([
+          for (final meal in batch) _recordFor(meal),
+        ]);
+        published += batch.length;
+      } catch (error) {
+        failed += batch.length;
+        stderr.writeln(
+          '[HealthConnect] Failed to publish meals $start-${end - 1}: $error',
+        );
+      }
+      onProgress?.call(end, mealRecords.length);
+    }
+    return HealthConnectPublishResult(
+      HealthConnectPublishOutcome.ran,
+      published: published,
+      failed: failed,
+    );
   }
 
   Future<HealthConnectPublishResult> removeAll() async {
