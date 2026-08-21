@@ -53,3 +53,4 @@ app.*.map.json
 
 # Build distribution folder
 /dist/
+android/.kotlin/sessions/
