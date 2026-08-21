@@ -79,9 +79,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
 
   Future<void> _prefillWeightFromHealthConnect(DateTime date) async {
     final appState = context.read<AppState>();
-    if (await appState.hasMealLoggedOnDate(date)) {
-      // Weight only applies to the first meal of a day — drop any stale
-      // auto-filled value when the date already has a meal.
+    if (await appState.hasWeightLoggedOnDate(date)) {
+      // The day's weight is already recorded — drop any stale auto-filled
+      // value so only one weight per day is captured.
       _clearAutoFilledWeight();
       return;
     }

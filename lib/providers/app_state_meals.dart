@@ -36,13 +36,13 @@ mixin _MealState on ChangeNotifier {
     notifyListeners();
   }
 
-  /// Whether a food meal (not an activity) has already been logged for [date].
-  Future<bool> hasMealLoggedOnDate(DateTime date) async {
+  /// Whether a logged entry already carries a body weight for [date].
+  Future<bool> hasWeightLoggedOnDate(DateTime date) async {
     final meals = await _state._dbHelper.getMealsForDate(
       date,
       includeImages: false,
     );
-    return meals.any((meal) => meal.isMeal);
+    return meals.any((meal) => meal.weightKg != null);
   }
 
   void _computeDailyTotals() {
