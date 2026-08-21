@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,7 @@ import 'scan_date_picker_tile.dart';
 import 'scan_verification_actions.dart';
 import 'ai_fallback_dialog.dart';
 import '../../services/ai_base_service.dart';
+import '../../services/health_connect_weight_reader.dart';
 
 class ScanVerificationForm extends StatefulWidget {
   final AIAnalysisResult? scanResult;
@@ -35,6 +38,7 @@ class ScanVerificationForm extends StatefulWidget {
 class _ScanVerificationFormState extends State<ScanVerificationForm> {
   DateTime _mealDate = DateTime.now();
   bool _isReEvaluating = false;
+  String? _autoFilledWeightText;
 
   late final TextEditingController _nameController;
   late final TextEditingController _caloriesController;
@@ -67,6 +71,54 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
     _fatController.addListener(_updateDraft);
     _notesController.addListener(_updateDraft);
     _weightController.addListener(_updateDraft);
+
+    if (!appState.scanIsActivity && Platform.isAndroid) {
+      _prefillWeightFromHealthConnect(_mealDate);
+    }
+  }
+
+  Future<void> _prefillWeightFromHealthConnect(DateTime date) async {
+    final appState = context.read<AppState>();
+    if (await appState.hasMealLoggedOnDate(date)) {
+      // Weight only applies to the first meal of a day — drop any stale
+      // auto-filled value when the date already has a meal.
+      _clearAutoFilledWeight();
+      return;
+    }
+
+    final weight = await HealthConnectWeightReader.instance
+        .readLatestWeightForPrefill(date);
+    if (!mounted) return;
+
+    if (weight == null) {
+      // No weight for this day (e.g. a past day) — drop stale auto-fill.
+      _clearAutoFilledWeight();
+      return;
+    }
+
+    // Keep a value the user typed manually while the read was in flight, but
+    // replace a previous auto-filled value when the date changes.
+    final current = _weightController.text.trim();
+    if (current.isNotEmpty && current != _autoFilledWeightText) return;
+
+    final text = weight.toStringAsFixed(1);
+    setState(() {
+      _weightController.text = text;
+      _autoFilledWeightText = text;
+    });
+  }
+
+  void _clearAutoFilledWeight() {
+    if (!mounted) return;
+    final current = _weightController.text.trim();
+    if (current.isEmpty) return;
+    if (_autoFilledWeightText == null || current != _autoFilledWeightText) {
+      return;
+    }
+    setState(() {
+      _weightController.text = '';
+      _autoFilledWeightText = null;
+    });
   }
 
   void _updateDraft() {
@@ -349,6 +401,9 @@ class _ScanVerificationFormState extends State<ScanVerificationForm> {
             onDateChanged: (picked) {
               setState(() => _mealDate = picked);
               context.read<AppState>().updateScanDraftFields(mealDate: picked);
+              if (!isActivity && Platform.isAndroid) {
+                _prefillWeightFromHealthConnect(picked);
+              }
             },
           ),
           const SizedBox(height: 25),

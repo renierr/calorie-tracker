@@ -36,6 +36,15 @@ mixin _MealState on ChangeNotifier {
     notifyListeners();
   }
 
+  /// Whether a food meal (not an activity) has already been logged for [date].
+  Future<bool> hasMealLoggedOnDate(DateTime date) async {
+    final meals = await _state._dbHelper.getMealsForDate(
+      date,
+      includeImages: false,
+    );
+    return meals.any((meal) => meal.isMeal);
+  }
+
   void _computeDailyTotals() {
     int intake = 0, burned = 0, protein = 0, carbs = 0, fat = 0;
     for (final meal in _state._selectedDateMeals) {
