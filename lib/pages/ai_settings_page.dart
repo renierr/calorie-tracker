@@ -215,7 +215,7 @@ class _AISettingsPageState extends State<AISettingsPage> {
     final localizations = AppLocalizations.of(context)!;
 
     final fallbackOptions =
-        ['none', 'gemini', 'openai', 'anthropic', 'grok', 'custom']
+        ['none', 'gemini', 'openai', 'anthropic', 'grok', 'deepseek', 'custom']
             .where(
               (provider) =>
                   provider == 'none' ||
@@ -316,6 +316,10 @@ class _AISettingsPageState extends State<AISettingsPage> {
                           DropdownMenuItem(
                             value: 'grok',
                             child: Text('xAI Grok'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'deepseek',
+                            child: Text('DeepSeek'),
                           ),
                           DropdownMenuItem(
                             value: 'custom',

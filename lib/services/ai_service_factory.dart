@@ -3,6 +3,7 @@ import 'gemini_service.dart';
 import 'openai_service.dart';
 import 'anthropic_service.dart';
 import 'grok_service.dart';
+import 'deepseek_service.dart';
 import 'custom_ai_service.dart';
 
 class AIServiceFactory {
@@ -14,6 +15,8 @@ class AIServiceFactory {
         return AnthropicService();
       case 'grok':
         return GrokService();
+      case 'deepseek':
+        return DeepSeekService();
       case 'custom':
         return CustomAIService();
       case 'gemini':

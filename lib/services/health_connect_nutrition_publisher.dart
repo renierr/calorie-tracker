@@ -55,7 +55,7 @@ class HealthConnectNutritionPublisher {
         );
       }
 
-      return _writeMeals(connector, meals, onProgress: onProgress);
+      return await _writeMeals(connector, meals, onProgress: onProgress);
     } catch (error) {
       stderr.writeln('[HealthConnect] Nutrition publishing failed: $error');
       return const HealthConnectPublishResult(
@@ -99,7 +99,7 @@ class HealthConnectNutritionPublisher {
           endTime: DateTime.now().add(const Duration(days: 1)),
         ),
       );
-      return _writeMeals(connector, meals, onProgress: onProgress);
+      return await _writeMeals(connector, meals, onProgress: onProgress);
     } catch (error) {
       stderr.writeln('[HealthConnect] Nutrition reconciliation failed: $error');
       return const HealthConnectPublishResult(

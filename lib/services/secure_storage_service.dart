@@ -69,6 +69,7 @@ class SecureStorageService implements SecureStorage {
       'ai_api_key_openai',
       'ai_api_key_anthropic',
       'ai_api_key_grok',
+      'ai_api_key_deepseek',
       'ai_api_key_custom',
       'gemini_api_key',
     ];
@@ -184,6 +185,7 @@ class FileSecureStorage implements SecureStorage {
       'ai_api_key_openai',
       'ai_api_key_anthropic',
       'ai_api_key_grok',
+      'ai_api_key_deepseek',
       'ai_api_key_custom',
       'gemini_api_key',
     ];

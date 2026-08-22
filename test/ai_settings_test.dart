@@ -37,12 +37,21 @@ void main() {
         reasoningEffort: 'medium',
       );
 
-      // Verify general active settings are updated to last saved (Anthropic)
-      expect(appState.aiProvider, 'anthropic');
-      expect(appState.aiModel, 'claude-3-5-sonnet-latest');
-      expect(appState.aiApiKey, 'anthropic-key');
-      expect(appState.aiCustomUrl, 'http://custom-anthropic.com');
-      expect(appState.aiReasoningEffort, 'medium');
+      // Set and save settings for DeepSeek
+      await appState.saveAISettings(
+        provider: 'deepseek',
+        model: 'deepseek-v4-flash-vision-exp',
+        apiKey: 'deepseek-key',
+        customUrl: 'https://api.deepseek.com',
+        reasoningEffort: 'none',
+      );
+
+      // Verify general active settings are updated to last saved (DeepSeek)
+      expect(appState.aiProvider, 'deepseek');
+      expect(appState.aiModel, 'deepseek-v4-flash-vision-exp');
+      expect(appState.aiApiKey, 'deepseek-key');
+      expect(appState.aiCustomUrl, 'https://api.deepseek.com');
+      expect(appState.aiReasoningEffort, 'none');
 
       // Verify that querying for OpenAI retrieves OpenAI's settings
       expect(appState.getModelForProvider('openai'), 'gpt-4o');

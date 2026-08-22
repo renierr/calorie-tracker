@@ -42,6 +42,8 @@ mixin _AiState on ChangeNotifier {
         return 'Anthropic Claude';
       case 'grok':
         return 'xAI Grok';
+      case 'deepseek':
+        return 'DeepSeek';
       case 'custom':
         return 'Custom Endpoint';
       default:
@@ -110,7 +112,14 @@ mixin _AiState on ChangeNotifier {
     }
 
     // Load provider-specific settings
-    final providers = ['gemini', 'openai', 'anthropic', 'grok', 'custom'];
+    final providers = [
+      'gemini',
+      'openai',
+      'anthropic',
+      'grok',
+      'deepseek',
+      'custom',
+    ];
     for (final p in providers) {
       final pKey = p.toLowerCase();
       // Model:
