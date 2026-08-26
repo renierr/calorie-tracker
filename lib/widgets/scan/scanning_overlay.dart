@@ -1,20 +1,67 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
 
-class ScanningOverlay extends StatelessWidget {
+class ScanningOverlay extends StatefulWidget {
   final bool isScanning;
+  final VoidCallback onCancel;
 
-  const ScanningOverlay({super.key, required this.isScanning});
+  const ScanningOverlay({
+    super.key,
+    required this.isScanning,
+    required this.onCancel,
+  });
+
+  @override
+  State<ScanningOverlay> createState() => _ScanningOverlayState();
+}
+
+class _ScanningOverlayState extends State<ScanningOverlay> {
+  Timer? _cancelTimer;
+  bool _showCancel = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateCancelTimer();
+  }
+
+  @override
+  void didUpdateWidget(covariant ScanningOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isScanning != widget.isScanning) {
+      _updateCancelTimer();
+    }
+  }
+
+  void _updateCancelTimer() {
+    _cancelTimer?.cancel();
+    _showCancel = false;
+    if (!widget.isScanning) return;
+
+    _cancelTimer = Timer(const Duration(seconds: 5), () {
+      if (mounted && widget.isScanning) {
+        setState(() => _showCancel = true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _cancelTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context);
 
     return IgnorePointer(
-      ignoring: !isScanning,
+      ignoring: !widget.isScanning,
       child: AnimatedOpacity(
-        opacity: isScanning ? 1.0 : 0.0,
+        opacity: widget.isScanning ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 200),
         child: Container(
           color: Colors.black.withValues(alpha: 0.8),
@@ -45,6 +92,18 @@ class ScanningOverlay extends StatelessWidget {
                     style: TextStyle(color: colors.textSecondary, fontSize: 13),
                   ),
                 ),
+                if (_showCancel) ...[
+                  const SizedBox(height: 24),
+                  OutlinedButton.icon(
+                    onPressed: widget.onCancel,
+                    icon: const Icon(Icons.close),
+                    label: Text(AppLocalizations.of(context)!.cancelScan),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: colors.textPrimary,
+                      side: BorderSide(color: colors.textSecondary),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

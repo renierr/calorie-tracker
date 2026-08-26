@@ -186,6 +186,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Gewichte, Portionen und Nährstoffe werden berechnet. Dies kann einige Sekunden dauern.';
 
   @override
+  String get cancelScan => 'Scan abbrechen';
+
+  @override
   String get aiError => 'KI-Scanner Fehler';
 
   @override

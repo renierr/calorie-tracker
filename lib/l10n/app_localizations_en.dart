@@ -186,6 +186,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Estimating weights, portions, and total nutritional content. This may take a few seconds.';
 
   @override
+  String get cancelScan => 'Cancel Scan';
+
+  @override
   String get aiError => 'AI Scanner Error';
 
   @override

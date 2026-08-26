@@ -410,6 +410,12 @@ abstract class AppLocalizations {
   /// **'Estimating weights, portions, and total nutritional content. This may take a few seconds.'**
   String get scanningDesc;
 
+  /// No description provided for @cancelScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Scan'**
+  String get cancelScan;
+
   /// No description provided for @aiError.
   ///
   /// In en, this message translates to:

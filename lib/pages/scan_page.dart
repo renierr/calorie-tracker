@@ -25,6 +25,7 @@ class ScanPage extends StatefulWidget {
 class _ScanPageState extends State<ScanPage> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _hintController = TextEditingController();
+  int _scanRequestId = 0;
 
   @override
   void initState() {
@@ -95,6 +96,7 @@ class _ScanPageState extends State<ScanPage> {
   Future<void> _scanMeal(AppState appState, {String? overrideProvider}) async {
     final colors = AppTheme.of(context);
     if (appState.scanImageBytes == null) return;
+    final int requestId = ++_scanRequestId;
 
     appState.setScanIsScanning(true);
 
@@ -112,10 +114,11 @@ class _ScanPageState extends State<ScanPage> {
         overrideProvider: overrideProvider,
       );
 
+      if (!mounted || requestId != _scanRequestId) return;
       appState.setScanResult(result);
     } catch (e) {
+      if (!mounted || requestId != _scanRequestId) return;
       appState.setScanIsScanning(false);
-      if (!mounted) return;
 
       await AIFallbackDialog.handleFallback(
         context: context,
@@ -150,11 +153,25 @@ class _ScanPageState extends State<ScanPage> {
         },
       );
     } finally {
-      try {
-        await WakelockPlus.disable();
-      } catch (e) {
-        debugPrint('Wakelock disable failed: $e');
+      if (requestId == _scanRequestId) {
+        try {
+          await WakelockPlus.disable();
+        } catch (e) {
+          debugPrint('Wakelock disable failed: $e');
+        }
       }
+    }
+  }
+
+  Future<void> _cancelScan(AppState appState) async {
+    if (!appState.scanIsScanning) return;
+
+    ++_scanRequestId;
+    appState.setScanIsScanning(false);
+    try {
+      await WakelockPlus.disable();
+    } catch (e) {
+      debugPrint('Wakelock disable failed: $e');
     }
   }
 
@@ -245,7 +262,10 @@ class _ScanPageState extends State<ScanPage> {
             ),
           ),
 
-          ScanningOverlay(isScanning: appState.scanIsScanning),
+          ScanningOverlay(
+            isScanning: appState.scanIsScanning,
+            onCancel: () => _cancelScan(appState),
+          ),
         ],
       ),
     );

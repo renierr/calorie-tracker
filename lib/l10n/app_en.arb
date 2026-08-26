@@ -55,6 +55,7 @@
   "mealLogged": "Logged successfully!",
   "scanningTitle": "Analyzing Food with AI...",
   "scanningDesc": "Estimating weights, portions, and total nutritional content. This may take a few seconds.",
+  "cancelScan": "Cancel Scan",
   "aiError": "AI Scanner Error",
   "aiErrorDesc": "Failed to analyze image. Please ensure your API Key is valid and internet connection is active.\n\nError details: {error}",
   "ok": "OK",

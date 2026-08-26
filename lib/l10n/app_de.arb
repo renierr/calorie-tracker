@@ -56,6 +56,7 @@
   "mealLogged": "Erfolgreich erfasst!",
   "scanningTitle": "Analyse mit KI...",
   "scanningDesc": "Gewichte, Portionen und Nährstoffe werden berechnet. Dies kann einige Sekunden dauern.",
+  "cancelScan": "Scan abbrechen",
   "aiError": "KI-Scanner Fehler",
   "aiErrorDesc": "Bildanalyse fehlgeschlagen. Bitte stelle sicher, dass dein API-Schlüssel gültig ist und eine Internetverbindung besteht.\n\nFehlerdetails: {error}",
   "ok": "OK",
