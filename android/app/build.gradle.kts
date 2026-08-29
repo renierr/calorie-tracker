@@ -84,6 +84,15 @@ tasks.register<Exec>("generateVersion") {
     }
 }
 
+// Running the version generator requires `lib/version.g.dart` (which is git-ignored) to
+// exist before Dart source is compiled. With AGP 9's variant API the Flutter compile task
+// (`compileFlutterBuild<Variant>`) is registered lazily and is NOT ordered after `preBuild`,
+// so only depending on `preBuild` can leave the file missing on a fresh clone and abort the
+// Dart kernel snapshot. Make every Flutter compile task depend on the generator directly.
+tasks.matching { it.name.startsWith("compileFlutterBuild") }.configureEach {
+    dependsOn("generateVersion")
+}
+
 tasks.named("preBuild") {
     dependsOn("generateVersion")
 }
