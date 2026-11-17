@@ -189,6 +189,17 @@ mixin _SettingsState on ChangeNotifier {
     return await File(path).readAsBytes();
   }
 
+  Future<({int sharedCount, int sharedBytes, int legacyCount, int legacyBytes})>
+  getImageDedupStats() => _state._dbHelper.getImageDedupStats();
+
+  /// Stores identical images only once and compacts the database.
+  Future<({int processed, int duplicates, int savedBytes})>
+  deduplicateImages() async {
+    final result = await _state._dbHelper.deduplicateImages();
+    await _state.loadMeals();
+    return result;
+  }
+
   Future<void> restoreDatabase(String backupPath) async {
     await _state._dbHelper.restoreDatabase(backupPath: backupPath);
     await _state.loadMeals();

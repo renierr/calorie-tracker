@@ -440,6 +440,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tempFilesCleanedUp => 'Temporary files cleaned up successfully';
 
   @override
+  String get imageStorageTitle => 'Image Storage';
+
+  @override
+  String get imageStorageDesc =>
+      'Identical photos (e.g. entries created from an existing one) are stored only once. Optimize converts older entries and removes duplicates.';
+
+  @override
+  String imageStorageUsage(int count, String size, int legacy) {
+    return '$count image(s) using $size · $legacy not optimized';
+  }
+
+  @override
+  String get imageStorageOptimize => 'Optimize Images';
+
+  @override
+  String imageStorageOptimized(int count, String size) {
+    return '$count duplicate(s) removed, $size saved';
+  }
+
+  @override
+  String imageStorageOptimizeFailed(String error) {
+    return 'Image optimization failed: $error';
+  }
+
+  @override
   String settingsExportFailed(String error) {
     return 'Settings export failed: $error';
   }

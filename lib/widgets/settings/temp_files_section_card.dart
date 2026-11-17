@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/theme.dart';
 import '../../l10n/app_localizations.dart';
+import '../../helpers/format_helper.dart';
 import '../../helpers/temp_file_manager.dart';
 import '../adaptive/adaptive_card_header.dart';
 import '../adaptive/responsive_icon_button.dart';
@@ -33,7 +34,7 @@ class _TempFilesSectionCardState extends State<TempFilesSectionCard> {
     try {
       final count = TempFileManager.trackedCount;
       final bytes = await TempFileManager.trackedBytes();
-      final sizeStr = _formatBytes(bytes);
+      final sizeStr = formatBytes(bytes);
 
       if (mounted) {
         setState(() {
@@ -50,18 +51,6 @@ class _TempFilesSectionCardState extends State<TempFilesSectionCard> {
         });
       }
     }
-  }
-
-  String _formatBytes(int bytes) {
-    if (bytes <= 0) return '0 B';
-    const suffixes = ['B', 'KB', 'MB', 'GB'];
-    var i = 0;
-    double dBytes = bytes.toDouble();
-    while (dBytes >= 1024 && i < suffixes.length - 1) {
-      dBytes /= 1024;
-      i++;
-    }
-    return '${dBytes.toStringAsFixed(1)} ${suffixes[i]}';
   }
 
   Future<void> _cleanTempFiles() async {

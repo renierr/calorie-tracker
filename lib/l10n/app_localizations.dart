@@ -884,6 +884,42 @@ abstract class AppLocalizations {
   /// **'Temporary files cleaned up successfully'**
   String get tempFilesCleanedUp;
 
+  /// No description provided for @imageStorageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Storage'**
+  String get imageStorageTitle;
+
+  /// No description provided for @imageStorageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Identical photos (e.g. entries created from an existing one) are stored only once. Optimize converts older entries and removes duplicates.'**
+  String get imageStorageDesc;
+
+  /// No description provided for @imageStorageUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} image(s) using {size} · {legacy} not optimized'**
+  String imageStorageUsage(int count, String size, int legacy);
+
+  /// No description provided for @imageStorageOptimize.
+  ///
+  /// In en, this message translates to:
+  /// **'Optimize Images'**
+  String get imageStorageOptimize;
+
+  /// No description provided for @imageStorageOptimized.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} duplicate(s) removed, {size} saved'**
+  String imageStorageOptimized(int count, String size);
+
+  /// No description provided for @imageStorageOptimizeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Image optimization failed: {error}'**
+  String imageStorageOptimizeFailed(String error);
+
   /// No description provided for @settingsExportFailed.
   ///
   /// In en, this message translates to:

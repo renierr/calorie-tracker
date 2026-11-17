@@ -152,6 +152,30 @@
   },
   "tempFilesCleanUp": "Clean Up Temp Files",
   "tempFilesCleanedUp": "Temporary files cleaned up successfully",
+  "imageStorageTitle": "Image Storage",
+  "imageStorageDesc": "Identical photos (e.g. entries created from an existing one) are stored only once. Optimize converts older entries and removes duplicates.",
+  "imageStorageUsage": "{count} image(s) using {size} · {legacy} not optimized",
+  "@imageStorageUsage": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "size": {"type": "String"},
+      "legacy": {"type": "int"}
+    }
+  },
+  "imageStorageOptimize": "Optimize Images",
+  "imageStorageOptimized": "{count} duplicate(s) removed, {size} saved",
+  "@imageStorageOptimized": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "size": {"type": "String"}
+    }
+  },
+  "imageStorageOptimizeFailed": "Image optimization failed: {error}",
+  "@imageStorageOptimizeFailed": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
   "settingsExportFailed": "Settings export failed: {error}",
   "@settingsExportFailed": {
     "placeholders": {

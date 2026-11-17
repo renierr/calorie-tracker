@@ -226,7 +226,7 @@ mixin _MealState on ChangeNotifier {
       synced: 0,
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
-    await _state._dbHelper.updateMeal(updated);
+    await _state._dbHelper.updateMealFavorite(updated);
     await _reloadCaches(refreshHistory: false);
     notifyListeners();
     if (_state._syncEnabled) {

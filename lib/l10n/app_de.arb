@@ -154,6 +154,30 @@
   },
   "tempFilesCleanUp": "Temporäre Dateien bereinigen",
   "tempFilesCleanedUp": "Temporäre Dateien erfolgreich bereinigt",
+  "imageStorageTitle": "Bildspeicher",
+  "imageStorageDesc": "Identische Fotos (z. B. bei Einträgen aus einer Vorlage) werden nur einmal gespeichert. Optimieren konvertiert ältere Einträge und entfernt Duplikate.",
+  "imageStorageUsage": "{count} Bild(er) belegen {size} · {legacy} nicht optimiert",
+  "@imageStorageUsage": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "size": {"type": "String"},
+      "legacy": {"type": "int"}
+    }
+  },
+  "imageStorageOptimize": "Bilder optimieren",
+  "imageStorageOptimized": "{count} Duplikat(e) entfernt, {size} gespart",
+  "@imageStorageOptimized": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "size": {"type": "String"}
+    }
+  },
+  "imageStorageOptimizeFailed": "Bildoptimierung fehlgeschlagen: {error}",
+  "@imageStorageOptimizeFailed": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
   "settingsExportFailed": "Export der Einstellungen fehlgeschlagen: {error}",
   "@settingsExportFailed": {
     "placeholders": {
